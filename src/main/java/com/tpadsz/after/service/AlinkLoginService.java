@@ -1,5 +1,11 @@
 package com.tpadsz.after.service;
 
+import com.tpadsz.after.entity.AppUser;
+import com.tpadsz.after.entity.LoginLog;
+import com.tpadsz.exception.AccountNotCorrectException;
+import com.tpadsz.exception.DisabledException;
+import com.tpadsz.exception.SystemAlgorithmException;
+
 /**
  * @program: blt-light
  * @description:
@@ -8,6 +14,12 @@ package com.tpadsz.after.service;
  **/
 public interface AlinkLoginService {
 
+
+    AppUser loginByTpad(String appid, String account, String password) throws SystemAlgorithmException, AccountNotCorrectException;
+
+    boolean checkPassword(String actual, String expected, String salt);
+
+    void saveLoginLog(LoginLog loginLog);
 
     void loginOut(String uid);
 }

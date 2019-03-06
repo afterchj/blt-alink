@@ -2,8 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tpadsz.after.dao.AlinkLoginDao">
 
+    <resultMap type="AppUser" id="standardTpadUserMap">
+        <id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="uname" column="uname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
+        <result property="account" column="account" javaType="String" jdbcType="VARCHAR"/>
+        <result property="psd" column="psd" javaType="String" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" javaType="String" jdbcType="VARCHAR"/>
+        <result property="utype" column="utype" javaType="String" jdbcType="VARCHAR"/>
+        <result property="uaddress" column="uaddress" javaType="String" jdbcType="VARCHAR"/>
+        <result property="rid" column="rid" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="create_date" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="update_date" column="update_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="other" column="other" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <insert id="saveLoginOutLog" parameterType="string">
         INSERT INTO alink.f_login_out_log (uid,create_date) VALUES(#{uid},NOW())
+    </insert>
+
+    <select id="getByMobile" resultMap="standardTpadUserMap" parameterType="string" >
+        SELECT id,uname,mobile,account,psd,utype,uaddress,rid from alink.f_user_account where account=#{account}
+    </select>
+
+    <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
+        INSERT INTO alink.f_user_account_log(login_date,behavior,uid,account) VALUES(#{login_date},#{behavior},#{uid},#{account})
     </insert>
 
 </mapper>
