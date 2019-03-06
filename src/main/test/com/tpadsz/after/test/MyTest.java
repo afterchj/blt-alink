@@ -1,6 +1,9 @@
 package com.tpadsz.after.test;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.dao.AccountDao;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.HttpUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -8,6 +11,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.Map;
 
 /**
  * Created by hongjian.chen on 2017/10/24.
@@ -30,10 +35,19 @@ public class MyTest {
     }
 
 
-    public static void main(String[] args) {
-        HttpUtils.sendSms("1", "18170756879", "123456");
+    @Test
+    public void test() {
 //        System.out.println("template=" + getSqlSessionTemplate());
 //        System.out.println("xMemcachedClient=" + ctx.getBean("xMemcachedClient"));
+    }
+
+    @Test
+    public void testAccount(){
+        String str="{\"mobile\":\"18170756879\",\"uname\":\"admin\",\"uid\":\"231231sddfw23\"}";
+        Map map= JSON.parseObject(str);
+        SqlSession session=getSession();
+        session.getMapper(AccountDao.class).updateAccount(map);
+        System.out.println(map.size());
     }
 
     @Test

@@ -6,8 +6,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +27,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/login")
-    public String login(HttpSession session) {
-//        List<User> users = userService.getAll();
-//        session.setAttribute("users", users);
+    public String login() {
         return "userInfo";
     }
 
