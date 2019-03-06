@@ -13,47 +13,28 @@
     <!-- 开启注解模式 -->
     <context:component-scan base-package="com.tpadsz.after"/>
 
+    <!--第一种方式：加载一个properties文件-->
+    <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+    <!--<property name="location" value="classpath:setup.production.properties"/>-->
+    <!--</bean>-->
 
-    <!--第二种方式：加载一个properties文件-->
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:setup.production.properties"/>
+    <!-- 第二种方式：加载多个properties文件 -->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:setup.production.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="UTF-8"/>
     </bean>
-
-
-    <!--第三种方式：加载多个properties文件-->
-    <!--<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">-->
-    <!--<property name="locations">-->
-    <!--<list>-->
-    <!--<value>classpath:jdbc.properties</value>-->
-    <!--<value>classpath:dubbo.properties</value>-->
-    <!--</list>-->
-    <!--</property>-->
-    <!--<property name="fileEncoding" value="UTF-8"/>-->
-    <!--</bean>-->
-    <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">-->
-    <!--<property name="properties" ref="configProperties"/>-->
-    <!--</bean>-->
-
-    <!--<dubbo:application name="${dubbo.application.name}"-->
-    <!--owner="${dubbo.application.owner}" />-->
-
-    <!--<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />-->
-
-    <!--&lt;!&ndash; <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" dispatcher="all"-->
-    <!--host="192.168.16.44" threadpool="fixed" threads="100" accepts="1000" /> &ndash;&gt;-->
-    <!--<dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" dispatcher="all" threadpool="fixed" threads="300" accepts="1000" />-->
-
-    <!--&lt;!&ndash; 业务发布 &ndash;&gt;-->
-    <!--<dubbo:monitor protocol="registry"/>-->
-    <!--&lt;!&ndash; 接口的位置 &ndash;&gt;-->
-    <!--<dubbo:service loadbalance="random" version="0.1.0"-->
-    <!--cluster="failover" retries="2" interface="com.tpadsz.after.api.RecordBillService"-->
-    <!--ref="recordBillService" timeout="3000"/>-->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="configProperties"/>
+    </bean>
 
     <!-- 阿里 druid数据库连接池 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
         <!-- 数据库基本信息配置 -->
-        <property name="driverClassName" value="${driverClasss}"/>
+        <property name="driverClassName" value="${driverClass}"/>
         <property name="url" value="${jdbcUrl}"/>
         <property name="username" value="${username}"/>
         <property name="password" value="${password}"/>
@@ -117,7 +98,7 @@
     </bean>
 
 
-    <!--<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">-->
-        <!--<constructor-arg ref="sqlSessionFactory"/>-->
-    <!--</bean>-->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
 </beans>
