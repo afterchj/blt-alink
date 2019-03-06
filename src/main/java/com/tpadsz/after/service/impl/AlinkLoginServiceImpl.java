@@ -4,6 +4,7 @@ import com.tpadsz.after.dao.AlinkLoginDao;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.util.Digests;
@@ -28,20 +29,22 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     private AlinkLoginDao alinkLoginDao;
 
     @Override
-    public AppUser loginByTpad(String appid, String account, String password)  throws SystemAlgorithmException, AccountNotCorrectException {
+    public AppUser loginByTpad(String appid, String account, String password)  throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException {
         AppUser appUser = null;
         try {
             appUser = alinkLoginDao.findByAccount(account);
-            if(appUser == null){
-                throw new AccountNotCorrectException();
-            }
         } catch (Exception e) {
             throw new SystemAlgorithmException();
         }
-        boolean isCorrect = checkPassword(password, appUser.getPwd(), appUser.getSalt());
-        if(!isCorrect){
+        if(appUser == null){
             throw new AccountNotCorrectException();
         }
+        boolean isCorrect = checkPassword(password, appUser.getPwd(), appUser.getSalt());
+        if(!isCorrect){
+            throw new PasswordNotCorrectException();
+        }
+        appUser.setPwd(null);
+        appUser.setSalt(null);
         return appUser;
     }
 
