@@ -30,7 +30,7 @@ public class AlinkLoginController extends BaseDecodedController {
     @Resource
     private AlinkLoginService alinkLoginService;
 
-    static final String URL = "http://www.uichange.com/boss-locker/alink/";
+    static final String URL = "http://odelic.com.cn:8080/blt-alink/alink/";
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {

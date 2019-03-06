@@ -38,7 +38,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
         } catch (Exception e) {
             throw new SystemAlgorithmException();
         }
-        boolean isCorrect = checkPassword(password, appUser.getPsd(), appUser.getSalt());
+        boolean isCorrect = checkPassword(password, appUser.getPwd(), appUser.getSalt());
         if(!isCorrect){
             throw new AccountNotCorrectException();
         }
