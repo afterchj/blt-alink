@@ -3,13 +3,11 @@ package com.tpadsz.after.service.impl;
 import com.tpadsz.after.dao.AlinkLoginDao;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
+import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.util.Digests;
 import com.tpadsz.after.util.Encodes;
-import com.tpadsz.exception.AccountNotCorrectException;
-import com.tpadsz.exception.DisabledException;
-import com.tpadsz.exception.NotExecutedDbException;
-import com.tpadsz.exception.SystemAlgorithmException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +28,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     private AlinkLoginDao alinkLoginDao;
 
     @Override
-    public AppUser loginByTpad(String appid, String account, String password)  throws SystemAlgorithmException, AccountNotCorrectException{
+    public AppUser loginByTpad(String appid, String account, String password)  throws SystemAlgorithmException, AccountNotCorrectException {
         AppUser appUser = null;
         try {
             appUser = alinkLoginDao.findByAccount(account);

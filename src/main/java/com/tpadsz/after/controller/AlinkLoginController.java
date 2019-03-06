@@ -3,11 +3,10 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
-import com.tpadsz.after.entity.ResultDict;
+import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
-import com.tpadsz.exception.AccountNotCorrectException;
-import com.tpadsz.exception.DisabledException;
-import com.tpadsz.exception.SystemAlgorithmException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -54,7 +53,6 @@ public class AlinkLoginController extends BaseDecodedController {
         } catch (AccountNotCorrectException e) {
             result = ResultDict.ACCOUNT_NOT_CORRECT;
         } catch (SystemAlgorithmException e) {
-            system.error(e);
             result = ResultDict.SYSTEM_ERROR;
         }
         model.put("result", result.getCode());

@@ -21,7 +21,7 @@
         INSERT INTO alink.f_login_out_log (uid,create_date) VALUES(#{uid},NOW())
     </insert>
 
-    <select id="getByMobile" resultMap="standardTpadUserMap" parameterType="string" >
+    <select id="findByAccount" resultMap="standardTpadUserMap" parameterType="string" >
         SELECT id,uname,mobile,account,psd,utype,uaddress,rid from alink.f_user_account where account=#{account}
     </select>
 
