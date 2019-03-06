@@ -5,11 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class BaseDecodedController extends BaseController {
-
-    public BaseDecodedController() {
-        super.encryption = true;
-    }
+public class BaseDecodedController{
 
     @ModelAttribute("decodedParams")
     public JSONObject beforeInvokingHandlerMethod(HttpServletRequest request) {

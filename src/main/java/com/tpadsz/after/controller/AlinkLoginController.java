@@ -1,7 +1,7 @@
 package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.ResultDict;
+import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.AlinkLoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
