@@ -7,11 +7,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import java.util.HashMap;
-import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParamsEncryptInterceptor implements HandlerInterceptor {
     private Logger system = LoggerUtils.SYSTEM;
@@ -110,8 +111,14 @@ public class ParamsEncryptInterceptor implements HandlerInterceptor {
                            HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         Object paramMap = modelAndView.getModel().remove("decodedParams");
-        String ip = "127.0.0.1";
+//        String ip = "127.0.0.1";
 //        String ip = request.getHeader("x-forwarded-for").split(",")[0];
+        String ip = request.getHeader("x-forwarded-for");
+        if (StringUtils.isEmpty(ip)) {
+            ip = "127.0.0.1";
+        } else {
+            ip = ip.split(",")[0];
+        }
         logAccess(paramMap, String.valueOf(modelAndView.getModel().get("result")), modelAndView.getModel(), request.getRequestURI(), ip);
         modelAndView.getModel().put("encrypted", true);
     }
