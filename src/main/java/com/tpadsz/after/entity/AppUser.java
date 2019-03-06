@@ -11,7 +11,7 @@ public class AppUser {
     private String uname;
     private String mobile;
     private String account;
-    private String psd;
+    private String pwd;
     private String salt;
     private String utype;
     private String uaddress;
@@ -52,12 +52,12 @@ public class AppUser {
         this.account = account;
     }
 
-    public String getPsd() {
-        return psd;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setPsd(String psd) {
-        this.psd = psd;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getSalt() {

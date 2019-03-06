@@ -5,6 +5,7 @@ import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +31,7 @@ public class AlinkLoginController extends BaseDecodedController {
     @Resource
     private AlinkLoginService alinkLoginService;
 
-    static final String URL = "http://www.uichange.com/boss-locker/alink/";
+    static final String URL = "http://odelic.com.cn:8080/blt-alink/alink/";
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
@@ -50,6 +51,8 @@ public class AlinkLoginController extends BaseDecodedController {
                 loginLog.setBehavior(URL + "login.json");
                 alinkLoginService.saveLoginLog(loginLog);
             }
+        } catch (PasswordNotCorrectException e) {
+            result = ResultDict.PASSWORD_NOT_CORRECT;
         } catch (AccountNotCorrectException e) {
             result = ResultDict.ACCOUNT_NOT_CORRECT;
         } catch (SystemAlgorithmException e) {

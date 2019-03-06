@@ -7,7 +7,7 @@
         <result property="uname" column="uname" javaType="String" jdbcType="VARCHAR"/>
         <result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
         <result property="account" column="account" javaType="String" jdbcType="VARCHAR"/>
-        <result property="psd" column="psd" javaType="String" jdbcType="VARCHAR"/>
+        <result property="pwd" column="pwd" javaType="String" jdbcType="VARCHAR"/>
         <result property="salt" column="salt" javaType="String" jdbcType="VARCHAR"/>
         <result property="utype" column="utype" javaType="String" jdbcType="VARCHAR"/>
         <result property="uaddress" column="uaddress" javaType="String" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
     </insert>
 
     <select id="findByAccount" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,psd,utype,uaddress,rid from alink.f_user_account where account=#{account}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where account=#{account}
     </select>
 
     <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
