@@ -8,10 +8,14 @@
 		mid,
 		sid,
 		gid,
-		operation,
+		lmac,
+		x,
+		y,
+		method,
+		cmd,
 		log_date
 	  )
-	 VALUES(#{uid},#{mid},#{sid},#{gid},#{operation},NOW())
+	 VALUES(#{uid},#{mid},#{sid},#{gid},#{lmac},#{x},#{y},#{method},#{cmd},NOW())
     </update>
 
     <select id="findByUser" resultType="int" parameterType="string">
