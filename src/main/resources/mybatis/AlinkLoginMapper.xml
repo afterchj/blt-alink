@@ -27,11 +27,11 @@
     </select>
 
     <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
-        INSERT INTO alink.f_user_account_log(login_date,behavior,uid,account) VALUES(#{login_date},#{behavior},#{uid},#{account})
+        INSERT INTO alink.f_user_account_log(login_date,behavior,uid,account,mobile) VALUES(#{login_date},#{behavior},#{uid},#{account},#{mobile})
     </insert>
 
     <select id="findUserByMobile" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT * from alink.f_user_account where mobile=#{mobile}
+        SELECT id,uname,mobile,account,utype,uaddress,rid from alink.f_user_account where mobile=#{mobile}
     </select>
 
 </mapper>

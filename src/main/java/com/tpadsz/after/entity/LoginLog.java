@@ -11,6 +11,7 @@ public class LoginLog implements Serializable {
     private String behavior;
     private String uid;
     private String account;
+    private String mobile;
     private String other;
 
     public LoginLog() {
@@ -58,6 +59,14 @@ public class LoginLog implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getOther() {

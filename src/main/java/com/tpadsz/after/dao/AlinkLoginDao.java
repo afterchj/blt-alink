@@ -15,7 +15,7 @@ public interface AlinkLoginDao {
 
     void saveLoginLog(LoginLog loginLog);
 
-    void saveLoginOutLog(String uid);
+    void saveLoginOutLog(String uid) throws Exception;
 
     AppUser findUserByMobile(String mobile);
 }

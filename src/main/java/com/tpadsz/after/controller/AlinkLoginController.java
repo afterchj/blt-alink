@@ -5,6 +5,7 @@ import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.InvalidCodeException;
 import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.util.Date;
+
+import static com.tpadsz.after.entity.dd.ResultDict.SYSTEM_ERROR;
 
 /**
  * @program: blt-light
@@ -37,7 +40,7 @@ public class AlinkLoginController extends BaseDecodedController {
     @Autowired
     ValidationService validationService;
 
-    static final String URL = "http://odelic.com.cn:8080/blt-alink/alink/";
+    static final String URL = "http://odelic.com.cn:8080/blt-alink/account";
 
     @RequestMapping(value = "/pwd/login", method = RequestMethod.POST)
     public String pwdLogin(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
@@ -54,7 +57,7 @@ public class AlinkLoginController extends BaseDecodedController {
                 loginLog.setUid(appUser.getId());
                 loginLog.setAccount(account);
                 loginLog.setLogin_date(new Date());
-                loginLog.setBehavior(URL + "login.json");
+                loginLog.setBehavior(URL + "/pwd/login.json");
                 alinkLoginService.saveLoginLog(loginLog);
             }
         } catch (PasswordNotCorrectException e) {
@@ -62,7 +65,7 @@ public class AlinkLoginController extends BaseDecodedController {
         } catch (AccountNotCorrectException e) {
             result = ResultDict.ACCOUNT_NOT_CORRECT;
         } catch (SystemAlgorithmException e) {
-            result = ResultDict.SYSTEM_ERROR;
+            result = SYSTEM_ERROR;
         }
         model.put("result", result.getCode());
         model.put("result_message", result.getValue());
@@ -87,18 +90,39 @@ public class AlinkLoginController extends BaseDecodedController {
                 model.put("result_message", ResultDict.SUCCESS.getValue());
             }
         } catch (Exception e) {
-            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
+            model.put("result", SYSTEM_ERROR.getCode());
+            model.put("result_message", SYSTEM_ERROR.getValue());
         }
         return null;
     }
 
 
     @RequestMapping(value = "/code/login", method = RequestMethod.POST)
-    public void codeLogin(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+    public String codeLogin(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String mobile = params.getString("mobile");
         String code = params.getString("code");
-        model.put("result", ResultDict.SUCCESS.getCode());
+        try {
+            if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(mobile)) {
+                validationService.checkCode(code, mobile);
+            }
+            AppUser appUser = alinkLoginService.findUserByMobile(mobile);
+            LoginLog loginLog = new LoginLog();
+            loginLog.setUid(appUser.getId());
+            loginLog.setMobile(mobile);
+            loginLog.setLogin_date(new Date());
+            loginLog.setBehavior(URL + "/code/login.json");
+            alinkLoginService.saveLoginLog(loginLog);
+            model.put("user", appUser);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        }catch (InvalidCodeException e) {
+            model.put("result", ResultDict.VERIFY_ERROR.getCode());
+            model.put("result_message", ResultDict.VERIFY_ERROR.getValue());
+        } catch (Exception e) {
+            model.put("result", SYSTEM_ERROR.getCode());
+            model.put("result_message", SYSTEM_ERROR.getValue());
+        }
+        return null;
     }
 
 
@@ -124,8 +148,8 @@ public class AlinkLoginController extends BaseDecodedController {
         } catch (Exception e) {
             e.printStackTrace();
             //系统错误
-            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-            model.put("result_message",ResultDict.SYSTEM_ERROR.getCode());
+            model.put("result", SYSTEM_ERROR.getCode());
+            model.put("result_message", SYSTEM_ERROR.getCode());
         }
     }
 }
