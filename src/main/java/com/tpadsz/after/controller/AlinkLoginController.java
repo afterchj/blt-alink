@@ -8,7 +8,10 @@ import com.tpadsz.after.exception.AccountNotCorrectException;
 import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
+import com.tpadsz.after.service.ValidationService;
+import com.tpadsz.after.util.Constants;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,16 +28,19 @@ import java.util.Date;
  * @create: 2019-03-06 11:12
  **/
 @Controller
-@RequestMapping("/alink")
+@RequestMapping("/account")
 public class AlinkLoginController extends BaseDecodedController {
 
     @Resource
     private AlinkLoginService alinkLoginService;
 
+    @Autowired
+    ValidationService validationService;
+
     static final String URL = "http://odelic.com.cn:8080/blt-alink/alink/";
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+    @RequestMapping(value = "/pwd/login", method = RequestMethod.POST)
+    public String pwdLogin(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         ResultDict result = ResultDict.SUCCESS;
         try {
             String account = params.getString("account");
@@ -62,6 +68,40 @@ public class AlinkLoginController extends BaseDecodedController {
         model.put("result_message", result.getValue());
         return null;
     }
+
+    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    public String verify(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String mobile = params.getString("mobile");
+        if (StringUtils.isBlank(mobile)) {
+            model.put("result", ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
+        }
+        try {
+            AppUser appUser = alinkLoginService.findUserByMobile(mobile);
+            if (appUser == null) {
+                model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
+                model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
+            } else {
+                validationService.sendCode("12", mobile);
+                model.put("result", ResultDict.SUCCESS.getCode());
+                model.put("result_message", ResultDict.SUCCESS.getValue());
+            }
+        } catch (Exception e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
+        }
+        return null;
+    }
+
+
+    @RequestMapping(value = "/code/login", method = RequestMethod.POST)
+    public void codeLogin(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String mobile = params.getString("mobile");
+        String code = params.getString("code");
+        model.put("result", ResultDict.SUCCESS.getCode());
+    }
+
+
     /**
      * 退出登录接口
      * @param params uid:用户id
