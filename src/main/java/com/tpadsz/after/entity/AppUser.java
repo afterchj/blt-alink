@@ -10,6 +10,7 @@ public class AppUser {
     private String id;
     private String uname;
     private String mobile;
+    private String imei;
     private String account;
     private String pwd;
     private String salt;
@@ -90,6 +91,14 @@ public class AppUser {
 
     public void setRid(int rid) {
         this.rid = rid;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
     }
 
     public Date getCreate_date() {

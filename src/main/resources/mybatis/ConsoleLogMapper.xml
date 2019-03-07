@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tpadsz.after.dao.ConsoleLogDao">
+
+    <update id="saveLog" parameterType="map">
+     INSERT INTO alink.f_console_log (
+		uid,
+		mid,
+		sid,
+		gid,
+		operation,
+		log_date
+	  )
+	 VALUES(#{uid},#{mid},#{sid},#{gid},#{operation},NOW())
+    </update>
+
+    <select id="findByUser" resultType="int" parameterType="string">
+        SELECT COUNT(1) from alink.f_user_account where uname=#{uname}
+    </select>
+
+</mapper>

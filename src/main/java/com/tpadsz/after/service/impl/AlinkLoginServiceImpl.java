@@ -32,7 +32,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     public AppUser loginByTpad(String appid, String account, String password)  throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException {
         AppUser appUser = null;
         try {
-            appUser = alinkLoginDao.findByAccount(account);
+            appUser = alinkLoginDao.findUserByAccount(account);
         } catch (Exception e) {
             throw new SystemAlgorithmException();
         }
@@ -79,5 +79,10 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     @Override
     public void loginOut(String uid) throws Exception {
         alinkLoginDao.saveLoginOutLog(uid);
+    }
+
+    @Override
+    public AppUser findUserByMobile(String mobile) {
+        return alinkLoginDao.findUserByMobile(mobile);
     }
 }

@@ -6,6 +6,7 @@
         <id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
         <result property="uname" column="uname" javaType="String" jdbcType="VARCHAR"/>
         <result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
+        <result property="imei" column="imei" javaType="String" jdbcType="VARCHAR"/>
         <result property="account" column="account" javaType="String" jdbcType="VARCHAR"/>
         <result property="pwd" column="pwd" javaType="String" jdbcType="VARCHAR"/>
         <result property="salt" column="salt" javaType="String" jdbcType="VARCHAR"/>
@@ -21,12 +22,16 @@
         INSERT INTO alink.f_login_out_log (uid,create_date) VALUES(#{uid},NOW())
     </insert>
 
-    <select id="findByAccount" resultMap="standardTpadUserMap" parameterType="string" >
+    <select id="findUserByAccount" resultMap="standardTpadUserMap" parameterType="string" >
         SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where account=#{account}
     </select>
 
     <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
         INSERT INTO alink.f_user_account_log(login_date,behavior,uid,account) VALUES(#{login_date},#{behavior},#{uid},#{account})
     </insert>
+
+    <select id="findUserByMobile" resultMap="standardTpadUserMap" parameterType="string" >
+        SELECT * from alink.f_user_account where mobile=#{mobile}
+    </select>
 
 </mapper>
