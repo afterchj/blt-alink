@@ -3,7 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.GroupReturn;
-import com.tpadsz.after.entity.ResultDict;
+import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.GroupOperationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Group group;
         if (StringUtils.isBlank(operation)||StringUtils.isBlank(bltFlag)||StringUtils.isBlank(meshId)||StringUtils.isBlank(uid)||StringUtils.isBlank(gname)){
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message",ResultDict.PARAMS_BLANK.getValue());
+            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             return;
         }
         //未连蓝牙
