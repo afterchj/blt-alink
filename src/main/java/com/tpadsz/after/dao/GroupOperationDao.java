@@ -3,6 +3,7 @@ package com.tpadsz.after.dao;
 import com.tpadsz.after.entity.Group;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,5 +24,5 @@ public interface GroupOperationDao {
     //重命名组名
     void updateGroupNameByGroupId(@Param("groupId") String groupId, @Param("gname") String gname);
 
-    Map<Integer,String> getGroupsByMeshId(@Param("meshId") String meshId);//根据网络id查询组信息
+    List<Map<String,Object>> getGroupsByMeshId(String meshId);
 }

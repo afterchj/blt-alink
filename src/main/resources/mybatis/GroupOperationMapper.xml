@@ -5,7 +5,7 @@
     <insert id="saveGroup" parameterType="com.tpadsz.after.entity.Group" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO alink.f_group
             (group_id,gname,mid,create_date,update_date)
-            VALUES(REPLACE(UUID(),'-',''),#{gname},#{mid},NOW(),NOW())
+            VALUES(#{groupId},#{gname},#{mid},NOW(),NOW())
     </insert>
 
     <insert id="saveGroupLog">
@@ -26,7 +26,7 @@
         UPDATE alink.f_group SET gname=#{gname} WHERE group_id=#{groupId};
     </update>
 
-    <select id="getGroupsByMeshId" resultMap="map">
+    <select id="getGroupsByMeshId" resultType="java.util.HashMap">
         SELECT
     	    g.id,
         	g.group_id

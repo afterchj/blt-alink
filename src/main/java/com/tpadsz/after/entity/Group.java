@@ -12,6 +12,7 @@ public class Group {
     private String gname;
     private Integer mid;
     private String groupId;
+    private String meshId;
 
     public String getGroupId() {
         return groupId;
@@ -43,5 +44,13 @@ public class Group {
 
     public void setMid(Integer mid) {
         this.mid = mid;
+    }
+
+    public String getMeshId() {
+        return meshId;
+    }
+
+    public void setMeshId(String meshId) {
+        this.meshId = meshId;
     }
 }

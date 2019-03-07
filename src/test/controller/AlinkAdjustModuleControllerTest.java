@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,9 +56,17 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void test(){
-        Map<Integer,String> maps = groupOperationService.getGroupsByMeshId("12345678");
-        for (Map.Entry<Integer,String> entry:maps.entrySet()){
-            System.out.println("key = "+entry.getKey()+", value = "+entry.getValue());
+        List<Map<String,Object>> groupLists = groupOperationService.getGroupsByMeshId("12345678");
+        for (Map<String,Object> gruopList:groupLists){
+            for (Map.Entry<String,Object>  entry:gruopList.entrySet()) {
+                if ("group_id".equals(entry.getKey())){
+                    System.out.print("group_id=="+entry.getValue());
+                }
+                if ("id".equals(entry.getKey())){
+                    System.out.print("id=="+entry.getValue());
+                }
+            }
+            System.out.println(" ");
         }
     }
 }

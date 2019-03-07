@@ -6,6 +6,7 @@ import com.tpadsz.after.service.GroupOperationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,7 +49,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public Map<Integer, String> getGroupsByMeshId(String meshId) {
+    public List<Map<String, Object>> getGroupsByMeshId(String meshId) {
         return groupOperationDao.getGroupsByMeshId(meshId);
     }
 
