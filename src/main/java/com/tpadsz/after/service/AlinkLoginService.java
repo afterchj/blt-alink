@@ -21,7 +21,7 @@ public interface AlinkLoginService {
 
     void saveLoginLog(LoginLog loginLog);
 
-    void loginOut(String uid) throws Exception;
+    void loginOut(String uid)throws Exception;
 
     AppUser findUserByMobile(String mobile);
 }
