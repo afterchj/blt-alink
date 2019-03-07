@@ -1,5 +1,6 @@
 package com.tpadsz.after.util;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -128,6 +129,10 @@ public class Encryption {
 
 
 	public static void main(String[] args) {
-		System.out.println(Encryption.getMD5Str("tianping20130701"));
+		String str="123456";
+		String tpad1="1300458lch";
+		System.out.println(Encryption.getMD5Str(str));
+		Encryption.HashPassword password = Encryption.encrypt(str);
+		System.out.println(JSON.toJSONString(password));
 	}
 }

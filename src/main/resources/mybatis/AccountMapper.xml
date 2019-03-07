@@ -8,6 +8,8 @@
             <if test="mobile != null">mobile=#{mobile},</if>
             <if test="uname != null">uname=#{uname},</if>
             <if test="pwd != null">pwd=#{pwd},</if>
+            <if test="salt != null">salt=#{salt},</if>
+            update_date=now()
         </set>
         WHERE id=#{uid}
     </update>

@@ -1,4 +1,4 @@
-package com.tpadsz.after;
+package after;
 
 import java.util.*;
 import java.util.concurrent.*;

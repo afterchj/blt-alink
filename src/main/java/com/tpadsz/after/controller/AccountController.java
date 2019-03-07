@@ -6,6 +6,7 @@ import com.tpadsz.after.exception.InvalidCodeException;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.AccountService;
 import com.tpadsz.after.service.ValidationService;
+import com.tpadsz.after.util.Encryption;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +31,16 @@ public class AccountController extends BaseDecodedController {
     public void fillAccount(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         String msg = param.getString("mobile");
         String code = param.getString("code");
+        String plainPwd = param.getString("pwd");
         try {
             if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(msg)) {
                 validationService.checkCode(code, msg);
+            }
+            if (StringUtils.isNotEmpty(plainPwd)) {
+                String md5Pwd = Encryption.getMD5Str(plainPwd);
+                Encryption.HashPassword password = Encryption.encrypt(md5Pwd);
+                param.put("pwd", password.getPassword());
+                param.put("salt", password.getSalt());
             }
             accountService.updateAccount(param);
             code = ResultDict.SUCCESS.getCode();
