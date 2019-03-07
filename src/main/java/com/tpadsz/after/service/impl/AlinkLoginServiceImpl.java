@@ -24,9 +24,30 @@ import javax.annotation.Resource;
 public class AlinkLoginServiceImpl implements AlinkLoginService {
 
     private static final int INTERATIONS = 1024;
+    private static final int SALT_SIZE = 8;
 
     @Resource
     private AlinkLoginDao alinkLoginDao;
+
+    public static class HashPassword {
+        private String salt;
+        private String password;
+
+        public HashPassword(String salt, String password) {
+            super();
+            this.salt = salt;
+            this.password = password;
+        }
+
+        public String getSalt() {
+            return salt;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+    }
 
     @Override
     public AppUser loginByTpad(String appid, String account, String password)  throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException {
@@ -60,6 +81,14 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
         }else {
             return false;
         }
+    }
+
+    public HashPassword encrypt(String plainText) {
+        byte[] salt = Digests.generateSalt(SALT_SIZE);
+        String hashsalt = Encodes.encodeHex(salt);
+        String hashpassword = encrypt(plainText, salt);
+        HashPassword result = new HashPassword(hashsalt, hashpassword);
+        return result;
     }
 
     @Override
