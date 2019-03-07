@@ -21,5 +21,5 @@ public interface AlinkLoginService {
 
     void saveLoginLog(LoginLog loginLog);
 
-    void loginOut(String uid);
+    void loginOut(String uid) throws Exception;
 }

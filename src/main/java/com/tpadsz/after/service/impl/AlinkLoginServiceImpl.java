@@ -77,7 +77,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     }
 
     @Override
-    public void loginOut(String uid) {
+    public void loginOut(String uid) throws Exception {
         alinkLoginDao.saveLoginOutLog(uid);
     }
 }

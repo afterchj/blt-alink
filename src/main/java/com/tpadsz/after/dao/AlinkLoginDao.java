@@ -12,8 +12,6 @@ import com.tpadsz.after.entity.LoginLog;
 public interface AlinkLoginDao {
 
     AppUser findByAccount(String account);
-
     void saveLoginLog(LoginLog loginLog);
-
-    void saveLoginOutLog(String uid);
+    void saveLoginOutLog(String uid) throws Exception;
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tpadsz.after.dao.GroupOperationDao">
+
+    <insert id="saveGroup" parameterType="com.tpadsz.after.entity.Group" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO alink.f_group
+            (group_id,gname,mid,create_date,update_date)
+            VALUES(REPLACE(UUID(),'-',''),#{gname},#{mid},NOW(),NOW())
+    </insert>
+
+    <insert id="saveGroupLog">
+        INSERT INTO alink.f_group_log
+            (uid,operation,blt_flag,create_date)
+            VALUES(#{uid},#{operation},#{bltFlag},NOW())
+    </insert>
+
+    <select id="getMeshSerialNo" resultType="integer">
+        SELECT id FROM alink.f_mesh WHERE mesh_id=#{meshId}
+    </select>
+
+    <select id="getGroupIdById" resultType="string">
+        SELECT group_id FROM alink.f_group WHERE id=#{id}
+    </select>
+
+    <update id="updateGroupNameByGroupId">
+        UPDATE alink.f_group SET gname=#{gname} WHERE group_id=#{groupId};
+    </update>
+
+</mapper>
