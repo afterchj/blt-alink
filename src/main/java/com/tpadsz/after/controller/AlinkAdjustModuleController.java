@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -111,6 +113,25 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         if (operation.equals("1")){
 
         }
+    }
+
+    /**
+     * 查看group列表、group内设备列表和信息状态
+     * @param params uid,meshId
+     * @param model
+     */
+    @RequestMapping(value = "groupsLists",method = RequestMethod.POST)
+    public void groupsLists(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        String meshId = params.getString("meshId");
+        String uid = params.getString("uid");
+        Map<Integer,String> map;
+        if (StringUtils.isBlank(meshId)||StringUtils.isBlank(uid)){
+            model.put("result", ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message",ResultDict.PARAMS_BLANK.getValue());
+            return;
+        }
+//        map = groupOperationService.getGroupsByMeshId(meshId);
+
     }
 
 }

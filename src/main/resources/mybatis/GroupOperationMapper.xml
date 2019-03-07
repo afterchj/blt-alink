@@ -26,4 +26,17 @@
         UPDATE alink.f_group SET gname=#{gname} WHERE group_id=#{groupId};
     </update>
 
+    <select id="getGroupsByMeshId" resultMap="map">
+        SELECT
+    	    g.id,
+        	g.group_id
+        FROM
+        	alink.f_group g,
+        	alink.f_mesh m
+        WHERE
+        	g.mid = m.id
+        	AND m.mesh_id = #{meshId}
+        ORDER BY
+        	g.id DESC
+    </select>
 </mapper>

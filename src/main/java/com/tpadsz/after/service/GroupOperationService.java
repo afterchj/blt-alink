@@ -2,6 +2,8 @@ package com.tpadsz.after.service;
 
 import com.tpadsz.after.entity.Group;
 
+import java.util.Map;
+
 /**
  * @program: blt-alink
  * @description:
@@ -19,4 +21,6 @@ public interface GroupOperationService {
     Integer saveGroup(Group group);
 
     void updateGroupNameByGroupId(String groupId, String gname);
+
+    Map<Integer,String> getGroupsByMeshId(String meshId);
 }

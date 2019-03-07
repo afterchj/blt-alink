@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Map;
+
 /**
  * @program: blt-alink
  * @description:
@@ -46,8 +48,16 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test(){
+    public void updateGroupNameByGroupIdTest(){
         groupOperationService.updateGroupNameByGroupId("180002b13ff011e98908fa163eaa8896","白炽灯组");
         System.out.println("success");
+    }
+
+    @Test
+    public void test(){
+        Map<Integer,String> maps = groupOperationService.getGroupsByMeshId("12345678");
+        for (Map.Entry<Integer,String> entry:maps.entrySet()){
+            System.out.println("key = "+entry.getKey()+", value = "+entry.getValue());
+        }
     }
 }

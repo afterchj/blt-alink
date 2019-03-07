@@ -11,6 +11,15 @@ public class Group {
     private Integer id;
     private String gname;
     private Integer mid;
+    private String groupId;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     public Integer getId() {
         return id;

@@ -3,6 +3,8 @@ package com.tpadsz.after.dao;
 import com.tpadsz.after.entity.Group;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 /**
  * @program: blt-alink
  * @description: 组操作
@@ -20,4 +22,6 @@ public interface GroupOperationDao {
     Integer saveGroup(Group group);//创建组
     //重命名组名
     void updateGroupNameByGroupId(@Param("groupId") String groupId, @Param("gname") String gname);
+
+    Map<Integer,String> getGroupsByMeshId(@Param("meshId") String meshId);//根据网络id查询组信息
 }

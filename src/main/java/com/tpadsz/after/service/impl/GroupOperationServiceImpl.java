@@ -6,6 +6,7 @@ import com.tpadsz.after.service.GroupOperationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -44,6 +45,11 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     @Override
     public void updateGroupNameByGroupId(String groupId, String gname) {
         groupOperationDao.updateGroupNameByGroupId(groupId,gname);
+    }
+
+    @Override
+    public Map<Integer, String> getGroupsByMeshId(String meshId) {
+        return groupOperationDao.getGroupsByMeshId(meshId);
     }
 
 
