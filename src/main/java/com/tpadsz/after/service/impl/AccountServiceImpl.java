@@ -28,7 +28,6 @@ public class AccountServiceImpl implements AccountService {
                 throw new RepetitionException("用户名已存在！");
             }
         }
-        System.out.println("开始下一步...");
         accountDao.updateAccount(map);
     }
 

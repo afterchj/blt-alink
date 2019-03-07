@@ -56,7 +56,7 @@ public class AccountController extends BaseDecodedController {
     public void pushCode(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
 
         try {
-            validationService.sendCode(param.getString("code"), param.getString("mobile"));
+            validationService.sendCode(param.getString("appid"), param.getString("mobile"));
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
