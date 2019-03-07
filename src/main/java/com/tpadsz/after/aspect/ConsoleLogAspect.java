@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Created by hongjian.chen on 2019/3/7.
  * 日志切面
  */
 @Aspect
@@ -28,7 +29,7 @@ public class ConsoleLogAspect {
     private ConsoleLogService logService;
 
     public ConsoleLogAspect() {
-        System.out.println("<<<<<<<<<<<<<<<----aspect works----->>>>>>>>");
+        logger.info("aspect start work...");
     }
 
     //记录操作日志节点
@@ -45,7 +46,6 @@ public class ConsoleLogAspect {
         map.put("method", methodName);
         try {
             logService.saveLog(map);
-            logger.info("执行成功！");
         } catch (Throwable e) {
             logger.error("执行失败：" + e.getMessage());
         }
