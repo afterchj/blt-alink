@@ -62,13 +62,30 @@ public class AlinkLoginController extends BaseDecodedController {
         model.put("result_message", result.getValue());
         return null;
     }
-
-
-    @RequestMapping(value = "loginOut", method = RequestMethod.POST)
-    public void loginOut(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+    /**
+     * 退出登录接口
+     * @param params uid:用户id
+     * @param model
+     */
+    @RequestMapping(value = "loginOut",method = RequestMethod.POST)
+    public void loginOut(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
         String uid = params.getString("uid");
-        alinkLoginService.loginOut(uid);
-        model.put("result", ResultDict.SUCCESS.getCode());
-
+        if (StringUtils.isBlank(uid)){
+            //参数不能为空
+            model.put("result", ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message",ResultDict.PARAMS_BLANK.getCode());
+            return;
+        }
+        try {
+            alinkLoginService.loginOut(uid);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message",ResultDict.SUCCESS.getCode());
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+            //系统错误
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+            model.put("result_message",ResultDict.SYSTEM_ERROR.getCode());
+        }
     }
 }
