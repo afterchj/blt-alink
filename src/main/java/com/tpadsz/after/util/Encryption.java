@@ -12,7 +12,30 @@ import java.security.NoSuchAlgorithmException;
 public class Encryption {
 	
 	private static Logger logger = Logger.getLogger(Encryption.class);
-	
+	private static final int INTERATIONS = 1024;
+	private static final int SALT_SIZE = 8;
+
+
+	public static class HashPassword {
+		private String salt;
+		private String password;
+
+		public HashPassword(String salt, String password) {
+			super();
+			this.salt = salt;
+			this.password = password;
+		}
+
+		public String getSalt() {
+			return salt;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+	}
+
 	public static String getMD5Str(String str) {
 		MessageDigest messageDigest = null;
 
@@ -84,7 +107,25 @@ public class Encryption {
 			return null;
 		}
 	}
-	
+
+	public static HashPassword encrypt(String plainText) {
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		String hashsalt = Encodes.encodeHex(salt);
+		String hashpassword = encrypt(plainText, salt);
+		HashPassword result = new HashPassword(hashsalt, hashpassword);
+		return result;
+	}
+
+	public static String encrypt(String actual, String salt) {
+		return encrypt(actual, Encodes.decodeHex(salt));
+	}
+
+	public static String encrypt(String actual, byte[] salt) {
+		byte[] hashPassword = Digests.sha1(actual.getBytes(), salt, INTERATIONS);
+		return Encodes.encodeHex(hashPassword);
+	}
+
+
 
 	public static void main(String[] args) {
 		System.out.println(Encryption.getMD5Str("tianping20130701"));
