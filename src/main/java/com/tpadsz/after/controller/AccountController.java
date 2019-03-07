@@ -6,6 +6,7 @@ import com.tpadsz.after.exception.InvalidCodeException;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.AccountService;
 import com.tpadsz.after.service.ValidationService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,11 +26,14 @@ public class AccountController extends BaseDecodedController {
     @Autowired
     private ValidationService validationService;
 
+    @RequestMapping("/fillAccount")
     public void fillAccount(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
-        String msg = "";
-        String code = "";
+        String msg = param.getString("mobile");
+        String code = param.getString("code");
         try {
-            validationService.checkCode(param.getString("code"), param.getString("mobile"));
+            if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(msg)) {
+                validationService.checkCode(code, msg);
+            }
             accountService.updateAccount(param);
             code = ResultDict.SUCCESS.getCode();
             msg = ResultDict.SUCCESS.getValue();
@@ -50,8 +54,9 @@ public class AccountController extends BaseDecodedController {
 
     @RequestMapping("/verify")
     public void pushCode(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
+
         try {
-            validationService.sendCode(param.getString("appid"), param.getString("mobile"));
+            validationService.sendCode(param.getString("code"), param.getString("mobile"));
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
