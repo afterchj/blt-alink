@@ -75,4 +75,9 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     public AppUser findUserByMobile(String mobile) {
         return alinkLoginDao.findUserByMobile(mobile);
     }
+
+    @Override
+    public void insert() {
+        alinkLoginDao.insert("网络","11222345","2345","2345","1");
+    }
 }

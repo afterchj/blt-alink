@@ -34,4 +34,8 @@
         SELECT id,uname,mobile,account,utype,uaddress,rid from alink.f_user_account where mobile=#{mobile}
     </select>
 
+    <insert id="insert" parameterType="string">
+        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
+    </insert>
+
 </mapper>

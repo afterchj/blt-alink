@@ -10,9 +10,9 @@ import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.service.ValidationService;
-import com.tpadsz.after.util.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -152,4 +152,19 @@ public class AlinkLoginController extends BaseDecodedController {
             model.put("result_message", SYSTEM_ERROR.getCode());
         }
     }
+
+    @RequestMapping(value = "/generator", method = RequestMethod.POST)
+    public String generator(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        try{
+            String meshId = "11112345";
+            alinkLoginService.insert();
+        }catch (DuplicateKeyException e){
+            System.out.println();
+        }
+
+        model.put("result", "123");
+        model.put("result_message", "成功");
+        return null;
+    }
+
 }
