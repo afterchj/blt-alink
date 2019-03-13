@@ -6,13 +6,13 @@ import java.util.Date;
  * Created by chenhao.lu on 2019/3/8.
  */
 public class Mesh {
-    private int id;
+    private Integer id;
     private String mname;
     private String mesh_id;
     private String is_repeat;
     private String pwd;
     private String uid;
-    private int project_id;
+    private Integer project_id;
     private Date create_date;
     private Date update_date;
     private String other;

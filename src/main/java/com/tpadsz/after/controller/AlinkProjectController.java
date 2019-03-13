@@ -53,17 +53,15 @@ public class AlinkProjectController extends BaseDecodedController{
     public String findProList(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
-        List<Project> list = new ArrayList<>();
         try{
-            list = projectService.findProListByUid(uid,preId);
-
+            List<Project> list = projectService.findProListByUid(uid,preId);
+            Project oldPro = projectService.findOldProByUid(uid);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("myProjects", list);
+            model.put("oldProject", oldPro);
         }catch (Exception e){
-
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
-
-
-        model.put("result", "123");
-        model.put("result_message", list);
         return null;
     }
 

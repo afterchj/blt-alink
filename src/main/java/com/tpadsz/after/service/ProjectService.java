@@ -12,6 +12,8 @@ public interface ProjectService {
 
     List<Project> findProListByUid(String uid, String preId);
 
+    Project findOldProByUid(String uid);
+
     void  createMesh(String mname,String meshId,String pwd,String uid,String projectId) throws RepetitionException;
 
     String findMeshId(int limitNum);

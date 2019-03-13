@@ -24,11 +24,17 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> list = new ArrayList<>();
         Mesh mesh = projectDao.findRepeatIdByUid(preId,uid);
         if(mesh!=null){
-            list = projectDao.findProListByUid(uid,mesh.getId());
+            list = projectDao.findProListByUid(uid,mesh.getProject_id());
         }else {
             list = projectDao.findProListByUid(uid,0);
         }
         return list;
+    }
+
+    @Override
+    public Project findOldProByUid(String uid) {
+        Project project = projectDao.findOldProByUid(uid);
+        return project;
     }
 
     @Override

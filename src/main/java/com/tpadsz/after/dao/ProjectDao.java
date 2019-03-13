@@ -22,4 +22,6 @@ public interface ProjectDao {
     void recordMeshId(@Param("mesh_id")String meshId);
 
     List<Project> findProListByUid(@Param("uid")String uid,@Param("id")int id);
+
+    Project findOldProByUid(@Param("uid")String uid);
 }
