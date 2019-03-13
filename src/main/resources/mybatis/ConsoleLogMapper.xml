@@ -18,8 +18,4 @@
 	 VALUES(#{uid},#{mid},#{sid},#{gid},#{lmac},#{x},#{y},#{method},#{cmd},NOW())
     </update>
 
-    <select id="findByUser" resultType="int" parameterType="string">
-        SELECT COUNT(1) from alink.f_user_account where uname=#{uname}
-    </select>
-
 </mapper>
