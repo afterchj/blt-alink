@@ -31,11 +31,22 @@
     </insert>
 
     <select id="findUserByMobile" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,utype,uaddress,rid from alink.f_user_account where mobile=#{mobile}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where mobile=#{mobile}
     </select>
 
-    <insert id="insert" parameterType="string">
-        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
+    <select id="findUserByUname" resultMap="standardTpadUserMap" parameterType="string" >
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where uname=#{uname}
+    </select>
+
+    <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into alink.create_mesh_id
+        (mesh_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item}
+            )
+        </foreach>
     </insert>
 
 </mapper>
