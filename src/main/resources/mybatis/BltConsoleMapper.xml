@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tpadsz.after.dao.BltConsoleDao">
+
+	<parameterMap id="consoleMapper" type="map">
+		<parameter property="uid" mode="IN"/>
+		<parameter property="mid" mode="IN"/>
+		<parameter property="pid" mode="IN"/>
+		<parameter property="gid" mode="IN"/>
+		<parameter property="lmac" mode="IN"/>
+		<parameter property="cmd" mode="IN"/>
+		<parameter property="x" mode="IN"/>
+		<parameter property="y" mode="IN"/>
+		<parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+	</parameterMap>
+
+	<select id="saveOperation" parameterMap="consoleMapper" statementType="CALLABLE">
+		CALL alink.save_operation (?,?,?,?,?,?,?,?,?)
+	</select>
+
+    <update id="saveSceneName" parameterType="map">
+		UPDATE f_scene
+		SET sname = #{sname}
+		WHERE
+			scene_id = #{sid}
+		AND mid = (
+			SELECT
+				id
+			FROM
+				f_mesh
+			WHERE
+				mesh_id = #{mid}
+			AND uid = #{uid}
+		)
+    </update>
+
+    <select id="getScenes" resultType="map" parameterType="map">
+		SELECT
+			s.scene_id,
+			s.sname,
+			a.x,
+			a.y
+		FROM
+			f_mesh m
+		INNER JOIN f_scene s ON m.id = s.mid
+		INNER JOIN f_scene_setting a ON a.sid = s.id
+		AND s.uid = #{uid}
+		AND m.mesh_id = #{mid}
+	</select>
+
+    <select id="getGroups" resultType="map" parameterType="map">
+		SELECT
+			g.group_id,
+			g.gname,
+			gs.x,
+			gs.y
+		FROM
+			f_group g
+		INNER JOIN f_group_setting gs ON g.id = gs.gid
+		INNER JOIN f_mesh m ON m.id = gs.mid
+		AND m.uid = #{uid}
+		AND m.mesh_id = #{mid}
+	</select>
+
+    <delete id="deleteScene" parameterType="map">
+		DELETE
+		FROM
+			f_scene
+		WHERE
+			scene_id = #{sid}
+		AND mid = (
+			SELECT
+				id
+			FROM
+				f_mesh
+			WHERE mesh_id = #{mid}
+			AND uid = #{uid}
+		)
+	</delete>
+
+	<update id="saveApplyScene" parameterType="map">
+		UPDATE f_group_setting set x=#{x},y=#{y},update_date=NOW()
+		WHERE
+			sid = (
+				SELECT
+					s.id
+				FROM
+					f_scene s
+				WHERE s.scene_id = #{sid}
+				AND s.uid = #{uid}
+				AND mid = (
+					SELECT
+						id
+					FROM
+						f_mesh
+					WHERE
+						mesh_id = #{mid}
+				)
+			)
+	</update>
+</mapper>

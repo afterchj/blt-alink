@@ -18,4 +18,7 @@
         SELECT COUNT(1) from alink.f_user_account where uname=#{uname}
     </select>
 
+    <select id="findByMobile" resultType="int" parameterType="string">
+        SELECT COUNT(1) from alink.f_user_account where mobile=#{mobile}
+    </select>
 </mapper>

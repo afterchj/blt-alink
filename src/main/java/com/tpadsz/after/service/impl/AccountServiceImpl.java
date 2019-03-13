@@ -22,10 +22,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccount(Map map) throws RepetitionException {
         String username = (String) map.get("uname");
+        String mobile = (String) map.get("mobile");
         if (StringUtils.isNotEmpty(username)) {
             int count = findByUser(username);
             if (count > 0) {
-                throw new RepetitionException("用户名已存在！");
+                throw new RepetitionException(11,"用户名已存在！");
+            }
+        }
+        if (StringUtils.isNotEmpty(mobile)) {
+            int count = findByMobile(mobile);
+            if (count > 0) {
+                throw new RepetitionException(12,"该手机号已被绑定！");
             }
         }
         accountDao.updateAccount(map);
@@ -34,5 +41,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public int findByUser(String username) {
         return accountDao.findByUser(username);
+    }
+
+    @Override
+    public int findByMobile(String mobile) {
+        return accountDao.findByMobile(mobile);
     }
 }

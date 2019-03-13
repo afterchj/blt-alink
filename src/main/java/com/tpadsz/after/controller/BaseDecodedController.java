@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class BaseDecodedController{
+public class BaseDecodedController extends BaseController{
 
     @ModelAttribute("decodedParams")
     public JSONObject beforeInvokingHandlerMethod(HttpServletRequest request) {
