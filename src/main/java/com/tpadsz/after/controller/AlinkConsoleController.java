@@ -1,5 +1,6 @@
 package com.tpadsz.after.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.BltConsoleService;
@@ -55,7 +56,15 @@ public class AlinkConsoleController extends BaseDecodedController {
     @RequestMapping("/switch")
     public void consoleSwitch(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
-        bltConsoleService.saveOperation(param);
+        JSONArray gids = param.getJSONArray("gids");
+        if (gids != null) {
+            for (Object gid : gids) {
+                param.put("gid", gid);
+                bltConsoleService.saveOperation(param);
+            }
+        } else {
+            bltConsoleService.saveOperation(param);
+        }
         logger.info("result=" + param.getString("result"));
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -64,6 +73,7 @@ public class AlinkConsoleController extends BaseDecodedController {
     @RequestMapping("/rename")
     public void consoleRenameScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
+        bltConsoleService.saveSceneName(param);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }
@@ -71,6 +81,10 @@ public class AlinkConsoleController extends BaseDecodedController {
     @RequestMapping("/clean")
     public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
+        String flag = param.getString("bltFlag");
+        if ("1".equals(flag)) {
+            bltConsoleService.deleteScene(param);
+        }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }

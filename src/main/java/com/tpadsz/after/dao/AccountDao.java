@@ -12,4 +12,5 @@ public interface AccountDao {
 
     int findByUser(String uname);
 
+    int findByMobile(String mobile);
 }

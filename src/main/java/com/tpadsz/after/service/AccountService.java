@@ -12,4 +12,6 @@ public interface AccountService {
     void updateAccount(Map map) throws RepetitionException;
 
     int findByUser(String uname);
+
+    int findByMobile(String mobile);
 }

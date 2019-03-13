@@ -33,7 +33,6 @@ public class ValidationService{
     public void checkCode(String code, String mobile) throws InvalidCodeException {
         String key = String.format(MemcachedObjectType.CACHE_MESSAGE_VERIFICATION.getPrefix(), mobile);
         String value = getCode(key);
-        System.out.println("code=" + code + ",value=" + value);
         if (!StringUtils.equals(code, value)) {
             throw new InvalidCodeException("验证码不正确！");
         }

@@ -78,7 +78,7 @@ public class HttpUtils {
                 body = buildRequestBody(SMSContains.ALINK_LAIGHT.getSender(), receiver, SMSContains.ALINK_LAIGHT.getTemplate(), templateParas);
                 break;
         }
-        System.out.println("body=" + body);
+//        System.out.println("body=" + body);
         //请求Headers中的X-WSSE参数值
         String wsseHeader = buildHeader(SMS.APPKEY.getValue(), SMS.APPSECRET.getValue());
         //为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
@@ -97,7 +97,7 @@ public class HttpUtils {
                     .addHeader("X-WSSE", wsseHeader)
                     .setEntity(new StringEntity(body)).build());
             result = EntityUtils.toString(response.getEntity());
-            System.out.println("response=" + result);
+//            System.out.println("response=" + result);
         } catch (Exception e) {
             return null;
         }

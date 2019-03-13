@@ -2,6 +2,8 @@ package com.tpadsz.after.test;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.AccountDao;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.HttpUtils;
@@ -19,12 +21,8 @@ import java.util.Map;
 public class MyTest {
     private static ClassPathXmlApplicationContext ctx;
 
-    static {
-        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-    }
-
-
     public static SqlSession getSession() {
+        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         SqlSessionFactory factory = (SqlSessionFactory) ctx.getBean("sqlSessionFactory");
         return factory.openSession();
     }
@@ -59,5 +57,13 @@ public class MyTest {
         ValidationService validationService = (ValidationService) ctx.getBean("validationService");
         String code = validationService.sendCode("13", "18170756879");
         validationService.checkCode(code, "18170756879");
+    }
+
+    @Test
+    public void testArray(){
+        String[] arys={"0","4","5"};
+        JSONObject object=new JSONObject();
+        object.put("gids",arys);
+        System.out.println(object);
     }
 }

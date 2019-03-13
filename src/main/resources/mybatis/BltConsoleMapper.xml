@@ -77,4 +77,25 @@
 			AND uid = #{uid}
 		)
 	</delete>
+
+	<update id="saveApplyScene" parameterType="map">
+		UPDATE f_group_setting set x=#{x},y=#{y},update_date=NOW()
+		WHERE
+			sid = (
+				SELECT
+					s.id
+				FROM
+					f_scene s
+				WHERE s.scene_id = #{sid}
+				AND s.uid = #{uid}
+				AND mid = (
+					SELECT
+						id
+					FROM
+						f_mesh
+					WHERE
+						mesh_id = #{mid}
+				)
+			)
+	</update>
 </mapper>

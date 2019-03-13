@@ -8,6 +8,7 @@ import com.tpadsz.after.service.AccountService;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.Encryption;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class AccountController extends BaseDecodedController {
 
+    private Logger logger = Logger.getLogger(this.getClass());
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -46,8 +48,16 @@ public class AccountController extends BaseDecodedController {
             code = ResultDict.SUCCESS.getCode();
             msg = ResultDict.SUCCESS.getValue();
         } catch (RepetitionException e) {
-            code = ResultDict.UNAME_REPET.getCode();
-            msg = ResultDict.UNAME_REPET.getValue();
+            int flag = e.getCode();
+            logger.info("flag=" + flag);
+            if (flag == 12) {
+                code = ResultDict.MOBILE_REPET.getCode();
+                msg = ResultDict.MOBILE_REPET.getValue();
+            }
+            if (flag == 11) {
+                code = ResultDict.UNAME_REPET.getCode();
+                msg = ResultDict.UNAME_REPET.getValue();
+            }
         } catch (InvalidCodeException e1) {
             code = ResultDict.VERIFY_ERROR.getCode();
             msg = ResultDict.VERIFY_ERROR.getValue();

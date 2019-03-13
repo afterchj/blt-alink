@@ -1,6 +1,7 @@
 package com.tpadsz.after.aspect;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.service.ConsoleLogService;
 import org.apache.log4j.Logger;
@@ -42,12 +43,15 @@ public class ConsoleLogAspect {
     public void saveLog(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         JSONObject map = (JSONObject) request.getSession().getAttribute("param");
-        String methodName = joinPoint.getSignature().getName();
-        map.put("method", methodName);
-        try {
+        map.put("method", joinPoint.getSignature().getName());
+        JSONArray gids = map.getJSONArray("gids");
+        if (gids != null) {
+            for (Object gid : gids) {
+                map.put("gid", gid);
+                logService.saveLog(map);
+            }
+        }else {
             logService.saveLog(map);
-        } catch (Throwable e) {
-            logger.error("执行失败：" + e.getMessage());
         }
     }
 }
