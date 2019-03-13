@@ -1,4 +1,4 @@
-package com.tpadsz.after;
+package com.after;
 
 import com.tpadsz.after.config.SpringConfig;
 import net.rubyeye.xmemcached.XMemcachedClient;

@@ -1,6 +1,9 @@
 package com.tpadsz.after.service;
 
 import com.tpadsz.after.entity.Group;
+import com.tpadsz.after.entity.GroupConsoleLog;
+import com.tpadsz.after.entity.GroupList;
+import com.tpadsz.after.entity.LightList;
 
 import java.util.List;
 import java.util.Map;
@@ -13,15 +16,31 @@ import java.util.Map;
  **/
 public interface GroupOperationService {
 
-    void saveGroupLog(String uid, String operation, String bltFlag);
+    void saveGroupLog(String uid, String meshId, String operation, String bltFlag);
 
-    Integer getMeshSerialNo(String meshId);
+    Integer getMeshSerialNo(String meshId,String uid);
 
     String getGroupIdById(Integer id);
 
     Integer saveGroup(Group group);
 
-    void updateGroupNameByGroupId(String groupId, String gname);
+    void updateGroupNameByMid(Group group);
 
-    List<Map<String,Object>> getGroupsByMeshId(String meshId);
+    List<GroupList> getGroupAll(Integer mid);
+
+    Map<String,Object> getLightColor(String lmac);
+
+    Integer getGid(Group group);
+
+    Integer getLightNum(Group group);
+
+    void updateGidInLight(Group group);
+
+    List<LightList> getLightList(Group group);
+
+    void deleteGroup(Group group);
+
+    Integer getSceneSerialNo(Integer mid, Integer sceneId);
+
+    GroupConsoleLog getGroupConsoleLogByGid(Integer gid);
 }

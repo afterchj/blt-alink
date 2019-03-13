@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tpadsz.after.dao.LightAujstDao">
+<mapper namespace="com.tpadsz.after.dao.LightAjustDao">
 
-    <insert id="saveLightAjust">
-
+    <insert id="saveLightAjustLog">
+        INSERT INTO alink.f_light_ajust_log
+          ( mesh_id,lmac, blt_flag,operation,create_date )
+        VALUES
+	      (#{meshId}, #{lmac},#{bltFlag},#{operation},now())
     </insert>
 
+    <update id="updateLightName">
+        UPDATE alink.f_light SET lname=#{lname},update_date=now() WHERE lmac=#{lmac}
+    </update>
+
+    <insert id="saveLight" parameterType="com.tpadsz.after.entity.LightList">
+        INSERT INTO alink.f_light ( product_id, lmac, lname, mid, gid, create_date, update_date )
+        VALUES( #{productId},#{lmac},#{lname},#{mid},#{gid},now(),now() )
+    </insert>
+
+    <delete id="deleteLight">
+        DELETE from alink.f_light WHERE lmac=#{lmac}
+    </delete>
+
+    <update id="updateLightGid">
+        UPDATE alink.f_light SET gid=#{dgid} WHERE gid=#{gid}
+    </update>
 </mapper>
