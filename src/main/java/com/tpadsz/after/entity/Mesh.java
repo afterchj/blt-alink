@@ -5,11 +5,14 @@ import java.util.Date;
 /**
  * Created by chenhao.lu on 2019/3/8.
  */
-public class Project {
+public class Mesh {
     private int id;
-    private String name;
-    private String add;
+    private String mname;
+    private String mesh_id;
+    private String is_repeat;
+    private String pwd;
     private String uid;
+    private int project_id;
     private Date create_date;
     private Date update_date;
     private String other;
@@ -22,20 +25,36 @@ public class Project {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getMname() {
+        return mname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMname(String mname) {
+        this.mname = mname;
     }
 
-    public String getAdd() {
-        return add;
+    public String getMesh_id() {
+        return mesh_id;
     }
 
-    public void setAdd(String add) {
-        this.add = add;
+    public void setMesh_id(String mesh_id) {
+        this.mesh_id = mesh_id;
+    }
+
+    public String getIs_repeat() {
+        return is_repeat;
+    }
+
+    public void setIs_repeat(String is_repeat) {
+        this.is_repeat = is_repeat;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getUid() {
@@ -44,6 +63,14 @@ public class Project {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public int getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(int project_id) {
+        this.project_id = project_id;
     }
 
     public Date getCreate_date() {

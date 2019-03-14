@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tpadsz.after.dao.ProjectDao">
+
+
+    <select id="findRepeatIdByUid" resultType="com.tpadsz.after.entity.Mesh" parameterType="string">
+        SELECT * from alink.f_mesh where mesh_id LIKE CONCAT(#{mesh_id},'%') and uid = #{uid}
+    </select>
+
+    <insert id="createMesh" parameterType="string">
+        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
+    </insert>
+
+    <select id="findMeshId" resultType="string" parameterType="int">
+        select mesh_id from
+        (SELECT * from alink.create_mesh_id ORDER BY id ASC LIMIT #{limitNum}) as a
+        ORDER BY a.id DESC limit 1
+    </select>
+
+    <delete id="deleteMeshId" parameterType="int">
+        DELETE FROM alink.create_mesh_id WHERE id=(select id from
+        (SELECT * from alink.create_mesh_id ORDER BY id ASC LIMIT #{limitNum}) as a
+        ORDER BY a.id DESC limit 1)
+    </delete>
+
+    <insert id="recordMeshId" parameterType="string">
+        INSERT INTO alink.repeated_mesh_id (mesh_id) VALUES(#{mesh_id})
+    </insert>
+
+    <select id="findProListByUid" resultType="com.tpadsz.after.entity.Project">
+        SELECT * from alink.f_project where uid = #{uid} and other !='old' or uid=#{uid} and other is null ORDER BY case when id=#{id} then 0 else 1 end , update_date DESC
+    </select>
+</mapper>

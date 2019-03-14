@@ -2,7 +2,8 @@ package com.tpadsz.after.dao;
 
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
-import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @program: blt-light
@@ -20,5 +21,7 @@ public interface AlinkLoginDao {
 
     AppUser findUserByMobile(String mobile);
 
-    void insert(@Param("mname")String mname, @Param("mesh_id")String mesh_id, @Param("pwd")String pwd, @Param("uid")String uid, @Param("project_id")String project_id);
+    AppUser findUserByUname(String uname);
+
+    void insertForeach(List<String> list);
 }

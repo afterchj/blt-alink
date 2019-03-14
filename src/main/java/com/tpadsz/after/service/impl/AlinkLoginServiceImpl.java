@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -27,11 +28,17 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     private AlinkLoginDao alinkLoginDao;
 
     @Override
-    public AppUser loginByTpad(String appid, String account, String password) throws SystemAlgorithmException,
+    public AppUser loginByTpad(String input, String password,String inputFlag) throws SystemAlgorithmException,
             AccountNotCorrectException, PasswordNotCorrectException {
         AppUser appUser = null;
         try {
-            appUser = alinkLoginDao.findUserByAccount(account);
+            if("0".equals(inputFlag)) {
+                appUser = alinkLoginDao.findUserByAccount(input);
+            } else if("1".equals(inputFlag)){
+                appUser = alinkLoginDao.findUserByMobile(input);
+            } else if("2".equals(inputFlag)){
+                appUser = alinkLoginDao.findUserByUname(input);
+            }
         } catch (Exception e) {
             throw new SystemAlgorithmException();
         }
@@ -77,7 +84,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     }
 
     @Override
-    public void insert() {
-        alinkLoginDao.insert("网络","11222345","2345","2345","1");
+    public void insertForeach(List<String> list) {
+        alinkLoginDao.insertForeach(list);
     }
 }

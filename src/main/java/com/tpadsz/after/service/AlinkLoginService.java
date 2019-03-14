@@ -6,6 +6,8 @@ import com.tpadsz.after.exception.AccountNotCorrectException;
 import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 
+import java.util.List;
+
 /**
  * @program: blt-light
  * @description:
@@ -15,7 +17,7 @@ import com.tpadsz.after.exception.SystemAlgorithmException;
 public interface AlinkLoginService {
 
 
-    AppUser loginByTpad(String appid, String account, String password) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException;
+    AppUser loginByTpad(String input, String password,String inputFlag) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException;
 
     boolean checkPassword(String actual, String expected, String salt);
 
@@ -25,5 +27,5 @@ public interface AlinkLoginService {
 
     AppUser findUserByMobile(String mobile);
 
-    void insert();
+    void insertForeach(List<String> list);
 }
