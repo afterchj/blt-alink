@@ -48,16 +48,8 @@ public class AccountController extends BaseDecodedController {
             code = ResultDict.SUCCESS.getCode();
             msg = ResultDict.SUCCESS.getValue();
         } catch (RepetitionException e) {
-            int flag = e.getCode();
-            logger.info("flag=" + flag);
-            if (flag == 12) {
-                code = ResultDict.MOBILE_REPET.getCode();
-                msg = ResultDict.MOBILE_REPET.getValue();
-            }
-            if (flag == 11) {
-                code = ResultDict.UNAME_REPET.getCode();
-                msg = ResultDict.UNAME_REPET.getValue();
-            }
+            code = ResultDict.UNAME_REPET.getCode();
+            msg = ResultDict.UNAME_REPET.getValue();
         } catch (InvalidCodeException e1) {
             code = ResultDict.VERIFY_ERROR.getCode();
             msg = ResultDict.VERIFY_ERROR.getValue();
@@ -72,12 +64,22 @@ public class AccountController extends BaseDecodedController {
 
     @RequestMapping("/verify")
     public void pushCode(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
-
+        String mobile = (String) param.get("mobile");
         try {
+            if (StringUtils.isNotEmpty(mobile)) {
+                int count = accountService.findByMobile(mobile);
+                if (count > 0) {
+                    throw new RepetitionException(12, "该手机号已被绑定！");
+                }
+            }
             validationService.sendCode(param.getString("appid"), param.getString("mobile"));
             model.put("result", ResultDict.SUCCESS.getCode());
+        } catch (RepetitionException e) {
+            model.put("result", ResultDict.MOBILE_REPET.getCode());
+            model.put("result_message", ResultDict.MOBILE_REPET.getValue());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
         }
     }
 }
