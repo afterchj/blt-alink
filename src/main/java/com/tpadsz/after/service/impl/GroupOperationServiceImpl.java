@@ -1,10 +1,7 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.GroupOperationDao;
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.GroupConsoleLog;
-import com.tpadsz.after.entity.GroupList;
-import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.service.GroupOperationService;
 import org.springframework.stereotype.Service;
 
@@ -91,8 +88,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public GroupConsoleLog getGroupConsoleLogByGid(Integer gid) {
-        return groupOperationDao.getGroupConsoleLogByGid(gid);
+    public GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId) {
+        return groupOperationDao.getGroupConsoleLogByGid(groupId,uid,meshId);
     }
-
 }

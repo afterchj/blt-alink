@@ -1,12 +1,10 @@
 package com.after.controller;
 
 import com.tpadsz.after.dao.GroupOperationDao;
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.GroupConsoleLog;
-import com.tpadsz.after.entity.GroupList;
-import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
+import com.tpadsz.after.service.SceneAjustService;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -35,6 +33,7 @@ public class AlinkAdjustModuleControllerTest {
 
     GroupOperationService groupOperationService = ac.getBean("groupOperationService",GroupOperationService.class);
     LightAjustService lightAjustService = ac.getBean("lightAjustService",LightAjustService.class);
+    SceneAjustService sceneAjustService = ac.getBean("sceneAjustService", SceneAjustService.class);
 
     @Test
     public void getMeshSerialNoTest(){
@@ -85,7 +84,7 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void getMapperTest(){
         SqlSession session=getSession();
-        List<GroupList> groupLists = session.getMapper(GroupOperationDao.class).getGroupAll(1);
+        List<GroupList> groupLists = session.getMapper(GroupOperationDao.class).getGroupAll(3);
         for (GroupList groupList:groupLists){
             System.out.println(groupList.toString());
         }
@@ -99,22 +98,9 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void getGroupAllTest(){
-        Integer mid = 1;
-        List<GroupList> groupLists = groupOperationService.getGroupAll(mid);
-        for (GroupList groupList:groupLists){
-            List<LightList> lightLists = groupList.getLightLists();
-            groupList.setMeshId("12345678");
-            if (lightLists.size()>0){
-                for (LightList lightList:lightLists){
-                    String lmac = lightList.getLmac();
-                    Map<String, Object> map = groupOperationService.getLightColor(lmac);
-                    if (map!=null){
-                        lightList.setX((String) map.get("x"));
-                        lightList.setY((String) map.get("y"));
-                    }
-                }
-            }
-        }
+//        Integer mid = 1;
+        List<GroupList> groupLists = groupOperationService.getGroupAll(3);
+        System.out.println(groupLists.toString());
     }
 
     @Test
@@ -160,11 +146,65 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test(){
-        GroupConsoleLog groupConsoleLog = groupOperationService.getGroupConsoleLogByGid(21);
+    public void getGroupConsoleLogByGidTest(){
+        GroupConsoleLog groupConsoleLog = groupOperationService.getGroupConsoleLogByGid(2,"aaaa","12345678");
         System.out.println(groupConsoleLog.toString());
         if (groupConsoleLog.getLmac()==null){
             System.out.println("lmac is null");
         }
+    }
+
+    @Test
+    public void saveLightSettingTest(){
+        LightSetting lightSetting = new LightSetting();
+        lightSetting.setX("21");
+        lightSetting.setY("21%");
+        lightSetting.setLid(14);
+        lightSetting.setSid(1);
+        lightAjustService.saveLightSetting(lightSetting);
+    }
+
+    @Test
+    public void saveSceneSettingTest(){
+        SceneSetting sceneSetting = new SceneSetting();
+        sceneSetting.setSid(1);
+        sceneSetting.setX("20");
+        sceneSetting.setY("20%");
+        lightAjustService.saveSceneSetting(sceneSetting);
+    }
+
+    @Test
+    public void saveGroupSettingTest(){
+        GroupSetting groupSetting = new GroupSetting();
+        groupSetting.setMid(4);
+        groupSetting.setGid(21);
+        groupSetting.setSid(1);
+        groupSetting.setX("11");
+        groupSetting.setY("21%");
+        //保存单组场景
+        groupOperationService.saveGroupSetting(groupSetting);
+    }
+
+    @Test
+    public void saveSceneTest(){
+        SceneAjust sceneAjust = new SceneAjust();
+        sceneAjust.setUid("aaaa");
+        sceneAjust.setMid(3);
+        sceneAjust.setSceneId(8888);
+        sceneAjust.setSname("8888");
+        sceneAjustService.saveScene(sceneAjust);
+        Integer sid = sceneAjust.getId();
+        System.out.println("sid: "+sid);//17
+    }
+
+    @Test
+    public void test(){
+        SceneLog sceneLog = new SceneLog();
+        sceneLog.setSceneId(7777);
+        sceneLog.setUid("aaaa");
+        sceneLog.setBltFlag("0");
+        sceneLog.setMeshId("12345678");
+        sceneLog.setOperation("0");
+        sceneAjustService.saveSceneLog(sceneLog);
     }
 }

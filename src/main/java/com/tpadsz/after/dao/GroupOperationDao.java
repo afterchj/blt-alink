@@ -1,9 +1,6 @@
 package com.tpadsz.after.dao;
 
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.GroupConsoleLog;
-import com.tpadsz.after.entity.GroupList;
-import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -43,5 +40,5 @@ public interface GroupOperationDao {
 
     Integer getSceneSeriaNo(@Param("mid") Integer mid, @Param("sceneId") Integer sceneId);//获取sid
 
-    GroupConsoleLog getGroupConsoleLogByGid(@Param("gid") Integer gid);//获取lmac地址
+    GroupConsoleLog getGroupConsoleLogByGid(@Param("groupId") Integer groupId,@Param("uid") String uid,@Param("meshId") String meshId);//获取lmac地址
 }

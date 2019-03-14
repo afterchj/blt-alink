@@ -34,7 +34,7 @@
         	g.mid,
         	g.create_date,
         	g.update_date,
-        	l.id,
+        	l.id as lid,
         	l.lmac,
         	l.lname,
         	l.gid,
@@ -48,10 +48,13 @@
         	p.tname,
         	p.tnum
         FROM
-        	( alink.f_light l RIGHT JOIN alink.f_group g ON g.mid = #{mid}
-        	AND g.id = l.gid )
+    	  (
+        	alink.f_light l
+        	RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid = #{mid} ) g ON l.gid = g.id
+        	)
         	LEFT JOIN alink.f_product p ON l.product_id = p.product_id
-        ORDER BY g.group_id DESC
+        ORDER BY
+        	group_id DESC
 
     </select>
     
@@ -66,7 +69,7 @@
         <!-- property指的是在bean中字段名 ofType类的全定向名 -->
         <!--一对多-->
         <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
-            <id property="id" column="id"/>
+            <id property="lid" column="lid"/>
             <result property="lmac" column="lmac"/>
             <result property="lname" column="lname"/>
             <result property="gid" column="gid"/>
@@ -125,6 +128,6 @@
     </select>
 
     <select id="getGroupConsoleLogByGid" resultType="com.tpadsz.after.entity.GroupConsoleLog">
-        select x,y,lmac from alink.f_console_log WHERE gid=#{gid} order by log_date desc limit 1
+        select x,y,lmac from alink.f_console_log WHERE gid=#{groupId} and uid=#{uid} and mid=#{meshId} order by log_date desc limit 1
     </select>
 </mapper>

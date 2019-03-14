@@ -7,7 +7,7 @@ package com.tpadsz.after.entity;
  * @create: 2019-03-07 17:57
  **/
 public class LightList {
-    private String id;
+    private Integer lid;
     private String productId;
     private String lmac;
     private String lname;
@@ -25,12 +25,12 @@ public class LightList {
     private String voltage;
     private String current;
 
-    public String getId() {
-        return id;
+    public Integer getLid() {
+        return lid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setLid(Integer lid) {
+        this.lid = lid;
     }
 
     public String getProductName() {
@@ -164,7 +164,8 @@ public class LightList {
     @Override
     public String toString() {
         return "LightList{" +
-                "productId='" + productId + '\'' +
+                "lid=" + lid +
+                ", productId='" + productId + '\'' +
                 ", lmac='" + lmac + '\'' +
                 ", lname='" + lname + '\'' +
                 ", gid=" + gid +
@@ -174,6 +175,12 @@ public class LightList {
                 ", tname='" + tname + '\'' +
                 ", tnum='" + tnum + '\'' +
                 ", groupId=" + groupId +
+                ", mid=" + mid +
+                ", productName='" + productName + '\'' +
+                ", irrEff='" + irrEff + '\'' +
+                ", power='" + power + '\'' +
+                ", voltage='" + voltage + '\'' +
+                ", current='" + current + '\'' +
                 '}';
     }
 }

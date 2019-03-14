@@ -20,4 +20,5 @@ public interface LightAjustDao {
     void deleteLight(@Param("lmac") String lmac);//删除灯
 
     void updateLightGid(Group group);//已分组中移除灯
+
 }

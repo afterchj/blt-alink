@@ -19,4 +19,5 @@ public interface LightAjustService {
     void deleteLight(String lmac);
 
     void updateLightGid(Group group);
+
 }

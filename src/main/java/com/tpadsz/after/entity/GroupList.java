@@ -18,15 +18,15 @@ public class GroupList {
     private String meshId;
     private String x;
     private String y;
-    private String status;//0:对灯调光;1:对组调光
+//    private int status;
 
-    public String getStatus() {
-        return status;
-    }
+//    public int getStatus() {
+//        return status;
+//    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+//    public void setStatus(int status) {
+//        this.status = status;
+//    }
 
     public String getX() {
         return x;
@@ -128,6 +128,9 @@ public class GroupList {
                 ", groupId=" + groupId +
                 ", gname='" + gname + '\'' +
                 ", mid=" + mid +
+                ", meshId='" + meshId + '\'' +
+                ", x='" + x + '\'' +
+                ", y='" + y + '\'' +
                 ", pid=" + pid +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +

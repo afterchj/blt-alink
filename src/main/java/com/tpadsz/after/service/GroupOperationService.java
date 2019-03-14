@@ -1,9 +1,6 @@
 package com.tpadsz.after.service;
 
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.GroupConsoleLog;
-import com.tpadsz.after.entity.GroupList;
-import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -42,5 +39,6 @@ public interface GroupOperationService {
 
     Integer getSceneSerialNo(Integer mid, Integer sceneId);
 
-    GroupConsoleLog getGroupConsoleLogByGid(Integer gid);
+    GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId);
+
 }
