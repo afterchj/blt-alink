@@ -2,13 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tpadsz.after.dao.ProjectDao">
 
+    <resultMap type="Mesh" id="standardMeshMap">
+        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="mname" column="mname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="mesh_id" column="mesh_id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="is_repeat" column="is_repeat" javaType="String" jdbcType="VARCHAR"/>
+        <result property="pwd" column="pwd" javaType="String" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+        <result property="project_id" column="project_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="create_date" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="update_date" column="update_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="other" column="other" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
 
-    <select id="findRepeatIdByUid" resultType="com.tpadsz.after.entity.Mesh" parameterType="string">
+    <resultMap type="Project" id="standardProjectMap">
+        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="add" column="add" javaType="String" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+        <result property="create_date" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="update_date" column="update_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="other" column="other" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findRepeatIdByUid" resultMap="standardMeshMap" parameterType="string">
         SELECT * from alink.f_mesh where mesh_id LIKE CONCAT(#{mesh_id},'%') and uid = #{uid}
     </select>
 
-    <insert id="createMesh" parameterType="string">
+    <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createProject" parameterType="com.tpadsz.after.entity.Project">
+        INSERT INTO alink.f_project (name,uid,create_date) VALUES(#{name},#{uid},NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <select id="findMeshId" resultType="string" parameterType="int">
@@ -27,7 +59,21 @@
         INSERT INTO alink.repeated_mesh_id (mesh_id) VALUES(#{mesh_id})
     </insert>
 
-    <select id="findProListByUid" resultType="com.tpadsz.after.entity.Project">
-        SELECT * from alink.f_project where uid = #{uid} and other !='old' or uid=#{uid} and other is null ORDER BY case when id=#{id} then 0 else 1 end , update_date DESC
+    <select id="findProListByUid" resultMap="standardProjectMap">
+        SELECT * from alink.f_project where uid = #{uid} and other &lt;&gt;'old' or uid=#{uid} and other is null ORDER BY case when id=#{id} then 0 else 1 end , update_date DESC
     </select>
+
+    <select id="findOldProByUid" resultMap="standardProjectMap">
+        SELECT * from alink.f_project where uid = #{uid} and other ='old'
+    </select>
+
+    <update id="rename">
+        <!--<if test="#{name} > 0">-->
+        <!--update alink.f_project p set p.name = #{name},p.update_date = NOW() where p.id=#{id}-->
+        <!--</if>-->
+        <!--<if test="count > 0">-->
+            update alink.f_mesh m set m.mname = #{name},m.update_date = NOW() where m.id=#{id}
+        <!--</if>-->
+    </update>
+
 </mapper>

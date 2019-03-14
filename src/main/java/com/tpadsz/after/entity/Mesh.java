@@ -6,22 +6,26 @@ import java.util.Date;
  * Created by chenhao.lu on 2019/3/8.
  */
 public class Mesh {
-    private int id;
+    private Integer id;
     private String mname;
     private String mesh_id;
     private String is_repeat;
     private String pwd;
     private String uid;
-    private int project_id;
+    private Integer project_id;
     private Date create_date;
     private Date update_date;
     private String other;
 
-    public int getId() {
+    public Mesh() {
+        super();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -65,11 +69,11 @@ public class Mesh {
         this.uid = uid;
     }
 
-    public int getProject_id() {
+    public Integer getProject_id() {
         return project_id;
     }
 
-    public void setProject_id(int project_id) {
+    public void setProject_id(Integer project_id) {
         this.project_id = project_id;
     }
 

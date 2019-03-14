@@ -1,6 +1,7 @@
 package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.RepetitionException;
@@ -53,19 +54,54 @@ public class AlinkProjectController extends BaseDecodedController{
     public String findProList(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
-        List<Project> list = new ArrayList<>();
         try{
-            list = projectService.findProListByUid(uid,preId);
-
+            List<Project> list = projectService.findProListByUid(uid,preId);
+            Project oldPro = projectService.findOldProByUid(uid);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("myProjects", list);
+            model.put("oldProject", oldPro);
         }catch (Exception e){
-
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
-
-
-        model.put("result", "123");
-        model.put("result_message", list);
         return null;
     }
+
+    @RequestMapping(value = "/createProject", method = RequestMethod.POST)
+    public String createProject(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String uid = params.getString("uid");
+        String projectName = params.getString("projectName");
+        try{
+            Project project = new Project();
+            project.setUid(uid);
+            project.setName(projectName);
+            projectService.createProject(project);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("projectId",project.getId());
+        }catch (Exception e){
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/rename", method = RequestMethod.POST)
+    public String rename(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String id = params.getString("id");
+        String name = params.getString("name");
+        String renameFlag = params.getString("renameFlag");
+        try{
+            if("0".equals(renameFlag)) {
+                projectService.renameProject(Integer.parseInt(id),name);
+            }else if("1".equals(renameFlag)){
+                projectService.renameMesh(id,name);
+            }
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("projectId","");
+        }catch (Exception e){
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
+
 
     @RequestMapping(value = "/createMesh", method = RequestMethod.POST)
     public String createMesh(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
@@ -81,10 +117,17 @@ public class AlinkProjectController extends BaseDecodedController{
             try {
                 meshId = projectService.findMeshId(limitNum);
                 meshId = prex.substring(0,prex.length()-meshId.length())+meshId;
-                projectService.createMesh(mname,meshId,meshId.substring(4),uid,projectId);
+                Mesh mesh = new Mesh();
+                mesh.setMname(mname);
+                mesh.setMesh_id(meshId);
+                mesh.setPwd(meshId.substring(4));
+                mesh.setUid(uid);
+                mesh.setProject_id(Integer.parseInt(projectId));
+                projectService.createMesh(mesh);
                 projectService.deleteMeshId(limitNum);
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("meshId",meshId);
+                model.put("mid",mesh.getId());
             } catch (DuplicateKeyException e) {
                 isDuplicate =true;
                 projectService.recordMeshId(meshId);
