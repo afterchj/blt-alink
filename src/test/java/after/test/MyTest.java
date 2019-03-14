@@ -2,7 +2,6 @@ package com.tpadsz.after.test;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.AccountDao;
 import com.tpadsz.after.service.ValidationService;
@@ -13,6 +12,8 @@ import org.junit.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,10 +61,15 @@ public class MyTest {
     }
 
     @Test
-    public void testArray(){
-        String[] arys={"0","4","5"};
-        JSONObject object=new JSONObject();
-        object.put("gids",arys);
-        System.out.println(object);
+    public void testArray() {
+        String[] arys = {"0", "4", "5"};
+        List list = new ArrayList();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        JSONObject object = new JSONObject();
+        object.put("gids", arys);
+        object.put("sids", list);
+        System.out.println("result=" + object);
     }
 }
