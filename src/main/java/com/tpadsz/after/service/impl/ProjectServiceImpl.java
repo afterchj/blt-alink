@@ -33,15 +33,29 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project findOldProByUid(String uid) {
-        Project project = projectDao.findOldProByUid(uid);
-        return project;
+        return projectDao.findOldProByUid(uid);
     }
 
     @Override
-    public void createMesh(String mname, String meshId, String pwd, String uid, String projectId) throws RepetitionException{
-        Mesh mesh = projectDao.findRepeatIdByUid(meshId.substring(0,4),uid);
-        if(mesh==null) {
-            projectDao.createMesh(mname, meshId, pwd, uid, projectId);
+    public void createProject(Project project) {
+        projectDao.createProject(project);
+    }
+
+    @Override
+    public void renameProject(Integer id, String name) {
+        projectDao.rename(id,name);
+    }
+
+    @Override
+    public void renameMesh(String id, String name) {
+//        projectDao.renameMesh(id,name);
+    }
+
+    @Override
+    public void createMesh(Mesh mesh) throws RepetitionException{
+        Mesh mesh2 = projectDao.findRepeatIdByUid(mesh.getMesh_id().substring(0,4),mesh.getUid());
+        if(mesh2==null) {
+            projectDao.createMesh(mesh);
         }else {
             throw new RepetitionException();
         }
@@ -49,8 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public String findMeshId(int limitNum) {
-        String meshId = projectDao.findMeshId(limitNum);
-        return meshId;
+        return projectDao.findMeshId(limitNum);
     }
 
     @Override

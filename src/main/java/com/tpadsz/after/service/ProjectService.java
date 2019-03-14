@@ -1,5 +1,6 @@
 package com.tpadsz.after.service;
 
+import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.exception.RepetitionException;
 
@@ -14,7 +15,13 @@ public interface ProjectService {
 
     Project findOldProByUid(String uid);
 
-    void  createMesh(String mname,String meshId,String pwd,String uid,String projectId) throws RepetitionException;
+    void createProject(Project project);
+
+    void renameProject(Integer id, String name);
+
+    void renameMesh(String id, String name);
+
+    void  createMesh(Mesh mesh) throws RepetitionException;
 
     String findMeshId(int limitNum);
 

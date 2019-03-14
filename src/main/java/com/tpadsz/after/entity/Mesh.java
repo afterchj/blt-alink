@@ -17,11 +17,15 @@ public class Mesh {
     private Date update_date;
     private String other;
 
-    public int getId() {
+    public Mesh() {
+        super();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -65,11 +69,11 @@ public class Mesh {
         this.uid = uid;
     }
 
-    public int getProject_id() {
+    public Integer getProject_id() {
         return project_id;
     }
 
-    public void setProject_id(int project_id) {
+    public void setProject_id(Integer project_id) {
         this.project_id = project_id;
     }
 

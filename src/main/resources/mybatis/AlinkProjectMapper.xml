@@ -29,8 +29,18 @@
         SELECT * from alink.f_mesh where mesh_id LIKE CONCAT(#{mesh_id},'%') and uid = #{uid}
     </select>
 
-    <insert id="createMesh" parameterType="string">
+    <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createProject" parameterType="com.tpadsz.after.entity.Project">
+        INSERT INTO alink.f_project (name,uid,create_date) VALUES(#{name},#{uid},NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <select id="findMeshId" resultType="string" parameterType="int">
@@ -56,4 +66,14 @@
     <select id="findOldProByUid" resultMap="standardProjectMap">
         SELECT * from alink.f_project where uid = #{uid} and other ='old'
     </select>
+
+    <update id="rename">
+        <!--<if test="#{name} > 0">-->
+        <!--update alink.f_project p set p.name = #{name},p.update_date = NOW() where p.id=#{id}-->
+        <!--</if>-->
+        <!--<if test="count > 0">-->
+            update alink.f_mesh m set m.mname = #{name},m.update_date = NOW() where m.id=#{id}
+        <!--</if>-->
+    </update>
+
 </mapper>

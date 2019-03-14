@@ -70,31 +70,6 @@ public class AlinkLoginController extends BaseDecodedController {
         return null;
     }
 
-    @RequestMapping(value = "/verify", method = RequestMethod.POST)
-    public String verify(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        String mobile = params.getString("mobile");
-        if (StringUtils.isBlank(mobile)) {
-            model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-        }
-        try {
-            AppUser appUser = alinkLoginService.findUserByMobile(mobile);
-            if (appUser == null) {
-                model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
-                model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
-            } else {
-                validationService.sendCode("12", mobile);
-                model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("result_message", ResultDict.SUCCESS.getValue());
-            }
-        } catch (Exception e) {
-            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
-        }
-        return null;
-    }
-
-
     @RequestMapping(value = "/code/login", method = RequestMethod.POST)
     public String codeLogin(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String mobile = params.getString("mobile");

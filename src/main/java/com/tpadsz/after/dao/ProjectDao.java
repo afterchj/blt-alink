@@ -13,7 +13,7 @@ public interface ProjectDao {
 
     Mesh findRepeatIdByUid(@Param("mesh_id")String meshId, @Param("uid")String uid);
 
-    void createMesh(@Param("mname")String mname, @Param("mesh_id")String meshId, @Param("pwd")String pwd, @Param("uid")String uid, @Param("project_id")String project_id);
+    int createMesh(Mesh mesh);
 
     String findMeshId(@Param("limitNum")int limitNum);
 
@@ -24,4 +24,9 @@ public interface ProjectDao {
     List<Project> findProListByUid(@Param("uid")String uid,@Param("id")int id);
 
     Project findOldProByUid(@Param("uid")String uid);
+
+    int createProject(Project project);
+
+    void rename(@Param("id")Integer id, @Param("name")String name);
+
 }
