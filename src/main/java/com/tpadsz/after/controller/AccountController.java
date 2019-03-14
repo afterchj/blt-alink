@@ -3,6 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.InvalidCodeException;
+import com.tpadsz.after.exception.MobileNotExistedException;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.AccountService;
 import com.tpadsz.after.service.ValidationService;
@@ -65,11 +66,18 @@ public class AccountController extends BaseDecodedController {
     @RequestMapping("/verify")
     public void pushCode(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         String mobile = (String) param.get("mobile");
+        String flag = (String) param.get("flag");
         try {
             if (StringUtils.isNotEmpty(mobile)) {
                 int count = accountService.findByMobile(mobile);
-                if (count > 0) {
-                    throw new RepetitionException(12, "该手机号已被绑定！");
+                if ("0".equals(flag)) {
+                    if (count == 0) {
+                        throw new MobileNotExistedException();
+                    }
+                } else if ("1".equals(flag)) {
+                    if (count > 0) {
+                        throw new RepetitionException(12, "该手机号已被绑定！");
+                    }
                 }
             }
             validationService.sendCode(param.getString("appid"), param.getString("mobile"));
@@ -77,6 +85,9 @@ public class AccountController extends BaseDecodedController {
         } catch (RepetitionException e) {
             model.put("result", ResultDict.MOBILE_REPET.getCode());
             model.put("result_message", ResultDict.MOBILE_REPET.getValue());
+        } catch (MobileNotExistedException e) {
+            model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
+            model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
