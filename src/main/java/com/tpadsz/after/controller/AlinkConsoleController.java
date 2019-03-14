@@ -82,7 +82,7 @@ public class AlinkConsoleController extends BaseDecodedController {
     public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
         String flag = param.getString("bltFlag");
-        if ("1".equals(flag)) {
+        if ("0".equals(flag)) {
             bltConsoleService.deleteScene(param);
         }
         model.put("result", ResultDict.SUCCESS.getCode());
