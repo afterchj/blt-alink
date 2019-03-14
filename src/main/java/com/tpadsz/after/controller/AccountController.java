@@ -44,6 +44,7 @@ public class AccountController extends BaseDecodedController {
                 Encryption.HashPassword password = Encryption.encrypt(md5Pwd);
                 param.put("pwd", password.getPassword());
                 param.put("salt", password.getSalt());
+                param.put("other", "1");
             }
             accountService.updateAccount(param);
             code = ResultDict.SUCCESS.getCode();
