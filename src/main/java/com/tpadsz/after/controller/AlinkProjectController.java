@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.exception.LightExistedException;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.service.ProjectService;
@@ -25,7 +26,7 @@ import java.util.Random;
 
 @Controller
 @RequestMapping("/project")
-public class AlinkProjectController extends BaseDecodedController{
+public class AlinkProjectController extends BaseDecodedController {
     @Resource
     private ProjectService projectService;
 
@@ -35,9 +36,9 @@ public class AlinkProjectController extends BaseDecodedController{
     @RequestMapping(value = "/generator", method = RequestMethod.POST)
     public String generator(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         try {
-            int[] meshIds =  generateAppCode2Disk();
+            int[] meshIds = generateAppCode2Disk();
             List<String> list = new ArrayList<>();
-            for(int i=1;i<10001;i++){
+            for (int i = 1; i < 10001; i++) {
                 list.add(String.valueOf(meshIds[i]));
 //                alinkLoginService.insert(String.valueOf(meshIds[i]));
             }
@@ -54,30 +55,45 @@ public class AlinkProjectController extends BaseDecodedController{
     public String findProList(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
-        try{
-            List<Project> list = projectService.findProListByUid(uid,preId);
+        try {
+            List<Project> list = projectService.findProListByUid(uid, preId);
             Project oldPro = projectService.findOldProByUid(uid);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("myProjects", list);
             model.put("oldProject", oldPro);
-        }catch (Exception e){
+        } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
         return null;
     }
 
+    @RequestMapping(value = "/proDetail", method = RequestMethod.POST)
+    public String proDetail(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String uid = params.getString("uid");
+        String projectId = params.getString("projectId");
+        try {
+            List<Mesh> list = projectService.findProDetailByUid(uid, projectId);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("meshList", list);
+        } catch (Exception e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
+
+
     @RequestMapping(value = "/createProject", method = RequestMethod.POST)
     public String createProject(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String projectName = params.getString("projectName");
-        try{
+        try {
             Project project = new Project();
             project.setUid(uid);
             project.setName(projectName);
             projectService.createProject(project);
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("projectId",project.getId());
-        }catch (Exception e){
+            model.put("projectId", project.getId());
+        } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
         return null;
@@ -88,20 +104,14 @@ public class AlinkProjectController extends BaseDecodedController{
         String id = params.getString("id");
         String name = params.getString("name");
         String renameFlag = params.getString("renameFlag");
-        try{
-            if("0".equals(renameFlag)) {
-                projectService.renameProject(Integer.parseInt(id),name);
-            }else if("1".equals(renameFlag)){
-                projectService.renameMesh(id,name);
-            }
+        try {
+            projectService.rename(Integer.parseInt(id), name, Integer.parseInt(renameFlag));
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("projectId","");
-        }catch (Exception e){
+        } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
         return null;
     }
-
 
     @RequestMapping(value = "/createMesh", method = RequestMethod.POST)
     public String createMesh(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
@@ -116,7 +126,7 @@ public class AlinkProjectController extends BaseDecodedController{
             isDuplicate = false;
             try {
                 meshId = projectService.findMeshId(limitNum);
-                meshId = prex.substring(0,prex.length()-meshId.length())+meshId;
+                meshId = prex.substring(0, prex.length() - meshId.length()) + meshId;
                 Mesh mesh = new Mesh();
                 mesh.setMname(mname);
                 mesh.setMesh_id(meshId);
@@ -126,19 +136,49 @@ public class AlinkProjectController extends BaseDecodedController{
                 projectService.createMesh(mesh);
                 projectService.deleteMeshId(limitNum);
                 model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("meshId",meshId);
-                model.put("mid",mesh.getId());
+                model.put("meshId", meshId);
+                model.put("mid", mesh.getId());
             } catch (DuplicateKeyException e) {
-                isDuplicate =true;
+                isDuplicate = true;
                 projectService.recordMeshId(meshId);
                 projectService.deleteMeshId(limitNum);
             } catch (RepetitionException e) {
-                isDuplicate =true;
+                isDuplicate = true;
                 limitNum++;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             }
-        }while (isDuplicate);
+        } while (isDuplicate);
+        return null;
+    }
+
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public String delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        int id = (int) params.get("id");
+        String uid = (String) params.get("uid");
+        String deleteFlag = (String) params.get("deleteFlag");
+        try {
+            if("0".equals(deleteFlag)) {
+                int count = projectService.findLightByPid(id,uid);
+                if(count>0){
+
+                    throw new LightExistedException();
+                }
+            }else if("1".equals(deleteFlag)){
+                int count = projectService.findLightByMid(id);
+                if(count>0){
+
+                    throw new LightExistedException();
+                }
+            }
+            projectService.delete(id, uid,deleteFlag);
+            model.put("result", ResultDict.SUCCESS.getCode());
+        }catch (LightExistedException e){
+            model.put("result", ResultDict.LIGHT_EXISTED.getCode());
+        }catch (Exception e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
         return null;
     }
 
@@ -146,22 +186,21 @@ public class AlinkProjectController extends BaseDecodedController{
 
 
 
-
-    private static int[] generateAppCode2Disk(){
+    private static int[] generateAppCode2Disk() {
         int begin = 1;
         int end = 99999999;
         int count = begin + end;
         //生成1到99999999的所有整数
         int[] codes = new int[count + 1];
-        for (int i = begin; i <= end; i++){
+        for (int i = begin; i <= end; i++) {
             codes[i] = i;
         }
         //随机交换数据
         int index = 0;
         int tempCode = 0;
         Random random = new Random();
-        for (int i = begin; i <= end; i++){
-            index = random.nextInt(count+1);
+        for (int i = begin; i <= end; i++) {
+            index = random.nextInt(count + 1);
             tempCode = codes[index];
             codes[index] = codes[i];
             codes[i] = tempCode;
@@ -200,8 +239,6 @@ public class AlinkProjectController extends BaseDecodedController{
 //        }
         return codes;
     }
-
-
 
 
 }

@@ -42,13 +42,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void renameProject(Integer id, String name) {
-        projectDao.rename(id,name);
-    }
-
-    @Override
-    public void renameMesh(String id, String name) {
-//        projectDao.renameMesh(id,name);
+    public void rename(Integer id, String name,Integer renameFlag) {
+        projectDao.rename(id,name,renameFlag);
     }
 
     @Override
@@ -76,6 +71,38 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.recordMeshId(meshId);
     }
 
+    @Override
+    public List<Mesh> findProDetailByUid(String uid, String projectId) {
+        return projectDao.findProDetailByUid(uid,projectId);
+    }
+
+    @Override
+    public int findLightByMid(int id) {
+        return projectDao.findLightByMid(id);
+    }
+
+    @Override
+    public void delete(int id, String uid, String deleteFlag) {
+        if("0".equals(deleteFlag)){
+            List<String> list = projectDao.findMeshIdByPid(id,uid);
+            projectDao.deleteProByPid(id,uid);
+            projectDao.deleteMeshByPid(id,uid);
+            if(list!=null){
+                projectDao.insertMeshId(list);
+            }
+        }else if("1".equals(deleteFlag)) {
+            String meshId = projectDao.findMeshIdByMid(id);
+            projectDao.deleteByMid(id);
+            if(meshId!=null){
+                projectDao.recordMeshId(meshId);
+            }
+        }
+    }
+
+    @Override
+    public int findLightByPid(int id, String uid) {
+        return projectDao.findLightByPid(id,uid);
+    }
 
 
 }

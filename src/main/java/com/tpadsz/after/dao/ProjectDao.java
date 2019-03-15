@@ -27,6 +27,23 @@ public interface ProjectDao {
 
     int createProject(Project project);
 
-    void rename(@Param("id")Integer id, @Param("name")String name);
+    void rename(@Param("id")int id, @Param("name")String name,@Param("renameFlag")int renameFlag);
 
+    List<Mesh> findProDetailByUid(@Param("uid")String uid, @Param("projectId")String projectId);
+
+    int findLightByMid(@Param("id")int id);
+
+    void deleteByMid(@Param("id")int id);
+
+    void deleteProByPid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteMeshByPid(@Param("id")int id, @Param("uid")String uid);
+
+    int findLightByPid(@Param("id")int id, @Param("uid")String uid);
+
+    String findMeshIdByMid(@Param("id")int id);
+
+    List findMeshIdByPid(@Param("id")int id, @Param("uid")String uid);
+
+    void insertMeshId(List<String> list);
 }

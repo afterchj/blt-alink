@@ -17,9 +17,7 @@ public interface ProjectService {
 
     void createProject(Project project);
 
-    void renameProject(Integer id, String name);
-
-    void renameMesh(String id, String name);
+    void rename(Integer id, String name,Integer renameFlag);
 
     void  createMesh(Mesh mesh) throws RepetitionException;
 
@@ -29,4 +27,11 @@ public interface ProjectService {
 
     void recordMeshId(String meshId);
 
+    List<Mesh> findProDetailByUid(String uid, String projectId);
+
+    int findLightByMid(int id);
+
+    void delete(int id, String uid, String deleteFlag);
+
+    int findLightByPid(int id, String uid);
 }

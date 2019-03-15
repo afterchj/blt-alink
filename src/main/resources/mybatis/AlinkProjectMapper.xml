@@ -60,7 +60,7 @@
     </insert>
 
     <select id="findProListByUid" resultMap="standardProjectMap">
-        SELECT * from alink.f_project where uid = #{uid} and other &lt;&gt;'old' or uid=#{uid} and other is null ORDER BY case when id=#{id} then 0 else 1 end , update_date DESC
+        SELECT * from alink.f_project where uid = #{uid} and other &lt;&gt;'old' or uid=#{uid} and other is null ORDER BY case when id=#{id} then 0 else 1 end , update_date DESC,create_date DESC
     </select>
 
     <select id="findOldProByUid" resultMap="standardProjectMap">
@@ -68,12 +68,56 @@
     </select>
 
     <update id="rename">
-        <!--<if test="#{name} > 0">-->
-        <!--update alink.f_project p set p.name = #{name},p.update_date = NOW() where p.id=#{id}-->
-        <!--</if>-->
-        <!--<if test="count > 0">-->
+        <if test="renameFlag == 0">
+        update alink.f_project p set p.name = #{name},p.update_date = NOW() where p.id=#{id}
+        </if>
+        <if test="renameFlag == 1">
             update alink.f_mesh m set m.mname = #{name},m.update_date = NOW() where m.id=#{id}
-        <!--</if>-->
+        </if>
     </update>
 
+    <select id="findProDetailByUid" resultMap="standardMeshMap" parameterType="string">
+        SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
+    </select>
+
+    <select id="findLightByMid" resultType="int" parameterType="int">
+        SELECT COUNT(1) from alink.f_light where mid=#{id}
+    </select>
+
+    <select id="findMeshIdByMid" resultType="string" parameterType="int">
+        SELECT mesh_id from alink.f_mesh where id=#{id} and other &lt;&gt;'old' or id=#{id} and other IS NULL
+    </select>
+
+    <delete id="deleteByMid" parameterType="int">
+        DELETE FROM alink.f_mesh WHERE id=#{id}
+    </delete>
+
+    <select id="findLightByPid" resultType="int">
+        SELECT COUNT(1) FROM alink.f_light WHERE mid IN (
+        SELECT m.id from alink.f_mesh m where m.project_id=#{id} and m.uid = #{uid}
+        )
+    </select>
+
+    <delete id="deleteMeshByPid">
+        DELETE FROM alink.f_mesh WHERE id IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+    </delete>
+
+    <delete id="deleteProByPid">
+        DELETE FROM alink.f_project WHERE id=#{id} and uid = #{uid}
+    </delete>
+
+    <select id="findMeshIdByPid" resultType="string">
+        SELECT mesh_id from alink.f_mesh where project_id=#{id} and uid = #{uid} and other &lt;&gt;'old' or project_id=#{id} and uid = #{uid} and other IS NULL
+    </select>
+
+    <insert id="insertMeshId" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into alink.repeated_mesh_id
+        (mesh_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item}
+            )
+        </foreach>
+    </insert>
 </mapper>
