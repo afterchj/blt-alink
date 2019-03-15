@@ -21,4 +21,6 @@ public interface SceneAjustDao {
     void saveGroupSetting(GroupSetting groupSetting);//保存单组场景
 
     void deleteLightSetting(@Param("sid") Integer sid);//删除旧场景
+
+    void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除单灯lightsetting记录
 }

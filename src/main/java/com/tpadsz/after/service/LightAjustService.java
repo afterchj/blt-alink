@@ -3,6 +3,8 @@ package com.tpadsz.after.service;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 
+import java.util.List;
+
 /**
  * @program: blt-alink
  * @description:
@@ -14,7 +16,7 @@ public interface LightAjustService {
 
     void updateLightName(String lmac, String lname);
 
-    void saveLight(LightList lightList);
+    void saveLight(List<LightList> lightLists) throws Exception;
 
     void deleteLight(String lmac);
 

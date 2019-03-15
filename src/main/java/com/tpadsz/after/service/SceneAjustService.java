@@ -2,6 +2,8 @@ package com.tpadsz.after.service;
 
 import com.tpadsz.after.entity.*;
 
+import java.util.List;
+
 /**
  * @program: blt-alink
  * @description:
@@ -14,11 +16,13 @@ public interface SceneAjustService {
 
     void saveScene(SceneAjust sceneAjust);
 
-    void saveLightSetting(LightSetting lightSetting);
+    void saveLightSetting(List<LightSetting> lightSettingList) throws Exception;
 
     void saveSceneSetting(SceneSetting sceneSetting);
 
     void saveGroupSetting(GroupSetting groupSetting);
 
     void deleteLightSetting(Integer sid);
+
+    void deleteLightSettingByLmac(String lmac);
 }

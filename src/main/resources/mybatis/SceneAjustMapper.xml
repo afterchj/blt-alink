@@ -13,7 +13,7 @@
     </insert>
 
     <insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >
-        REPLACE INTO alink.f_light_setting(lid,sid,x,y) VALUES (#{lid},#{sid},#{x},#{y})
+        INSERT INTO alink.f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
     </insert>
 
     <insert id="saveSceneSetting" parameterType="com.tpadsz.after.entity.SceneSetting">
@@ -27,5 +27,8 @@
 
     <delete id="deleteLightSetting">
         DELETE FROM alink.f_light_setting WHERE sid=#{sid}
+    </delete>
+    <delete id="deleteLightSettingByLmac">
+        DELETE FROM alink.f_light_setting WHERE lid=(select id from alink.f_light WHERE lmac=#{lmac})
     </delete>
 </mapper>

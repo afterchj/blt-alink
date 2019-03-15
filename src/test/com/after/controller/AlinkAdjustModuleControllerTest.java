@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,44 +24,50 @@ import java.util.Map;
 public class AlinkAdjustModuleControllerTest {
 
     static ApplicationContext ac = null;
+
     static {
         ac = new ClassPathXmlApplicationContext("applicationContext.xml");
     }
+
     public static SqlSession getSession() {
-        SqlSessionFactory factory = (SqlSessionFactory) ac.getBean("sqlSessionFactory");
+        SqlSessionFactory factory = (SqlSessionFactory) ac.getBean
+                ("sqlSessionFactory");
         return factory.openSession();
     }
 
-    GroupOperationService groupOperationService = ac.getBean("groupOperationService",GroupOperationService.class);
-    LightAjustService lightAjustService = ac.getBean("lightAjustService",LightAjustService.class);
-    SceneAjustService sceneAjustService = ac.getBean("sceneAjustService", SceneAjustService.class);
+    GroupOperationService groupOperationService = ac.getBean
+            ("groupOperationService", GroupOperationService.class);
+    LightAjustService lightAjustService = ac.getBean("lightAjustService",
+            LightAjustService.class);
+    SceneAjustService sceneAjustService = ac.getBean("sceneAjustService",
+            SceneAjustService.class);
 
     @Test
-    public void getMeshSerialNoTest(){
+    public void getMeshSerialNoTest() {
         Integer mid = groupOperationService.getMeshSerialNo
-                ("12345678","aaaa");
-        System.out.println("mid:"+mid);
+                ("12345678", "aaaa");
+        System.out.println("mid:" + mid);
     }
 
     @Test
-    public void saveGroupTest(){
+    public void saveGroupTest() {
         Group group = new Group();
         group.setGname("组4");
         group.setMid(1);
         groupOperationService.saveGroup(group);
-        System.out.println("id:"+group.getId());
+        System.out.println("id:" + group.getId());
         String groupId = groupOperationService.getGroupIdById(group.getId());
-        System.out.println("groupId:"+groupId);
+        System.out.println("groupId:" + groupId);
     }
 
     @Test
-    public void saveGroupLogTest(){
-        groupOperationService.saveGroupLog("aaaa","12345678","0","1");
+    public void saveGroupLogTest() {
+        groupOperationService.saveGroupLog("aaaa", "12345678", "0", "1");
         System.out.println("success");
     }
 
     @Test
-    public void updateGroupNameByMidTest(){
+    public void updateGroupNameByMidTest() {
         Group group = new Group();
         group.setGname("灯100");
         group.setGroupId(1);
@@ -70,41 +77,45 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void saveLightAjustLogTest(){
-        lightAjustService.saveLightAjustLog("12345678","aa-aa-aa-aa","0","4");
+    public void saveLightAjustLogTest() {
+        lightAjustService.saveLightAjustLog("12345678", "aa-aa-aa-aa", "0",
+                "4");
         System.out.println("success");
     }
 
     @Test
-    public void updateLightNameTest(){
-        lightAjustService.updateLightName("aa-aa-aa-aa","筒灯");
+    public void updateLightNameTest() {
+        lightAjustService.updateLightName("aa-aa-aa-aa", "筒灯");
         System.out.println("success");
     }
 
     @Test
-    public void getMapperTest(){
-        SqlSession session=getSession();
-        List<GroupList> groupLists = session.getMapper(GroupOperationDao.class).getGroupAll(3);
-        for (GroupList groupList:groupLists){
+    public void getMapperTest() {
+        SqlSession session = getSession();
+        List<GroupList> groupLists = session.getMapper(GroupOperationDao
+                .class).getGroupAll(3);
+        for (GroupList groupList : groupLists) {
             System.out.println(groupList.toString());
         }
     }
 
     @Test
-    public void getLightColorTest(){
-        Map<String,Object> map = groupOperationService.getLightColor("bb-bb-bb-bb");
-        System.out.println("x: "+map.get("x")+", y:"+map.get("y"));
+    public void getLightColorTest() {
+        Map<String, Object> map = groupOperationService.getLightColor
+                ("red");
+        System.out.println(map);
+//        System.out.println("x: " + map.get("x") + ", y:" + map.get("y"));
     }
 
     @Test
-    public void getGroupAllTest(){
+    public void getGroupAllTest() {
 //        Integer mid = 1;
         List<GroupList> groupLists = groupOperationService.getGroupAll(3);
         System.out.println(groupLists.toString());
     }
 
     @Test
-    public void getGidTest(){
+    public void getGidTest() {
         Group group = new Group();
 //        group.setGid(19);
         group.setMid(1);
@@ -114,24 +125,29 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void saveLightTest(){
-        LightList lightList = new LightList();
-        lightList.setLmac("rr-rr-rr-rr");
-        lightList.setLname("灯19");
-        lightList.setMid(3);
-        lightList.setGid(17);
-        lightList.setProductId("1234");
-        lightAjustService.saveLight(lightList);
+    public void saveLightTest() throws Exception {
+        List<LightList> lightLists = new ArrayList<>();
+        LightList lightList;
+        for (int i=0;i<10;i++){
+            lightList = new LightList();
+            lightList.setLmac(i+"iii");
+            lightList.setLname("iii");
+            lightList.setMid(3);
+            lightList.setGid(17);
+            lightList.setProductId("1234");
+            lightLists.add(lightList);
+        }
+        lightAjustService.saveLight(lightLists);
     }
 
     @Test
-    public void deleteLightTest(){
+    public void deleteLightTest() {
         lightAjustService.deleteLight("rr-rr-rr-rr");
         System.out.println("success");
     }
 
     @Test
-    public void updateLightGidTest(){
+    public void updateLightGidTest() {
         Group group = new Group();
         group.setGid(21);
         group.setDgid(17);
@@ -140,32 +156,46 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void getSceneSerialNoTest(){
-        Integer sid = groupOperationService.getSceneSerialNo(3,8888,"aaaa");
-        System.out.println("sid: "+sid);
+    public void getSceneSerialNoTest() {
+        Integer sid = groupOperationService.getSceneSerialNo(3, 8888, "aaaa");
+        System.out.println("sid: " + sid);
     }
 
     @Test
-    public void getGroupConsoleLogByGidTest(){
-        GroupConsoleLog groupConsoleLog = groupOperationService.getGroupConsoleLogByGid(2,"aaaa","12345678");
+    public void getGroupConsoleLogByGidTest() {
+        GroupConsoleLog groupConsoleLog = groupOperationService
+                .getGroupConsoleLogByGid(2, "aaaa", "12345678");
         System.out.println(groupConsoleLog.toString());
-        if (groupConsoleLog.getLmac()==null){
+        if (groupConsoleLog.getLmac() == null) {
             System.out.println("lmac is null");
         }
     }
 
     @Test
-    public void saveLightSettingTest(){
-        LightSetting lightSetting = new LightSetting();
-        lightSetting.setX("21");
-        lightSetting.setY("21%");
-        lightSetting.setLid(14);
-        lightSetting.setSid(1);
-        sceneAjustService.saveLightSetting(lightSetting);
+    public void saveLightSettingTest() throws Exception {
+        List<LightSetting> lightSettingList = new ArrayList<>();
+        LightSetting lightSetting;
+        for (int i=0;i<=1000;i++){
+            lightSetting = new LightSetting();
+            lightSetting.setX("21");
+            lightSetting.setY("21%");
+            lightSetting.setLid(i + 14);
+            lightSetting.setSid(21);
+            lightSetting.setOff("0");
+//            getSession().getMapper(SceneAjustDao.class).saveLightSetting(lightSetting);
+//            sceneAjustService.save(lightSetting);
+            lightSettingList.add(i,lightSetting);
+        }
+
+//        System.out.println(lightSettingList.size());
+        Long start  = System.currentTimeMillis();
+        sceneAjustService.saveLightSetting( lightSettingList);
+        Long end = System.currentTimeMillis();
+        System.out.println("耗时: "+(end-start));
     }
 
     @Test
-    public void saveSceneSettingTest(){
+    public void saveSceneSettingTest() {
         SceneSetting sceneSetting = new SceneSetting();
         sceneSetting.setSid(1);
         sceneSetting.setX("20");
@@ -174,7 +204,7 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void saveGroupSettingTest(){
+    public void saveGroupSettingTest() {
         GroupSetting groupSetting = new GroupSetting();
         groupSetting.setMid(4);
         groupSetting.setGid(21);
@@ -186,7 +216,7 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void saveSceneTest(){
+    public void saveSceneTest() {
         SceneAjust sceneAjust = new SceneAjust();
         sceneAjust.setUid("aaaa");
         sceneAjust.setMid(3);
@@ -194,11 +224,11 @@ public class AlinkAdjustModuleControllerTest {
         sceneAjust.setSname("8888");
         sceneAjustService.saveScene(sceneAjust);
         Integer sid = sceneAjust.getId();
-        System.out.println("sid: "+sid);//17
+        System.out.println("sid: " + sid);//17
     }
 
     @Test
-    public void saveSceneLogTest(){
+    public void saveSceneLogTest() {
         SceneLog sceneLog = new SceneLog();
         sceneLog.setSceneId(7777);
         sceneLog.setUid("aaaa");
@@ -207,30 +237,38 @@ public class AlinkAdjustModuleControllerTest {
         sceneLog.setOperation("0");
         sceneAjustService.saveSceneLog(sceneLog);
     }
+
     @Test
-    public void saveLightColorTest(){
-        lightAjustService.saveLightColor("0000","00000000","00-00-00-00","0","0%");
+    public void saveLightColorTest() {
+        lightAjustService.saveLightColor("0000", "00000000", "00-00-00-00",
+                "0", "0%");
     }
 
     @Test
-    public void getLidTest(){
+    public void getLidTest() {
         Integer lid = lightAjustService.getLid("ff-ff-ff-ff");
-        System.out.println("lid: "+lid);
+        System.out.println("lid: " + lid);
     }
 
     @Test
-    public void saveTempLightTest(){
+    public void saveTempLightTest() {
         LightList lightList = new LightList();
         lightList.setMid(3);
         lightList.setLmac("1-1-1-1");
         lightList.setLname("1-1-1-1");
         //临时创建灯
         lightAjustService.saveTempLight(lightList);
-        System.out.println("id: "+lightList.getId());
+        System.out.println("id: " + lightList.getId());
+    }
+
+    @Test
+    public void deleteLightSettingTest() {
+        sceneAjustService.deleteLightSetting(2);
     }
 
     @Test
     public void test(){
-        sceneAjustService.deleteLightSetting(2);
+        sceneAjustService.deleteLightSettingByLmac("a");
     }
+
 }

@@ -62,4 +62,16 @@ public class LightSetting {
     public void setY(String y) {
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "LightSetting{" +
+                "id=" + id +
+                ", sid=" + sid +
+                ", lid=" + lid +
+                ", x='" + x + '\'' +
+                ", y='" + y + '\'' +
+                ", off='" + off + '\'' +
+                '}';
+    }
 }
