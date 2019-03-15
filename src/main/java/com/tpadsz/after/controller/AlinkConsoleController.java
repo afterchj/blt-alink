@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.BltConsoleService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,7 +83,7 @@ public class AlinkConsoleController extends BaseDecodedController {
     public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
         String flag = param.getString("bltFlag");
-        if ("0".equals(flag)) {
+        if ("1".equals(flag)) {
             bltConsoleService.deleteScene(param);
         }
         model.put("result", ResultDict.SUCCESS.getCode());
@@ -92,6 +93,11 @@ public class AlinkConsoleController extends BaseDecodedController {
     @RequestMapping("/apply")
     public void consoleApplyScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
+        String x = param.getString("x");
+        String y = param.getString("y");
+        if (StringUtils.isNotEmpty(x) && StringUtils.isNotEmpty(y)) {
+            bltConsoleService.saveApplyScene(param);
+        }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }

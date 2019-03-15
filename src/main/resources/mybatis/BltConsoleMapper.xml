@@ -39,7 +39,8 @@
 			s.scene_id,
 			s.sname,
 			a.x,
-			a.y
+			a.y,
+			a.off
 		FROM
 			f_mesh m
 		INNER JOIN f_scene s ON m.id = s.mid
@@ -79,7 +80,7 @@
 	</delete>
 
 	<update id="saveApplyScene" parameterType="map">
-		UPDATE f_group_setting set x=#{x},y=#{y},update_date=NOW()
+		UPDATE f_scene_setting set x=#{x},y=#{y},update_date=NOW()
 		WHERE
 			sid = (
 				SELECT
