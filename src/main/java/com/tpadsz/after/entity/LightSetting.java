@@ -13,6 +13,15 @@ public class LightSetting {
     private Integer lid;
     private String x;
     private String y;
+    private String off;
+
+    public String getOff() {
+        return off;
+    }
+
+    public void setOff(String off) {
+        this.off = off;
+    }
 
     public Integer getId() {
         return id;

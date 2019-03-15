@@ -45,4 +45,24 @@ public class LightAjustServiceImpl implements LightAjustService {
     public void updateLightGid(Group group) {
         lightAjustDao.updateLightGid(group);
     }
+
+    @Override
+    public void saveLightColor(String uid,String meshId,String lmac, String x, String y) {
+        lightAjustDao.saveLightColor(uid,meshId,lmac,x,y);
+    }
+
+    @Override
+    public String getLightOff(String lmac) {
+        return lightAjustDao.getLightOff(lmac);
+    }
+
+    @Override
+    public Integer getLid(String lmac) {
+        return lightAjustDao.getLid(lmac);
+    }
+
+    @Override
+    public void saveTempLight(LightList lightList) {
+        lightAjustDao.saveTempLight(lightList);
+    }
 }

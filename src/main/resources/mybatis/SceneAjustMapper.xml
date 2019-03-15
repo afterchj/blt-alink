@@ -24,4 +24,8 @@
         replace into alink.f_group_setting (mid,gid,sid,x,y,create_date,update_date)
         VALUES (#{mid},#{gid},#{sid},#{x},#{y},now(),now())
     </insert>
+
+    <delete id="deleteLightSetting">
+        DELETE FROM alink.f_light_setting WHERE sid=#{sid}
+    </delete>
 </mapper>

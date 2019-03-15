@@ -25,4 +25,18 @@
     <update id="updateLightGid">
         UPDATE alink.f_light SET gid=#{dgid} WHERE gid=#{gid}
     </update>
+
+    <insert id="saveLightColor">
+        INSERT INTO alink.f_console_log (uid,mid,gid,lmac,x,y,cmd,log_date)
+	    VALUES(#{uid},#{meshId},'0',#{lmac},#{x},#{y},'1',now())
+    </insert>
+
+    <select id="getLid" resultType="integer">
+        select id from alink.f_light WHERE  lmac=#{lmac}
+    </select>
+
+    <insert id="saveTempLight" parameterType="com.tpadsz.after.entity.LightList" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO alink.f_light ( lmac, lname, mid, create_date, update_date )
+        VALUES( #{lmac},#{lname},#{mid},now(),now() )
+    </insert>
 </mapper>

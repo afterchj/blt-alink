@@ -20,4 +20,11 @@ public interface LightAjustService {
 
     void updateLightGid(Group group);
 
+    void saveLightColor(String uid,String meshId,String lmac, String x, String y);
+
+    String getLightOff(String lmac);
+
+    Integer getLid(String lmac);
+
+    void saveTempLight(LightList lightList);
 }

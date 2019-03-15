@@ -19,4 +19,6 @@ public interface SceneAjustService {
     void saveSceneSetting(SceneSetting sceneSetting);
 
     void saveGroupSetting(GroupSetting groupSetting);
+
+    void deleteLightSetting(Integer sid);
 }

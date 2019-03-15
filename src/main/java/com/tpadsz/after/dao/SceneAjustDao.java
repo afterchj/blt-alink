@@ -1,6 +1,7 @@
 package com.tpadsz.after.dao;
 
 import com.tpadsz.after.entity.*;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @program: blt-alink
@@ -18,4 +19,6 @@ public interface SceneAjustDao {
     void saveSceneSetting(SceneSetting sceneSetting);//场景设置
 
     void saveGroupSetting(GroupSetting groupSetting);//保存单组场景
+
+    void deleteLightSetting(@Param("sid") Integer sid);//删除旧场景
 }

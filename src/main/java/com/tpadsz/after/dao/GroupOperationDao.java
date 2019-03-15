@@ -24,7 +24,7 @@ public interface GroupOperationDao {
 
     void updateGroupNameByMid(Group group);//重命名组名
 
-    List<GroupList> getGroupAll(@Param("mid") Integer mid);
+    List<GroupList> getGroupAll(@Param("mid") Integer mid);//获取所有组的信息
 
     Map<String,Object> getLightColor(@Param("lmac") String lmac);//根据mac查询灯x，y值
 
@@ -38,7 +38,9 @@ public interface GroupOperationDao {
 
     void deleteGroup(Group group);//删除组
 
-    Integer getSceneSeriaNo(@Param("mid") Integer mid, @Param("sceneId") Integer sceneId);//获取sid
+    Integer getSceneSeriaNo(@Param("mid") Integer mid, @Param("sceneId") Integer sceneId, @Param("uid") String uid);//获取sid
 
     GroupConsoleLog getGroupConsoleLogByGid(@Param("groupId") Integer groupId,@Param("uid") String uid,@Param("meshId") String meshId);//获取lmac地址
+
+    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

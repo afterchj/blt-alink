@@ -7,6 +7,7 @@ package com.tpadsz.after.entity;
  * @create: 2019-03-07 17:57
  **/
 public class LightList {
+    private Integer id;
     private Integer lid;
     private String productId;
     private String lmac;
@@ -25,6 +26,13 @@ public class LightList {
     private String voltage;
     private String current;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public Integer getLid() {
         return lid;
     }

@@ -37,8 +37,9 @@ public interface GroupOperationService {
 
     void deleteGroup(Group group);
 
-    Integer getSceneSerialNo(Integer mid, Integer sceneId);
+    Integer getSceneSerialNo(Integer mid, Integer sceneId,String uid);
 
     GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId);
 
+    List<GroupList> getGroups(Integer mid);
 }

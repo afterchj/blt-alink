@@ -21,4 +21,11 @@ public interface LightAjustDao {
 
     void updateLightGid(Group group);//已分组中移除灯
 
+    void saveLightColor(@Param("uid") String uid,@Param("meshId") String meshId,@Param("lmac")String lmac, @Param("x")String x, @Param("y")String y);//扫描灯时，保存灯的x,y值，开关状态
+
+    String getLightOff(@Param("lmac") String lmac);//获取灯开关状态
+
+    Integer getLid(@Param("lmac") String lmac);//获取lid
+
+    void saveTempLight(LightList lightList);//创建临时灯
 }

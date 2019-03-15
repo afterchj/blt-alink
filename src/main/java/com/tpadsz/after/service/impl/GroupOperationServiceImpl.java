@@ -83,12 +83,17 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public Integer getSceneSerialNo(Integer mid, Integer sceneId) {
-        return groupOperationDao.getSceneSeriaNo(mid, sceneId);
+    public Integer getSceneSerialNo(Integer mid, Integer sceneId,String uid) {
+        return groupOperationDao.getSceneSeriaNo(mid, sceneId, uid);
     }
 
     @Override
     public GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId) {
         return groupOperationDao.getGroupConsoleLogByGid(groupId,uid,meshId);
+    }
+
+    @Override
+    public List<GroupList> getGroups(Integer mid) {
+        return groupOperationDao.getGroups(mid);
     }
 }

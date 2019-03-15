@@ -141,7 +141,7 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void getSceneSerialNoTest(){
-        Integer sid = groupOperationService.getSceneSerialNo(3,1111);
+        Integer sid = groupOperationService.getSceneSerialNo(3,8888,"aaaa");
         System.out.println("sid: "+sid);
     }
 
@@ -161,7 +161,7 @@ public class AlinkAdjustModuleControllerTest {
         lightSetting.setY("21%");
         lightSetting.setLid(14);
         lightSetting.setSid(1);
-        lightAjustService.saveLightSetting(lightSetting);
+        sceneAjustService.saveLightSetting(lightSetting);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class AlinkAdjustModuleControllerTest {
         sceneSetting.setSid(1);
         sceneSetting.setX("20");
         sceneSetting.setY("20%");
-        lightAjustService.saveSceneSetting(sceneSetting);
+        sceneAjustService.saveSceneSetting(sceneSetting);
     }
 
     @Test
@@ -182,7 +182,7 @@ public class AlinkAdjustModuleControllerTest {
         groupSetting.setX("11");
         groupSetting.setY("21%");
         //保存单组场景
-        groupOperationService.saveGroupSetting(groupSetting);
+        sceneAjustService.saveGroupSetting(groupSetting);
     }
 
     @Test
@@ -198,7 +198,7 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test(){
+    public void saveSceneLogTest(){
         SceneLog sceneLog = new SceneLog();
         sceneLog.setSceneId(7777);
         sceneLog.setUid("aaaa");
@@ -206,5 +206,31 @@ public class AlinkAdjustModuleControllerTest {
         sceneLog.setMeshId("12345678");
         sceneLog.setOperation("0");
         sceneAjustService.saveSceneLog(sceneLog);
+    }
+    @Test
+    public void saveLightColorTest(){
+        lightAjustService.saveLightColor("0000","00000000","00-00-00-00","0","0%");
+    }
+
+    @Test
+    public void getLidTest(){
+        Integer lid = lightAjustService.getLid("ff-ff-ff-ff");
+        System.out.println("lid: "+lid);
+    }
+
+    @Test
+    public void saveTempLightTest(){
+        LightList lightList = new LightList();
+        lightList.setMid(3);
+        lightList.setLmac("1-1-1-1");
+        lightList.setLname("1-1-1-1");
+        //临时创建灯
+        lightAjustService.saveTempLight(lightList);
+        System.out.println("id: "+lightList.getId());
+    }
+
+    @Test
+    public void test(){
+        sceneAjustService.deleteLightSetting(2);
     }
 }
