@@ -2,6 +2,7 @@ package com.tpadsz.after.dao;
 
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
+import com.tpadsz.after.entity.SceneAjust;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -46,4 +47,8 @@ public interface ProjectDao {
     List findMeshIdByPid(@Param("id")int id, @Param("uid")String uid);
 
     void insertMeshId(List<String> list);
+
+    void createDefaultScene(SceneAjust scene);
+
+    void createDefaultSceneSetting(@Param("sid")Integer sid, @Param("x")String x, @Param("y")String y);
 }

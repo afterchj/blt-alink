@@ -104,5 +104,14 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDao.findLightByPid(id,uid);
     }
 
+    @Override
+    public void oldCommit(List<Mesh> list, String uid) {
+        for(int i=0;i<list.size();i++){
+//           projectDao.commitOldMeshs(list.get(i));
+        }
+
+
+    }
+
 
 }

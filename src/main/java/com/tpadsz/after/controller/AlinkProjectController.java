@@ -1,5 +1,6 @@
 package com.tpadsz.after.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
@@ -182,6 +183,20 @@ public class AlinkProjectController extends BaseDecodedController {
         return null;
     }
 
+
+    @RequestMapping(value = "/oldCommit", method = RequestMethod.POST)
+    public String oldCommit(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String meshData = params.getString("meshData");
+        String uid = params.getString("uid");
+        try {
+            List<Mesh> list = JSONArray.parseArray(meshData, Mesh.class);
+            projectService.oldCommit(list,uid);
+            model.put("result", ResultDict.SUCCESS.getCode());
+        } catch (Exception e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
 
 
 

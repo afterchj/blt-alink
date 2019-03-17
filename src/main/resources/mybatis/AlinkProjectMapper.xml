@@ -120,4 +120,19 @@
             )
         </foreach>
     </insert>
+
+
+    <insert id="createDefaultScene" parameterType="com.tpadsz.after.entity.SceneAjust">
+        INSERT INTO alink.f_scene (scene_id,sname,mid,uid,create_date) VALUES(#{sceneId},#{sname},#{mid},#{uid},NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createDefaultSceneSetting">
+        INSERT INTO alink.f_scene_setting (sid,x,y,create_date) VALUES(#{sid},#{x},#{y},NOW())
+    </insert>
+
+
+
 </mapper>

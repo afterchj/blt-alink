@@ -75,25 +75,28 @@ public class AlinkLoginController extends BaseDecodedController {
         String mobile = params.getString("mobile");
         String code = params.getString("code");
         try {
-            if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(mobile)) {
-                validationService.checkCode(code, mobile);
-            }
-            AppUser appUser = alinkLoginService.findUserByMobile(mobile);
-            if(appUser==null){
-                model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
-                model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
+            if (StringUtils.isBlank(code) || StringUtils.isBlank(mobile)) {
+                model.put("result", ResultDict.PARAMS_BLANK.getCode());
+                model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             }else {
-                appUser.setPwd(null);
-                appUser.setSalt(null);
-                LoginLog loginLog = new LoginLog();
-                loginLog.setUid(appUser.getId());
-                loginLog.setMobile(mobile);
-                loginLog.setLogin_date(new Date());
-                loginLog.setBehavior(URL + "/code/login.json");
-                alinkLoginService.saveLoginLog(loginLog);
-                model.put("user", appUser);
-                model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("result_message", ResultDict.SUCCESS.getValue());
+                validationService.checkCode(code, mobile);
+                AppUser appUser = alinkLoginService.findUserByMobile(mobile);
+                if (appUser == null) {
+                    model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
+                    model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
+                } else {
+                    appUser.setPwd(null);
+                    appUser.setSalt(null);
+                    LoginLog loginLog = new LoginLog();
+                    loginLog.setUid(appUser.getId());
+                    loginLog.setMobile(mobile);
+                    loginLog.setLogin_date(new Date());
+                    loginLog.setBehavior(URL + "/code/login.json");
+                    alinkLoginService.saveLoginLog(loginLog);
+                    model.put("user", appUser);
+                    model.put("result", ResultDict.SUCCESS.getCode());
+                    model.put("result_message", ResultDict.SUCCESS.getValue());
+                }
             }
         }catch (InvalidCodeException e) {
             model.put("result", ResultDict.VERIFY_ERROR.getCode());

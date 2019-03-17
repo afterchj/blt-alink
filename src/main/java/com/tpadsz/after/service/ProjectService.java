@@ -34,4 +34,6 @@ public interface ProjectService {
     void delete(int id, String uid, String deleteFlag);
 
     int findLightByPid(int id, String uid);
+
+    void oldCommit(List<Mesh> list, String uid);
 }
