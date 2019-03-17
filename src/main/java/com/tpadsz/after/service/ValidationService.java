@@ -15,17 +15,14 @@ import java.util.Random;
  * Created by after on 2018/12/12.
  */
 @Service
-public class ValidationService{
+public class ValidationService {
 
     @Autowired
     XMemcachedClient client;
 
     public String sendCode(String appid, String mobile) throws Exception {
         String key = String.format(MemcachedObjectType.CACHE_MESSAGE_VERIFICATION.getPrefix(), mobile);
-        String code = getCode(key);
-        if (StringUtils.isEmpty(code)) {
-            code = prepare(key, code);
-        }
+        String code = prepare(key);
         HttpUtils.sendSms(appid, mobile, code);
         return code;
     }
@@ -38,8 +35,8 @@ public class ValidationService{
         }
     }
 
-    private String prepare(String key, String code) throws Exception {
-        code = StringUtils.isEmpty(code) ? getRandomNum(6) : code;
+    private String prepare(String key) throws Exception {
+        String code = getRandomNum(6);
         client.set(key, MemcachedObjectType.CACHE_MESSAGE_VERIFICATION.getExpiredTime(), code);
         return code;
     }
