@@ -100,5 +100,7 @@
 
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
         <constructor-arg ref="sqlSessionFactory"/>
+        <!--批量操作-->
+        <!--<constructor-arg name="executorType" value="BATCH"/>-->
     </bean>
 </beans>

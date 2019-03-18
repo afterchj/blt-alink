@@ -11,14 +11,42 @@ public class Group {
     private Integer id;
     private String gname;
     private Integer mid;
-    private String groupId;
+    private Integer groupId;
     private String meshId;
+    private String uid;
+    private Integer gid;
+    private Integer dgid;//目标组的gid
+    private Integer dGroupId;//目标组的组id
 
-    public String getGroupId() {
+    public Integer getdGroupId() {
+        return dGroupId;
+    }
+
+    public void setdGroupId(Integer dGroupId) {
+        this.dGroupId = dGroupId;
+    }
+
+    public Integer getDgid() {
+        return dgid;
+    }
+
+    public void setDgid(Integer dgid) {
+        this.dgid = dgid;
+    }
+
+    public Integer getGid() {
+        return gid;
+    }
+
+    public void setGid(Integer gid) {
+        this.gid = gid;
+    }
+
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
@@ -53,4 +81,13 @@ public class Group {
     public void setMeshId(String meshId) {
         this.meshId = meshId;
     }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }
