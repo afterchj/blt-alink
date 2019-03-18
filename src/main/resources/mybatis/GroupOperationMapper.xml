@@ -10,33 +10,156 @@
 
     <insert id="saveGroupLog">
         INSERT INTO alink.f_group_log
-            (uid,operation,blt_flag,create_date)
-            VALUES(#{uid},#{operation},#{bltFlag},NOW())
+            (uid,mesh_id,operation,blt_flag,create_date)
+            VALUES(#{uid},#{meshId},#{operation},#{bltFlag},NOW())
     </insert>
 
     <select id="getMeshSerialNo" resultType="integer">
-        SELECT id FROM alink.f_mesh WHERE mesh_id=#{meshId}
+        SELECT id FROM alink.f_mesh WHERE mesh_id=#{meshId} and uid=#{uid}
     </select>
 
     <select id="getGroupIdById" resultType="string">
         SELECT group_id FROM alink.f_group WHERE id=#{id}
     </select>
 
-    <update id="updateGroupNameByGroupId">
-        UPDATE alink.f_group SET gname=#{gname} WHERE group_id=#{groupId};
+    <update id="updateGroupNameByMid">
+        UPDATE alink.f_group SET gname=#{gname},update_date=now() WHERE mid=#{mid} and group_id=#{groupId}
     </update>
-
-    <select id="getGroupsByMeshId" resultType="java.util.HashMap">
+    
+    <select id="getGroupAll" resultMap="groupLists">
         SELECT
     	    g.id,
-        	g.group_id
+        	g.group_id,
+        	g.gname,
+        	g.mid,
+        	g.create_date,
+        	g.update_date,
+        	l.id as lid,
+        	l.lmac,
+        	l.lname,
+        	l.gid,
+        	l.type_id,
+        	l.product_id,
+        	p.product_name,
+        	p.irr_eff,
+        	p.power,
+        	p.voltage,
+        	p.current,
+        	p.tname,
+        	p.tnum
         FROM
-        	alink.f_group g,
-        	alink.f_mesh m
-        WHERE
-        	g.mid = m.id
-        	AND m.mesh_id = #{meshId}
+    	  (
+        	alink.f_light l
+        	RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid = #{mid} ) g ON l.gid = g.id
+        	)
+        	LEFT JOIN alink.f_product p ON l.product_id = p.product_id
         ORDER BY
-        	g.id DESC
+        	group_id DESC
+
     </select>
+    
+    <resultMap id="groupLists" type="com.tpadsz.after.entity.GroupList">
+        <id property="id" column="id"/>
+        <!--property实体类中定义的属性 column数据库中字段名-->
+        <result property="groupId" column="group_id"/>
+        <result property="gname" column="gname"/>
+        <result property="mid" column="mid"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <!-- property指的是在bean中字段名 ofType类的全定向名 -->
+        <!--一对多-->
+        <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
+            <id property="lid" column="lid"/>
+            <result property="lmac" column="lmac"/>
+            <result property="lname" column="lname"/>
+            <result property="gid" column="gid"/>
+            <result property="typeId" column="type_id"/>
+            <result property="productId" column="product_id"/>
+            <!--<association property="typeList" javaType="com.tpadsz.after.entity.TypeList">-->
+            <result property="productName" column="product_name"/>
+            <result property="irrEff" column="irr_eff"/>
+            <result property="power" column="power"/>
+            <result property="voltage" column="voltage"/>
+            <result property="current" column="current"/>
+            <result property="tname" column="tname"/>
+            <result property="tnum" column="tnum"/>
+            <!--</association>-->
+        </collection>
+    </resultMap>
+
+    <select id="getLightColor" resultType="map">
+        select x,y from alink.f_console_log WHERE lmac=#{lmac} order by log_date desc limit 1
+    </select>
+
+    <select id="getGid"  resultType="integer" parameterType="com.tpadsz.after.entity.Group">
+        select id FROM  alink.f_group WHERE mid=#{mid} and group_id=#{groupId}
+    </select>
+
+    <select id="getLightNum"  resultType="integer" parameterType="com.tpadsz.after.entity.Group">
+        SELECT count(*) FROM  alink.f_light WHERE gid=#{gid}
+    </select>
+
+    <update id="updateGidInLight" parameterType="com.tpadsz.after.entity.Group">
+        UPDATE alink.f_light
+        SET gid = ( SELECT id FROM alink.f_group WHERE mid=#{mid} AND group_id = 0 limit 1)
+        WHERE
+	      gid = #{gid}
+    </update>
+    <!---->
+    <select id="getLightList" resultType="com.tpadsz.after.entity.LightList" parameterType="com.tpadsz.after.entity.Group">
+      SELECT
+          lmac,
+          lname,
+          group_id
+      FROM
+          alink.f_group g,
+          alink.f_light l
+      WHERE
+          g.mid=#{mid} and g.group_id=0 and
+          g.id = l.gid
+    </select>
+
+    <delete id="deleteGroup" parameterType="com.tpadsz.after.entity.Group">
+        DELETE from alink.f_group WHERE id=#{gid}
+    </delete>
+
+    <select id="getSceneSeriaNo" resultType="integer">
+        SELECT id FROM alink.f_scene WHERE mid=#{mid} and scene_id=#{sceneId} and uid=#{uid}
+    </select>
+
+    <select id="getGroupConsoleLogByGid" resultType="com.tpadsz.after.entity.GroupConsoleLog">
+        select x,y,lmac from alink.f_console_log WHERE gid=#{groupId} and uid=#{uid} and mid=#{meshId} order by log_date desc limit 1
+    </select>
+
+    <select id="getGroups" resultMap="groups">
+        SELECT
+            g.id,
+	        g.group_id,
+	        g.mid,
+	        l.id AS lid,
+	        l.lmac,
+	        l.gid
+        FROM
+        (
+        alink.f_light l
+        RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid = #{mid} ) g ON l.gid = g.id
+        )
+        ORDER BY
+        group_id DESC
+    </select>
+    <resultMap id="groups" type="com.tpadsz.after.entity.GroupList">
+        <id property="id" column="id"/>
+        <!--property实体类中定义的属性 column数据库中字段名-->
+        <result property="groupId" column="group_id"/>
+        <result property="mid" column="mid"/>
+        <!-- property指的是在bean中字段名 ofType类的全定向名 -->
+        <!--一对多-->
+        <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
+            <id property="lid" column="lid"/>
+            <result property="lmac" column="lmac"/>
+            <result property="gid" column="gid"/>
+            <!--<association property="typeList" javaType="com.tpadsz.after.entity.TypeList">-->
+            <!--</association>-->
+        </collection>
+    </resultMap>
 </mapper>

@@ -23,7 +23,11 @@ public interface AlinkLoginService {
 
     void saveLoginLog(LoginLog loginLog);
 
+<<<<<<< HEAD
     void loginOut(String uid)throws Exception;
+=======
+    void loginOut(String uid) throws Exception;
+>>>>>>> origin/ji.ma
 
     AppUser findUserByMobile(String mobile);
 
