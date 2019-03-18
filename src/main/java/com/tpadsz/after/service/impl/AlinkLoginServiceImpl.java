@@ -1,5 +1,6 @@
 package com.tpadsz.after.service.impl;
 
+import com.tpadsz.after.constants.MemcachedObjectType;
 import com.tpadsz.after.dao.AlinkLoginDao;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
@@ -8,11 +9,14 @@ import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.util.Encryption;
+import net.rubyeye.xmemcached.XMemcachedClient;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -27,8 +31,11 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     @Resource
     private AlinkLoginDao alinkLoginDao;
 
+    @Autowired
+    private XMemcachedClient client;
+
     @Override
-    public AppUser loginByTpad(String input, String password,String inputFlag) throws SystemAlgorithmException,
+    public AppUser loginByTpad(String input, String password, String inputFlag) throws SystemAlgorithmException,
             AccountNotCorrectException, PasswordNotCorrectException {
         AppUser appUser = null;
         try {
@@ -52,6 +59,19 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
         appUser.setPwd(null);
         appUser.setSalt(null);
         return appUser;
+    }
+
+    @Override
+    public String generateToken(String uid) throws SystemAlgorithmException {
+        String token = null;
+        try {
+            token = UUID.randomUUID().toString().replaceAll("-", "");
+            String key = MemcachedObjectType.CACHE_TOKEN.getPrefix() + uid;
+            client.set(key, MemcachedObjectType.CACHE_TOKEN.getExpiredTime(), token);
+        } catch (Exception e) {
+            throw new SystemAlgorithmException();
+        }
+        return token;
     }
 
 

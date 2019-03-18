@@ -12,7 +12,7 @@ public enum MemcachedObjectType {
     
     CACHE_MESSAGE_VERIFICATION("uic_cache_message_verify_%s", 5 * 60),
     
-    CACHE_TOKEN("uic_cache_token:", 30 * 24 * 3600);
+    CACHE_TOKEN("uic_cache_token:", 3 * 24 * 3600);
 
 
     //=================================================================

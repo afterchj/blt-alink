@@ -17,7 +17,7 @@ import java.util.List;
 public interface AlinkLoginService {
 
 
-    AppUser loginByTpad(String input, String password,String inputFlag) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException;
+    AppUser loginByTpad(String input, String password, String inputFlag) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException;
 
     boolean checkPassword(String actual, String expected, String salt);
 
@@ -28,4 +28,6 @@ public interface AlinkLoginService {
     AppUser findUserByMobile(String mobile);
 
     void insertForeach(List<String> list);
+
+    String generateToken(String uid) throws SystemAlgorithmException;
 }

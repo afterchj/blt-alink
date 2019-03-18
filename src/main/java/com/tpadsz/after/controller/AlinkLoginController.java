@@ -12,7 +12,6 @@ import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.service.ValidationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,7 +49,9 @@ public class AlinkLoginController extends BaseDecodedController {
                 result = ResultDict.PARAMS_BLANK;
             } else {
                 AppUser appUser = alinkLoginService.loginByTpad(input, pwd,inputFlag);
+                String token = alinkLoginService.generateToken(appUser.getId());
                 model.put("user", appUser);
+                model.put("token", token);
                 LoginLog loginLog = new LoginLog();
                 loginLog.setUid(appUser.getId());
                 loginLog.setAccount(input);
@@ -85,6 +86,8 @@ public class AlinkLoginController extends BaseDecodedController {
                     model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
                     model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
                 } else {
+                    String token = alinkLoginService.generateToken(appUser.getId());
+                    model.put("token", token);
                     appUser.setPwd(null);
                     appUser.setSalt(null);
                     LoginLog loginLog = new LoginLog();
