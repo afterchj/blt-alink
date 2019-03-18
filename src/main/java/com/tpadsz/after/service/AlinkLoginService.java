@@ -16,18 +16,13 @@ import java.util.List;
  **/
 public interface AlinkLoginService {
 
-
     AppUser loginByTpad(String input, String password,String inputFlag) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException;
 
     boolean checkPassword(String actual, String expected, String salt);
 
     void saveLoginLog(LoginLog loginLog);
 
-<<<<<<< HEAD
-    void loginOut(String uid)throws Exception;
-=======
     void loginOut(String uid) throws Exception;
->>>>>>> origin/ji.ma
 
     AppUser findUserByMobile(String mobile);
 

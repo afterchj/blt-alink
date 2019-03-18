@@ -1,7 +1,6 @@
 package com.after.controller;
 
 import com.tpadsz.after.dao.GroupOperationDao;
-import com.tpadsz.after.entity.*;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;

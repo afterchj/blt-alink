@@ -1,8 +1,5 @@
 package after;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 /**
  * Created by hongjian.chen on 2018/8/31.
  */

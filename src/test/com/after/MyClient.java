@@ -2,7 +2,6 @@ package after;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.tpadsz.after.api.RecordBillService;
-
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
