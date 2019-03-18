@@ -156,24 +156,24 @@ public class AlinkProjectController extends BaseDecodedController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        int id = (int) params.get("id");
+        String id = (String) params.get("id");
         String uid = (String) params.get("uid");
         String deleteFlag = (String) params.get("deleteFlag");
         try {
             if("0".equals(deleteFlag)) {
-                int count = projectService.findLightByPid(id,uid);
+                int count = projectService.findLightByPid(Integer.parseInt(id),uid);
                 if(count>0){
 
                     throw new LightExistedException();
                 }
             }else if("1".equals(deleteFlag)){
-                int count = projectService.findLightByMid(id);
+                int count = projectService.findLightByMid(Integer.parseInt(id));
                 if(count>0){
 
                     throw new LightExistedException();
                 }
             }
-            projectService.delete(id, uid,deleteFlag);
+            projectService.delete(Integer.parseInt(id), uid,deleteFlag);
             model.put("result", ResultDict.SUCCESS.getCode());
         }catch (LightExistedException e){
             model.put("result", ResultDict.LIGHT_EXISTED.getCode());

@@ -5,6 +5,7 @@ import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.ProjectService;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -84,14 +85,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void delete(int id, String uid, String deleteFlag) {
         if("0".equals(deleteFlag)){
-            List<String> list = projectDao.findMeshIdByPid(id,uid);
+            List<String> list = projectDao.findNewMeshIdByPid(id,uid);
             projectDao.deleteProByPid(id,uid);
             projectDao.deleteMeshByPid(id,uid);
-            if(list!=null){
+            if(list.size()!=0){
                 projectDao.insertMeshId(list);
             }
         }else if("1".equals(deleteFlag)) {
-            String meshId = projectDao.findMeshIdByMid(id);
+            String meshId = projectDao.findNewMeshIdByMid(id);
             projectDao.deleteByMid(id);
             if(meshId!=null){
                 projectDao.recordMeshId(meshId);
@@ -106,12 +107,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void oldCommit(List<Mesh> list, String uid) {
+        Project project = new Project();
+        project.setUid(uid);
+        project.setName("老项目");
+        projectDao.createOldProject(project);
         for(int i=0;i<list.size();i++){
-//           projectDao.commitOldMeshs(list.get(i));
+            try {
+                list.get(i).setProject_id(project.getId());
+                list.get(i).setUid(uid);
+                projectDao.createOldMesh(list.get(i));
+            }catch (DuplicateKeyException e){
+                projectDao.createOldDuplicatedMesh(list.get(i));
+            }
         }
-
-
     }
+
+
 
 
 }

@@ -36,8 +36,23 @@
         </selectKey>
     </insert>
 
+    <insert id="createOldMesh" parameterType="com.tpadsz.after.entity.Mesh">
+        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),'old')
+    </insert>
+
+    <insert id="createOldDuplicatedMesh" parameterType="com.tpadsz.after.entity.Mesh">
+        INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),'old')
+    </insert>
+
     <insert id="createProject" parameterType="com.tpadsz.after.entity.Project">
         INSERT INTO alink.f_project (name,uid,create_date) VALUES(#{name},#{uid},NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createOldProject" parameterType="com.tpadsz.after.entity.Project">
+        INSERT INTO alink.f_project (name,uid,create_date,other) VALUES(#{name},#{uid},NOW(),'old')
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
@@ -84,7 +99,7 @@
         SELECT COUNT(1) from alink.f_light where mid=#{id}
     </select>
 
-    <select id="findMeshIdByMid" resultType="string" parameterType="int">
+    <select id="findNewMeshIdByMid" resultType="string" parameterType="int">
         SELECT mesh_id from alink.f_mesh where id=#{id} and other &lt;&gt;'old' or id=#{id} and other IS NULL
     </select>
 
@@ -106,7 +121,7 @@
         DELETE FROM alink.f_project WHERE id=#{id} and uid = #{uid}
     </delete>
 
-    <select id="findMeshIdByPid" resultType="string">
+    <select id="findNewMeshIdByPid" resultType="string">
         SELECT mesh_id from alink.f_mesh where project_id=#{id} and uid = #{uid} and other &lt;&gt;'old' or project_id=#{id} and uid = #{uid} and other IS NULL
     </select>
 
@@ -119,18 +134,6 @@
             #{item}
             )
         </foreach>
-    </insert>
-
-
-    <insert id="createDefaultScene" parameterType="com.tpadsz.after.entity.SceneAjust">
-        INSERT INTO alink.f_scene (scene_id,sname,mid,uid,create_date) VALUES(#{sceneId},#{sname},#{mid},#{uid},NOW())
-        <selectKey keyProperty="id" order="AFTER" resultType="int">
-            select LAST_INSERT_ID()
-        </selectKey>
-    </insert>
-
-    <insert id="createDefaultSceneSetting">
-        INSERT INTO alink.f_scene_setting (sid,x,y,create_date) VALUES(#{sid},#{x},#{y},NOW())
     </insert>
 
 

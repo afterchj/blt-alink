@@ -28,6 +28,8 @@ public interface ProjectDao {
 
     int createProject(Project project);
 
+    int createOldProject(Project project);
+
     void rename(@Param("id")int id, @Param("name")String name,@Param("renameFlag")int renameFlag);
 
     List<Mesh> findProDetailByUid(@Param("uid")String uid, @Param("projectId")String projectId);
@@ -42,13 +44,13 @@ public interface ProjectDao {
 
     int findLightByPid(@Param("id")int id, @Param("uid")String uid);
 
-    String findMeshIdByMid(@Param("id")int id);
+    String findNewMeshIdByMid(@Param("id")int id);
 
-    List findMeshIdByPid(@Param("id")int id, @Param("uid")String uid);
+    List<String> findNewMeshIdByPid(@Param("id")int id, @Param("uid")String uid);
 
     void insertMeshId(List<String> list);
 
-    void createDefaultScene(SceneAjust scene);
+    void createOldMesh(Mesh mesh);
 
-    void createDefaultSceneSetting(@Param("sid")Integer sid, @Param("x")String x, @Param("y")String y);
+    void createOldDuplicatedMesh(Mesh mesh);
 }
