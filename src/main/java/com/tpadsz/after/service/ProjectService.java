@@ -36,4 +36,6 @@ public interface ProjectService {
     int findLightByPid(int id, String uid);
 
     void oldCommit(List<Mesh> list, String uid);
+
+    void oldMove(List<Mesh> list, String uid);
 }

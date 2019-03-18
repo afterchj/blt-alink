@@ -41,7 +41,7 @@
     </insert>
 
     <insert id="createOldDuplicatedMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),'old')
+        INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{uid},#{pwd},#{uid},#{project_id},NOW(),'old')
     </insert>
 
     <insert id="createProject" parameterType="com.tpadsz.after.entity.Project">

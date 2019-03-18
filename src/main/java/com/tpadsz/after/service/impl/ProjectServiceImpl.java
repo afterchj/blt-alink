@@ -122,7 +122,10 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
+    @Override
+    public void oldMove(List<Mesh> list, String uid) {
 
+    }
 
 
 }
