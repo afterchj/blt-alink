@@ -202,12 +202,10 @@ public class AlinkProjectController extends BaseDecodedController {
     @RequestMapping(value = "/oldMove", method = RequestMethod.POST)
     public String oldMove(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String projectId = params.getString("projectId");
-        String mname = params.getString("mname");
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         try {
-//            List<Mesh> list = JSONArray.parseArray(meshData, Mesh.class);
-//            projectService.oldMove(list, uid);
+            projectService.oldMove(projectId,meshId, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());

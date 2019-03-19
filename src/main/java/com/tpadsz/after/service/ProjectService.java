@@ -37,5 +37,5 @@ public interface ProjectService {
 
     void oldCommit(List<Mesh> list, String uid);
 
-    void oldMove(List<Mesh> list, String uid);
+    void oldMove(String projectId,String meshId, String uid);
 }

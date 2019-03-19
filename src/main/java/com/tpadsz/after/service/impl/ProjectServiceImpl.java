@@ -123,9 +123,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void oldMove(List<Mesh> list, String uid) {
-
+    public void oldMove(String projectId, String meshId, String uid) {
+            projectDao.oldMove(projectId,meshId,uid);
     }
-
 
 }

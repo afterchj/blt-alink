@@ -53,4 +53,6 @@ public interface ProjectDao {
     void createOldMesh(Mesh mesh);
 
     void createOldDuplicatedMesh(Mesh mesh);
+
+    void oldMove(@Param("projectId")String projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 }

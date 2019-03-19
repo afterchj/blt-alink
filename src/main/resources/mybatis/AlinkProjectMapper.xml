@@ -100,7 +100,7 @@
     </select>
 
     <select id="findNewMeshIdByMid" resultType="string" parameterType="int">
-        SELECT mesh_id from alink.f_mesh where id=#{id} and other &lt;&gt;'old' or id=#{id} and other IS NULL
+        SELECT mesh_id from alink.f_mesh where id=#{id} and is_repeat=0 and other NOT IN ('old','fromOld') or id=#{id} and is_repeat=0  and other IS NULL
     </select>
 
     <delete id="deleteByMid" parameterType="int">
@@ -122,7 +122,7 @@
     </delete>
 
     <select id="findNewMeshIdByPid" resultType="string">
-        SELECT mesh_id from alink.f_mesh where project_id=#{id} and uid = #{uid} and other &lt;&gt;'old' or project_id=#{id} and uid = #{uid} and other IS NULL
+        SELECT mesh_id from alink.f_mesh where project_id=#{id} and is_repeat=0 and uid = #{uid} and other NOT IN ('old','fromOld') or project_id=#{id} and is_repeat=0 and uid = #{uid} and other IS NULL
     </select>
 
     <insert id="insertMeshId" parameterType="java.util.List" useGeneratedKeys="false">
@@ -136,6 +136,8 @@
         </foreach>
     </insert>
 
-
+    <update id="oldMove" parameterType="string">
+            update alink.f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}
+    </update>
 
 </mapper>
