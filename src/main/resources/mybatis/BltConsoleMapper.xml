@@ -37,10 +37,7 @@
     <select id="getScenes" resultType="map" parameterType="map">
 		SELECT
 			s.scene_id,
-			s.sname,
-			a.x,
-			a.y,
-			a.off
+			s.sname
 		FROM
 			f_mesh m
 		INNER JOIN f_scene s ON m.id = s.mid
@@ -52,9 +49,7 @@
     <select id="getGroups" resultType="map" parameterType="map">
 		SELECT
 			g.group_id,
-			g.gname,
-			gs.x,
-			gs.y
+			g.gname
 		FROM
 			f_group g
 		INNER JOIN f_group_setting gs ON g.id = gs.gid
