@@ -28,9 +28,9 @@ public class UpdateController extends BaseDecodedController {
     @RequestMapping(value = "/update_dlw",method = RequestMethod.POST)
     public void updateDlw(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
         UpdateInfo updateInfo ;
-        String userId;
+        String uid;
         try {
-            userId = params.getString("userId");
+            uid = params.getString("uid");
             updateInfo= setUpdateInfo(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -63,5 +63,4 @@ public class UpdateController extends BaseDecodedController {
         updateInfo.setResultCode("000");
         return updateInfo;
     }
-
 }

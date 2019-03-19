@@ -41,10 +41,6 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-
-
-
-
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 
         <property name="contentNegotiationManager">
