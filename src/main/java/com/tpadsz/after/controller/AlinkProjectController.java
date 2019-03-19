@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
+import com.tpadsz.after.entity.ProjectVo;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.LightExistedException;
 import com.tpadsz.after.exception.RepetitionException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,6 +35,8 @@ public class AlinkProjectController extends BaseDecodedController {
 
     @Resource
     private AlinkLoginService alinkLoginService;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @RequestMapping(value = "/generator", method = RequestMethod.POST)
     public String generator(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
@@ -57,24 +61,59 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
         List<Project> list = new ArrayList<>();
-        Boolean isExist = false;
+        List<ProjectVo> listVo = new ArrayList<>();
         try {
-            if(!"".equals(preId)) {
-                Mesh mesh = projectService.findRepeatIdByUid(preId,uid);
-                if(mesh!=null) {
-                    list = projectService.findProListByUid(uid, mesh.getProject_id());
-                    isExist = true;
+            if ("".equals(preId)) {
+                list = projectService.findProListByUid(uid);
+                if(list.size()!=0) {
+                    for (Project project : list) {
+                        ProjectVo projectVo = new ProjectVo();
+                        projectVo.setId(project.getId());
+                        projectVo.setName(project.getName());
+                        projectVo.setAdd(project.getAdd());
+                        projectVo.setUid(project.getUid());
+                        projectVo.setIsConnected("0");
+                        if (project.getCreate_date() != null) {
+                            projectVo.setCreate_date(sdf.format(project.getCreate_date()));
+                        }
+                        if (project.getUpdate_date() != null) {
+                            projectVo.setUpdate_date(sdf.format(project.getUpdate_date()));
+                        }
+                        listVo.add(projectVo);
+                    }
+                    model.put("myProjects", listVo);
                 }else {
-                    list = projectService.findProListByUid(uid,0);
+                    model.put("myProjects", "");
                 }
-            }else {
-                list = projectService.findProListByUid(uid,0);
+                Project oldPro = projectService.findOldProByUid(uid);
+                if(oldPro!=null) {
+                    ProjectVo projectVo2 = new ProjectVo();
+                    projectVo2.setId(oldPro.getId());
+                    projectVo2.setName(oldPro.getName());
+                    projectVo2.setAdd(oldPro.getAdd());
+                    projectVo2.setUid(oldPro.getUid());
+                    projectVo2.setIsConnected("0");
+                    if (oldPro.getCreate_date() != null) {
+                        projectVo2.setCreate_date(sdf.format(oldPro.getCreate_date()));
+                    }
+                    if (oldPro.getUpdate_date() != null) {
+                        projectVo2.setUpdate_date(sdf.format(oldPro.getUpdate_date()));
+                    }
+                    model.put("oldProject", projectVo2);
+                }else {
+                    model.put("oldProject", "");
+                }
+                model.put("result", ResultDict.SUCCESS.getCode());
+            } else {
+                Mesh mesh = projectService.findRepeatIdByUid(preId, uid);
+                if (mesh != null) {
+                    model.put("result", ResultDict.SUCCESS.getCode());
+                    model.put("connectedProjectId", String.valueOf(mesh.getProject_id()));
+                } else {
+                    model.put("result", ResultDict.SUCCESS.getCode());
+                    model.put("connectedProjectId", "");
+                }
             }
-            Project oldPro = projectService.findOldProByUid(uid);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("myProjects", list);
-            model.put("isExist", isExist);
-            model.put("oldProject", oldPro);
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
@@ -86,7 +125,7 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         String projectId = params.getString("projectId");
         try {
-            List<Mesh> list = projectService.findProDetailByUid(uid,Integer.parseInt(projectId));
+            List<Mesh> list = projectService.findProDetailByUid(uid, Integer.parseInt(projectId));
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("meshList", list);
         } catch (Exception e) {
@@ -218,7 +257,7 @@ public class AlinkProjectController extends BaseDecodedController {
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         try {
-            projectService.oldMove(Integer.parseInt(projectId),meshId, uid);
+            projectService.oldMove(Integer.parseInt(projectId), meshId, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());

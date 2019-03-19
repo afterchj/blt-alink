@@ -74,8 +74,8 @@
         INSERT INTO alink.repeated_mesh_id (mesh_id) VALUES(#{mesh_id})
     </insert>
 
-    <select id="findProListByUid" resultMap="standardProjectMap">
-        SELECT * from alink.f_project where uid = #{uid} and other &lt;&gt;'old' or uid=#{uid} and other is null ORDER BY case when id=#{id} then 0 else 1 end , update_date DESC,create_date DESC
+    <select id="findProListByUid" resultMap="standardProjectMap" parameterType="string">
+        SELECT * from alink.f_project where uid = #{uid} and other &lt;&gt;'old' or uid=#{uid} and other is null ORDER BY update_date DESC,create_date DESC
     </select>
 
     <select id="findOldProByUid" resultMap="standardProjectMap">

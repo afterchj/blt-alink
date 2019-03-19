@@ -13,7 +13,7 @@ public interface ProjectService {
 
     Mesh findRepeatIdByUid(String preId,String uid);
 
-    List<Project> findProListByUid(String uid, int projectId);
+    List<Project> findProListByUid(String uid);
 
     Project findOldProByUid(String uid);
 
