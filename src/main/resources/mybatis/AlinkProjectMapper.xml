@@ -91,7 +91,7 @@
         </if>
     </update>
 
-    <select id="findProDetailByUid" resultMap="standardMeshMap" parameterType="string">
+    <select id="findProDetailByUid" resultMap="standardMeshMap">
         SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
     </select>
 
@@ -136,7 +136,7 @@
         </foreach>
     </insert>
 
-    <update id="oldMove" parameterType="string">
+    <update id="oldMove">
             update alink.f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}
     </update>
 

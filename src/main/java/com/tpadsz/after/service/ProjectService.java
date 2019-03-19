@@ -11,7 +11,9 @@ import java.util.List;
  */
 public interface ProjectService {
 
-    List<Project> findProListByUid(String uid, String preId);
+    Mesh findRepeatIdByUid(String preId,String uid);
+
+    List<Project> findProListByUid(String uid, int projectId);
 
     Project findOldProByUid(String uid);
 
@@ -27,7 +29,7 @@ public interface ProjectService {
 
     void recordMeshId(String meshId);
 
-    List<Mesh> findProDetailByUid(String uid, String projectId);
+    List<Mesh> findProDetailByUid(String uid, int projectId);
 
     int findLightByMid(int id);
 
@@ -37,5 +39,5 @@ public interface ProjectService {
 
     void oldCommit(List<Mesh> list, String uid);
 
-    void oldMove(String projectId,String meshId, String uid);
+    void oldMove(int projectId,String meshId, String uid);
 }

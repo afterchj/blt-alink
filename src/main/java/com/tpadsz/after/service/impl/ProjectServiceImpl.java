@@ -21,15 +21,13 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectDao projectDao;
 
     @Override
-    public List<Project> findProListByUid(String uid, String preId) {
-        List<Project> list = new ArrayList<>();
-        Mesh mesh = projectDao.findRepeatIdByUid(preId,uid);
-        if(mesh!=null){
-            list = projectDao.findProListByUid(uid,mesh.getProject_id());
-        }else {
-            list = projectDao.findProListByUid(uid,0);
-        }
-        return list;
+    public Mesh findRepeatIdByUid(String preId,String uid) {
+        return projectDao.findRepeatIdByUid(preId, uid);
+    }
+
+    @Override
+    public List<Project> findProListByUid(String uid,int projectId) {
+        return projectDao.findProListByUid(uid,projectId);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Mesh> findProDetailByUid(String uid, String projectId) {
+    public List<Mesh> findProDetailByUid(String uid, int projectId) {
         return projectDao.findProDetailByUid(uid,projectId);
     }
 
@@ -123,7 +121,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void oldMove(String projectId, String meshId, String uid) {
+    public void oldMove(int projectId, String meshId, String uid) {
             projectDao.oldMove(projectId,meshId,uid);
     }
 

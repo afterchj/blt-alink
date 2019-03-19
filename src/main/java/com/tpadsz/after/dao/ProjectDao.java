@@ -32,7 +32,7 @@ public interface ProjectDao {
 
     void rename(@Param("id")int id, @Param("name")String name,@Param("renameFlag")int renameFlag);
 
-    List<Mesh> findProDetailByUid(@Param("uid")String uid, @Param("projectId")String projectId);
+    List<Mesh> findProDetailByUid(@Param("uid")String uid, @Param("projectId")int projectId);
 
     int findLightByMid(@Param("id")int id);
 
@@ -54,5 +54,5 @@ public interface ProjectDao {
 
     void createOldDuplicatedMesh(Mesh mesh);
 
-    void oldMove(@Param("projectId")String projectId, @Param("meshId")String meshId, @Param("uid")String uid);
+    void oldMove(@Param("projectId")int projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 }

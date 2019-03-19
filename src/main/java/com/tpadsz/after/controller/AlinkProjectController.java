@@ -56,11 +56,24 @@ public class AlinkProjectController extends BaseDecodedController {
     public String findProList(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
+        List<Project> list = new ArrayList<>();
+        Boolean isExist = false;
         try {
-            List<Project> list = projectService.findProListByUid(uid, preId);
+            if(!"".equals(preId)) {
+                Mesh mesh = projectService.findRepeatIdByUid(preId,uid);
+                if(mesh!=null) {
+                    list = projectService.findProListByUid(uid, mesh.getProject_id());
+                    isExist = true;
+                }else {
+                    list = projectService.findProListByUid(uid,0);
+                }
+            }else {
+                list = projectService.findProListByUid(uid,0);
+            }
             Project oldPro = projectService.findOldProByUid(uid);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("myProjects", list);
+            model.put("isExist", isExist);
             model.put("oldProject", oldPro);
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
@@ -73,7 +86,7 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         String projectId = params.getString("projectId");
         try {
-            List<Mesh> list = projectService.findProDetailByUid(uid, projectId);
+            List<Mesh> list = projectService.findProDetailByUid(uid,Integer.parseInt(projectId));
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("meshList", list);
         } catch (Exception e) {
@@ -205,7 +218,7 @@ public class AlinkProjectController extends BaseDecodedController {
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         try {
-            projectService.oldMove(projectId,meshId, uid);
+            projectService.oldMove(Integer.parseInt(projectId),meshId, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
