@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by chenhao.lu on 2019/3/8.
  */
 public class ProjectVo {
-    private int id;
+    private String id;
     private String name;
     private String add;
     private String uid;
@@ -14,11 +14,11 @@ public class ProjectVo {
     private String create_date;
     private String update_date;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

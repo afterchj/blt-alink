@@ -68,7 +68,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 if(list.size()!=0) {
                     for (Project project : list) {
                         ProjectVo projectVo = new ProjectVo();
-                        projectVo.setId(project.getId());
+                        projectVo.setId(String.valueOf(project.getId()));
                         projectVo.setName(project.getName());
                         projectVo.setAdd(project.getAdd());
                         projectVo.setUid(project.getUid());
@@ -88,7 +88,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 Project oldPro = projectService.findOldProByUid(uid);
                 if(oldPro!=null) {
                     ProjectVo projectVo2 = new ProjectVo();
-                    projectVo2.setId(oldPro.getId());
+                    projectVo2.setId(String.valueOf(oldPro.getId()));
                     projectVo2.setName(oldPro.getName());
                     projectVo2.setAdd(oldPro.getAdd());
                     projectVo2.setUid(oldPro.getUid());

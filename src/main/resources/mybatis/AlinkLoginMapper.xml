@@ -23,7 +23,7 @@
     </insert>
 
     <select id="findUserByAccount" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where account=#{account}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where account= BINARY #{account}
     </select>
 
     <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
@@ -35,7 +35,7 @@
     </select>
 
     <select id="findUserByUname" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where uname=#{uname}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where uname= BINARY #{uname}
     </select>
 
     <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
