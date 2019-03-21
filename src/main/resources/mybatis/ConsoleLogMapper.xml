@@ -15,7 +15,7 @@
 		cmd,
 		log_date
 	  )
-	 VALUES(#{uid},#{mid},#{sid},#{gid},#{lmac},#{x},#{y},#{method},#{cmd},NOW())
+	 VALUES(#{uid},#{meshId},#{sceneId},#{gid},#{lmac},#{x},#{y},#{method},#{cmd},NOW())
     </update>
 
 </mapper>
