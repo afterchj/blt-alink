@@ -59,15 +59,15 @@ public class SceneAjustServiceImpl implements SceneAjustService {
         }
     }
 
-    @Override
-    public void saveSceneSetting(SceneSetting sceneSetting) {
-        sceneAjustDao.saveSceneSetting(sceneSetting);
-    }
+//    @Override
+//    public void saveSceneSetting(SceneSetting sceneSetting) {
+//        sceneAjustDao.saveSceneSetting(sceneSetting);
+//    }
 
-    @Override
-    public void saveGroupSetting(GroupSetting groupSetting) {
-        sceneAjustDao.saveGroupSetting(groupSetting);
-    }
+//    @Override
+//    public void saveGroupSetting(GroupSetting groupSetting) {
+//        sceneAjustDao.saveGroupSetting(groupSetting);
+//    }
 
     @Override
     public void deleteLightSetting(Integer sid) {

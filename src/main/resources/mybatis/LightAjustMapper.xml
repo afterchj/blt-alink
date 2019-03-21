@@ -4,9 +4,9 @@
 
     <insert id="saveLightAjustLog">
         INSERT INTO alink.f_light_ajust_log
-          ( mesh_id,lmac, blt_flag,operation,create_date )
+          ( mesh_id, blt_flag,operation,create_date )
         VALUES
-	      (#{meshId}, #{lmac},#{bltFlag},#{operation},now())
+	      (#{meshId}, #{bltFlag},#{operation},now())
     </insert>
 
     <update id="updateLightName">
@@ -23,13 +23,13 @@
     </delete>
 
     <update id="updateLightGid">
-        UPDATE alink.f_light SET gid=#{dgid} WHERE gid=#{gid}
+        UPDATE alink.f_light SET gid=#{gid} WHERE lmac=#{lmac}
     </update>
 
-    <insert id="saveLightColor">
-        INSERT INTO alink.f_console_log (uid,mid,gid,lmac,x,y,cmd,log_date)
-	    VALUES(#{uid},#{meshId},'0',#{lmac},#{x},#{y},'1',now())
-    </insert>
+    <!--<insert id="saveLightColor">-->
+        <!--INSERT INTO alink.f_console_log (uid,mid,gid,lmac,x,y,cmd,log_date)-->
+	    <!--VALUES(#{uid},#{meshId},'0',#{lmac},#{x},#{y},'1',now())-->
+    <!--</insert>-->
 
     <select id="getLid" resultType="integer">
         select id from alink.f_light WHERE  lmac=#{lmac}
