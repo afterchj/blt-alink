@@ -17,7 +17,7 @@ public interface LightAjustService {
 
     void saveLight(List<LightList> lightLists) throws Exception;
 
-    void deleteLight(String lmac);
+    Integer deleteLight(String lmac);
 
     void updateLightGid(List<LightList> lightLists) throws Exception;
 

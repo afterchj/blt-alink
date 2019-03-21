@@ -3,10 +3,8 @@
 <mapper namespace="com.tpadsz.after.dao.LightAjustDao">
 
     <insert id="saveLightAjustLog">
-        INSERT INTO alink.f_light_ajust_log
-          ( mesh_id, blt_flag,operation,create_date )
-        VALUES
-	      (#{meshId}, #{bltFlag},#{operation},now())
+        INSERT INTO alink.f_light_ajust_log( mesh_id, blt_flag,operation,create_date )
+        VALUES(#{meshId}, #{bltFlag},#{operation},now())
     </insert>
 
     <update id="updateLightName">
@@ -18,7 +16,7 @@
         VALUES( #{productId},#{lmac},#{lname},#{mid},#{gid},now(),now() )
     </insert>
 
-    <delete id="deleteLight">
+    <delete id="deleteLight" >
         DELETE from alink.f_light WHERE lmac=#{lmac}
     </delete>
 
