@@ -20,7 +20,7 @@
 
 	<update id="saveSceneName" parameterType="map">
 		UPDATE f_scene
-		SET sname = #{sname}
+		SET sname = #{sname},update_date=NOW()
 		WHERE
 		scene_id = #{sceneId}
 		AND mid = (
