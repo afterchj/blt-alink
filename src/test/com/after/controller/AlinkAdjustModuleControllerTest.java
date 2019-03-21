@@ -78,7 +78,7 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void saveLightAjustLogTest() {
-        lightAjustService.saveLightAjustLog("12345678", "aa-aa-aa-aa", "0",
+        lightAjustService.saveLightAjustLog("12345678", "0",
                 "4");
         System.out.println("success");
     }
@@ -147,11 +147,13 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void updateLightGidTest() {
-        Group group = new Group();
-        group.setGid(21);
-        group.setDgid(17);
-        lightAjustService.updateLightGid(group);
+    public void updateLightGidTest() throws Exception {
+        List<LightList> lightLists = new ArrayList<>();
+        LightList lightList = new LightList();
+        lightList.setGid(1);
+        lightList.setLmac("aa-aa-aa");
+        lightLists.add(lightList);
+        lightAjustService.updateLightGid(lightLists);
         System.out.println("success");
     }
 
@@ -195,27 +197,6 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void saveSceneSettingTest() {
-        SceneSetting sceneSetting = new SceneSetting();
-        sceneSetting.setSid(1);
-        sceneSetting.setX("20");
-        sceneSetting.setY("20%");
-        sceneAjustService.saveSceneSetting(sceneSetting);
-    }
-
-    @Test
-    public void saveGroupSettingTest() {
-        GroupSetting groupSetting = new GroupSetting();
-        groupSetting.setMid(4);
-        groupSetting.setGid(21);
-        groupSetting.setSid(1);
-        groupSetting.setX("11");
-        groupSetting.setY("21%");
-        //保存单组场景
-        sceneAjustService.saveGroupSetting(groupSetting);
-    }
-
-    @Test
     public void saveSceneTest() {
         SceneAjust sceneAjust = new SceneAjust();
         sceneAjust.setUid("aaaa");
@@ -236,12 +217,6 @@ public class AlinkAdjustModuleControllerTest {
         sceneLog.setMeshId("12345678");
         sceneLog.setOperation("0");
         sceneAjustService.saveSceneLog(sceneLog);
-    }
-
-    @Test
-    public void saveLightColorTest() {
-        lightAjustService.saveLightColor("0000", "00000000", "00-00-00-00",
-                "0", "0%");
     }
 
     @Test

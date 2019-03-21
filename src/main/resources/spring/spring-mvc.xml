@@ -38,6 +38,7 @@
             <mvc:exclude-mapping path="/account/pwd/login*"/>
             <mvc:exclude-mapping path="/account/code/login*"/>
             <mvc:exclude-mapping path="/user/verify*"/>
+            <!--<mvc:exclude-mapping path="/adjust/**"/>-->
             <bean class="com.tpadsz.after.interceptor.UserTokenValidationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

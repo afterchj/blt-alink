@@ -33,7 +33,7 @@ public interface GroupOperationService {
 
     void updateGidInLight(Group group);
 
-    List<LightList> getLightList(Group group);
+//    List<LightList> getLightList(Group group);
 
     void deleteGroup(Group group);
 
@@ -41,5 +41,5 @@ public interface GroupOperationService {
 
     GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId);
 
-    List<GroupList> getGroups(Integer mid);
+//    List<GroupList> getGroups(Integer mid);
 }

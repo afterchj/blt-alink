@@ -72,10 +72,10 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         groupOperationDao.updateGidInLight(group);
     }
 
-    @Override
-    public List<LightList> getLightList(Group group) {
-        return groupOperationDao.getLightList(group);
-    }
+//    @Override
+//    public List<LightList> getLightList(Group group) {
+//        return groupOperationDao.getLightList(group);
+//    }
 
     @Override
     public void deleteGroup(Group group) {
@@ -92,8 +92,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         return groupOperationDao.getGroupConsoleLogByGid(groupId,uid,meshId);
     }
 
-    @Override
-    public List<GroupList> getGroups(Integer mid) {
-        return groupOperationDao.getGroups(mid);
-    }
+//    @Override
+//    public List<GroupList> getGroups(Integer mid) {
+//        return groupOperationDao.getGroups(mid);
+//    }
 }
