@@ -22,14 +22,14 @@
 		UPDATE f_scene
 		SET sname = #{sname}
 		WHERE
-			scene_id = #{sid}
+			scene_id = #{sceneId}
 		AND mid = (
 			SELECT
 				id
 			FROM
 				f_mesh
 			WHERE
-				mesh_id = #{mid}
+				mesh_id = #{meshId}
 			AND uid = #{uid}
 		)
     </update>
@@ -43,7 +43,7 @@
 		INNER JOIN f_scene s ON m.id = s.mid
 		INNER JOIN f_scene_setting a ON a.sid = s.id
 		AND s.uid = #{uid}
-		AND m.mesh_id = #{mid}
+		AND m.mesh_id = #{meshId}
 	</select>
 
     <select id="getGroups" resultType="map" parameterType="map">
@@ -55,7 +55,7 @@
 		INNER JOIN f_group_setting gs ON g.id = gs.gid
 		INNER JOIN f_mesh m ON m.id = gs.mid
 		AND m.uid = #{uid}
-		AND m.mesh_id = #{mid}
+		AND m.mesh_id = #{meshId}
 	</select>
 
     <delete id="deleteScene" parameterType="map">
@@ -63,13 +63,13 @@
 		FROM
 			f_scene
 		WHERE
-			scene_id = #{sid}
+			scene_id = #{sceneId}
 		AND mid = (
 			SELECT
 				id
 			FROM
 				f_mesh
-			WHERE mesh_id = #{mid}
+			WHERE mesh_id = #{meshId}
 			AND uid = #{uid}
 		)
 	</delete>
@@ -82,7 +82,7 @@
 					s.id
 				FROM
 					f_scene s
-				WHERE s.scene_id = #{sid}
+				WHERE s.scene_id = #{}
 				AND s.uid = #{uid}
 				AND mid = (
 					SELECT
@@ -90,7 +90,7 @@
 					FROM
 						f_mesh
 					WHERE
-						mesh_id = #{mid}
+						mesh_id = #{meshId}
 				)
 			)
 	</update>
