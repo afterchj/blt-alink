@@ -1,7 +1,10 @@
 package com.tpadsz.after.dao;
 
-import com.tpadsz.after.entity.*;
+import com.tpadsz.after.entity.Group;
+import com.tpadsz.after.entity.GroupConsoleLog;
+import com.tpadsz.after.entity.GroupList;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +15,7 @@ import java.util.Map;
  * @author: Mr.Ma
  * @create: 2019-03-06 14:51
  **/
+@Repository
 public interface GroupOperationDao {
 
     void saveGroupLog(@Param("uid") String uid,@Param("meshId")String meshId, @Param("operation") String operation, @Param("bltFlag") String bltFlag);//创建组日志
@@ -34,7 +38,7 @@ public interface GroupOperationDao {
 
     void updateGidInLight(Group group);//更新灯表gid
 
-    List<LightList> getLightList(Group group);//查询未分组内灯信息
+//    List<LightList> getLightList(Group group);//查询未分组内灯信息
 
     void deleteGroup(Group group);//删除组
 
@@ -42,5 +46,5 @@ public interface GroupOperationDao {
 
     GroupConsoleLog getGroupConsoleLogByGid(@Param("groupId") Integer groupId,@Param("uid") String uid,@Param("meshId") String meshId);//获取lmac地址
 
-    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
+//    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

@@ -18,9 +18,9 @@ public interface SceneAjustService {
 
     void saveLightSetting(List<LightSetting> lightSettingList) throws Exception;
 
-    void saveSceneSetting(SceneSetting sceneSetting);
+//    void saveSceneSetting(SceneSetting sceneSetting);
 
-    void saveGroupSetting(GroupSetting groupSetting);
+//    void saveGroupSetting(GroupSetting groupSetting);
 
     void deleteLightSetting(Integer sid);
 

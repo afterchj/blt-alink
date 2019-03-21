@@ -106,18 +106,18 @@
 	      gid = #{gid}
     </update>
     <!---->
-    <select id="getLightList" resultType="com.tpadsz.after.entity.LightList" parameterType="com.tpadsz.after.entity.Group">
-      SELECT
-          lmac,
-          lname,
-          group_id
-      FROM
-          alink.f_group g,
-          alink.f_light l
-      WHERE
-          g.mid=#{mid} and g.group_id=0 and
-          g.id = l.gid
-    </select>
+    <!--<select id="getLightList" resultType="com.tpadsz.after.entity.LightList" parameterType="com.tpadsz.after.entity.Group">-->
+      <!--SELECT-->
+          <!--lmac,-->
+          <!--lname,-->
+          <!--group_id-->
+      <!--FROM-->
+          <!--alink.f_group g,-->
+          <!--alink.f_light l-->
+      <!--WHERE-->
+          <!--g.mid=#{mid} and g.group_id=0 and-->
+          <!--g.id = l.gid-->
+    <!--</select>-->
 
     <delete id="deleteGroup" parameterType="com.tpadsz.after.entity.Group">
         DELETE from alink.f_group WHERE id=#{gid}
@@ -131,22 +131,22 @@
         select x,y,lmac from alink.f_console_log WHERE gid=#{groupId} and uid=#{uid} and mid=#{meshId} order by log_date desc limit 1
     </select>
 
-    <select id="getGroups" resultMap="groups">
-        SELECT
-            g.id,
-	        g.group_id,
-	        g.mid,
-	        l.id AS lid,
-	        l.lmac,
-	        l.gid
-        FROM
-        (
-        alink.f_light l
-        RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid = #{mid} ) g ON l.gid = g.id
-        )
-        ORDER BY
-        group_id DESC
-    </select>
+    <!--<select id="getGroups" resultMap="groups">-->
+        <!--SELECT-->
+            <!--g.id,-->
+	        <!--g.group_id,-->
+	        <!--g.mid,-->
+	        <!--l.id AS lid,-->
+	        <!--l.lmac,-->
+	        <!--l.gid-->
+        <!--FROM-->
+        <!--(-->
+        <!--alink.f_light l-->
+        <!--RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid = #{mid} ) g ON l.gid = g.id-->
+        <!--)-->
+        <!--ORDER BY-->
+        <!--group_id DESC-->
+    <!--</select>-->
     <resultMap id="groups" type="com.tpadsz.after.entity.GroupList">
         <id property="id" column="id"/>
         <!--property实体类中定义的属性 column数据库中字段名-->

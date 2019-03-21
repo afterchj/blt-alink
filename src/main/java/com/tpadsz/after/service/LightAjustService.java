@@ -1,6 +1,5 @@
 package com.tpadsz.after.service;
 
-import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
  * @create: 2019-03-07 14:19
  **/
 public interface LightAjustService {
-    void saveLightAjustLog(String meshId,String lmac, String bltFlag,String operation);
+    void saveLightAjustLog(String meshId, String bltFlag,String operation);
 
     void updateLightName(String lmac, String lname);
 
@@ -20,11 +19,11 @@ public interface LightAjustService {
 
     void deleteLight(String lmac);
 
-    void updateLightGid(Group group);
+    void updateLightGid(List<LightList> lightLists) throws Exception;
 
-    void saveLightColor(String uid,String meshId,String lmac, String x, String y);
+//    void saveLightColor(String uid,String meshId,String lmac, String x, String y);
 
-    String getLightOff(String lmac);
+//    String getLightOff(String lmac);
 
     Integer getLid(String lmac);
 
