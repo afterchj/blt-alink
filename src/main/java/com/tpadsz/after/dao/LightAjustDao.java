@@ -18,7 +18,7 @@ public interface LightAjustDao {
 
     void saveLight(LightList lightList);//扫描灯
 
-    void deleteLight(@Param("lmac") String lmac);//删除灯
+    Integer deleteLight(@Param("lmac") String lmac);//删除灯
 
     void updateLightGid(@Param("lmac") String lmac,@Param("gid") Integer gid);//移动灯
 

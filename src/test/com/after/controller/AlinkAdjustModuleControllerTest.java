@@ -142,8 +142,8 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void deleteLightTest() {
-        lightAjustService.deleteLight("rr-rr-rr-rr");
-        System.out.println("success");
+        Integer num = lightAjustService.deleteLight("ii-ii-ii-ii");
+        System.out.println(num);
     }
 
     @Test
