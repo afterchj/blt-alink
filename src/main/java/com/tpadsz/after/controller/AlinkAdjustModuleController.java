@@ -386,11 +386,18 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         group.setMid(mid);
         group.setMeshId(meshId);
         List<LightList> lightLists;
+        String result;
         //连接蓝牙
         if ("1".equals(bltFlag)) {
             //扫描灯
             if ("0".equals(operation)) {
                 lightLists = moveLight(model, operation, group, params);
+                result = (String) model.get("result");
+//                System.out.println("result: "+result);
+                if (result!=null){
+                    //出現異常
+                    return;
+                }
                 try {
                     //mybatis 批量添加灯
                     lightAjustService.saveLight(lightLists);
@@ -426,6 +433,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             //移动灯，包括组之间移动 已分组移除灯 未分组移动到已分组
             if ("2".equals(operation)) {
                 lightLists = moveLight(model, operation, group, params);
+                result = (String) model.get("result");
+                if (result!=null){
+                    //出現異常
+                    return;
+                }
                 try {
                     lightAjustService.updateLightGid(lightLists);//更新light表中的gid
                     lightAjustService.saveLightAjustLog(meshId, bltFlag, operation);//记录日志
