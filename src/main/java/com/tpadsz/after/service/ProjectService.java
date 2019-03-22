@@ -1,7 +1,6 @@
 package com.tpadsz.after.service;
 
-import com.tpadsz.after.entity.Mesh;
-import com.tpadsz.after.entity.Project;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.RepetitionException;
 
 import java.util.List;
@@ -37,7 +36,8 @@ public interface ProjectService {
 
     int findLightByPid(int id, String uid);
 
-    void oldCommit(List<Mesh> list, String uid);
+    List<Mesh> oldMeshCommit(List<Mesh> list, String uid);
 
     void oldMove(int projectId,String meshId, String uid);
+
 }

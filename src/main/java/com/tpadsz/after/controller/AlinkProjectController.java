@@ -2,14 +2,11 @@ package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.Mesh;
-import com.tpadsz.after.entity.Project;
-import com.tpadsz.after.entity.ProjectVo;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.LightExistedException;
 import com.tpadsz.after.exception.RepetitionException;
-import com.tpadsz.after.service.AlinkLoginService;
-import com.tpadsz.after.service.ProjectService;
+import com.tpadsz.after.service.*;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by chenhao.lu on 2019/3/8.
@@ -34,26 +29,33 @@ public class AlinkProjectController extends BaseDecodedController {
     private ProjectService projectService;
 
     @Resource
-    private AlinkLoginService alinkLoginService;
+    private SceneAjustService sceneAjustService;
+
+    @Resource
+    private GroupOperationService groupOperationService;
+
+    @Resource
+    private LightAjustService lightAjustService;
+
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @RequestMapping(value = "/generator", method = RequestMethod.POST)
-    public String generator(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        try {
-            int[] meshIds = generateAppCode2Disk();
-            List<String> list = new ArrayList<>();
-            for (int i = 1; i < 10001; i++) {
-                list.add(String.valueOf(meshIds[i]));
-//                alinkLoginService.insert(String.valueOf(meshIds[i]));
-            }
-            alinkLoginService.insertForeach(list);
-        } catch (Exception e) {
-        }
-        model.put("result", "123");
-        model.put("result_message", "成功");
-        return null;
-    }
+//    @RequestMapping(value = "/generator", method = RequestMethod.POST)
+//    public String generator(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+//        try {
+//            int[] meshIds = generateAppCode2Disk();
+//            List<String> list = new ArrayList<>();
+//            for (int i = 1; i < 10001; i++) {
+//                list.add(String.valueOf(meshIds[i]));
+////                alinkLoginService.insert(String.valueOf(meshIds[i]));
+//            }
+//            alinkLoginService.insertForeach(list);
+//        } catch (Exception e) {
+//        }
+//        model.put("result", "123");
+//        model.put("result_message", "成功");
+//        return null;
+//    }
 
 
     @RequestMapping(value = "/pro_list", method = RequestMethod.POST)
@@ -65,7 +67,7 @@ public class AlinkProjectController extends BaseDecodedController {
         try {
             if ("".equals(preId)) {
                 list = projectService.findProListByUid(uid);
-                if(list.size()!=0) {
+                if (list.size() != 0) {
                     for (Project project : list) {
                         ProjectVo projectVo = new ProjectVo();
                         projectVo.setId(String.valueOf(project.getId()));
@@ -82,11 +84,11 @@ public class AlinkProjectController extends BaseDecodedController {
                         listVo.add(projectVo);
                     }
                     model.put("myProjects", listVo);
-                }else {
+                } else {
                     model.put("myProjects", "");
                 }
                 Project oldPro = projectService.findOldProByUid(uid);
-                if(oldPro!=null) {
+                if (oldPro != null) {
                     ProjectVo projectVo2 = new ProjectVo();
                     projectVo2.setId(String.valueOf(oldPro.getId()));
                     projectVo2.setName(oldPro.getName());
@@ -100,7 +102,7 @@ public class AlinkProjectController extends BaseDecodedController {
                         projectVo2.setUpdate_date(sdf.format(oldPro.getUpdate_date()));
                     }
                     model.put("oldProject", projectVo2);
-                }else {
+                } else {
                     model.put("oldProject", "");
                 }
                 model.put("result", ResultDict.SUCCESS.getCode());
@@ -238,11 +240,68 @@ public class AlinkProjectController extends BaseDecodedController {
 
     @RequestMapping(value = "/oldCommit", method = RequestMethod.POST)
     public String oldCommit(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        String meshData = params.getString("meshData");
+        String meshinfo = params.getString("meshinfo");
+        String groupinfo = params.getString("groupinfo");
+        String sceneinfo = params.getString("sceneinfo");
+        String lightinfo = params.getString("lightinfo");
         String uid = params.getString("uid");
         try {
-            List<Mesh> list = JSONArray.parseArray(meshData, Mesh.class);
-            projectService.oldCommit(list, uid);
+            List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
+            List<SceneInfo> sceneInfoList = JSONArray.parseArray(sceneinfo, SceneInfo.class);
+            List<GroupInfo> groupInfoList = JSONArray.parseArray(groupinfo, GroupInfo.class);
+            List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
+            List<LightList> flightList = new ArrayList<>();
+            List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid);
+            for (int i = 0; i < sceneInfoList.size(); i++) {
+                SceneAjust sceneAjust = new SceneAjust();
+                for (int j = 0; j < meshList.size(); j++) {
+                    if (meshList.get(j).getMname().equals(sceneInfoList.get(i).getMname())) {
+                        sceneAjust.setSceneId(sceneInfoList.get(i).getSceneId());
+                        sceneAjust.setSname(sceneInfoList.get(i).getSname());
+                        sceneAjust.setMid(meshList.get(j).getId());
+                        sceneAjust.setUid(uid);
+                        sceneAjustService.saveScene(sceneAjust);
+                        break;
+                    }
+                }
+            }
+            for (int i = 0; i < groupInfoList.size(); i++) {
+                Group group = new Group();
+                for (int j = 0; j < meshList.size(); j++) {
+                    if (meshList.get(j).getMname().equals(groupInfoList.get(i).getMname())) {
+                        group.setGname(groupInfoList.get(i).getGname());
+                        group.setMid(meshList.get(j).getId());
+                        group.setGroupId(groupInfoList.get(i).getGroupId());
+                        groupOperationService.saveGroup(group);
+                        groupInfoList.get(i).setGid(group.getId());
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < lightInfoList.size(); i++) {
+                LightList lightList = new LightList();
+                for (int j = 0; j < meshList.size(); j++) {
+                    if (meshList.get(j).getMname().equals(lightInfoList.get(i).getMname())) {
+                        lightList.setMid(meshList.get(j).getId());
+                        lightList.setLmac(lightInfoList.get(i).getLmac());
+                        lightList.setGroupId(lightInfoList.get(i).getGroupId());
+                        lightList.setLname(lightInfoList.get(i).getLname());
+                        lightList.setProductId(lightInfoList.get(i).getProductId());
+                        for (int k = 0; k < groupInfoList.size(); k++) {
+                            if (groupInfoList.get(k).getMname().equals(lightInfoList.get(i).getMname()) &&
+                                    groupInfoList.get(k).getGroupId().equals(lightInfoList.get(i).getGroupId())) {
+                                lightList.setGid(groupInfoList.get(k).getGid());
+                                break;
+                            }
+                        }
+                        flightList.add(lightList);
+                        break;
+                    }
+                }
+            }
+            lightAjustService.saveLight(flightList);
+
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
