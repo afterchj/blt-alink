@@ -6,7 +6,10 @@ import com.tpadsz.after.entity.*;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.LightExistedException;
 import com.tpadsz.after.exception.RepetitionException;
-import com.tpadsz.after.service.*;
+import com.tpadsz.after.service.GroupOperationService;
+import com.tpadsz.after.service.LightAjustService;
+import com.tpadsz.after.service.ProjectService;
+import com.tpadsz.after.service.SceneAjustService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by chenhao.lu on 2019/3/8.
@@ -221,14 +226,14 @@ public class AlinkProjectController extends BaseDecodedController {
         mesh.setProject_id(Integer.valueOf(projectId));
         try {
             int count = projectService.findFullyRepeatIdByUid(meshId, uid);
-            if(count==0){
+            if (count == 0) {
                 projectService.createSendMesh(mesh);
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("mid", mesh.getId());
-            }else {
+            } else {
                 model.put("result", ResultDict.ID_REPEATED.getCode());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
         return null;
@@ -313,12 +318,15 @@ public class AlinkProjectController extends BaseDecodedController {
                     meshInfoList.remove(i);
                 }
             }
-            List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList2, uid);
+            List<Mesh> meshList = new ArrayList<>();
+            if(meshInfoList2.size()!=0) {
+                meshList = projectService.oldMeshCommit(meshInfoList2, uid);
+                model.put("projectId", meshList.get(0).getProject_id());
+            }
             oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("importSuccessId", meshInfoList2);
+            model.put("importSuccessId", meshList);
             model.put("repeatId", meshInfoList);
-            model.put("projectId", meshList.get(0).getProject_id());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
