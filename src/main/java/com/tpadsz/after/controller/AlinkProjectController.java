@@ -291,10 +291,12 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         try {
             List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
-            List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid);
-            oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
+            List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid,"0");
+            if(meshList!=null) {
+                oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
+                model.put("projectId", meshList.get(0).getProject_id());
+            }
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("projectId", meshList.get(0).getProject_id());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
@@ -320,7 +322,7 @@ public class AlinkProjectController extends BaseDecodedController {
             }
             List<Mesh> meshList = new ArrayList<>();
             if(meshInfoList2.size()!=0) {
-                meshList = projectService.oldMeshCommit(meshInfoList2, uid);
+                meshList = projectService.oldMeshCommit(meshInfoList2, uid,"1");
                 model.put("projectId", meshList.get(0).getProject_id());
             }
             oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
