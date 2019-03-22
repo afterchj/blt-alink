@@ -111,9 +111,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Mesh> oldMeshCommit(List<Mesh> list, String uid) {
         Project project = new Project();
-        project.setUid(uid);
-        project.setName("老项目");
-        projectDao.createOldProject(project);
+        Project oldProject = projectDao.findOldProByUid(uid);
+        if (oldProject == null) {
+            project.setUid(uid);
+            project.setName("老项目");
+            projectDao.createOldProject(project);
+        } else {
+            project = oldProject;
+        }
         for (int i = 0; i < list.size(); i++) {
             try {
                 list.get(i).setProject_id(project.getId());
@@ -130,6 +135,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void oldMove(int projectId, String meshId, String uid) {
         projectDao.oldMove(projectId, meshId, uid);
+    }
+
+    @Override
+    public void createSendMesh(Mesh mesh) {
+        try {
+            projectDao.createMesh(mesh);
+        } catch (DuplicateKeyException e) {
+            projectDao.createDuplicatedMesh(mesh);
+        }
     }
 
 }

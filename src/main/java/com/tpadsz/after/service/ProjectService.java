@@ -42,4 +42,5 @@ public interface ProjectService {
 
     void oldMove(int projectId,String meshId, String uid);
 
+    void createSendMesh(Mesh mesh);
 }

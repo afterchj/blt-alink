@@ -7,6 +7,7 @@ import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.LightExistedException;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -207,6 +208,31 @@ public class AlinkProjectController extends BaseDecodedController {
         return null;
     }
 
+    @RequestMapping(value = "/createSendMesh", method = RequestMethod.POST)
+    public String createSendMesh(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        String projectId = params.getString("projectId");
+        Mesh mesh = new Mesh();
+        mesh.setUid(uid);
+        mesh.setMesh_id(meshId);
+        mesh.setMname(meshId);
+        mesh.setPwd(meshId.substring(4));
+        mesh.setProject_id(Integer.valueOf(projectId));
+        try {
+            int count = projectService.findFullyRepeatIdByUid(meshId, uid);
+            if(count==0){
+                projectService.createSendMesh(mesh);
+                model.put("result", ResultDict.SUCCESS.getCode());
+                model.put("mid", mesh.getId());
+            }else {
+                model.put("result", ResultDict.ID_REPEATED.getCode());
+            }
+        }catch (Exception e){
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
@@ -261,38 +287,38 @@ public class AlinkProjectController extends BaseDecodedController {
         try {
             List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
             List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid);
-            oldDeal(sceneinfo,groupinfo,lightinfo,meshList,uid);
+            oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("projectId",meshList.get(0).getProject_id());
-            model.put("meshList",meshList);
+            model.put("projectId", meshList.get(0).getProject_id());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
         return null;
     }
 
-    @RequestMapping(value = "/import", method = RequestMethod.POST)
-    public String importOld(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+    @RequestMapping(value = "/oldImport", method = RequestMethod.POST)
+    public String oldImport(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String meshinfo = params.getString("meshinfo");
         String sceneinfo = params.getString("sceneinfo");
         String groupinfo = params.getString("groupinfo");
         String lightinfo = params.getString("lightinfo");
         String uid = params.getString("uid");
-        try{
+        try {
             List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
             List<Mesh> meshInfoList2 = new ArrayList<>();
-            for(int i=0;i<meshInfoList.size();i++) {
-               int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id(),uid);
-               if(count==0){
-                   meshInfoList2.add(meshInfoList.get(i));
-                   meshInfoList.remove(i);
-               }
+            for (int i = 0; i < meshInfoList.size(); i++) {
+                int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id(), uid);
+                if (count == 0) {
+                    meshInfoList2.add(meshInfoList.get(i));
+                    meshInfoList.remove(i);
+                }
             }
             List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList2, uid);
-            oldDeal(sceneinfo,groupinfo,lightinfo,meshList,uid);
+            oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("importSuccessId", meshInfoList2);
             model.put("repeatId", meshInfoList);
+            model.put("projectId", meshList.get(0).getProject_id());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
@@ -300,62 +326,68 @@ public class AlinkProjectController extends BaseDecodedController {
     }
 
 
-    private void oldDeal(String sceneinfo,String groupinfo,String lightinfo,List<Mesh> meshList,String uid) throws
-            Exception {
-
-        List<SceneInfo> sceneInfoList = JSONArray.parseArray(sceneinfo, SceneInfo.class);
-        List<GroupInfo> groupInfoList = JSONArray.parseArray(groupinfo, GroupInfo.class);
-        List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
-        List<LightList> flightList = new ArrayList<>();
-        for (int i = 0; i < sceneInfoList.size(); i++) {
-            SceneAjust sceneAjust = new SceneAjust();
-            for (int j = 0; j < meshList.size(); j++) {
-                if (meshList.get(j).getMname().equals(sceneInfoList.get(i).getMname())) {
-                    sceneAjust.setSceneId(sceneInfoList.get(i).getSceneId());
-                    sceneAjust.setSname(sceneInfoList.get(i).getSname());
-                    sceneAjust.setMid(meshList.get(j).getId());
-                    sceneAjust.setUid(uid);
-                    sceneAjustService.saveScene(sceneAjust);
-                    break;
-                }
-            }
-        }
-        for (int i = 0; i < groupInfoList.size(); i++) {
-            Group group = new Group();
-            for (int j = 0; j < meshList.size(); j++) {
-                if (meshList.get(j).getMname().equals(groupInfoList.get(i).getMname())) {
-                    group.setGname(groupInfoList.get(i).getGname());
-                    group.setMid(meshList.get(j).getId());
-                    group.setGroupId(groupInfoList.get(i).getGroupId());
-                    groupOperationService.saveGroup(group);
-                    groupInfoList.get(i).setGid(group.getId());
-                    break;
+    private void oldDeal(String sceneinfo, String groupinfo, String lightinfo, List<Mesh> meshList, String uid)
+            throws Exception {
+        if (StringUtils.isNotBlank(sceneinfo)) {
+            List<SceneInfo> sceneInfoList = JSONArray.parseArray(sceneinfo, SceneInfo.class);
+            for (int i = 0; i < sceneInfoList.size(); i++) {
+                SceneAjust sceneAjust = new SceneAjust();
+                for (int j = 0; j < meshList.size(); j++) {
+                    if (meshList.get(j).getMname().equals(sceneInfoList.get(i).getMname())) {
+                        sceneAjust.setSceneId(sceneInfoList.get(i).getSceneId());
+                        sceneAjust.setSname(sceneInfoList.get(i).getSname());
+                        sceneAjust.setMid(meshList.get(j).getId());
+                        sceneAjust.setUid(uid);
+                        sceneAjustService.saveScene(sceneAjust);
+                        break;
+                    }
                 }
             }
         }
 
-        for (int i = 0; i < lightInfoList.size(); i++) {
-            LightList lightList = new LightList();
-            for (int j = 0; j < meshList.size(); j++) {
-                if (meshList.get(j).getMname().equals(lightInfoList.get(i).getMname())) {
-                    lightList.setMid(meshList.get(j).getId());
-                    lightList.setLmac(lightInfoList.get(i).getLmac());
-                    lightList.setGroupId(lightInfoList.get(i).getGroupId());
-                    lightList.setLname(lightInfoList.get(i).getLname());
-                    lightList.setProductId(lightInfoList.get(i).getProductId());
-                    for (int k = 0; k < groupInfoList.size(); k++) {
-                        if (groupInfoList.get(k).getMname().equals(lightInfoList.get(i).getMname()) &&
-                                groupInfoList.get(k).getGroupId().equals(lightInfoList.get(i).getGroupId())) {
-                            lightList.setGid(groupInfoList.get(k).getGid());
+        if (StringUtils.isNotBlank(groupinfo)) {
+            List<GroupInfo> groupInfoList = JSONArray.parseArray(groupinfo, GroupInfo.class);
+            for (int i = 0; i < groupInfoList.size(); i++) {
+                Group group = new Group();
+                for (int j = 0; j < meshList.size(); j++) {
+                    if (meshList.get(j).getMname().equals(groupInfoList.get(i).getMname())) {
+                        group.setGname(groupInfoList.get(i).getGname());
+                        group.setMid(meshList.get(j).getId());
+                        group.setGroupId(groupInfoList.get(i).getGroupId());
+                        groupOperationService.saveGroup(group);
+                        groupInfoList.get(i).setGid(group.getId());
+                        break;
+                    }
+                }
+            }
+
+            if (StringUtils.isNotBlank(lightinfo)) {
+                List<LightList> flightList = new ArrayList<>();
+                List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
+                for (int i = 0; i < lightInfoList.size(); i++) {
+                    LightList lightList = new LightList();
+                    for (int j = 0; j < meshList.size(); j++) {
+                        if (meshList.get(j).getMname().equals(lightInfoList.get(i).getMname())) {
+                            lightList.setMid(meshList.get(j).getId());
+                            lightList.setLmac(lightInfoList.get(i).getLmac());
+                            lightList.setGroupId(lightInfoList.get(i).getGroupId());
+                            lightList.setLname(lightInfoList.get(i).getLname());
+                            lightList.setProductId(lightInfoList.get(i).getProductId());
+                            for (int k = 0; k < groupInfoList.size(); k++) {
+                                if (groupInfoList.get(k).getMname().equals(lightInfoList.get(i).getMname()) &&
+                                        groupInfoList.get(k).getGroupId().equals(lightInfoList.get(i).getGroupId())) {
+                                    lightList.setGid(groupInfoList.get(k).getGid());
+                                    break;
+                                }
+                            }
+                            flightList.add(lightList);
                             break;
                         }
                     }
-                    flightList.add(lightList);
-                    break;
                 }
+                lightAjustService.saveLight(flightList);
             }
         }
-        lightAjustService.saveLight(flightList);
     }
 
 
