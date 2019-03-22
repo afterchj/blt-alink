@@ -1,10 +1,8 @@
 package com.tpadsz.after.service.impl;
 
-import com.tpadsz.after.dao.GroupOperationDao;
-import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.ProjectDao;
-import com.tpadsz.after.dao.SceneAjustDao;
-import com.tpadsz.after.entity.*;
+import com.tpadsz.after.entity.Mesh;
+import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.ProjectService;
 import org.springframework.dao.DuplicateKeyException;
@@ -25,6 +23,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Mesh findRepeatIdByUid(String preId, String uid) {
         return projectDao.findRepeatIdByUid(preId, uid);
+    }
+
+    @Override
+    public int findFullyRepeatIdByUid(String meshId, String uid) {
+        return projectDao.findFullyRepeatIdByUid(meshId, uid);
     }
 
     @Override

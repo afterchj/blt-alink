@@ -14,6 +14,8 @@ public interface ProjectDao {
 
     Mesh findRepeatIdByUid(@Param("mesh_id")String meshId, @Param("uid")String uid);
 
+    int findFullyRepeatIdByUid(@Param("mesh_id")String meshId, @Param("uid")String uid);
+
     int createMesh(Mesh mesh);
 
     String findMeshId(@Param("limitNum")int limitNum);

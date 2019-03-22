@@ -29,6 +29,11 @@
         SELECT * from alink.f_mesh where mesh_id LIKE CONCAT(#{mesh_id},'%') and uid = #{uid}
     </select>
 
+    <select id="findFullyRepeatIdByUid" resultType="int" parameterType="string">
+        SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id} and uid = #{uid}
+    </select>
+
+
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
