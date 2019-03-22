@@ -57,7 +57,7 @@ public class LightAjustServiceImpl implements LightAjustService {
                     //扫描到未分组
                     lightAjustDao1.saveLight(lightLists.get(i-1));
                 }
-                System.out.println("i % 500: "+i % 500);
+//                System.out.println("i % 500: "+i % 500);
                 if (i % 500 == 0 || i == lightLists.size()) {
                     //手动每500个一提交，提交后无法回滚
                     sqlSession.commit();
@@ -97,7 +97,7 @@ public class LightAjustServiceImpl implements LightAjustService {
                     //创建灯
                     lightAjustDao1.saveLight(lightLists.get(i-1));
                 }
-                System.out.println("i % 500: "+i % 500);
+//                System.out.println("i % 500: "+i % 500);
                 if (i % 500 == 0 || i == lightLists.size()) {
                     //手动每500个一提交，提交后无法回滚
                     sqlSession.commit();
