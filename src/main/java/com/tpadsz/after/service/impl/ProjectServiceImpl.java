@@ -119,7 +119,9 @@ public class ProjectServiceImpl implements ProjectService {
             } else if("1".equals(flag)){
                 project = oldProject;
             }else {
-                return null;
+                list.get(0).setMesh_id(null);
+                list.get(0).setProject_id(oldProject.getId());
+                return list;
             }
             for (int i = 0; i < list.size(); i++) {
                 try {

@@ -40,7 +40,7 @@
 
     <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
         insert into alink.create_mesh_id
-        (mesh_id)
+         (mesh_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
