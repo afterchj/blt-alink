@@ -30,5 +30,8 @@ public interface LightAjustDao {
 
     void saveTempLight(LightList lightList);//创建临时灯
 
-    void updateLightGidAndMid(@Param("lmac") String lmac, @Param("gid") Integer gid, @Param("mid") Integer mid);//灯移网
+    void updateLightGidAndMid(@Param("lmac") String lmac, @Param("gid") Integer gid, @Param("mid") Integer mid,@Param
+            ("lname") String
+            lname);
+    //灯移网
 }

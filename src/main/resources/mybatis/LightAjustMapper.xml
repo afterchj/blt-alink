@@ -39,6 +39,6 @@
     </insert>
 
     <update id="updateLightGidAndMid">
-        UPDATE alink.f_light SET gid=#{gid}, mid=#{mid} WHERE lmac=#{lmac}
+        UPDATE alink.f_light SET gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now() WHERE lmac=#{lmac}
     </update>
 </mapper>

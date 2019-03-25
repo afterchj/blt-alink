@@ -59,7 +59,7 @@ public class LightAjustServiceImpl implements LightAjustService {
                 }else {
                     //有灯 灯移网
                     lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
-                            lightLists.get(i-1).getMid());
+                            lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
                 }
 //                System.out.println("i % 500: "+i % 500);
                 if (i % 500 == 0 || i == lightLists.size()) {
