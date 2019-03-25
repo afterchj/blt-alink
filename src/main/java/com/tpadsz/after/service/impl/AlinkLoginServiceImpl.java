@@ -67,7 +67,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
         try {
             token = UUID.randomUUID().toString().replaceAll("-", "");
             String key = MemcachedObjectType.CACHE_TOKEN.getPrefix() + uid;
-            client.set(key, MemcachedObjectType.CACHE_TOKEN.getExpiredTime(), token);
+            client.set(key, 0, token);
         } catch (Exception e) {
             throw new SystemAlgorithmException();
         }
