@@ -36,25 +36,25 @@
 
 	<select id="getScenes" resultType="map" parameterType="map">
 		SELECT
-		s.scene_id,
-		s.sname
+			m.id,
+			s.scene_id,
+			s.sname
 		FROM
-		f_mesh m
+			f_mesh m
 		INNER JOIN f_scene s ON m.id = s.mid
-		INNER JOIN f_scene_setting a ON a.sid = s.id
-		AND s.uid = #{uid}
-		AND m.mesh_id = #{meshId}
+		WHERE s.uid =  #{uid}
+		AND m.mesh_id =  #{meshId}
 	</select>
 
 	<select id="getGroups" resultType="map" parameterType="map">
 		SELECT
-		g.group_id,
-		g.gname
+		    m.mesh_id,
+			g.group_id,
+			g.gname
 		FROM
-		f_group g
-		INNER JOIN f_group_setting gs ON g.id = gs.gid
-		INNER JOIN f_mesh m ON m.id = gs.mid
-		AND m.uid = #{uid}
+			f_group g
+		INNER JOIN f_mesh m ON g.mid=m.id
+		WHERE m.uid = #{uid}
 		AND m.mesh_id = #{meshId}
 	</select>
 
