@@ -14,6 +14,8 @@ public interface BltConsoleDao {
 
     List getLights(Map map);
 
+    List getAll(Map map);
+
     void saveApplyScene(Map map);
 
     void saveSceneName(Map map);

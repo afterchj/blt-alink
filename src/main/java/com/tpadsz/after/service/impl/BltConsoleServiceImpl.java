@@ -29,6 +29,11 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public List getAll(Map map) {
+        return bltConsoleDao.getAll(map);
+    }
+
+    @Override
     public List getLights(Map map) {
         return bltConsoleDao.getLights(map);
     }
