@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tpadsz.after.dao.BltConsoleDao">
 
-	<parameterMap id="consoleMapper" type="map">
-		<parameter property="uid" mode="IN"/>
-		<parameter property="meshId" mode="IN"/>
-		<parameter property="placeId" mode="IN"/>
-		<parameter property="gid" mode="IN"/>
-		<parameter property="lmac" mode="IN"/>
-		<parameter property="cmd" mode="IN"/>
-		<parameter property="x" mode="IN"/>
-		<parameter property="y" mode="IN"/>
-		<parameter property="result" mode="OUT" jdbcType="INTEGER"/>
-	</parameterMap>
+    <parameterMap id="consoleMapper" type="map">
+        <parameter property="uid" mode="IN"/>
+        <parameter property="meshId" mode="IN"/>
+        <parameter property="placeId" mode="IN"/>
+        <parameter property="gid" mode="IN"/>
+        <parameter property="lmac" mode="IN"/>
+        <parameter property="cmd" mode="IN"/>
+        <parameter property="x" mode="IN"/>
+        <parameter property="y" mode="IN"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
 
-	<select id="saveOperation" parameterMap="consoleMapper" statementType="CALLABLE">
+    <select id="saveOperation" parameterMap="consoleMapper" statementType="CALLABLE">
 		CALL alink.save_operation (?,?,?,?,?,?,?,?,?)
 	</select>
 
-	<update id="saveSceneName" parameterType="map">
+    <update id="saveSceneName" parameterType="map">
 		UPDATE f_scene
 		SET sname = #{sname},update_date=NOW()
 		WHERE
@@ -34,7 +34,29 @@
 		)
 	</update>
 
-	<select id="getScenes" resultType="map" parameterType="map">
+    <select id="getAll" resultType="map" parameterType="map">
+		SELECT
+			m.mesh_id,
+		  	s.scene_id,
+			s.sname,
+			g.group_id,
+			g.gname,
+			l.lmac,
+			ls.x,
+			ls.y,
+			ls.off
+		FROM
+			f_mesh m
+		INNER JOIN f_group g ON g.mid = m.id
+		INNER JOIN f_light l ON g.id = l.gid
+		INNER JOIN f_light_setting ls ON ls.lid = l.id
+		INNER JOIN f_scene s ON s.id = ls.sid
+		WHERE
+			m.uid =  #{uid}
+		AND m.mesh_id =  #{meshId}
+    </select>
+
+    <select id="getScenes" resultType="map" parameterType="map">
 		SELECT
 			m.id,
 			s.scene_id,
@@ -46,7 +68,7 @@
 		AND m.mesh_id =  #{meshId}
 	</select>
 
-	<select id="getGroups" resultType="map" parameterType="map">
+    <select id="getGroups" resultType="map" parameterType="map">
 		SELECT
 		    m.mesh_id,
 			g.group_id,
@@ -58,7 +80,7 @@
 		AND m.mesh_id = #{meshId}
 	</select>
 
-	<delete id="deleteScene" parameterType="map">
+    <delete id="deleteScene" parameterType="map">
 		DELETE
 		FROM
 		f_scene
@@ -74,7 +96,7 @@
 		)
 	</delete>
 
-	<update id="saveApplyScene" parameterType="map">
+    <update id="saveApplyScene" parameterType="map">
 		UPDATE f_scene_setting set x=#{x},y=#{y},update_date=NOW()
 		WHERE
 			sid = (

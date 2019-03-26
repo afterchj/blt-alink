@@ -12,6 +12,8 @@ public interface BltConsoleService {
 
     List getGroups(Map map);
 
+    List getAll(Map map);
+
     List getLights(Map map);
 
     void saveApplyScene(Map map);
