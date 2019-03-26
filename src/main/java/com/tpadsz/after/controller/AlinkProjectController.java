@@ -277,6 +277,9 @@ public class AlinkProjectController extends BaseDecodedController {
             if(meshList!=null) {
                 if(meshList.get(0).getMesh_id()!=null) {
                     oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
+                    model.put("commitSuccess", meshList);
+                }else {
+                    model.put("commitSuccess", "");
                 }
                 model.put("projectId", meshList.get(0).getProject_id());
             }

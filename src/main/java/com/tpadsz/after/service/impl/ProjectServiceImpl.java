@@ -91,12 +91,16 @@ public class ProjectServiceImpl implements ProjectService {
             List<String> list = projectDao.findNewMeshIdByPid(id, uid);
             projectDao.deleteProByPid(id, uid);
             projectDao.deleteMeshByPid(id, uid);
+            projectDao.deleteSceneByPid(id, uid);
+            projectDao.deleteGroupByPid(id, uid);
             if (list.size() != 0) {
                 projectDao.insertMeshId(list);
             }
         } else if ("1".equals(deleteFlag)) {
             String meshId = projectDao.findNewMeshIdByMid(id);
-            projectDao.deleteByMid(id);
+            projectDao.deleteMeshByMid(id);
+            projectDao.deleteSceneByMid(id,uid);
+            projectDao.deleteGroupByMid(id);
             if (meshId != null) {
                 projectDao.recordMeshId(meshId);
             }

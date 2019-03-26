@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,11 +32,13 @@ public class GeneratorController {
         try {
             int[] meshIds = generateAppCode2Disk();
             List<String> list = new ArrayList<>();
-            for (int i = 1; i < 10001; i++) {
-                list.add(String.valueOf(meshIds[i]));
-//                alinkLoginService.insert(String.valueOf(meshIds[i]));
-            }
-            alinkLoginService.insertForeach(list);
+//            for (int i = 0; i < 10000; i++) {
+//                if(meshIds[i]!=1122){
+//                    list.add(String.valueOf(meshIds[i]));
+//                }
+////                alinkLoginService.insert(String.valueOf(meshIds[i]));
+//            }
+//            alinkLoginService.insertForeach(list);
         } catch (Exception e) {
         }
         model.put("result", "123");
@@ -64,34 +70,34 @@ public class GeneratorController {
         //生成1000个文件,每个文件包含100000个appCode
         StringBuilder sb = new StringBuilder();
         int flag = 100000;
-//        System.out.println("***********开始**********");
-//        try {
-//            for(int i = 5000001; i <= end; i++){
-//                sb.append(codes[i]).append("\n");
-//                if(i == end || i%flag == 0){
-//                    File folder = new File("C:/001work/meshId");
-//                    if(!folder.isDirectory()){
-//                        folder.mkdir();
-//                    }
-//                    if(i==end){
-//                        i = end +1;
-//                    }
-//                    File file = new File("C:/001work/meshId/ID_"+(i/flag)+".txt");
-//                    if (!file.exists()) {
-//                        file.createNewFile();
-//                    }
-//                    BufferedWriter bw=new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
-//                    bw.write(sb.toString());
-//                    bw.flush();
-//                    bw.close();
-//                    sb = new StringBuilder();
-////                    System.out.println("当前i值："+i+"第"+(i/flag)+"个文件生成成功！");
-//                }
-//            }
-////            System.out.println("***********结束**********");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        System.out.println("***********开始**********");
+        try {
+            for(int i = begin; i <= end; i++){
+                sb.append(codes[i]).append("\n");
+                if(i == end || i%flag == 0){
+                    File folder = new File("C:/001work/meshId");
+                    if(!folder.isDirectory()){
+                        folder.mkdir();
+                    }
+                    if(i==end){
+                        i = end +1;
+                    }
+                    File file = new File("C:/001work/meshId/ID_"+(i/flag)+".txt");
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    BufferedWriter bw=new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+                    bw.write(sb.toString());
+                    bw.flush();
+                    bw.close();
+                    sb = new StringBuilder();
+//                    System.out.println("当前i值："+i+"第"+(i/flag)+"个文件生成成功！");
+                }
+            }
+//            System.out.println("***********结束**********");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return codes;
     }
 

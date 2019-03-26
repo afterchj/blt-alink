@@ -122,8 +122,16 @@
         SELECT mesh_id from alink.f_mesh where id=#{id} and is_repeat=0 and other NOT IN ('old','fromOld') or id=#{id} and is_repeat=0  and other IS NULL
     </select>
 
-    <delete id="deleteByMid" parameterType="int">
+    <delete id="deleteMeshByMid" parameterType="int">
         DELETE FROM alink.f_mesh WHERE id=#{id}
+    </delete>
+
+    <delete id="deleteSceneByMid">
+        DELETE FROM alink.f_scene WHERE mid=#{id} and uid=#{uid}
+    </delete>
+
+    <delete id="deleteGroupByMid" parameterType="int">
+        DELETE FROM alink.f_group WHERE mid=#{id}
     </delete>
 
     <select id="findLightByPid" resultType="int">
@@ -138,6 +146,14 @@
 
     <delete id="deleteProByPid">
         DELETE FROM alink.f_project WHERE id=#{id} and uid = #{uid}
+    </delete>
+
+    <delete id="deleteSceneByPid">
+        DELETE FROM alink.f_scene WHERE uid=#{uid} and mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+    </delete>
+
+    <delete id="deleteGroupByPid">
+        DELETE FROM alink.f_group WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
     <select id="findNewMeshIdByPid" resultType="string">

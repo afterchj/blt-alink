@@ -38,11 +38,20 @@ public interface ProjectDao {
 
     int findLightByMid(@Param("id")int id);
 
-    void deleteByMid(@Param("id")int id);
+    void deleteMeshByMid(@Param("id")int id);
 
     void deleteProByPid(@Param("id")int id, @Param("uid")String uid);
 
     void deleteMeshByPid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteSceneByPid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteGroupByPid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteSceneByMid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteGroupByMid(@Param("id")int id);
+
 
     int findLightByPid(@Param("id")int id, @Param("uid")String uid);
 
@@ -59,4 +68,6 @@ public interface ProjectDao {
     void oldMove(@Param("projectId")int projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 
     void createDuplicatedMesh(Mesh mesh);
+
+
 }
