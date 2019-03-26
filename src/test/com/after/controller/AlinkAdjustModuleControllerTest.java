@@ -248,8 +248,5 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void test(){
-
-    int x = 1*+2;
-        System.out.println(x);
     }
 }

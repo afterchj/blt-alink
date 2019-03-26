@@ -37,4 +37,8 @@
         INSERT INTO alink.f_light ( lmac, lname, mid, create_date, update_date )
         VALUES( #{lmac},#{lname},#{mid},now(),now() )
     </insert>
+
+    <update id="updateLightGidAndMid">
+        UPDATE alink.f_light SET gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now() WHERE lmac=#{lmac}
+    </update>
 </mapper>
