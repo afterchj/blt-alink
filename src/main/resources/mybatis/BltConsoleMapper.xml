@@ -36,8 +36,8 @@
 
     <select id="getAll" resultType="map" parameterType="map">
 		SELECT
-			m.mesh_id,
-		  	s.scene_id,
+-- 			m.mesh_id,
+		    s.scene_id,
 			s.sname,
 			g.group_id,
 			g.gname,
@@ -52,8 +52,9 @@
 		INNER JOIN f_light_setting ls ON ls.lid = l.id
 		INNER JOIN f_scene s ON s.id = ls.sid
 		WHERE
-			m.uid =  #{uid}
+			m.uid = #{uid}
 		AND m.mesh_id =  #{meshId}
+		ORDER BY s.scene_id,g.group_id
     </select>
 
     <select id="getScenes" resultType="map" parameterType="map">
