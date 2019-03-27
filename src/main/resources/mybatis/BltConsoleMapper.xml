@@ -59,7 +59,7 @@
 
     <select id="getScenes" resultType="map" parameterType="map">
 		SELECT
-			m.id,
+			m.mesh_id,
 			s.scene_id,
 			s.sname
 		FROM
@@ -67,6 +67,7 @@
 		INNER JOIN f_scene s ON m.id = s.mid
 		WHERE s.uid =  #{uid}
 		AND m.mesh_id =  #{meshId}
+		GROUP BY mesh_id,s.scene_id,s.sname
 	</select>
 
     <select id="getGroups" resultType="map" parameterType="map">
@@ -79,6 +80,7 @@
 		INNER JOIN f_mesh m ON g.mid=m.id
 		WHERE m.uid = #{uid}
 		AND m.mesh_id = #{meshId}
+		GROUP BY mesh_id,g.group_id,g.gname
 	</select>
 
     <delete id="deleteScene" parameterType="map">
