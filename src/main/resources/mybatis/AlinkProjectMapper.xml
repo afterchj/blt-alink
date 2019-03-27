@@ -102,7 +102,7 @@
     </update>
 
     <select id="findProDetailByUid" resultMap="standardMeshMap">
-        SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} and other NOT IN ('freezing','freezingOld') or project_id = #{projectId} and uid=#{uid} and other is null ORDER BY update_date DESC, create_date DESC
+        SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
     </select>
 
 
