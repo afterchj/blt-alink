@@ -105,11 +105,9 @@ public class AlinkProjectController extends BaseDecodedController {
                     }
                     if ("freezing".equals(project.getOther())) {
                         projectService.unfreezing(mesh.getProject_id(),"0");
-                        model.put("isUnfreezingProject", true);
                         model.put("unfreezingProject", project);
                     }else if("freezingOld".equals(project.getOther())){
                         projectService.unfreezingOld(mesh.getProject_id(),"0");
-                        model.put("isUnfreezingProject", true);
                         model.put("unfreezingProject", project);
                     }
                     model.put("result", ResultDict.SUCCESS.getCode());
@@ -301,6 +299,7 @@ public class AlinkProjectController extends BaseDecodedController {
             }
             oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("projectId", "");
             model.put("importSuccessId", meshList);
             model.put("repeatId", meshInfoList);
         } catch (Exception e) {
