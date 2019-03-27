@@ -36,6 +36,7 @@ public interface ProjectDao {
 
     List<Mesh> findProDetailByUid(@Param("uid")String uid, @Param("projectId")int projectId);
 
+    //删除部分
     int findLightByMid(@Param("id")int id);
 
     void deleteMeshByMid(@Param("id")int id);
@@ -44,14 +45,23 @@ public interface ProjectDao {
 
     void deleteMeshByPid(@Param("id")int id, @Param("uid")String uid);
 
+    List<Integer> querySidByPid(@Param("id")int id, @Param("uid")String uid);
+
     void deleteSceneByPid(@Param("id")int id, @Param("uid")String uid);
 
+    void deleteSceneSettingBySid(List<String> list);
+
+    void deleteSceneSettingByMid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteGroupSettingByMid(@Param("id")int id, @Param("uid")String uid);
+
     void deleteGroupByPid(@Param("id")int id, @Param("uid")String uid);
+
+    void deleteGroupSettingByPid(@Param("id")int id, @Param("uid")String uid);
 
     void deleteSceneByMid(@Param("id")int id, @Param("uid")String uid);
 
     void deleteGroupByMid(@Param("id")int id);
-
 
     int findLightByPid(@Param("id")int id, @Param("uid")String uid);
 
@@ -60,6 +70,7 @@ public interface ProjectDao {
     List<String> findNewMeshIdByPid(@Param("id")int id, @Param("uid")String uid);
 
     void insertMeshId(List<String> list);
+    //删除部分
 
     void createOldMesh(Mesh mesh);
 
@@ -67,7 +78,6 @@ public interface ProjectDao {
 
     void oldMove(@Param("projectId")int projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 
-    void createDuplicatedMesh(Mesh mesh);
-
+//    void createDuplicatedMesh(Mesh mesh);
 
 }

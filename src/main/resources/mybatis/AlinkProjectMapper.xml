@@ -41,12 +41,12 @@
         </selectKey>
     </insert>
 
-    <insert id="createDuplicatedMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{uid},#{pwd},#{uid},#{project_id},NOW())
-        <selectKey keyProperty="id" order="AFTER" resultType="int">
-            select LAST_INSERT_ID()
-        </selectKey>
-    </insert>
+    <!--<insert id="createDuplicatedMesh" parameterType="com.tpadsz.after.entity.Mesh">-->
+        <!--INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{uid},#{pwd},#{uid},#{project_id},NOW())-->
+        <!--<selectKey keyProperty="id" order="AFTER" resultType="int">-->
+            <!--select LAST_INSERT_ID()-->
+        <!--</selectKey>-->
+    <!--</insert>-->
 
 
     <insert id="createOldMesh" parameterType="com.tpadsz.after.entity.Mesh">
@@ -114,6 +114,8 @@
         SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
     </select>
 
+
+    <!--删除部分-->
     <select id="findLightByMid" resultType="int" parameterType="int">
         SELECT COUNT(1) from alink.f_light where mid=#{id}
     </select>
@@ -122,12 +124,47 @@
         SELECT mesh_id from alink.f_mesh where id=#{id} and is_repeat=0 and other NOT IN ('old','fromOld') or id=#{id} and is_repeat=0  and other IS NULL
     </select>
 
+    <select id="querySidByPid" resultType="integer">
+        SELECT id from alink.f_scene where uid=#{uid} and mid IN (
+        SELECT m.id from alink.f_mesh m where m.project_id=#{id} and m.uid = #{uid}
+        )
+    </select>
+
+    <delete id="deleteSceneByPid" parameterType="java.util.List">
+        DELETE FROM alink.f_scene
+        WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+    </delete>
+
+    <delete id="deleteSceneSettingBySid" parameterType="java.lang.String">
+        DELETE FROM alink.f_scene_setting s
+        WHERE s.sid IN
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+
+    <delete id="deleteGroupByPid">
+        DELETE FROM alink.f_group WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+    </delete>
+
+    <delete id="deleteGroupSettingByPid">
+        DELETE FROM alink.f_group_setting WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+    </delete>
+
     <delete id="deleteMeshByMid" parameterType="int">
         DELETE FROM alink.f_mesh WHERE id=#{id}
     </delete>
 
+    <delete id="deleteSceneSettingByMid">
+        DELETE FROM alink.f_scene_setting WHERE sid IN (SELECT s.id from (SELECT id from alink.f_scene where mid=#{id} and uid = #{uid}) AS s )
+    </delete>
+
     <delete id="deleteSceneByMid">
         DELETE FROM alink.f_scene WHERE mid=#{id} and uid=#{uid}
+    </delete>
+
+    <delete id="deleteGroupSettingByMid" parameterType="int">
+        DELETE FROM alink.f_group_setting WHERE mid=#{id}
     </delete>
 
     <delete id="deleteGroupByMid" parameterType="int">
@@ -148,13 +185,6 @@
         DELETE FROM alink.f_project WHERE id=#{id} and uid = #{uid}
     </delete>
 
-    <delete id="deleteSceneByPid">
-        DELETE FROM alink.f_scene WHERE uid=#{uid} and mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
-    </delete>
-
-    <delete id="deleteGroupByPid">
-        DELETE FROM alink.f_group WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
-    </delete>
 
     <select id="findNewMeshIdByPid" resultType="string">
         SELECT mesh_id from alink.f_mesh where project_id=#{id} and is_repeat=0 and uid = #{uid} and other NOT IN ('old','fromOld') or project_id=#{id} and is_repeat=0 and uid = #{uid} and other IS NULL
@@ -170,6 +200,8 @@
             )
         </foreach>
     </insert>
+    <!--删除部分-->
+
 
     <update id="oldMove">
             update alink.f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}

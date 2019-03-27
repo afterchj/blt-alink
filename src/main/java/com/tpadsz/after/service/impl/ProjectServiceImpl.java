@@ -9,6 +9,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,17 +90,24 @@ public class ProjectServiceImpl implements ProjectService {
     public void delete(int id, String uid, String deleteFlag) {
         if ("0".equals(deleteFlag)) {
             List<String> list = projectDao.findNewMeshIdByPid(id, uid);
+            List<Integer> sids = projectDao.querySidByPid(id, uid);
+            if (sids.size() != 0) {
+                projectDao.deleteSceneByPid(id, uid);
+//                projectDao.deleteSceneSettingBySid(list2);
+            }
+            projectDao.deleteGroupByPid(id, uid);
+            projectDao.deleteGroupSettingByPid(id, uid);
             projectDao.deleteProByPid(id, uid);
             projectDao.deleteMeshByPid(id, uid);
-            projectDao.deleteSceneByPid(id, uid);
-            projectDao.deleteGroupByPid(id, uid);
             if (list.size() != 0) {
                 projectDao.insertMeshId(list);
             }
         } else if ("1".equals(deleteFlag)) {
             String meshId = projectDao.findNewMeshIdByMid(id);
             projectDao.deleteMeshByMid(id);
-            projectDao.deleteSceneByMid(id,uid);
+            projectDao.deleteSceneSettingByMid(id, uid);
+            projectDao.deleteSceneByMid(id, uid);
+            projectDao.deleteGroupSettingByMid(id, uid);
             projectDao.deleteGroupByMid(id);
             if (meshId != null) {
                 projectDao.recordMeshId(meshId);
@@ -113,29 +121,29 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Mesh> oldMeshCommit(List<Mesh> list, String uid,String flag) {
+    public List<Mesh> oldMeshCommit(List<Mesh> list, String uid, String flag) {
         Project project = new Project();
         Project oldProject = projectDao.findOldProByUid(uid);
-            if (oldProject == null) {
-                project.setUid(uid);
-                project.setName("老项目");
-                projectDao.createOldProject(project);
-            } else if("1".equals(flag)){
-                project = oldProject;
-            }else {
-                list.get(0).setMesh_id(null);
-                list.get(0).setProject_id(oldProject.getId());
-                return list;
+        if (oldProject == null) {
+            project.setUid(uid);
+            project.setName("老项目");
+            projectDao.createOldProject(project);
+        } else if ("1".equals(flag)) {
+            project = oldProject;
+        } else {
+            list.get(0).setMesh_id(null);
+            list.get(0).setProject_id(oldProject.getId());
+            return list;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            try {
+                list.get(i).setProject_id(project.getId());
+                list.get(i).setUid(uid);
+                projectDao.createOldMesh(list.get(i));
+            } catch (DuplicateKeyException e) {
+                projectDao.createOldDuplicatedMesh(list.get(i));
             }
-            for (int i = 0; i < list.size(); i++) {
-                try {
-                    list.get(i).setProject_id(project.getId());
-                    list.get(i).setUid(uid);
-                    projectDao.createOldMesh(list.get(i));
-                } catch (DuplicateKeyException e) {
-                    projectDao.createOldDuplicatedMesh(list.get(i));
-                }
-            }
+        }
         return list;
     }
 
@@ -145,13 +153,13 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.oldMove(projectId, meshId, uid);
     }
 
-    @Override
-    public void createSendMesh(Mesh mesh) {
-        try {
-            projectDao.createMesh(mesh);
-        } catch (DuplicateKeyException e) {
-            projectDao.createDuplicatedMesh(mesh);
-        }
-    }
+//    @Override
+//    public void createSendMesh(Mesh mesh) {
+//        try {
+//            projectDao.createMesh(mesh);
+//        } catch (DuplicateKeyException e) {
+//            projectDao.createDuplicatedMesh(mesh);
+//        }
+//    }
 
 }

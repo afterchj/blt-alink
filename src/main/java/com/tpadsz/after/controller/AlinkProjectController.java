@@ -195,31 +195,31 @@ public class AlinkProjectController extends BaseDecodedController {
         return null;
     }
 
-    @RequestMapping(value = "/createSendMesh", method = RequestMethod.POST)
-    public String createSendMesh(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        String uid = params.getString("uid");
-        String meshId = params.getString("meshId");
-        String projectId = params.getString("projectId");
-        Mesh mesh = new Mesh();
-        mesh.setUid(uid);
-        mesh.setMesh_id(meshId);
-        mesh.setMname(meshId);
-        mesh.setPwd(meshId.substring(4));
-        mesh.setProject_id(Integer.valueOf(projectId));
-        try {
-            int count = projectService.findFullyRepeatIdByUid(meshId, uid);
-            if (count == 0) {
-                projectService.createSendMesh(mesh);
-                model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("mid", mesh.getId());
-            } else {
-                model.put("result", ResultDict.ID_REPEATED.getCode());
-            }
-        } catch (Exception e) {
-            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-        }
-        return null;
-    }
+//    @RequestMapping(value = "/createSendMesh", method = RequestMethod.POST)
+//    public String createSendMesh(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+//        String uid = params.getString("uid");
+//        String meshId = params.getString("meshId");
+//        String projectId = params.getString("projectId");
+//        Mesh mesh = new Mesh();
+//        mesh.setUid(uid);
+//        mesh.setMesh_id(meshId);
+//        mesh.setMname(meshId);
+//        mesh.setPwd(meshId.substring(4));
+//        mesh.setProject_id(Integer.valueOf(projectId));
+//        try {
+//            int count = projectService.findFullyRepeatIdByUid(meshId, uid);
+//            if (count == 0) {
+//                projectService.createSendMesh(mesh);
+//                model.put("result", ResultDict.SUCCESS.getCode());
+//                model.put("mid", mesh.getId());
+//            } else {
+//                model.put("result", ResultDict.ID_REPEATED.getCode());
+//            }
+//        } catch (Exception e) {
+//            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+//        }
+//        return null;
+//    }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
