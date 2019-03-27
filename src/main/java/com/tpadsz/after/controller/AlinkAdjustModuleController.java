@@ -223,6 +223,69 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     }
 
     /**
+     * 保存默认场景
+     * @param params
+     * @param model
+     */
+    @RequestMapping(value = "/saveDefaultScene", method = RequestMethod.POST)
+    public void saveDefaultScene(@ModelAttribute("decodedParams") JSONObject params,
+                          ModelMap model) {
+
+        String meshId = params.getString("meshId");
+        String uid = params.getString("uid");
+        if (StringUtils.isBlank(meshId) ) {
+            model.put("result", ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
+            return;
+        }
+        Integer mid = groupOperationService.getMeshSerialNo(meshId, uid);
+
+        if (mid == null) {
+            model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
+            model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
+            logger.error("method:saveDefaultScene meshId:{} mid is null", meshId);
+            return;
+        }
+        JSONArray sceneArray = params.getJSONArray("sceneArray");
+        if (sceneArray.isEmpty() || sceneArray.size() < 1) {
+            model.put("result", ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
+            return;
+        }
+        SceneAjust sceneAjust;
+        for (int i=0;i<sceneArray.size();i++){
+            String sname = sceneArray.getJSONObject(i).getString("sname");
+            Integer sceneId = sceneArray.getJSONObject(i).getInteger("sceneId");
+            if ( sceneId == null ||StringUtils.isBlank(sname) ) {
+                model.put("result", ResultDict.PARAMS_BLANK.getCode());
+                model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
+                return;
+            }
+            Integer sid = groupOperationService.getSceneSerialNo(mid, sceneId, uid);
+            if (sid==null){
+                sceneAjust = new SceneAjust();
+                sceneAjust.setSceneId(sceneId);
+                sceneAjust.setUid(uid);
+                sceneAjust.setMid(mid);
+                sceneAjust.setSname(sname);
+                //创建场景
+                sceneAjustService.saveScene(sceneAjust);
+                SceneLog sceneLog = new SceneLog();
+                sceneLog.setOperation("0");
+                sceneLog.setUid(uid);
+                sceneLog.setMeshId(meshId);
+                sceneLog.setBltFlag("1");
+                sceneLog.setSceneId(sceneId);
+                sceneAjustService.saveSceneLog(sceneLog);//保存场景日志
+            }
+        }
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+        return;
+    }
+
+
+    /**
      * 保存更新场景
      *
      * @param params

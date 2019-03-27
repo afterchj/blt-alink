@@ -79,7 +79,7 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void saveLightAjustLogTest() {
         lightAjustService.saveLightAjustLog("12345678", "0",
-                "4","aaa-aa-aa,bb-bb-bb");
+                "4",null);
         System.out.println("success");
     }
 

@@ -124,7 +124,7 @@
     </delete>
 
     <select id="getSceneSeriaNo" resultType="integer">
-        SELECT id FROM alink.f_scene WHERE mid=#{mid} and scene_id=#{sceneId} and uid=#{uid}
+        SELECT id FROM alink.f_scene WHERE mid=#{mid} and scene_id=#{sceneId} and uid=#{uid} limit 1
     </select>
 
     <select id="getGroupConsoleLogByGid" resultType="com.tpadsz.after.entity.GroupConsoleLog">
