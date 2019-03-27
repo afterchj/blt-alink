@@ -10,8 +10,8 @@
 
     <insert id="saveGroupLog">
         INSERT INTO alink.f_group_log
-            (uid,mesh_id,operation,blt_flag,create_date)
-            VALUES(#{uid},#{meshId},#{operation},#{bltFlag},NOW())
+            (uid,mesh_id,operation,blt_flag,create_date,group_id)
+            VALUES(#{uid},#{meshId},#{operation},#{bltFlag},NOW(),#{groupId})
     </insert>
 
     <select id="getMeshSerialNo" resultType="integer">

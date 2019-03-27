@@ -28,8 +28,8 @@ public class LightAjustServiceImpl implements LightAjustService {
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Override
-    public void saveLightAjustLog(String meshId, String bltFlag, String operation) {
-        lightAjustDao.saveLightAjustLog(meshId, bltFlag, operation);
+    public void saveLightAjustLog(String meshId, String bltFlag, String operation, String lmacs) {
+        lightAjustDao.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public interface LightAjustDao {
-    void saveLightAjustLog(@Param("meshId") String meshId, @Param("bltFlag") String bltFlag, @Param("operation") String operation);//保存灯操作日志
+    void saveLightAjustLog(@Param("meshId") String meshId, @Param("bltFlag") String bltFlag, @Param("operation") String operation, @Param("lmacs") String lmacs);//保存灯操作日志
 
     void updateLightName(@Param("lmac") String lmac, @Param("lname") String lname);//重命名灯
 

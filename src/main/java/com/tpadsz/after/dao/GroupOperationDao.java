@@ -18,7 +18,7 @@ import java.util.Map;
 @Repository
 public interface GroupOperationDao {
 
-    void saveGroupLog(@Param("uid") String uid,@Param("meshId")String meshId, @Param("operation") String operation, @Param("bltFlag") String bltFlag);//创建组日志
+    void saveGroupLog(@Param("uid") String uid,@Param("meshId")String meshId, @Param("operation") String operation, @Param("bltFlag") String bltFlag, @Param("groupId") Integer groupId);//创建组日志
 
     Integer getMeshSerialNo(@Param("meshId") String meshId, @Param("uid") String uid);//查询mesh序列号
 

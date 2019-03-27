@@ -13,7 +13,7 @@ import java.util.Map;
  **/
 public interface GroupOperationService {
 
-    void saveGroupLog(String uid, String meshId, String operation, String bltFlag);
+    void saveGroupLog(String uid, String meshId, String operation, String bltFlag, Integer groupId);
 
     Integer getMeshSerialNo(String meshId,String uid);
 

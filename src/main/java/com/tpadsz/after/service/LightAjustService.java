@@ -11,7 +11,7 @@ import java.util.List;
  * @create: 2019-03-07 14:19
  **/
 public interface LightAjustService {
-    void saveLightAjustLog(String meshId, String bltFlag,String operation);
+    void saveLightAjustLog(String meshId, String bltFlag,String operation, String lmacs);
 
     void updateLightName(String lmac, String lname);
 

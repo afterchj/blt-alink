@@ -22,8 +22,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     private GroupOperationDao groupOperationDao;
 
     @Override
-    public void saveGroupLog(String uid, String meshId,String operation, String bltFlag) {
-        groupOperationDao.saveGroupLog(uid,meshId,operation,bltFlag);
+    public void saveGroupLog(String uid, String meshId,String operation, String bltFlag, Integer groupId) {
+        groupOperationDao.saveGroupLog(uid,meshId,operation,bltFlag, groupId);
     }
 
     @Override

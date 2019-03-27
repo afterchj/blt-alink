@@ -70,7 +70,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         //未连蓝牙
         if (bltFlag.equals("0")) {
-            saveLog(uid, meshId, operation, bltFlag, model);
+            saveLog(uid, meshId, operation, bltFlag, model,groupId, null);
             return;
         }
         //根据mesh id查询mesh序列号
@@ -101,7 +101,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     logger.info("method:groupOperation db has the group: {},meshId: {}", groupId, meshId);
                 }
                 groupOperationService.saveGroupLog(uid, meshId, operation,
-                        bltFlag);//创建组日志
+                        bltFlag, groupId);//创建组日志
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
                 return;
@@ -114,7 +114,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     //不存在灯 ???
                     logger.info("method:groupOperation cannot find the group:{},meshId:{}", groupId, meshId);
                 }
-                groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag);
+                groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
                 return;
@@ -133,7 +133,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     }
                     //删除组表
                     groupOperationService.deleteGroup(group);
-                    groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag);
+                    groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
                 } else {
                     logger.info("method:groupOperation cannot find the group:{},meshId:{}", groupId, meshId);
                 }
@@ -200,7 +200,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         //未连蓝牙
         if ("0".equals(bltFlag)) {
             //记录日志
-            saveLog(null, meshId, operation, bltFlag, model);
+            saveLog(null, meshId, operation, bltFlag, model,null,lmac);
             return;
         }
         //连接蓝牙
@@ -215,7 +215,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 lightAjustService.updateLightName(lmac, lname);
             }
             //记录日志
-            lightAjustService.saveLightAjustLog(meshId, bltFlag, operation);
+            lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmac);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
             return;
@@ -371,7 +371,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         //未连蓝牙
         if ("0".equals(bltFlag)) {
-            saveLog(null, meshId, operation, bltFlag, model);
+            saveLog(null, meshId, operation, bltFlag, model,null,null);
             return;
         }
         Integer mid = groupOperationService.getMeshSerialNo(meshId, uid);
@@ -387,6 +387,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         group.setMeshId(meshId);
         List<LightList> lightLists;
         String result;
+        StringBuffer sb;
+        String lmacs;
         //连接蓝牙
         if ("1".equals(bltFlag)) {
             //扫描灯
@@ -401,7 +403,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 try {
                     //mybatis 批量添加灯
                     lightAjustService.saveLight(lightLists);
-                    lightAjustService.saveLightAjustLog(meshId, bltFlag, operation);
+                    sb = new StringBuffer();
+                    for (LightList lightList:lightLists){
+                        sb.append(lightList.getLmac()).append(",");
+                    }
+                    lmacs = sb.toString();
+                    lmacs.substring(0,lmacs.length()-",".length());
+                    lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("result_message", ResultDict.SUCCESS.getValue());
                 } catch (Exception e) {
@@ -425,7 +433,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     //删除light_setting中的记录
                     sceneAjustService.deleteLightSettingByLmac(lmac);
                 }
-                lightAjustService.saveLightAjustLog(meshId, bltFlag, operation);//记录日志
+                lightAjustService.saveLightAjustLog(meshId, bltFlag, operation,lmac);//记录日志
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
                 return;
@@ -440,7 +448,14 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 }
                 try {
                     lightAjustService.updateLightGid(lightLists);//更新light表中的gid
-                    lightAjustService.saveLightAjustLog(meshId, bltFlag, operation);//记录日志
+                    sb = new StringBuffer();
+                    for (LightList lightList:lightLists){
+                        sb.append(lightList.getLmac()).append(",");
+                    }
+                    lmacs = sb.toString();
+                    lmacs.substring(0,lmacs.length()-",".length());
+                    lightAjustService.saveLightAjustLog(meshId, bltFlag, operation,lmacs);//记录日志
+//                    lightLists.listIterator().toString()
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("result_message", ResultDict.SUCCESS.getValue());
                 } catch (Exception e) {
@@ -524,14 +539,14 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
      * @param model
      */
     public void saveLog(String uid, String meshId, String
-            operation, String bltFlag, ModelMap model) {
+            operation, String bltFlag, ModelMap model,Integer groupId, String lmacs) {
         if (uid != null) {
-            groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag);
+            groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
             return;
         }
-        lightAjustService.saveLightAjustLog(meshId, bltFlag, operation);
+        lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
         return;

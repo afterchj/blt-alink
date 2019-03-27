@@ -62,7 +62,7 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void saveGroupLogTest() {
-        groupOperationService.saveGroupLog("aaaa", "12345678", "0", "1");
+        groupOperationService.saveGroupLog("aaaa", "12345678", "0", "1",0);
         System.out.println("success");
     }
 
@@ -79,7 +79,7 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void saveLightAjustLogTest() {
         lightAjustService.saveLightAjustLog("12345678", "0",
-                "4");
+                "4","aaa-aa-aa,bb-bb-bb");
         System.out.println("success");
     }
 
@@ -248,5 +248,23 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void test(){
+        List<LightList> lightLists = new ArrayList<>();
+        LightList lightList;
+        for (int i=0;i<10;i++){
+            lightList = new LightList();
+            lightList.setGid(1);
+            lightList.setMid(1);
+            lightList.setGroupId(0);
+            lightList.setLmac("aa-aa-aa"+i);
+//            lightList.setLmac("aa-aa-aa"+i);
+            lightLists.add(lightList);
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        for (LightList lightList1:lightLists){
+            stringBuffer.append(lightList1.getLmac()).append(",");
+        }
+        String s = stringBuffer.toString();
+        s = s.substring(0,s.length()-",".length());
+        System.out.println("s: " + s);
     }
 }
