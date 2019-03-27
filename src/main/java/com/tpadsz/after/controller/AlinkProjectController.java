@@ -257,7 +257,7 @@ public class AlinkProjectController extends BaseDecodedController {
         String lightinfo = params.getString("lightinfo");
         String uid = params.getString("uid");
         try {
-            if (!"".equals(meshinfo)) {
+            if (!"[]".equals(meshinfo)) {
                 List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
                 List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid, "0");
                 if (meshList != null) {
