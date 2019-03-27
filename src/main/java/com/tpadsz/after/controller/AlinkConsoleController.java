@@ -35,21 +35,24 @@ public class AlinkConsoleController extends BaseDecodedController {
         List scenes = bltConsoleService.getScenes(param);
         List groups = bltConsoleService.getGroups(param);
         Map info = new HashMap();
-        if (scenes.size() > 0) {
-            info.put("scenes", scenes);
-        } else {
+        logger.info(scenes.size() + "\t" + groups.size());
+        if (scenes.size() == 0) {
             model.put("result", ResultDict.NO_SCENE.getCode());
             model.put("result_message", ResultDict.NO_SCENE.getValue());
-        }
-        if (groups.size() > 0) {
-            info.put("groups", groups);
         } else {
+            info.put("scenes", scenes);
+        }
+        if (groups.size() == 0) {
             model.put("result", ResultDict.NO_GROUP.getCode());
             model.put("result_message", ResultDict.NO_GROUP.getValue());
+        } else {
+            info.put("groups", groups);
         }
-        model.put("data", info);
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
+        if (info.size() > 0) {
+            model.put("data", info);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        }
     }
 
     @RequestMapping("/switch")
