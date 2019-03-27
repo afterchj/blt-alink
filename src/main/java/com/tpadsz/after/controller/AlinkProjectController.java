@@ -296,10 +296,11 @@ public class AlinkProjectController extends BaseDecodedController {
             if (meshInfoList2.size() != 0) {
                 meshList = projectService.oldMeshCommit(meshInfoList2, uid, "1");
                 model.put("projectId", meshList.get(0).getProject_id());
+            }else {
+                model.put("projectId", "");
             }
             oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("projectId", "");
             model.put("importSuccessId", meshList);
             model.put("repeatId", meshInfoList);
         } catch (Exception e) {
