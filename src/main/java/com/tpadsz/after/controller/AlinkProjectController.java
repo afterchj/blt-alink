@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -50,11 +51,10 @@ public class AlinkProjectController extends BaseDecodedController {
     public String findProList(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
-        List<Project> list = new ArrayList<>();
         List<ProjectVo> listVo = new ArrayList<>();
         try {
             if ("".equals(preId)) {
-                list = projectService.findProListByUid(uid);
+                List<Project> list = projectService.findProListByUid(uid);
                 if (list.size() != 0) {
                     for (Project project : list) {
                         ProjectVo projectVo = new ProjectVo();
@@ -97,6 +97,21 @@ public class AlinkProjectController extends BaseDecodedController {
             } else {
                 Mesh mesh = projectService.findRepeatIdByUid(preId, uid);
                 if (mesh != null) {
+                    Project project = projectService.findProjectById(mesh.getProject_id());
+                    if ("freezing".equals(mesh.getOther())) {
+                        projectService.unfreezing(mesh.getId(),"1");
+                    }else if("freezingOld".equals(mesh.getOther())){
+                        projectService.unfreezingOld(mesh.getId(),"1");
+                    }
+                    if ("freezing".equals(project.getOther())) {
+                        projectService.unfreezing(mesh.getProject_id(),"0");
+                        model.put("isUnfreezingProject", true);
+                        model.put("unfreezingProject", project);
+                    }else if("freezingOld".equals(project.getOther())){
+                        projectService.unfreezingOld(mesh.getProject_id(),"0");
+                        model.put("isUnfreezingProject", true);
+                        model.put("unfreezingProject", project);
+                    }
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("connectedProjectId", String.valueOf(mesh.getProject_id()));
                 } else {
@@ -195,55 +210,25 @@ public class AlinkProjectController extends BaseDecodedController {
         return null;
     }
 
-//    @RequestMapping(value = "/createSendMesh", method = RequestMethod.POST)
-//    public String createSendMesh(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-//        String uid = params.getString("uid");
-//        String meshId = params.getString("meshId");
-//        String projectId = params.getString("projectId");
-//        Mesh mesh = new Mesh();
-//        mesh.setUid(uid);
-//        mesh.setMesh_id(meshId);
-//        mesh.setMname(meshId);
-//        mesh.setPwd(meshId.substring(4));
-//        mesh.setProject_id(Integer.valueOf(projectId));
-//        try {
-//            int count = projectService.findFullyRepeatIdByUid(meshId, uid);
-//            if (count == 0) {
-//                projectService.createSendMesh(mesh);
-//                model.put("result", ResultDict.SUCCESS.getCode());
-//                model.put("mid", mesh.getId());
-//            } else {
-//                model.put("result", ResultDict.ID_REPEATED.getCode());
-//            }
-//        } catch (Exception e) {
-//            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-//        }
-//        return null;
-//    }
-
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String id = (String) params.get("id");
         String uid = (String) params.get("uid");
         String deleteFlag = (String) params.get("deleteFlag");
+        int lightFlag = 0;
         try {
             if ("0".equals(deleteFlag)) {
-                int count = projectService.findLightByPid(Integer.parseInt(id), uid);
-                if (count > 0) {
-
-                    throw new LightExistedException();
-                }
+                lightFlag = projectService.findLightByPid(Integer.parseInt(id), uid);
             } else if ("1".equals(deleteFlag)) {
-                int count = projectService.findLightByMid(Integer.parseInt(id));
-                if (count > 0) {
-
-                    throw new LightExistedException();
-                }
+                lightFlag = projectService.findLightByMid(Integer.parseInt(id));
             }
-            projectService.delete(Integer.parseInt(id), uid, deleteFlag);
+            projectService.delete(Integer.parseInt(id), uid, deleteFlag, lightFlag);
+            DeleteLog deleteLog = new DeleteLog();
+            deleteLog.setUid(uid);
+            deleteLog.setLightFlag(lightFlag);
+            deleteLog.setDelete_date(new Date());
+            projectService.saveDeleteLog(deleteLog);
             model.put("result", ResultDict.SUCCESS.getCode());
-        } catch (LightExistedException e) {
-            model.put("result", ResultDict.LIGHT_EXISTED.getCode());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
@@ -272,16 +257,18 @@ public class AlinkProjectController extends BaseDecodedController {
         String lightinfo = params.getString("lightinfo");
         String uid = params.getString("uid");
         try {
-            List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
-            List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid,"0");
-            if(meshList!=null) {
-                if(meshList.get(0).getMesh_id()!=null) {
-                    oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
-                    model.put("commitSuccess", meshList);
-                }else {
-                    model.put("commitSuccess", "");
+            if (!"".equals(meshinfo)) {
+                List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
+                List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid, "0");
+                if (meshList != null) {
+                    if (meshList.get(0).getMesh_id() != null) {
+                        oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
+                        model.put("commitSuccess", meshList);
+                    } else {
+                        model.put("commitSuccess", "");
+                    }
+                    model.put("projectId", meshList.get(0).getProject_id());
                 }
-                model.put("projectId", meshList.get(0).getProject_id());
             }
             model.put("result", ResultDict.SUCCESS.getCode());
         } catch (Exception e) {
@@ -308,8 +295,8 @@ public class AlinkProjectController extends BaseDecodedController {
                 }
             }
             List<Mesh> meshList = new ArrayList<>();
-            if(meshInfoList2.size()!=0) {
-                meshList = projectService.oldMeshCommit(meshInfoList2, uid,"1");
+            if (meshInfoList2.size() != 0) {
+                meshList = projectService.oldMeshCommit(meshInfoList2, uid, "1");
                 model.put("projectId", meshList.get(0).getProject_id());
             }
             oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);

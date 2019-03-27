@@ -34,7 +34,7 @@ public interface ProjectService {
 
     int findLightByMid(int id);
 
-    void delete(int id, String uid, String deleteFlag);
+    void delete(int id, String uid, String deleteFlag,int lightFlag);
 
     int findLightByPid(int id, String uid);
 
@@ -42,5 +42,12 @@ public interface ProjectService {
 
     void oldMove(int projectId,String meshId, String uid);
 
-//    void createSendMesh(Mesh mesh);
+    Project findProjectById(Integer project_id);
+
+    void unfreezing(Integer id,String flag);
+
+    void unfreezingOld(Integer id,String flag);
+
+    void saveDeleteLog(DeleteLog deleteLog);
+
 }

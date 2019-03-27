@@ -33,21 +33,12 @@
         SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id} and uid = #{uid}
     </select>
 
-
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
-
-    <!--<insert id="createDuplicatedMesh" parameterType="com.tpadsz.after.entity.Mesh">-->
-        <!--INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{uid},#{pwd},#{uid},#{project_id},NOW())-->
-        <!--<selectKey keyProperty="id" order="AFTER" resultType="int">-->
-            <!--select LAST_INSERT_ID()-->
-        <!--</selectKey>-->
-    <!--</insert>-->
-
 
     <insert id="createOldMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),'old')
@@ -94,7 +85,7 @@
     </insert>
 
     <select id="findProListByUid" resultMap="standardProjectMap" parameterType="string">
-        SELECT * from alink.f_project where uid = #{uid} and other &lt;&gt;'old' or uid=#{uid} and other is null ORDER BY update_date DESC,create_date DESC
+        SELECT * from alink.f_project where uid = #{uid} and other NOT IN ('old','freezing','freezingOld') or uid=#{uid} and other is null ORDER BY update_date DESC,create_date DESC
     </select>
 
     <select id="findOldProByUid" resultMap="standardProjectMap">
@@ -111,7 +102,7 @@
     </update>
 
     <select id="findProDetailByUid" resultMap="standardMeshMap">
-        SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
+        SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} and other NOT IN ('freezing','freezingOld') or project_id = #{projectId} and uid=#{uid} and other is null ORDER BY update_date DESC, create_date DESC
     </select>
 
 
@@ -124,6 +115,50 @@
         SELECT mesh_id from alink.f_mesh where id=#{id} and is_repeat=0 and other NOT IN ('old','fromOld') or id=#{id} and is_repeat=0  and other IS NULL
     </select>
 
+    <select id="findProjectById" resultMap="standardProjectMap" parameterType="integer">
+        SELECT * from alink.f_project where id = #{projectId}
+    </select>
+
+    <select id="findMeshById" resultMap="standardMeshMap" parameterType="integer">
+        SELECT * from alink.f_mesh where id = #{id}
+    </select>
+
+    <update id="freezing">
+        <if test="flag == 0">
+            update alink.f_project p set p.other = 'freezing',p.update_date = NOW() where p.id=#{id}
+        </if>
+        <if test="flag == 1">
+            update alink.f_mesh m set m.other = 'freezing',m.update_date = NOW() where m.id=#{id}
+        </if>
+    </update>
+
+    <update id="freezingOld">
+        <if test="flag == 0">
+            update alink.f_project p set p.other = 'freezingOld',p.update_date = NOW() where p.id=#{id}
+        </if>
+        <if test="flag == 1">
+            update alink.f_mesh m set m.other = 'freezingOld',m.update_date = NOW() where m.id=#{id}
+        </if>
+    </update>
+
+    <update id="unfreezing">
+        <if test="flag == 0">
+            update alink.f_project p set p.other = NULL ,p.update_date = NOW() where p.id=#{id}
+        </if>
+        <if test="flag == 1">
+            update alink.f_mesh m set m.other = NULL ,m.update_date = NOW() where m.id=#{id}
+        </if>
+    </update>
+
+    <update id="unfreezingOld">
+        <if test="flag == 0">
+            update alink.f_project p set p.other = 'old' ,p.update_date = NOW() where p.id=#{id}
+        </if>
+        <if test="flag == 1">
+            update alink.f_mesh m set m.other = 'old' ,m.update_date = NOW() where m.id=#{id}
+        </if>
+    </update>
+
     <select id="querySidByPid" resultType="integer">
         SELECT id from alink.f_scene where uid=#{uid} and mid IN (
         SELECT m.id from alink.f_mesh m where m.project_id=#{id} and m.uid = #{uid}
@@ -135,11 +170,11 @@
         WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
-    <delete id="deleteSceneSettingBySid" parameterType="java.lang.String">
-        DELETE FROM alink.f_scene_setting s
-        WHERE s.sid IN
+    <delete id="deleteSceneSettingBySid">
+        DELETE FROM alink.f_scene_setting
+        WHERE sid IN
         <foreach item="item" collection="list" open="(" separator="," close=")">
-            #{item,jdbcType=VARCHAR}
+            #{item}
         </foreach>
     </delete>
 
@@ -199,6 +234,10 @@
             #{item}
             )
         </foreach>
+    </insert>
+
+    <insert id="saveDeleteLog" parameterType="com.tpadsz.after.entity.DeleteLog">
+        INSERT INTO alink.f_delete_log(delete_date,uid,lightFlag) VALUES(#{delete_date},#{uid},#{lightFlag})
     </insert>
     <!--删除部分-->
 

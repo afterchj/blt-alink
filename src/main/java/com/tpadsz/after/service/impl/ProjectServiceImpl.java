@@ -1,6 +1,7 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.ProjectDao;
+import com.tpadsz.after.entity.DeleteLog;
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.exception.RepetitionException;
@@ -87,30 +88,48 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void delete(int id, String uid, String deleteFlag) {
-        if ("0".equals(deleteFlag)) {
-            List<String> list = projectDao.findNewMeshIdByPid(id, uid);
-            List<Integer> sids = projectDao.querySidByPid(id, uid);
-            if (sids.size() != 0) {
-                projectDao.deleteSceneByPid(id, uid);
-//                projectDao.deleteSceneSettingBySid(list2);
+    public void delete(int id, String uid, String deleteFlag,int lightFlag) {
+        if(lightFlag==0) {
+            if ("0".equals(deleteFlag)) {
+                List<String> list = projectDao.findNewMeshIdByPid(id, uid);
+                List<Integer> sids = projectDao.querySidByPid(id, uid);
+                if (sids.size() != 0) {
+                    projectDao.deleteSceneByPid(id, uid);
+                    projectDao.deleteSceneSettingBySid(sids);
+                }
+                projectDao.deleteGroupByPid(id, uid);
+                projectDao.deleteGroupSettingByPid(id, uid);
+                projectDao.deleteProByPid(id, uid);
+                projectDao.deleteMeshByPid(id, uid);
+                if (list.size() != 0) {
+                    projectDao.insertMeshId(list);
+                }
+            } else if ("1".equals(deleteFlag)) {
+                String meshId = projectDao.findNewMeshIdByMid(id);
+                projectDao.deleteMeshByMid(id);
+                projectDao.deleteSceneSettingByMid(id, uid);
+                projectDao.deleteSceneByMid(id, uid);
+                projectDao.deleteGroupSettingByMid(id, uid);
+                projectDao.deleteGroupByMid(id);
+                if (meshId != null) {
+                    projectDao.recordMeshId(meshId);
+                }
             }
-            projectDao.deleteGroupByPid(id, uid);
-            projectDao.deleteGroupSettingByPid(id, uid);
-            projectDao.deleteProByPid(id, uid);
-            projectDao.deleteMeshByPid(id, uid);
-            if (list.size() != 0) {
-                projectDao.insertMeshId(list);
-            }
-        } else if ("1".equals(deleteFlag)) {
-            String meshId = projectDao.findNewMeshIdByMid(id);
-            projectDao.deleteMeshByMid(id);
-            projectDao.deleteSceneSettingByMid(id, uid);
-            projectDao.deleteSceneByMid(id, uid);
-            projectDao.deleteGroupSettingByMid(id, uid);
-            projectDao.deleteGroupByMid(id);
-            if (meshId != null) {
-                projectDao.recordMeshId(meshId);
+        }else if(lightFlag>0){
+            if("0".equals(deleteFlag)) {
+                Project project = projectDao.findProjectById(id);
+                if(!"old".equals(project.getOther())) {
+                    projectDao.freezing(id, uid, "0");
+                }else {
+                    projectDao.freezingOld(id, uid,"0");
+                }
+            }else if("1".equals(deleteFlag)){
+                Mesh mesh = projectDao.findMeshById(id);
+                if(!"old".equals(mesh.getOther())) {
+                    projectDao.freezing(id, uid, "1");
+                }else {
+                    projectDao.freezingOld(id, uid,"1");
+                }
             }
         }
     }
@@ -153,13 +172,25 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.oldMove(projectId, meshId, uid);
     }
 
-//    @Override
-//    public void createSendMesh(Mesh mesh) {
-//        try {
-//            projectDao.createMesh(mesh);
-//        } catch (DuplicateKeyException e) {
-//            projectDao.createDuplicatedMesh(mesh);
-//        }
-//    }
+    @Override
+    public Project findProjectById(Integer project_id) {
+        return projectDao.findProjectById(project_id);
+    }
+
+    @Override
+    public void unfreezing(Integer id, String flag) {
+        projectDao.unfreezing(id,flag);
+    }
+
+    @Override
+    public void unfreezingOld(Integer id,String flag) {
+        projectDao.unfreezingOld(id,flag);
+    }
+
+    @Override
+    public void saveDeleteLog(DeleteLog deleteLog) {
+        projectDao.saveDeleteLog(deleteLog);
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.tpadsz.after.dao;
 
+import com.tpadsz.after.entity.DeleteLog;
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
 import com.tpadsz.after.entity.SceneAjust;
@@ -45,11 +46,15 @@ public interface ProjectDao {
 
     void deleteMeshByPid(@Param("id")int id, @Param("uid")String uid);
 
+    void freezing(@Param("id")int id, @Param("uid")String uid, @Param("flag")String flag);
+
+    void unfreezing(@Param("id")Integer id, @Param("flag")String flag);
+
     List<Integer> querySidByPid(@Param("id")int id, @Param("uid")String uid);
 
     void deleteSceneByPid(@Param("id")int id, @Param("uid")String uid);
 
-    void deleteSceneSettingBySid(List<String> list);
+    void deleteSceneSettingBySid(List<Integer> list);
 
     void deleteSceneSettingByMid(@Param("id")int id, @Param("uid")String uid);
 
@@ -70,6 +75,16 @@ public interface ProjectDao {
     List<String> findNewMeshIdByPid(@Param("id")int id, @Param("uid")String uid);
 
     void insertMeshId(List<String> list);
+
+    void freezingOld(@Param("id")int id, @Param("uid")String uid,@Param("flag")String flag);
+
+    void unfreezingOld(@Param("id")Integer id,@Param("flag")String flag);
+
+    Project findProjectById(@Param("projectId")Integer project_id);
+
+    Mesh findMeshById(@Param("id")int id);
+
+    void saveDeleteLog(DeleteLog deleteLog);
     //删除部分
 
     void createOldMesh(Mesh mesh);
@@ -78,6 +93,5 @@ public interface ProjectDao {
 
     void oldMove(@Param("projectId")int projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 
-//    void createDuplicatedMesh(Mesh mesh);
 
 }
