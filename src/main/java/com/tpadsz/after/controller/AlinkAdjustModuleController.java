@@ -349,7 +349,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String lmac;
         Integer lid;
         LightList lightList;
-        List<LightSetting> lightSettingList = new ArrayList<>();
+        List<LightSetting> lightSettingList = new ArrayList<>(array.size()+1);//配置list容量为jsonArray的size()
         LightSetting lightSetting;
         String x;
         String y;
@@ -518,7 +518,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     lmacs = sb.toString();
                     lmacs = lmacs.substring(0,lmacs.length()-",".length());
                     lightAjustService.saveLightAjustLog(meshId, bltFlag, operation,lmacs);//记录日志
-//                    lightLists.listIterator().toString()
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("result_message", ResultDict.SUCCESS.getValue());
                 } catch (Exception e) {
@@ -563,7 +562,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.NO_GROUP.getValue());
             return null;
         }
-        List<LightList> lightLists = new ArrayList<>();
+
         LightList lightList;
         JSONArray array = params.getJSONArray("lightGroup");
         if (array.isEmpty() || array.size() < 1) {
@@ -572,6 +571,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             return null;
         }
+        List<LightList> lightLists = new ArrayList<>(array.size()+1);//配置list容量为jsonarray的size()
         for (int i = 0; i < array.size(); i++) {
             lmac = array.getJSONObject(i).getString("lmac");
             lname = array.getJSONObject(i).getString("lname");
