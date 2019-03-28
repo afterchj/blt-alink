@@ -5,20 +5,12 @@ package com.tpadsz.after.entity;
  */
 public class LightInfo {
 
-    private String mname;
     private Integer mid;
     private String lmac;
     private Integer groupId;
     private String lname;
     private String productId;
 
-    public String getMname() {
-        return mname;
-    }
-
-    public void setMname(String mname) {
-        this.mname = mname;
-    }
 
     public Integer getMid() {
         return mid;

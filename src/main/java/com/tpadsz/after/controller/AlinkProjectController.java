@@ -98,15 +98,15 @@ public class AlinkProjectController extends BaseDecodedController {
                 if (mesh != null) {
                     Project project = projectService.findProjectById(mesh.getProject_id());
                     if ("freezing".equals(mesh.getOther())) {
-                        projectService.unfreezing(mesh.getId(),"1");
-                    }else if("freezingOld".equals(mesh.getOther())){
-                        projectService.unfreezingOld(mesh.getId(),"1");
+                        projectService.unfreezing(mesh.getId(), "1");
+                    } else if ("freezingOld".equals(mesh.getOther())) {
+                        projectService.unfreezingOld(mesh.getId(), "1");
                     }
                     if ("freezing".equals(project.getOther())) {
-                        projectService.unfreezing(mesh.getProject_id(),"0");
+                        projectService.unfreezing(mesh.getProject_id(), "0");
                         model.put("unfreezingProject", project);
-                    }else if("freezingOld".equals(project.getOther())){
-                        projectService.unfreezingOld(mesh.getProject_id(),"0");
+                    } else if ("freezingOld".equals(project.getOther())) {
+                        projectService.unfreezingOld(mesh.getProject_id(), "0");
                         model.put("unfreezingProject", project);
                     }
                     model.put("result", ResultDict.SUCCESS.getCode());
@@ -250,7 +250,6 @@ public class AlinkProjectController extends BaseDecodedController {
         String meshinfo = params.getString("meshinfo");
         String sceneinfo = params.getString("sceneinfo");
         String groupinfo = params.getString("groupinfo");
-        String lightinfo = params.getString("lightinfo");
         String uid = params.getString("uid");
         try {
             if (!"[]".equals(meshinfo)) {
@@ -258,7 +257,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid, "0");
                 if (meshList != null) {
                     if (meshList.get(0).getMesh_id() != null) {
-                        oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
+                        oldDeal(sceneinfo, groupinfo, meshList, uid);
                         model.put("commitSuccess", meshList);
                     } else {
                         model.put("commitSuccess", "");
@@ -273,34 +272,65 @@ public class AlinkProjectController extends BaseDecodedController {
         return null;
     }
 
+
+    @RequestMapping(value = "/oldLight", method = RequestMethod.POST)
+    public String oldLight(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
+        String lightinfo = params.getString("lightinfo");
+        try {
+            if (!"[]".equals(lightinfo)) {
+                List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
+                List<LightList> flightList = new ArrayList<>();
+                for (int i = 0; i < lightInfoList.size(); i++) {
+                    LightList lightList = new LightList();
+                    Group group = new Group();
+                    lightList.setMid(lightInfoList.get(i).getMid());
+                    lightList.setLmac(lightInfoList.get(i).getLmac());
+                    lightList.setLname(lightInfoList.get(i).getLname());
+                    lightList.setProductId(lightInfoList.get(i).getProductId());
+                    group.setMid(lightInfoList.get(i).getMid());
+                    group.setGroupId(lightInfoList.get(i).getGroupId());
+                    int gid = groupOperationService.getGid(group);
+                    lightList.setGid(gid);
+                    flightList.add(lightList);
+                }
+                lightAjustService.saveLight(flightList);
+            }
+            model.put("result", ResultDict.SUCCESS.getCode());
+        } catch (Exception e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
+
     @RequestMapping(value = "/oldImport", method = RequestMethod.POST)
     public String oldImport(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String meshinfo = params.getString("meshinfo");
         String sceneinfo = params.getString("sceneinfo");
         String groupinfo = params.getString("groupinfo");
-        String lightinfo = params.getString("lightinfo");
         String uid = params.getString("uid");
         try {
             List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
             List<Mesh> meshInfoList2 = new ArrayList<>();
+            List<Mesh> meshInfoList3 = new ArrayList<>();
             for (int i = 0; i < meshInfoList.size(); i++) {
                 int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id(), uid);
                 if (count == 0) {
                     meshInfoList2.add(meshInfoList.get(i));
-                    meshInfoList.remove(i);
+                }else {
+                    meshInfoList3.add(meshInfoList.get(i));
                 }
             }
             List<Mesh> meshList = new ArrayList<>();
             if (meshInfoList2.size() != 0) {
                 meshList = projectService.oldMeshCommit(meshInfoList2, uid, "1");
+                oldDeal(sceneinfo, groupinfo, meshList, uid);
                 model.put("projectId", meshList.get(0).getProject_id());
-            }else {
+            } else {
                 model.put("projectId", "");
             }
-            oldDeal(sceneinfo, groupinfo, lightinfo, meshList, uid);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("importSuccessId", meshList);
-            model.put("repeatId", meshInfoList);
+            model.put("repeatId", meshInfoList3);
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
@@ -308,9 +338,9 @@ public class AlinkProjectController extends BaseDecodedController {
     }
 
 
-    private void oldDeal(String sceneinfo, String groupinfo, String lightinfo, List<Mesh> meshList, String uid)
+    private void oldDeal(String sceneinfo, String groupinfo, List<Mesh> meshList, String uid)
             throws Exception {
-        if (StringUtils.isNotBlank(sceneinfo)) {
+        if (!"[]".equals(sceneinfo)) {
             List<SceneInfo> sceneInfoList = JSONArray.parseArray(sceneinfo, SceneInfo.class);
             for (int i = 0; i < sceneInfoList.size(); i++) {
                 SceneAjust sceneAjust = new SceneAjust();
@@ -327,7 +357,7 @@ public class AlinkProjectController extends BaseDecodedController {
             }
         }
 
-        if (StringUtils.isNotBlank(groupinfo)) {
+        if (!"[]".equals(groupinfo)) {
             List<GroupInfo> groupInfoList = JSONArray.parseArray(groupinfo, GroupInfo.class);
             for (int i = 0; i < groupInfoList.size(); i++) {
                 Group group = new Group();
@@ -341,33 +371,6 @@ public class AlinkProjectController extends BaseDecodedController {
                         break;
                     }
                 }
-            }
-
-            if (StringUtils.isNotBlank(lightinfo)) {
-                List<LightList> flightList = new ArrayList<>();
-                List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
-                for (int i = 0; i < lightInfoList.size(); i++) {
-                    LightList lightList = new LightList();
-                    for (int j = 0; j < meshList.size(); j++) {
-                        if (meshList.get(j).getMname().equals(lightInfoList.get(i).getMname())) {
-                            lightList.setMid(meshList.get(j).getId());
-                            lightList.setLmac(lightInfoList.get(i).getLmac());
-                            lightList.setGroupId(lightInfoList.get(i).getGroupId());
-                            lightList.setLname(lightInfoList.get(i).getLname());
-                            lightList.setProductId(lightInfoList.get(i).getProductId());
-                            for (int k = 0; k < groupInfoList.size(); k++) {
-                                if (groupInfoList.get(k).getMname().equals(lightInfoList.get(i).getMname()) &&
-                                        groupInfoList.get(k).getGroupId().equals(lightInfoList.get(i).getGroupId())) {
-                                    lightList.setGid(groupInfoList.get(k).getGid());
-                                    break;
-                                }
-                            }
-                            flightList.add(lightList);
-                            break;
-                        }
-                    }
-                }
-                lightAjustService.saveLight(flightList);
             }
         }
     }
