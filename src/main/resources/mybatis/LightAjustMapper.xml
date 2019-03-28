@@ -30,7 +30,7 @@
     <!--</insert>-->
 
     <select id="getLid" resultType="integer">
-        select id from alink.f_light WHERE  lmac=#{lmac}
+        select mid from alink.f_light WHERE  lmac=#{lmac}
     </select>
 
     <insert id="saveTempLight" parameterType="com.tpadsz.after.entity.LightList" useGeneratedKeys="true" keyProperty="id">
@@ -41,4 +41,8 @@
     <update id="updateLightGidAndMid">
         UPDATE alink.f_light SET gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now() WHERE lmac=#{lmac}
     </update>
+
+    <delete id="deleteLightSettingByLmac">
+        DELETE FROM alink.f_light_setting WHERE lid=(select id from alink.f_light WHERE lmac=#{lmac})
+    </delete>
 </mapper>
