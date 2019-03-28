@@ -26,12 +26,12 @@ public interface LightAjustDao {
 
 //    String getLightOff(@Param("lmac") String lmac);//获取灯开关状态
 
-    Integer getLid(@Param("lmac") String lmac);//获取lid
+    Integer getLid(@Param("lmac") String lmac);//获取mid 查询灯是否存在
 
     void saveTempLight(LightList lightList);//创建临时灯
 
     void updateLightGidAndMid(@Param("lmac") String lmac, @Param("gid") Integer gid, @Param("mid") Integer mid,@Param
-            ("lname") String
-            lname);
-    //灯移网
+            ("lname") String lname);//更新灯信息
+
+    void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除light_setting
 }

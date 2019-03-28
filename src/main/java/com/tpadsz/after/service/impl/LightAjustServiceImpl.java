@@ -47,19 +47,26 @@ public class LightAjustServiceImpl implements LightAjustService {
     public void saveLight(List<LightList> lightLists) throws Exception {
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
-        Integer lid;
+        Integer mid;
+        Integer nowMid;
         try {
             for (int i = 1; i <= lightLists.size(); i++) {
-                lid = lightAjustDao.getLid(lightLists.get(i-1).getLmac());
+                mid = lightAjustDao.getLid(lightLists.get(i-1).getLmac());
 //                System.out.println("lid: " + lid + " lmac: " + lightLists.get(i).getLmac());
                 //该灯数据库没有记录
-                if (lid == null) {
+                if (mid == null) {
                     //扫描到未分组
                     lightAjustDao1.saveLight(lightLists.get(i-1));
                 }else {
-                    //有灯 灯移网
+                    //有灯 更新灯记录
                     lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
                             lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
+                    nowMid = lightLists.get(i-1).getMid();
+                    //数据库中的mid和当前扫描入网的mid不是同一网络//Integer默认比较[-128,128]
+                    if (mid.intValue()!=nowMid.intValue()){
+                        //删除light_setting中的场景记录
+                        lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
+                    }
                 }
 //                System.out.println("i % 500: "+i % 500);
                 if (i % 500 == 0 || i == lightLists.size()) {
