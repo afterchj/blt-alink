@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.entity.dd.ResultDict;
-import com.tpadsz.after.exception.LightExistedException;
 import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
@@ -182,7 +181,6 @@ public class AlinkProjectController extends BaseDecodedController {
             isDuplicate = false;
             try {
                 meshId = projectService.findMeshId(limitNum);
-                meshId = prex.substring(0, prex.length() - meshId.length()) + meshId;
                 Mesh mesh = new Mesh();
                 mesh.setMname(mname);
                 mesh.setMesh_id(meshId);

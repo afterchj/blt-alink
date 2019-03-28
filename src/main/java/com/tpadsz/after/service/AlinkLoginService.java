@@ -27,7 +27,5 @@ public interface AlinkLoginService {
 
     AppUser findUserByMobile(String mobile);
 
-    void insertForeach(List<String> list);
-
     String generateToken(String uid) throws SystemAlgorithmException;
 }

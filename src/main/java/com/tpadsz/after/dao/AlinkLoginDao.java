@@ -23,5 +23,4 @@ public interface AlinkLoginDao {
 
     AppUser findUserByUname(String uname);
 
-    void insertForeach(List<String> list);
 }

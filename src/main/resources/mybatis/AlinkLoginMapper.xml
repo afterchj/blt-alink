@@ -38,15 +38,4 @@
         SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where uname=#{uname}
     </select>
 
-    <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
-        insert into alink.create_mesh_id_copy
-         (mesh_id)
-        values
-        <foreach collection="list" item="item" index="index" separator=",">
-            (
-            #{item}
-            )
-        </foreach>
-    </insert>
-
 </mapper>

@@ -119,16 +119,16 @@ public class ProjectServiceImpl implements ProjectService {
             if("0".equals(deleteFlag)) {
                 Project project = projectDao.findProjectById(id);
                 if(!"old".equals(project.getOther())) {
-                    projectDao.freezing(id, uid, "0");
+                    projectDao.freezing(id,"0");
                 }else {
-                    projectDao.freezingOld(id, uid,"0");
+                    projectDao.freezingOld(id, "0");
                 }
             }else if("1".equals(deleteFlag)){
                 Mesh mesh = projectDao.findMeshById(id);
                 if(!"old".equals(mesh.getOther())) {
-                    projectDao.freezing(id, uid, "1");
+                    projectDao.freezing(id,"1");
                 }else {
-                    projectDao.freezingOld(id, uid,"1");
+                    projectDao.freezingOld(id, "1");
                 }
             }
         }

@@ -32,11 +32,15 @@ public interface ProjectService {
 
     List<Mesh> findProDetailByUid(String uid, int projectId);
 
+    //删除部分
     int findLightByMid(int id);
 
     void delete(int id, String uid, String deleteFlag,int lightFlag);
 
     int findLightByPid(int id, String uid);
+
+    void saveDeleteLog(DeleteLog deleteLog);
+    //删除部分
 
     List<Mesh> oldMeshCommit(List<Mesh> list, String uid,String flag);
 
@@ -47,7 +51,5 @@ public interface ProjectService {
     void unfreezing(Integer id,String flag);
 
     void unfreezingOld(Integer id,String flag);
-
-    void saveDeleteLog(DeleteLog deleteLog);
 
 }

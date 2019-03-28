@@ -103,8 +103,4 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
         return alinkLoginDao.findUserByMobile(mobile);
     }
 
-    @Override
-    public void insertForeach(List<String> list) {
-        alinkLoginDao.insertForeach(list);
-    }
 }

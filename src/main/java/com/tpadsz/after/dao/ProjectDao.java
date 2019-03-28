@@ -46,7 +46,7 @@ public interface ProjectDao {
 
     void deleteMeshByPid(@Param("id")int id, @Param("uid")String uid);
 
-    void freezing(@Param("id")int id, @Param("uid")String uid, @Param("flag")String flag);
+    void freezing(@Param("id")int id, @Param("flag")String flag);
 
     void unfreezing(@Param("id")Integer id, @Param("flag")String flag);
 
@@ -76,7 +76,7 @@ public interface ProjectDao {
 
     void insertMeshId(List<String> list);
 
-    void freezingOld(@Param("id")int id, @Param("uid")String uid,@Param("flag")String flag);
+    void freezingOld(@Param("id")int id, @Param("flag")String flag);
 
     void unfreezingOld(@Param("id")Integer id,@Param("flag")String flag);
 

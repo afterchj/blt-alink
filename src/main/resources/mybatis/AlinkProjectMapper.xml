@@ -26,7 +26,7 @@
     </resultMap>
 
     <select id="findRepeatIdByUid" resultMap="standardMeshMap" parameterType="string">
-        SELECT * from alink.f_mesh where mesh_id LIKE CONCAT(#{mesh_id},'%') and uid = #{uid}
+        SELECT * from ( SELECT * from alink.f_mesh m WHERE m.uid = #{uid} and LENGTH(m.mesh_id)=8) as a where a.mesh_id LIKE CONCAT(#{mesh_id},'%')
     </select>
 
     <select id="findFullyRepeatIdByUid" resultType="int" parameterType="string">
