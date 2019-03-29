@@ -3,6 +3,7 @@ package com.tpadsz.after.service;
 import com.tpadsz.after.entity.LightList;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -25,7 +26,7 @@ public interface LightAjustService {
 
 //    String getLightOff(String lmac);
 
-    Integer getLid(String lmac);
+    Map<String,Integer> getLid(String lmac);
 
     void saveTempLight(LightList lightList);
 }

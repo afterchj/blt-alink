@@ -1,6 +1,7 @@
 package com.after.controller;
 
 import com.tpadsz.after.dao.GroupOperationDao;
+import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
@@ -62,7 +63,7 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void saveGroupLogTest() {
-        groupOperationService.saveGroupLog("aaaa", "12345678", "0", "1",0);
+        groupOperationService.saveGroupLog("aaaa", "12345678", "0", "1", 0);
         System.out.println("success");
     }
 
@@ -79,7 +80,7 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void saveLightAjustLogTest() {
         lightAjustService.saveLightAjustLog("12345678", "0",
-                "4",null);
+                "4", null);
         System.out.println("success");
     }
 
@@ -128,9 +129,9 @@ public class AlinkAdjustModuleControllerTest {
     public void saveLightTest() throws Exception {
         List<LightList> lightLists = new ArrayList<>();
         LightList lightList;
-        for (int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             lightList = new LightList();
-            lightList.setLmac(i+"iii");
+            lightList.setLmac(i + "iii");
             lightList.setLname("iii");
             lightList.setMid(3);
             lightList.setGid(17);
@@ -177,7 +178,7 @@ public class AlinkAdjustModuleControllerTest {
     public void saveLightSettingTest() throws Exception {
         List<LightSetting> lightSettingList = new ArrayList<>();
         LightSetting lightSetting;
-        for (int i=0;i<=1000;i++){
+        for (int i = 0; i <= 1000; i++) {
             lightSetting = new LightSetting();
             lightSetting.setX("21");
             lightSetting.setY("21%");
@@ -186,14 +187,14 @@ public class AlinkAdjustModuleControllerTest {
             lightSetting.setOff("0");
 //            getSession().getMapper(SceneAjustDao.class).saveLightSetting(lightSetting);
 //            sceneAjustService.save(lightSetting);
-            lightSettingList.add(i,lightSetting);
+            lightSettingList.add(i, lightSetting);
         }
 
 //        System.out.println(lightSettingList.size());
-        Long start  = System.currentTimeMillis();
-        sceneAjustService.saveLightSetting( lightSettingList);
+        Long start = System.currentTimeMillis();
+        sceneAjustService.saveLightSetting(lightSettingList);
         Long end = System.currentTimeMillis();
-        System.out.println("耗时: "+(end-start));
+        System.out.println("耗时: " + (end - start));
     }
 
     @Test
@@ -221,8 +222,8 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void getLidTest() {
-        Integer lid = lightAjustService.getLid("ff-ff-ff-ff");
-        System.out.println("lid: " + lid);
+//        Integer lid = lightAjustService.getLid("ff-ff-ff-ff");
+//        System.out.println("lid: " + lid);
     }
 
     @Test
@@ -231,7 +232,9 @@ public class AlinkAdjustModuleControllerTest {
         lightList.setMid(3);
         lightList.setLmac("1-1-1-1");
         lightList.setLname("1-1-1-1");
-        //临时创建灯
+        lightList.setGroupId(0);
+        lightList.setProductId("2018");
+        //创建灯
         lightAjustService.saveTempLight(lightList);
         System.out.println("id: " + lightList.getId());
     }
@@ -242,25 +245,33 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void deleteLightSettingByLmacTest(){
+    public void deleteLightSettingByLmacTest() {
         sceneAjustService.deleteLightSettingByLmac("a");
     }
 
     @Test
-    public void test(){
-        List<LightList> lightLists = new ArrayList<>(3);
-        System.out.println("size: "+lightLists.size());
+    public void test1() {
+        long startTime;
+        long endTime;
+        List<LightList> lightLists;
         LightList lightList;
-        for (int i=0;i<10;i++){
-            lightList = new LightList();
-            lightList.setGid(1);
-            lightList.setMid(1);
-            lightList.setGroupId(0);
-            lightList.setLmac("aa-aa-aa"+i);
-//            lightList.setLmac("aa-aa-aa"+i);
-            lightLists.add(lightList);
-            System.out.println("size: "+lightLists.size());
+        for (int j = 0; j < 10; j++) {
+            startTime = System.currentTimeMillis();
+            lightLists = new ArrayList<>(50001);
+            for (int i = 0; i < 50000; i++) {
+                lightList = new LightList();
+                lightList.setGid(1);
+                lightList.setMid(1);
+                lightList.setGroupId(0);
+                lightList.setLmac("aa-aa-aa" + i);
+                lightLists.add(lightList);
+            }
+            endTime = System.currentTimeMillis();
+            System.out.println("j= "+j+",time= "+(endTime - startTime));
+            lightLists.clear();
         }
+
+
 //        System.out.println("lightLists: "+lightLists);
 //        StringBuffer stringBuffer = new StringBuffer();
 //        for (LightList lightList1:lightLists){
@@ -269,5 +280,23 @@ public class AlinkAdjustModuleControllerTest {
 //        String s = stringBuffer.toString();
 //        s = s.substring(0,s.length()-",".length());
 //        System.out.println("s: " + s);
+    }
+
+    @Test
+    public void getLidTest2() {
+        Map<String, Integer> maps =  getSession().getMapper(LightAjustDao.class).getLid("aa-aa-aa-a");
+        System.out.println(maps!=null&& maps.size()>0);
+//        Collections.synchronizedList();
+
+    }
+    @Test
+    public void test(){
+        String s = "f0:ac:d7:6d:40:68,";
+        String a="f0:ac:d7:6d:40:68,";
+        for (int i=0;i<=200;i++){
+            a=a+s;
+        }
+        System.out.println(a.length());
+        System.out.println(a);
     }
 }

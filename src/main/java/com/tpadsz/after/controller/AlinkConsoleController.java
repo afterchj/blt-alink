@@ -35,7 +35,6 @@ public class AlinkConsoleController extends BaseDecodedController {
         List scenes = bltConsoleService.getScenes(param);
         List groups = bltConsoleService.getGroups(param);
         Map info = new HashMap();
-        logger.info(scenes.size() + "\t" + groups.size());
         if (scenes.size() == 0) {
             model.put("result", ResultDict.NO_SCENE.getCode());
             model.put("result_message", ResultDict.NO_SCENE.getValue());
@@ -84,8 +83,16 @@ public class AlinkConsoleController extends BaseDecodedController {
     public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
         String flag = param.getString("bltFlag");
+        int sceneId = param.getInteger("sceneId");
         if ("1".equals(flag)) {
-            bltConsoleService.deleteScene(param);
+            if (sceneId > 3) {
+                bltConsoleService.deleteScene(param);
+            } else {
+                String sname = "场景" + (sceneId+1);
+                param.put("sname", sname);
+                bltConsoleService.saveSceneName(param);
+//                logger.info("id=" + sceneId + ",name=" + sname);
+            }
         }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 客户端和服务端可能有数据不一致情况
@@ -205,8 +206,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         //连接蓝牙
         if ("1".equals(bltFlag)) {
-            Integer lid = lightAjustService.getLid(lmac);
-            if (lid == null) {
+            Map<String,Integer> lightMap = lightAjustService.getLid(lmac);
+            if (lightMap == null||lightMap.size()==0) {
                 //服务端未找到该灯
                 operation = "5";
                 logger.info("method:renameLight cannot find the light {}", lmac);
@@ -347,30 +348,36 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             return;
         }
         String lmac;
-        Integer lid;
+        Integer groupId;
+        String productId;
         LightList lightList;
         List<LightSetting> lightSettingList = new ArrayList<>(array.size()+1);//配置list容量为jsonArray的size()
         LightSetting lightSetting;
         String x;
         String y;
         String off;
+        Map<String,Integer> lightMap;
         for (int i = 0; i < array.size(); i++) {
             lmac = array.getJSONObject(i).getString("lmac");
-            if (StringUtils.isBlank(lmac)) {
+            productId = array.getJSONObject(i).getString("productId");
+            groupId = array.getJSONObject(i).getInteger("groupId");
+            if (StringUtils.isBlank(lmac)||groupId==null||StringUtils.isBlank(productId)) {
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
                 return;
             }
-            lid = lightAjustService.getLid(lmac);
+            lightMap = lightAjustService.getLid(lmac);
             //服务端未找到该灯
-            if (lid == null) {
+            if (lightMap == null||lightMap.size()==0) {
                 lightList = new LightList();
                 lightList.setMid(mid);
                 lightList.setLmac(lmac);
                 lightList.setLname(lmac);
-                //临时创建灯
+                lightList.setGroupId(groupId);
+                lightList.setProductId(productId);
+                //创建灯
                 lightAjustService.saveTempLight(lightList);
-                lid = lightList.getId();
+                lightMap.put("id",lightList.getId());
                 logger.info("method:saveScene lmac:{} cannot find the light", lmac);
             }
             x = array.getJSONObject(i).getString("x");
@@ -378,7 +385,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             off = array.getJSONObject(i).getString("off");
             lightSetting = new LightSetting();
             lightSetting.setSid(sid);
-            lightSetting.setLid(lid);
+            lightSetting.setLid(lightMap.get("id"));
             lightSetting.setX(x);
             lightSetting.setY(y);
             lightSetting.setOff(off);
