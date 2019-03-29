@@ -348,7 +348,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             return;
         }
         String lmac;
-        Integer lid;
+        Integer groupId;
+        String productId;
         LightList lightList;
         List<LightSetting> lightSettingList = new ArrayList<>(array.size()+1);//配置list容量为jsonArray的size()
         LightSetting lightSetting;
@@ -358,7 +359,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Map<String,Integer> lightMap;
         for (int i = 0; i < array.size(); i++) {
             lmac = array.getJSONObject(i).getString("lmac");
-            if (StringUtils.isBlank(lmac)) {
+            productId = array.getJSONObject(i).getString("productId");
+            groupId = array.getJSONObject(i).getInteger("groupId");
+            if (StringUtils.isBlank(lmac)||groupId==null||StringUtils.isBlank(productId)) {
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
                 return;
@@ -370,7 +373,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 lightList.setMid(mid);
                 lightList.setLmac(lmac);
                 lightList.setLname(lmac);
-                //临时创建灯
+                lightList.setGroupId(groupId);
+                lightList.setProductId(productId);
+                //创建灯
                 lightAjustService.saveTempLight(lightList);
                 lightMap.put("id",lightList.getId());
                 logger.info("method:saveScene lmac:{} cannot find the light", lmac);

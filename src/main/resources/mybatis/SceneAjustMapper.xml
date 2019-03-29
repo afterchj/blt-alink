@@ -16,15 +16,6 @@
         INSERT INTO alink.f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
     </insert>
 
-    <!--<insert id="saveSceneSetting" parameterType="com.tpadsz.after.entity.SceneSetting">-->
-        <!--replace INTO alink.f_scene_setting(sid,x,y,create_date,update_date) VALUES (#{sid},#{x},#{y},now(),now())-->
-    <!--</insert>-->
-
-    <!--<insert id="saveGroupSetting" parameterType="com.tpadsz.after.entity.GroupSetting">-->
-        <!--replace into alink.f_group_setting (mid,gid,sid,x,y,create_date,update_date)-->
-        <!--VALUES (#{mid},#{gid},#{sid},#{x},#{y},now(),now())-->
-    <!--</insert>-->
-
     <delete id="deleteLightSetting">
         DELETE FROM alink.f_light_setting WHERE sid=#{sid}
     </delete>

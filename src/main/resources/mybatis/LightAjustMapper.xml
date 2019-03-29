@@ -34,8 +34,9 @@
     </select>
 
     <insert id="saveTempLight" parameterType="com.tpadsz.after.entity.LightList" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO alink.f_light ( lmac, lname, mid, create_date, update_date )
-        VALUES( #{lmac},#{lname},#{mid},now(),now() )
+        INSERT INTO alink.f_light ( lmac, lname, mid, create_date, update_date ,product_id,gid)
+	    values (#{lmac},#{lname},#{mid},now(),now() ,#{productId},
+	    (select id from alink.f_group where group_id=#{groupId} and mid=#{mid}))
     </insert>
 
     <update id="updateLightGidAndMid">

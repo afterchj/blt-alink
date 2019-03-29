@@ -232,7 +232,9 @@ public class AlinkAdjustModuleControllerTest {
         lightList.setMid(3);
         lightList.setLmac("1-1-1-1");
         lightList.setLname("1-1-1-1");
-        //临时创建灯
+        lightList.setGroupId(0);
+        lightList.setProductId("2018");
+        //创建灯
         lightAjustService.saveTempLight(lightList);
         System.out.println("id: " + lightList.getId());
     }
@@ -281,9 +283,20 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test2() {
+    public void getLidTest2() {
         Map<String, Integer> maps =  getSession().getMapper(LightAjustDao.class).getLid("aa-aa-aa-a");
         System.out.println(maps!=null&& maps.size()>0);
+//        Collections.synchronizedList();
 
+    }
+    @Test
+    public void test(){
+        String s = "f0:ac:d7:6d:40:68,";
+        String a="f0:ac:d7:6d:40:68,";
+        for (int i=0;i<=200;i++){
+            a=a+s;
+        }
+        System.out.println(a.length());
+        System.out.println(a);
     }
 }
