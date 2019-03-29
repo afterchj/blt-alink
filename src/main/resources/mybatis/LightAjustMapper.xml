@@ -29,8 +29,8 @@
 	    <!--VALUES(#{uid},#{meshId},'0',#{lmac},#{x},#{y},'1',now())-->
     <!--</insert>-->
 
-    <select id="getLid" resultType="integer">
-        select mid from alink.f_light WHERE  lmac=#{lmac}
+    <select id="getLid" resultType="map">
+        select id,mid from alink.f_light WHERE  lmac=#{lmac}
     </select>
 
     <insert id="saveTempLight" parameterType="com.tpadsz.after.entity.LightList" useGeneratedKeys="true" keyProperty="id">

@@ -4,6 +4,8 @@ import com.tpadsz.after.entity.LightList;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 /**
  * @program: blt-alink
  * @description:
@@ -26,7 +28,7 @@ public interface LightAjustDao {
 
 //    String getLightOff(@Param("lmac") String lmac);//获取灯开关状态
 
-    Integer getLid(@Param("lmac") String lmac);//获取mid 查询灯是否存在
+    Map<String,Integer> getLid(@Param("lmac") String lmac);//获取mid 查询灯是否存在
 
     void saveTempLight(LightList lightList);//创建临时灯
 
