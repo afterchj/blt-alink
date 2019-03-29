@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by chenhao.lu on 2019/3/8.
@@ -279,16 +277,18 @@ public class AlinkProjectController extends BaseDecodedController {
         try {
             if (!"[]".equals(lightinfo)) {
                 List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
+                Map<String, LightInfo> lightMap = lightInfoList.stream().collect(Collectors.toMap(LightInfo::getLmac, a ->
+                        a, (k1, k2) -> k1));
                 List<LightList> flightList = new ArrayList<>();
-                for (int i = 0; i < lightInfoList.size(); i++) {
+                for (Map.Entry<String, LightInfo> entry : lightMap.entrySet()) {
                     LightList lightList = new LightList();
                     Group group = new Group();
-                    lightList.setMid(lightInfoList.get(i).getMid());
-                    lightList.setLmac(lightInfoList.get(i).getLmac());
-                    lightList.setLname(lightInfoList.get(i).getLname());
-                    lightList.setProductId(lightInfoList.get(i).getProductId());
-                    group.setMid(lightInfoList.get(i).getMid());
-                    group.setGroupId(lightInfoList.get(i).getGroupId());
+                    lightList.setMid(entry.getValue().getMid());
+                    lightList.setLmac(entry.getValue().getLmac());
+                    lightList.setLname(entry.getValue().getLname());
+                    lightList.setProductId(entry.getValue().getProductId());
+                    group.setMid(entry.getValue().getMid());
+                    group.setGroupId(entry.getValue().getGroupId());
                     int gid = groupOperationService.getGid(group);
                     lightList.setGid(gid);
                     flightList.add(lightList);
@@ -316,7 +316,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id(), uid);
                 if (count == 0) {
                     meshInfoList2.add(meshInfoList.get(i));
-                }else {
+                } else {
                     meshInfoList3.add(meshInfoList.get(i));
                 }
             }
