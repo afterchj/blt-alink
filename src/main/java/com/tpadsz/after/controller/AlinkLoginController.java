@@ -1,6 +1,7 @@
 package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.constants.MemcachedObjectType;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.entity.dd.ResultDict;
@@ -10,6 +11,7 @@ import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.service.ValidationService;
+import net.rubyeye.xmemcached.XMemcachedClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,9 @@ public class AlinkLoginController extends BaseDecodedController {
 
     @Autowired
     ValidationService validationService;
+
+    @Autowired
+    private XMemcachedClient client;
 
     static final String URL = "http://odelic.cn/blt_alink/account";
 
@@ -120,6 +125,7 @@ public class AlinkLoginController extends BaseDecodedController {
     @RequestMapping(value = "loginOut",method = RequestMethod.POST)
     public void loginOut(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
         String uid = params.getString("uid");
+        String key = MemcachedObjectType.CACHE_TOKEN.getPrefix() + uid;
         if (StringUtils.isBlank(uid)){
             //参数不能为空
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
@@ -127,6 +133,7 @@ public class AlinkLoginController extends BaseDecodedController {
             return;
         }
         try {
+            client.delete(key);
             alinkLoginService.loginOut(uid);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message",ResultDict.SUCCESS.getCode());
