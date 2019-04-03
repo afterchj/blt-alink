@@ -50,7 +50,8 @@
         FROM
     	  (
         	alink.f_light l
-        	RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid = #{mid} ) g ON l.gid = g.id
+        	RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid =
+        	#{mid} ) g ON l.gid = g.id and l.mid=g.mid
         	)
         	LEFT JOIN alink.f_product p ON l.product_id = p.product_id
         ORDER BY
@@ -133,4 +134,13 @@
             <!--</association>-->
         </collection>
     </resultMap>
+
+    <select id="getPid" resultType="integer">
+        select id from alink.f_place WHERE place_id=#{placeId} and mid=#{mid}
+    </select>
+
+    <insert id="savePlace" parameterType="com.tpadsz.after.entity.AdjustPlace" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO alink.f_place (place_id,pname,uid,mid,create_date,update_date)
+        VALUES (#{placeId},#{pname},#{uid},#{mid},now(),now())
+    </insert>
 </mapper>

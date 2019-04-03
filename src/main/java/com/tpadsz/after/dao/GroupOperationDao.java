@@ -1,5 +1,6 @@
 package com.tpadsz.after.dao;
 
+import com.tpadsz.after.entity.AdjustPlace;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.GroupConsoleLog;
 import com.tpadsz.after.entity.GroupList;
@@ -45,6 +46,10 @@ public interface GroupOperationDao {
     Integer getSceneSeriaNo(@Param("mid") Integer mid, @Param("sceneId") Integer sceneId, @Param("uid") String uid);//获取sid
 
     GroupConsoleLog getGroupConsoleLogByGid(@Param("groupId") Integer groupId,@Param("uid") String uid,@Param("meshId") String meshId);//获取lmac地址
+
+    Integer getPid(@Param("placeId") Integer placeId, @Param("mid") Integer mid);
+
+    void savePlace(AdjustPlace adjustPlace);
 
 //    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

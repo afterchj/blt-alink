@@ -61,8 +61,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Integer groupId = params.getInteger("groupId");//组id(客户端生成)
         String gname = params.getString("gname");//组名(重命名组时是重命名后的组名)
         String meshId = params.getString("meshId");//网络id
+//        Integer placeId = params.getInteger("placeId");
+//        String pname = params.getString("pname");
         Integer mid;
         Group group;
+//        Integer pid;
         if (StringUtils.isBlank(operation) || StringUtils.isBlank(bltFlag) || StringUtils.isBlank(meshId) ||
                 StringUtils.isBlank(gname) || groupId == null) {
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
@@ -83,12 +86,24 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
             return;
         }
+//        pid = groupOperationService.getPid(placeId,mid);
+//        if (pid == null){
+//            创建区域
+//            AdjustPlace adjustPlace = new AdjustPlace();
+//            adjustPlace.setUid(uid);
+//            adjustPlace.setMid(mid);
+//            adjustPlace.setPlaceId(placeId);
+//            adjustPlace.setPname(pname);
+//            groupOperationService.savePlace(adjustPlace);
+//            pid = adjustPlace.getId();
+//        }
         group = new Group();
         group.setGname(gname);
         group.setMid(mid);
         group.setGroupId(groupId);
         group.setUid(uid);
         group.setMeshId(meshId);
+//        group.setPid(pid);
         Integer gid = groupOperationService.getGid(group);
         //连接蓝牙
         if ("1".equals(bltFlag)) {
@@ -233,7 +248,15 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 lightAjustService.saveTempLight(lightList);
 //                System.out.println("method:renameLight cannot find the light:"+lmac);
             } else {
-                lightAjustService.updateLightName(lmac, lname);
+                //数据库中的mid和当前扫描入网的mid不是同一网络//Integer默认比较[-128,128]
+                if (lightMap.get("mid").intValue()!=mid.intValue()){
+                    lightAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景
+                    //更新 lname,gid,mid,update_date
+                    lightAjustService.updateLight(lmac,groupId,mid);
+                }else {
+                    //只更新灯名
+                    lightAjustService.updateLightName(lmac, lname);
+                }
             }
             //记录日志
             lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmac);
@@ -309,7 +332,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 
     /**
      * 保存更新场景
-     *
      * @param params
      * @param model
      */
@@ -388,7 +410,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 return;
             }
             lightMap = lightAjustService.getLid(lmac);
-            //服务端未找到该灯
+            //服务端未找到该灯或者
             if (lightMap == null || lightMap.size() == 0) {
                 lightList = new LightList();
                 lightList.setMid(mid);
@@ -401,6 +423,12 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 lightMap.put("id", lightList.getId());
                 logger.info("method:saveScene lmac:{} cannot find the light", lmac);
             }
+            //mid不一致
+            if (lightMap.get("mid").intValue()!=mid.intValue()){
+                lightAjustService.updateLight(lmac, groupId, mid);//更新灯信息
+                sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
+            }
+
             x = array.getJSONObject(i).getString("x");
             y = array.getJSONObject(i).getString("y");
             off = array.getJSONObject(i).getString("off");
@@ -572,13 +600,14 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String lmac;
         String lname;
         String productId;
+        Integer dGroupId=0;
         if ("0".equals(operation)) {
             //扫描灯
             group.setGroupId(0);
         }
         if ("2".equals(operation)) {
             //移动灯
-            Integer dGroupId = params.getInteger("dGroupId");
+            dGroupId = params.getInteger("dGroupId");
             if (dGroupId == null) {
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
@@ -614,6 +643,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }
             lightList = new LightList();
             lightList.setGid(gid);
+            lightList.setGroupId(dGroupId);
             lightList.setLmac(lmac);
             lightList.setLname(lname);
             lightList.setProductId(productId);

@@ -100,8 +100,13 @@ public class LightAjustServiceImpl implements LightAjustService {
                 lightMap = lightAjustDao.getLid(lightLists.get(i-1).getLmac());
                 //该灯数据库有记录
                 if (lightMap!=null&& lightMap.size()>0) {
-                    //更新灯表中gid
-                    lightAjustDao1.updateLightGid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid());
+                    if (lightMap.get("mid").intValue()!=lightLists.get(i-1).getMid().intValue()){
+                        //mid不一致删除场景信息
+                        lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
+                    }
+                    //更新灯表 更新 lname,gid,mid,update_date
+                    lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
+                            lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
                 }else {
                     //创建灯
                     lightAjustDao1.saveLight(lightLists.get(i-1));
@@ -130,5 +135,15 @@ public class LightAjustServiceImpl implements LightAjustService {
     @Override
     public void saveTempLight(LightList lightList) {
         lightAjustDao.saveTempLight(lightList);
+    }
+
+    @Override
+    public void deleteLightSettingByLmac(String lmac) {
+        lightAjustDao.deleteLightSettingByLmac(lmac);
+    }
+
+    @Override
+    public void updateLight(String lmac, Integer groupId, Integer mid) {
+        lightAjustDao.updateLight(lmac,groupId,mid);
     }
 }

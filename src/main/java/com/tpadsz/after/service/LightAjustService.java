@@ -29,4 +29,8 @@ public interface LightAjustService {
     Map<String,Integer> getLid(String lmac);
 
     void saveTempLight(LightList lightList);
+
+    void deleteLightSettingByLmac(String lmac);
+
+    void updateLight(String lmac, Integer groupId, Integer mid);
 }

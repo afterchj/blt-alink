@@ -92,6 +92,16 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         return groupOperationDao.getGroupConsoleLogByGid(groupId,uid,meshId);
     }
 
+    @Override
+    public Integer getPid(Integer placeId, Integer mid) {
+        return groupOperationDao.getPid(placeId,mid);
+    }
+
+    @Override
+    public void savePlace(AdjustPlace adjustPlace) {
+        groupOperationDao.savePlace(adjustPlace);
+    }
+
 //    @Override
 //    public List<GroupList> getGroups(Integer mid) {
 //        return groupOperationDao.getGroups(mid);

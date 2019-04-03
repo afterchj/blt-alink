@@ -41,5 +41,9 @@ public interface GroupOperationService {
 
     GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId);
 
+    Integer getPid(Integer placeId, Integer mid);
+
+    void savePlace(AdjustPlace adjustPlace);
+
 //    List<GroupList> getGroups(Integer mid);
 }

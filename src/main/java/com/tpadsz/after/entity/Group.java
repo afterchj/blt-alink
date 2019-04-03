@@ -17,6 +17,15 @@ public class Group {
     private Integer gid;
     private Integer dgid;//目标组的gid
     private Integer dGroupId;//目标组的组id
+    private Integer pid;
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
 
     public Integer getdGroupId() {
         return dGroupId;

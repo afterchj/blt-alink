@@ -36,4 +36,6 @@ public interface LightAjustDao {
             ("lname") String lname);//更新灯信息
 
     void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除light_setting
+
+    void updateLight(@Param("lmac") String lmac, @Param("groupId") Integer groupId, @Param("mid") Integer mid);
 }

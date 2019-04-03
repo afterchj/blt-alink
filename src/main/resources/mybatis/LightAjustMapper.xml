@@ -46,4 +46,9 @@
     <delete id="deleteLightSettingByLmac">
         DELETE FROM alink.f_light_setting WHERE lid=(select id from alink.f_light WHERE lmac=#{lmac})
     </delete>
+
+    <update id="updateLight">
+        UPDATE alink.f_light SET mid=#{mid}, lname=#{lmac}, update_date=now(), gid =
+        ( SELECT id FROM alink.f_group WHERE mid=#{mid} AND group_id = #{groupId} limit 1) WHERE lmac=#{lmac}
+    </update>
 </mapper>

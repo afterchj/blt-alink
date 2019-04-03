@@ -6,6 +6,7 @@ import com.tpadsz.after.entity.*;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
+import com.tpadsz.after.util.Encryption;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -86,8 +87,8 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void updateLightNameTest() {
-        lightAjustService.updateLightName("aa-aa-aa-aa", "筒灯");
-        System.out.println("success");
+//        lightAjustService.updateLightName("aa-aa-aa-aa", "筒灯");
+//        System.out.println("success");
     }
 
     @Test
@@ -291,12 +292,41 @@ public class AlinkAdjustModuleControllerTest {
     }
     @Test
     public void test(){
-        String s = "f0:ac:d7:6d:40:68,";
-        String a="f0:ac:d7:6d:40:68,";
-        for (int i=0;i<=200;i++){
-            a=a+s;
+        String plainPwd = "00000001";
+        plainPwd = Encryption.getMD5Str(Encryption.getMD5Str(plainPwd));
+//        String actualEncodingPassword = Encryption.encrypt(plainPwd, "8e0a2885579d4f22");
+//        Encryption.HashPassword password = Encryption.encrypt(md5Pwd);
+//        md5Pwd = Encryption.getMD5Str(md5Pwd);
+        Encryption.HashPassword password = Encryption.encrypt(plainPwd);
+        System.out.println("pwd: "+password.getPassword()+" salt: "+password.getSalt());
+        //pwd: 901665ecefcd54d031a7821e341912aa3aefdc99 salt: f0c35bf074e8c5b8
+    }
+
+    @Test
+    public void test2(){
+        String plainPwd = "a892155918";
+        plainPwd = Encryption.getMD5Str(Encryption.getMD5Str(plainPwd));
+        String actualEncodingPassword = Encryption.encrypt(plainPwd, "f09ed0bb56ad10df");
+        System.out.println("pwd: "+actualEncodingPassword);
+    }
+
+    @Test
+    public void getPidTest3(){
+        Integer pid = groupOperationService.getPid(0, 3);
+        if (pid==null){
+            AdjustPlace adjustPlace = new AdjustPlace();
+            adjustPlace.setUid("aaaa");
+            adjustPlace.setMid(3);
+            adjustPlace.setPlaceId(0);
+            adjustPlace.setPname("区域1");
+            groupOperationService.savePlace(adjustPlace);
+            pid = adjustPlace.getId();
         }
-        System.out.println(a.length());
-        System.out.println(a);
+        System.out.println("pid: "+pid);
+    }
+
+    @Test
+    public void test3(){
+     lightAjustService.updateLight("dd-dd-dd-dd",0,3);
     }
 }
