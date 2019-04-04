@@ -130,7 +130,7 @@ public class Encryption {
 
 	public static void main(String[] args) {
 		String str="123456";
-		String tpad1="1300458lch";
+		String account="1300458lch";
 		System.out.println(Encryption.getMD5Str(str));
 		Encryption.HashPassword password = Encryption.encrypt(str);
 		System.out.println(JSON.toJSONString(password));

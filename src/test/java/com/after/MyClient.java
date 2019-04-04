@@ -1,4 +1,4 @@
-package after;
+package com.after;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.tpadsz.after.api.RecordBillService;

@@ -1,4 +1,4 @@
-package after;
+package com.after;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
