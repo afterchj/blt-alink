@@ -51,4 +51,8 @@
         UPDATE alink.f_light SET mid=#{mid}, lname=#{lmac}, update_date=now(), gid =
         ( SELECT id FROM alink.f_group WHERE mid=#{mid} AND group_id = #{groupId} limit 1) WHERE lmac=#{lmac}
     </update>
+
+    <select id="getAllByMid" resultType="com.tpadsz.after.entity.LightReturn">
+        select lmac,lname,product_id from alink.f_light WHERE mid=#{mid}
+    </select>
 </mapper>

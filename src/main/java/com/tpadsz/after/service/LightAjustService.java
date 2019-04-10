@@ -1,6 +1,7 @@
 package com.tpadsz.after.service;
 
 import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.LightReturn;
 
 import java.util.List;
 import java.util.Map;
@@ -33,4 +34,6 @@ public interface LightAjustService {
     void deleteLightSettingByLmac(String lmac);
 
     void updateLight(String lmac, Integer groupId, Integer mid);
+
+    List<LightReturn> getAllByMid(Integer mid);
 }

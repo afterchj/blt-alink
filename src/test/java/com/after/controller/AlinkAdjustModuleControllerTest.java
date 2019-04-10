@@ -329,4 +329,13 @@ public class AlinkAdjustModuleControllerTest {
     public void test3(){
      lightAjustService.updateLight("dd-dd-dd-dd",0,3);
     }
+
+    @Test
+    public void test4(){
+        List<LightReturn> allByMid = lightAjustService.getAllByMid(45);
+        for (LightReturn lightReturn:allByMid){
+            System.out.println(lightReturn.toString());
+        }
+
+    }
 }

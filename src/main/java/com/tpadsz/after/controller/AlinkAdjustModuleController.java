@@ -529,9 +529,10 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     lmacs = sb.toString();
                     lmacs = lmacs.substring(0, lmacs.length() - ",".length());
                     lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
+                    List<LightReturn> lightReturns = lightAjustService.getAllByMid(mid);
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("result_message", ResultDict.SUCCESS.getValue());
-                    model.put("lightLists",lightLists);
+                    model.put("lightLists",lightReturns);
                 } catch (Exception e) {
                     model.put("result", ResultDict.SYSTEM_ERROR.getCode());
                     model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());

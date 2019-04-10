@@ -1,9 +1,11 @@
 package com.tpadsz.after.dao;
 
 import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.LightReturn;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,4 +40,6 @@ public interface LightAjustDao {
     void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除light_setting
 
     void updateLight(@Param("lmac") String lmac, @Param("groupId") Integer groupId, @Param("mid") Integer mid);
+
+    List<LightReturn> getAllByMid(@Param("mid") Integer mid);//查询网络下所有灯的信息
 }

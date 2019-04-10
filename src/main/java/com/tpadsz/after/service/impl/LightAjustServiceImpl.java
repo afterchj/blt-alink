@@ -2,6 +2,7 @@ package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.LightList;
+import com.tpadsz.after.entity.LightReturn;
 import com.tpadsz.after.service.LightAjustService;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -145,5 +146,10 @@ public class LightAjustServiceImpl implements LightAjustService {
     @Override
     public void updateLight(String lmac, Integer groupId, Integer mid) {
         lightAjustDao.updateLight(lmac,groupId,mid);
+    }
+
+    @Override
+    public List<LightReturn> getAllByMid(Integer mid) {
+        return lightAjustDao.getAllByMid(mid);
     }
 }
