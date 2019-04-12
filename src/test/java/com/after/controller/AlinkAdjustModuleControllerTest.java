@@ -331,11 +331,15 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test4(){
+    public void getAllByMidTest4(){
         List<LightReturn> allByMid = lightAjustService.getAllByMid(45);
         for (LightReturn lightReturn:allByMid){
             System.out.println(lightReturn.toString());
         }
+    }
 
+    @Test
+    public void test4(){
+        getSession().getMapper(LightAjustDao.class).updateLightGidAndLmac("aa-aa-aa-aa",2);
     }
 }

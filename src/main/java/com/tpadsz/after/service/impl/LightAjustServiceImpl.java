@@ -103,11 +103,14 @@ public class LightAjustServiceImpl implements LightAjustService {
                 if (lightMap!=null&& lightMap.size()>0) {
                     if (lightMap.get("mid").intValue()!=lightLists.get(i-1).getMid().intValue()){
                         //mid不一致删除场景信息
+                        //更新灯表 更新 gid,update_date,mid,lmac,lname
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
+                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(), lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
+                    }else {
+                        //在同一网络中
+                        //更新灯表 更新 gid,update_date
+                        lightAjustDao1.updateLightGidAndLmac(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid());
                     }
-                    //更新灯表 更新 lname,gid,mid,update_date
-                    lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
-                            lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
                 }else {
                     //创建灯
                     lightAjustDao1.saveLight(lightLists.get(i-1));

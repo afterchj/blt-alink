@@ -55,4 +55,8 @@
     <select id="getAllByMid" resultType="com.tpadsz.after.entity.LightReturn">
         select lmac,lname,product_id from alink.f_light WHERE mid=#{mid}
     </select>
+
+    <update id="updateLightGidAndLmac">
+        UPDATE alink.f_light SET gid=#{gid},update_date=now() WHERE lmac=#{lmac}
+    </update>
 </mapper>

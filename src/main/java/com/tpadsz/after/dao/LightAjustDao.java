@@ -42,4 +42,6 @@ public interface LightAjustDao {
     void updateLight(@Param("lmac") String lmac, @Param("groupId") Integer groupId, @Param("mid") Integer mid);
 
     List<LightReturn> getAllByMid(@Param("mid") Integer mid);//查询网络下所有灯的信息
+
+    void updateLightGidAndLmac(@Param("lmac") String lmac, @Param("gid") Integer gid);
 }
