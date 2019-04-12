@@ -7,6 +7,12 @@
             (group_id,gname,mid,create_date,update_date)
             VALUES(#{groupId},#{gname},#{mid},NOW(),NOW())
     </insert>
+    <!--有区域-->
+    <!--<insert id="saveGroup" parameterType="com.tpadsz.after.entity.Group" useGeneratedKeys="true" keyProperty="id">-->
+        <!--INSERT INTO alink.f_group-->
+        <!--(group_id,gname,mid,create_date,update_date,pid)-->
+        <!--VALUES(#{groupId},#{gname},#{mid},NOW(),NOW(),#{pid})-->
+    <!--</insert>-->
 
     <insert id="saveGroupLog">
         INSERT INTO alink.f_group_log
