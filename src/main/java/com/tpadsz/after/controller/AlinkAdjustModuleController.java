@@ -645,7 +645,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             lmac = array.getJSONObject(i).getString("lmac");
             lname = array.getJSONObject(i).getString("lname");
             productId = array.getJSONObject(i).getString("productId");
-            if (StringUtils.isBlank(lmac) || StringUtils.isBlank(lname) || StringUtils.isBlank(productId)) {
+            if (StringUtils.isBlank(lmac) || StringUtils.isBlank(productId)) {
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
                 return null;
@@ -654,6 +654,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             lightList.setGid(gid);
             lightList.setGroupId(dGroupId);
             lightList.setLmac(lmac);
+            if (StringUtils.isBlank(lname)){
+                lightList.setLname(lmac);
+            }else {
+                lightList.setLname(lname);
+            }
             lightList.setLname(lname);
             lightList.setProductId(productId);
             lightList.setMid(group.getMid());
