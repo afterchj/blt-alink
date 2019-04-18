@@ -60,13 +60,15 @@ public class LightAjustServiceImpl implements LightAjustService {
                     lightAjustDao1.saveLight(lightLists.get(i-1));
                 }else {
                     //有灯 更新灯记录
-                    lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
-                            lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
+
                     nowMid = lightLists.get(i-1).getMid();
                     //数据库中的mid和当前扫描入网的mid不是同一网络//Integer默认比较[-128,128]
                     if (lightMap.get("mid").intValue()!=nowMid.intValue()){
                         //删除light_setting中的场景记录
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
+                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
+                                lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
+
                     }
                 }
                 if (i % 500 == 0 || i == lightLists.size()) {
@@ -84,6 +86,7 @@ public class LightAjustServiceImpl implements LightAjustService {
             sqlSession.close();
         }
     }
+
 
     @Override
     public Integer deleteLight(String lmac) {
