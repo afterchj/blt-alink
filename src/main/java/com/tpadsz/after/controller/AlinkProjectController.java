@@ -144,10 +144,10 @@ public class AlinkProjectController extends BaseDecodedController {
             project.setUid(uid);
             project.setName(projectName);
             int result = projectService.createProject(project);
-            if(result==1) {
+            if (result == 1) {
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("projectId", project.getId());
-            }else {
+            } else {
                 model.put("result", ResultDict.DUPLICATE_NAME.getCode());
             }
         } catch (Exception e) {
@@ -190,12 +190,12 @@ public class AlinkProjectController extends BaseDecodedController {
                 mesh.setUid(uid);
                 mesh.setProject_id(Integer.parseInt(projectId));
                 int result = projectService.createMesh(mesh);
-                if(result==1) {
+                if (result == 1) {
                     projectService.deleteMeshId(limitNum);
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("meshId", meshId);
                     model.put("mid", mesh.getId());
-                }else {
+                } else {
                     model.put("result", ResultDict.DUPLICATE_NAME.getCode());
                 }
             } catch (DuplicateKeyException e) {
@@ -260,7 +260,17 @@ public class AlinkProjectController extends BaseDecodedController {
         try {
             if (!"[]".equals(meshinfo)) {
                 List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
-                List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList, uid, "0");
+                List<Mesh> meshInfoList2 = new ArrayList<>();
+                List<Mesh> meshInfoList3 = new ArrayList<>();
+                for(int i = 0; i < meshInfoList.size(); i++) {
+                    int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id());
+                    if (count == 0) {
+                        meshInfoList2.add(meshInfoList.get(i));
+                    } else {
+                        meshInfoList3.add(meshInfoList.get(i));
+                    }
+                }
+                List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList2, uid, "0");
                 if (meshList != null) {
                     if (meshList.get(0).getMesh_id() != null) {
                         oldDeal(sceneinfo, groupinfo, meshList, uid);
@@ -285,8 +295,9 @@ public class AlinkProjectController extends BaseDecodedController {
         try {
             if (!"[]".equals(lightinfo)) {
                 List<LightInfo> lightInfoList = JSONArray.parseArray(lightinfo, LightInfo.class);
-                Map<String, LightInfo> lightMap = lightInfoList.stream().collect(Collectors.toMap(LightInfo::getLmac, a ->
-                        a, (k1, k2) -> k1));
+                Map<String, LightInfo> lightMap = lightInfoList.stream().collect(Collectors.toMap(LightInfo::getLmac,
+                        a ->
+                                a, (k1, k2) -> k1));
                 List<LightList> flightList = new ArrayList<>();
                 for (Map.Entry<String, LightInfo> entry : lightMap.entrySet()) {
                     LightList lightList = new LightList();

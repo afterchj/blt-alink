@@ -44,11 +44,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public int createProject(Project project) {
         int result;
-        String name = projectDao.findRepeatPnameByUid(project.getUid(),project.getName());
-        if(name==null) {
+        String name = projectDao.findRepeatPnameByUid(project.getUid(), project.getName());
+        if (name == null) {
             projectDao.createProject(project);
             result = 1;
-        }else {
+        } else {
             result = 0;
         }
         return result;
@@ -64,11 +64,11 @@ public class ProjectServiceImpl implements ProjectService {
         int result;
         Mesh mesh2 = projectDao.findRepeatIdByUid(mesh.getMesh_id().substring(0, 4), mesh.getUid());
         if (mesh2 == null) {
-            String mname = projectDao.findRepeatNameByUid(mesh.getUid(),mesh.getMname());
-            if(mname==null) {
+            String mname = projectDao.findRepeatNameByUid(mesh.getUid(), mesh.getMname());
+            if (mname == null) {
                 projectDao.createMesh(mesh);
                 result = 1;
-            }else {
+            } else {
                 result = 0;
             }
         } else {
@@ -103,8 +103,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void delete(int id, String uid, String deleteFlag,int lightFlag) {
-        if(lightFlag==0) {
+    public void delete(int id, String uid, String deleteFlag, int lightFlag) {
+        if (lightFlag == 0) {
             if ("0".equals(deleteFlag)) {
                 List<String> list = projectDao.findNewMeshIdByPid(id, uid);
                 List<Integer> sids = projectDao.querySidByPid(id, uid);
@@ -130,19 +130,19 @@ public class ProjectServiceImpl implements ProjectService {
                     projectDao.recordMeshId(meshId);
                 }
             }
-        }else if(lightFlag>0){
-            if("0".equals(deleteFlag)) {
+        } else if (lightFlag > 0) {
+            if ("0".equals(deleteFlag)) {
                 Project project = projectDao.findProjectById(id);
-                if(!"old".equals(project.getOther())) {
-                    projectDao.freezing(id,"0");
-                }else {
+                if (!"old".equals(project.getOther())) {
+                    projectDao.freezing(id, "0");
+                } else {
                     projectDao.freezingOld(id, "0");
                 }
-            }else if("1".equals(deleteFlag)){
+            } else if ("1".equals(deleteFlag)) {
                 Mesh mesh = projectDao.findMeshById(id);
-                if(!"old".equals(mesh.getOther())) {
-                    projectDao.freezing(id,"1");
-                }else {
+                if (!"old".equals(mesh.getOther())) {
+                    projectDao.freezing(id, "1");
+                } else {
                     projectDao.freezingOld(id, "1");
                 }
             }
@@ -165,8 +165,11 @@ public class ProjectServiceImpl implements ProjectService {
         } else if ("1".equals(flag)) {
             project = oldProject;
         } else {
-            list.get(0).setMesh_id(null);
-            list.get(0).setProject_id(oldProject.getId());
+            list.clear();
+            Mesh mesh = new Mesh();
+            mesh.setMesh_id(null);
+            mesh.setProject_id(oldProject.getId());
+            list.add(mesh);
             return list;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -177,6 +180,12 @@ public class ProjectServiceImpl implements ProjectService {
             } catch (Exception e) {
 //                projectDao.createOldDuplicatedMesh(list.get(i));
             }
+        }
+        if (list.size() == 0) {
+            Mesh mesh = new Mesh();
+            mesh.setMesh_id(null);
+            mesh.setProject_id(project.getId());
+            list.add(mesh);
         }
         return list;
     }
@@ -194,12 +203,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void unfreezing(Integer id, String flag) {
-        projectDao.unfreezing(id,flag);
+        projectDao.unfreezing(id, flag);
     }
 
     @Override
-    public void unfreezingOld(Integer id,String flag) {
-        projectDao.unfreezingOld(id,flag);
+    public void unfreezingOld(Integer id, String flag) {
+        projectDao.unfreezingOld(id, flag);
     }
 
     @Override
