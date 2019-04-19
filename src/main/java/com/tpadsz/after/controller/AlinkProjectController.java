@@ -321,7 +321,7 @@ public class AlinkProjectController extends BaseDecodedController {
             List<Mesh> meshInfoList2 = new ArrayList<>();
             List<Mesh> meshInfoList3 = new ArrayList<>();
             for (int i = 0; i < meshInfoList.size(); i++) {
-                int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id(), uid);
+                int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id());
                 if (count == 0) {
                     meshInfoList2.add(meshInfoList.get(i));
                 } else {

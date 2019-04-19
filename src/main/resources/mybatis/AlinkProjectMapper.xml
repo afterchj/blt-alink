@@ -30,7 +30,7 @@
     </select>
 
     <select id="findFullyRepeatIdByUid" resultType="int" parameterType="string">
-        SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id} and uid = #{uid}
+        SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id}
     </select>
 
     <select id="findRepeatNameByUid" resultType="string" parameterType="string">

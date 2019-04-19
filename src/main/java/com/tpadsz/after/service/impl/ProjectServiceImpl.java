@@ -27,8 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public int findFullyRepeatIdByUid(String meshId, String uid) {
-        return projectDao.findFullyRepeatIdByUid(meshId, uid);
+    public int findFullyRepeatIdByUid(String meshId) {
+        return projectDao.findFullyRepeatIdByUid(meshId);
     }
 
     @Override
@@ -174,8 +174,8 @@ public class ProjectServiceImpl implements ProjectService {
                 list.get(i).setProject_id(project.getId());
                 list.get(i).setUid(uid);
                 projectDao.createOldMesh(list.get(i));
-            } catch (DuplicateKeyException e) {
-                projectDao.createOldDuplicatedMesh(list.get(i));
+            } catch (Exception e) {
+//                projectDao.createOldDuplicatedMesh(list.get(i));
             }
         }
         return list;
