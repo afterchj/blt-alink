@@ -33,6 +33,14 @@
         SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id} and uid = #{uid}
     </select>
 
+    <select id="findRepeatNameByUid" resultType="string" parameterType="string">
+        SELECT mname from alink.f_mesh where uid = #{uid} and mname=#{mname}
+    </select>
+
+    <select id="findRepeatPnameByUid" resultType="string" parameterType="string">
+        SELECT p.name from alink.f_project p where p.uid = #{uid} and p.name=#{name}
+    </select>
+
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">

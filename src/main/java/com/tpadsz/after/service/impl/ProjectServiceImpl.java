@@ -42,8 +42,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void createProject(Project project) {
-        projectDao.createProject(project);
+    public int createProject(Project project) {
+        int result;
+        String name = projectDao.findRepeatPnameByUid(project.getUid(),project.getName());
+        if(name==null) {
+            projectDao.createProject(project);
+            result = 1;
+        }else {
+            result = 0;
+        }
+        return result;
     }
 
     @Override
@@ -52,13 +60,21 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void createMesh(Mesh mesh) throws RepetitionException {
+    public int createMesh(Mesh mesh) throws RepetitionException {
+        int result;
         Mesh mesh2 = projectDao.findRepeatIdByUid(mesh.getMesh_id().substring(0, 4), mesh.getUid());
         if (mesh2 == null) {
-            projectDao.createMesh(mesh);
+            String mname = projectDao.findRepeatNameByUid(mesh.getUid(),mesh.getMname());
+            if(mname==null) {
+                projectDao.createMesh(mesh);
+                result = 1;
+            }else {
+                result = 0;
+            }
         } else {
             throw new RepetitionException();
         }
+        return result;
     }
 
     @Override

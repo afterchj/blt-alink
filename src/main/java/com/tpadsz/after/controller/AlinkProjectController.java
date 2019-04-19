@@ -143,9 +143,13 @@ public class AlinkProjectController extends BaseDecodedController {
             Project project = new Project();
             project.setUid(uid);
             project.setName(projectName);
-            projectService.createProject(project);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("projectId", project.getId());
+            int result = projectService.createProject(project);
+            if(result==1) {
+                model.put("result", ResultDict.SUCCESS.getCode());
+                model.put("projectId", project.getId());
+            }else {
+                model.put("result", ResultDict.DUPLICATE_NAME.getCode());
+            }
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
@@ -185,11 +189,15 @@ public class AlinkProjectController extends BaseDecodedController {
                 mesh.setPwd(meshId.substring(4));
                 mesh.setUid(uid);
                 mesh.setProject_id(Integer.parseInt(projectId));
-                projectService.createMesh(mesh);
-                projectService.deleteMeshId(limitNum);
-                model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("meshId", meshId);
-                model.put("mid", mesh.getId());
+                int result = projectService.createMesh(mesh);
+                if(result==1) {
+                    projectService.deleteMeshId(limitNum);
+                    model.put("result", ResultDict.SUCCESS.getCode());
+                    model.put("meshId", meshId);
+                    model.put("mid", mesh.getId());
+                }else {
+                    model.put("result", ResultDict.DUPLICATE_NAME.getCode());
+                }
             } catch (DuplicateKeyException e) {
                 isDuplicate = true;
                 projectService.recordMeshId(meshId);

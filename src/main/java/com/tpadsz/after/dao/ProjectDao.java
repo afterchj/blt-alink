@@ -1,9 +1,6 @@
 package com.tpadsz.after.dao;
 
-import com.tpadsz.after.entity.DeleteLog;
-import com.tpadsz.after.entity.Mesh;
-import com.tpadsz.after.entity.Project;
-import com.tpadsz.after.entity.SceneAjust;
+import com.tpadsz.after.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -93,5 +90,7 @@ public interface ProjectDao {
 
     void oldMove(@Param("projectId")int projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 
+    String findRepeatNameByUid(@Param("uid")String uid,@Param("mname")String mname);
 
+    String findRepeatPnameByUid(@Param("uid")String uid,@Param("name")String name);
 }

@@ -18,11 +18,11 @@ public interface ProjectService {
 
     Project findOldProByUid(String uid);
 
-    void createProject(Project project);
+    int createProject(Project project);
 
     void rename(Integer id, String name,Integer renameFlag);
 
-    void  createMesh(Mesh mesh) throws RepetitionException;
+    int createMesh(Mesh mesh) throws RepetitionException;
 
     String findMeshId(int limitNum);
 
