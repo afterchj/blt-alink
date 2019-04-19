@@ -149,4 +149,8 @@
         INSERT INTO alink.f_place (place_id,pname,uid,mid,create_date,update_date)
         VALUES (#{placeId},#{pname},#{uid},#{mid},now(),now())
     </insert>
+
+    <select id="getGname" resultType="string">
+        select gname FROM  alink.f_group WHERE mid=#{mid} and gname=#{gname}
+    </select>
 </mapper>

@@ -51,5 +51,7 @@ public interface GroupOperationDao {
 
     void savePlace(AdjustPlace adjustPlace);
 
+    String getGname(Group group);//获取组名
+
 //    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

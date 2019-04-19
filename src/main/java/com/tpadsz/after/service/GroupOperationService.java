@@ -45,5 +45,7 @@ public interface GroupOperationService {
 
     void savePlace(AdjustPlace adjustPlace);
 
+    String getGname(Group group);
+
 //    List<GroupList> getGroups(Integer mid);
 }

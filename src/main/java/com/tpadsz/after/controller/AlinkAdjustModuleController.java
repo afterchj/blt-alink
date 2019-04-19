@@ -114,7 +114,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 //                    pid = adjustPlace.getId();
 //                }
 //                group.setPid(pid);
-
+                String dbGname = groupOperationService.getGname(group);
+                if (StringUtils.isNotBlank(dbGname)){
+                    //组名重复
+                    model.put("result", ResultDict.DUPLICATE_NAME.getCode());
+                    model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
+                    return;
+                }
                 if (gid == null) {
                     groupOperationService.saveGroup(group);//创建组
                 } else {

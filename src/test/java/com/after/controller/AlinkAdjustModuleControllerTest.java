@@ -7,6 +7,7 @@ import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
 import com.tpadsz.after.util.Encryption;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -339,7 +340,18 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test4(){
+    public void updateLightGidAndLmacTest4(){
         getSession().getMapper(LightAjustDao.class).updateLightGidAndLmac("aa-aa-aa-aa",2);
+    }
+    @Test
+    public void test4(){
+        Group group = new Group();
+        group.setMid(24);
+        group.setGname("A组");
+        String dbGname = groupOperationService.getGname(group);
+        if (StringUtils.isNotBlank(dbGname)){
+            //组名重复
+            System.out.println("组名重复");
+        }
     }
 }

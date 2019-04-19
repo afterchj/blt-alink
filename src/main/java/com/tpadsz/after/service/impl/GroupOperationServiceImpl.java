@@ -102,6 +102,11 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         groupOperationDao.savePlace(adjustPlace);
     }
 
+    @Override
+    public String getGname(Group group) {
+        return groupOperationDao.getGname(group);
+    }
+
 //    @Override
 //    public List<GroupList> getGroups(Integer mid) {
 //        return groupOperationDao.getGroups(mid);
