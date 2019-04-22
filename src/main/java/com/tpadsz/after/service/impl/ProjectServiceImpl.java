@@ -157,20 +157,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Mesh> oldMeshCommit(List<Mesh> list, String uid, String flag) {
         Project project = new Project();
-        Project oldProject = projectDao.findOldProByUid(uid);
-        if (oldProject == null) {
+        if ("1".equals(flag)) {
+            Project oldProject = projectDao.findOldProByUid(uid);
+            if (oldProject == null) {
+                project.setUid(uid);
+                project.setName("老项目");
+                projectDao.createOldProject(project);
+            } else {
+                project = oldProject;
+            }
+        } else {
             project.setUid(uid);
             project.setName("老项目");
             projectDao.createOldProject(project);
-        } else if ("1".equals(flag)) {
-            project = oldProject;
-        } else {
-            list.clear();
-            Mesh mesh = new Mesh();
-            mesh.setMesh_id(null);
-            mesh.setProject_id(oldProject.getId());
-            list.add(mesh);
-            return list;
         }
         for (int i = 0; i < list.size(); i++) {
             try {

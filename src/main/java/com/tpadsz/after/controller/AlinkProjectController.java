@@ -261,24 +261,30 @@ public class AlinkProjectController extends BaseDecodedController {
             if (!"[]".equals(meshinfo)) {
                 List<Mesh> meshInfoList = JSONArray.parseArray(meshinfo, Mesh.class);
                 List<Mesh> meshInfoList2 = new ArrayList<>();
-                List<Mesh> meshInfoList3 = new ArrayList<>();
-                for(int i = 0; i < meshInfoList.size(); i++) {
+                for (int i = 0; i < meshInfoList.size(); i++) {
                     int count = projectService.findFullyRepeatIdByUid(meshInfoList.get(i).getMesh_id());
                     if (count == 0) {
                         meshInfoList2.add(meshInfoList.get(i));
-                    } else {
-                        meshInfoList3.add(meshInfoList.get(i));
                     }
                 }
-                List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList2, uid, "0");
-                if (meshList != null) {
-                    if (meshList.get(0).getMesh_id() != null) {
-                        oldDeal(sceneinfo, groupinfo, meshList, uid);
-                        model.put("commitSuccess", meshList);
-                    } else {
-                        model.put("commitSuccess", "");
+                Project oldPro = projectService.findOldProByUid(uid);
+                if (oldPro != null) {
+                    model.put("commitSuccess", "");
+                    model.put("projectId", oldPro.getId());
+                    model.put("isExist", true);
+                    return null;
+                } else {
+                    List<Mesh> meshList = projectService.oldMeshCommit(meshInfoList2, uid, "0");
+                    if (meshList != null) {
+                        if (meshList.get(0).getMesh_id() != null) {
+                            oldDeal(sceneinfo, groupinfo, meshList, uid);
+                            model.put("commitSuccess", meshList);
+                        } else {
+                            model.put("commitSuccess", "");
+                        }
+                        model.put("projectId", meshList.get(0).getProject_id());
                     }
-                    model.put("projectId", meshList.get(0).getProject_id());
+                    model.put("isExist", false);
                 }
             }
             model.put("result", ResultDict.SUCCESS.getCode());
