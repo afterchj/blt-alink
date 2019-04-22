@@ -42,14 +42,14 @@
     </select>
 
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW())
+        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,update_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createOldMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),'old')
+        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,update_date,other) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),NOW(),'old')
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
@@ -63,14 +63,14 @@
     </insert>
 
     <insert id="createProject" parameterType="com.tpadsz.after.entity.Project">
-        INSERT INTO alink.f_project (name,uid,create_date) VALUES(#{name},#{uid},NOW())
+        INSERT INTO alink.f_project (name,uid,create_date,update_date) VALUES(#{name},#{uid},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createOldProject" parameterType="com.tpadsz.after.entity.Project">
-        INSERT INTO alink.f_project (name,uid,create_date,other) VALUES(#{name},#{uid},NOW(),'old')
+        INSERT INTO alink.f_project (name,uid,create_date,update_date,other) VALUES(#{name},#{uid},NOW(),NOW(),'old')
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
