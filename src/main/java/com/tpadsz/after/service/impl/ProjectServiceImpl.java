@@ -64,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService {
         int result;
         Mesh mesh2 = projectDao.findRepeatIdByUid(mesh.getMesh_id().substring(0, 4), mesh.getUid());
         if (mesh2 == null) {
-            String mname = projectDao.findRepeatNameByUid(mesh.getUid(), mesh.getMname());
+            String mname = projectDao.findRepeatNameByUid(mesh.getUid(), mesh.getMname(),mesh.getProject_id());
             if (mname == null) {
                 projectDao.createMesh(mesh);
                 result = 1;

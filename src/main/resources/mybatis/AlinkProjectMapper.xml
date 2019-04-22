@@ -33,8 +33,8 @@
         SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id}
     </select>
 
-    <select id="findRepeatNameByUid" resultType="string" parameterType="string">
-        SELECT mname from alink.f_mesh where uid = #{uid} and mname=#{mname}
+    <select id="findRepeatNameByUid" resultType="string">
+        SELECT mname from alink.f_mesh where uid = #{uid} and mname=#{mname} and project_id=#{projectId}
     </select>
 
     <select id="findRepeatPnameByUid" resultType="string" parameterType="string">

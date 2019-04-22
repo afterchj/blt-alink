@@ -90,7 +90,7 @@ public interface ProjectDao {
 
     void oldMove(@Param("projectId")int projectId, @Param("meshId")String meshId, @Param("uid")String uid);
 
-    String findRepeatNameByUid(@Param("uid")String uid,@Param("mname")String mname);
+    String findRepeatNameByUid(@Param("uid")String uid,@Param("mname")String mname,@Param("projectId")Integer projectId);
 
     String findRepeatPnameByUid(@Param("uid")String uid,@Param("name")String name);
 }
