@@ -269,6 +269,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 }
                 Project oldPro = projectService.findOldProByUid(uid);
                 if (oldPro != null) {
+                    model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("commitSuccess", "");
                     model.put("projectId", oldPro.getId());
                     model.put("isExist", true);
