@@ -175,7 +175,6 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         String projectId = params.getString("projectId");
         String mname = params.getString("mname");
-        String prex = "00000000";
         String meshId = "";
         int limitNum = 1;
         boolean isDuplicate;

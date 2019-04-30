@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.annotation.Resource;
 import java.util.Date;
 
@@ -53,16 +54,20 @@ public class AlinkLoginController extends BaseDecodedController {
             if (StringUtils.isBlank(input) || StringUtils.isBlank(pwd)) {
                 result = ResultDict.PARAMS_BLANK;
             } else {
-                AppUser appUser = alinkLoginService.loginByTpad(input, pwd,inputFlag);
-                String token = alinkLoginService.generateToken(appUser.getId());
-                model.put("user", appUser);
-                model.put("token", token);
-                LoginLog loginLog = new LoginLog();
-                loginLog.setUid(appUser.getId());
-                loginLog.setAccount(input);
-                loginLog.setLogin_date(new Date());
-                loginLog.setBehavior(URL + "/pwd/login.json");
-                alinkLoginService.saveLoginLog(loginLog);
+                AppUser appUser = alinkLoginService.loginByTpad(input, pwd, inputFlag);
+                if (appUser.getStatus() == 0) {
+                    result = ResultDict.ACCOUNT_IS_DISABLED;
+                } else {
+                    String token = alinkLoginService.generateToken(appUser.getId());
+                    model.put("user", appUser);
+                    model.put("token", token);
+                    LoginLog loginLog = new LoginLog();
+                    loginLog.setUid(appUser.getId());
+                    loginLog.setAccount(input);
+                    loginLog.setLogin_date(new Date());
+                    loginLog.setBehavior(URL + "/pwd/login.json");
+                    alinkLoginService.saveLoginLog(loginLog);
+                }
             }
         } catch (PasswordNotCorrectException e) {
             result = ResultDict.PASSWORD_NOT_CORRECT;
@@ -84,12 +89,15 @@ public class AlinkLoginController extends BaseDecodedController {
             if (StringUtils.isBlank(code) || StringUtils.isBlank(mobile)) {
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-            }else {
+            } else {
                 validationService.checkCode(code, mobile);
                 AppUser appUser = alinkLoginService.findUserByMobile(mobile);
                 if (appUser == null) {
                     model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
                     model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
+                } else if (appUser.getStatus() == 0) {
+                    model.put("result", ResultDict.ACCOUNT_IS_DISABLED.getCode());
+                    model.put("result_message", ResultDict.ACCOUNT_IS_DISABLED.getValue());
                 } else {
                     String token = alinkLoginService.generateToken(appUser.getId());
                     model.put("token", token);
@@ -106,7 +114,7 @@ public class AlinkLoginController extends BaseDecodedController {
                     model.put("result_message", ResultDict.SUCCESS.getValue());
                 }
             }
-        }catch (InvalidCodeException e) {
+        } catch (InvalidCodeException e) {
             model.put("result", ResultDict.VERIFY_ERROR.getCode());
             model.put("result_message", ResultDict.VERIFY_ERROR.getValue());
         } catch (Exception e) {
@@ -119,24 +127,25 @@ public class AlinkLoginController extends BaseDecodedController {
 
     /**
      * 退出登录接口
+     *
      * @param params uid:用户id
      * @param model
      */
-    @RequestMapping(value = "loginOut",method = RequestMethod.POST)
-    public void loginOut(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+    @RequestMapping(value = "loginOut", method = RequestMethod.POST)
+    public void loginOut(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String key = MemcachedObjectType.CACHE_TOKEN.getPrefix() + uid;
-        if (StringUtils.isBlank(uid)){
+        if (StringUtils.isBlank(uid)) {
             //参数不能为空
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message",ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message", ResultDict.PARAMS_BLANK.getCode());
             return;
         }
         try {
             client.delete(key);
             alinkLoginService.loginOut(uid);
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("result_message",ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getCode());
             return;
         } catch (Exception e) {
             e.printStackTrace();

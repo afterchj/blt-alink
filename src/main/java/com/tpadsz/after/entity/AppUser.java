@@ -17,6 +17,8 @@ public class AppUser {
     private String utype;
     private String uaddress;
     private int rid;
+    private int is_locked;
+    private int status;
     private Date create_date;
     private Date update_date;
     private String other;
@@ -99,6 +101,22 @@ public class AppUser {
 
     public void setImei(String imei) {
         this.imei = imei;
+    }
+
+    public int getIs_locked() {
+        return is_locked;
+    }
+
+    public void setIs_locked(int is_locked) {
+        this.is_locked = is_locked;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Date getCreate_date() {
