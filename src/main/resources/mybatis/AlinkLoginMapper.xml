@@ -16,6 +16,8 @@
         <result property="create_date" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
         <result property="update_date" column="update_date" javaType="Date" jdbcType="TIMESTAMP"/>
         <result property="other" column="other" javaType="String" jdbcType="VARCHAR"/>
+        <result property="is_locked" column="is_locked" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="Integer" jdbcType="INTEGER"/>
     </resultMap>
 
     <insert id="saveLoginOutLog" parameterType="string">
@@ -23,7 +25,7 @@
     </insert>
 
     <select id="findUserByAccount" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where account=#{account}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where account=#{account}
     </select>
 
     <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
@@ -31,11 +33,11 @@
     </insert>
 
     <select id="findUserByMobile" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where mobile=#{mobile}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where mobile=#{mobile}
     </select>
 
     <select id="findUserByUname" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid from alink.f_user_account where uname=#{uname}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where uname=#{uname}
     </select>
 
 </mapper>
