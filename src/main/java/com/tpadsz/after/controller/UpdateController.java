@@ -29,11 +29,14 @@ public class UpdateController extends BaseDecodedController {
     public void updateDlw(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
         UpdateInfo updateInfo ;
         String uid;
+        String account;
         try {
             uid = params.getString("uid");
+            account = updateService.findAccountByUid(uid);
             updateInfo= setUpdateInfo(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
+            model.put("account", account);
             model.put("data", updateInfo);
         } catch (Exception e) {
             e.printStackTrace();

@@ -22,4 +22,9 @@ public class UpdateServiceImpl implements UpdateService {
     public FileRecord getFileRecords(String appId, int versionCode) {
         return updateDao.getFileRecords(appId,versionCode);
     }
+
+    @Override
+    public String findAccountByUid(String uid) {
+        return updateDao.findAccountByUid(uid);
+    }
 }

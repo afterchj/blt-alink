@@ -10,4 +10,5 @@ public interface UpdateService {
 
     FileRecord getFileRecords(String appId, int versionCode);
 
+    String findAccountByUid(String uid);
 }

@@ -9,4 +9,6 @@ public interface UpdateDao {
     NewestFile getNewestFile(@Param("appId") String appId);
 
     FileRecord getFileRecords(@Param("appId") String appId, @Param("versionCode") int versionCode);
+
+    String findAccountByUid(@Param("uid")String uid);
 }
