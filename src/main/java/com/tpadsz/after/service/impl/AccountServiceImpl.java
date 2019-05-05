@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
         if (StringUtils.isNotEmpty(username)) {
             int count = findByUser(username);
             if (count > 0) {
-                throw new RepetitionException(11,"用户名已存在！");
+                throw new RepetitionException(11, "用户名已存在！");
             }
         }
         accountDao.updateAccount(map);
@@ -39,5 +40,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public int findByMobile(String mobile) {
         return accountDao.findByMobile(mobile);
+    }
+
+    @Override
+    public List<Map> getFirms() {
+        return accountDao.getFirms();
+    }
+
+    @Override
+    public void saveUser(Map map) {
+        accountDao.saveUser(map);
     }
 }

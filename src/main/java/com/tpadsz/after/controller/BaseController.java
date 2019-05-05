@@ -33,14 +33,14 @@ public class BaseController {
         }
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ModelAndView handleException(RuntimeException re) {
-        ModelAndView mv = new ModelAndView();
-        ModelMap model = mv.getModelMap();
-        system.error("严重 :: ", re);
-        model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-        return mv.addObject("encrypted", encryption);
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public ModelAndView handleException(RuntimeException re) {
+//        ModelAndView mv = new ModelAndView();
+//        ModelMap model = mv.getModelMap();
+//        system.error("严重 :: ", re);
+//        model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+//        return mv.addObject("encrypted", encryption);
+//    }
 
     @ExceptionHandler(Throwable.class)
     public ModelAndView handleException(Throwable t) {

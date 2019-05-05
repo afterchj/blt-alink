@@ -2,8 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tpadsz.after.dao.AccountDao">
 
+    <parameterMap id="registerMapper" type="map">
+        <parameter property="uname" mode="IN"/>
+        <parameter property="account" mode="IN"/>
+        <parameter property="pwd" mode="IN"/>
+        <parameter property="salt" mode="IN"/>
+        <parameter property="mobile" mode="IN"/>
+        <parameter property="fid" mode="IN"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+
+    <select id="saveUser" parameterMap="registerMapper" statementType="CALLABLE">
+        CALL regist_user (?,?,?,?,?,?,?)
+    </select>
+
+    <select id="getFirms" parameterType="map" resultType="int">
+        SELECT id,coname label FROM f_firm
+    </select>
+
+    <update id="updateUser" parameterType="map">
+        UPDATE f_user_account SET pwd=#{pwd},salt=#{salt},update_date=NOW() WHERE mobile=#{mobile}
+    </update>
+
     <update id="updateAccount" parameterType="map">
-        UPDATE alink.f_user_account
+        UPDATE f_user_account
         <set>
             <if test="mobile != null">mobile=#{mobile},</if>
             <if test="uname != null">uname=#{uname},</if>
@@ -12,7 +34,13 @@
             <if test="other != null">other=#{other},</if>
             update_date=now()
         </set>
-        WHERE id=#{uid}
+        WHERE 1=1
+        <if test="uid!=null and uid!=''">
+            AND id=#{uid}
+        </if>
+        <if test="mobile!=null and mobile!=''">
+            AND mobile=#{mobile}
+        </if>
     </update>
 
     <select id="findByUser" resultType="int" parameterType="string">

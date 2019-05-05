@@ -8,6 +8,7 @@ import com.tpadsz.after.exception.RepetitionException;
 import com.tpadsz.after.service.AccountService;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.Encryption;
+import com.tpadsz.after.util.GenerateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hongjian.chen on 2019/3/6.
@@ -61,6 +65,38 @@ public class AccountController extends BaseDecodedController {
         } finally {
             model.put("result", code);
             model.put("result_message", msg);
+        }
+    }
+
+    @RequestMapping("/getFirms")
+    public void getFirms(ModelMap model) {
+        List<Map> firms = accountService.getFirms();
+        model.put("firms", firms);
+    }
+
+    @RequestMapping("/register")
+    public void saveUser(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
+        String mobile = param.getString("mobile");
+        String code = param.getString("code");
+        String plainPwd = "00000000";
+        String md5Pwd = Encryption.getMD5Str(plainPwd);
+        String account = GenerateUtils.getCharAndNumr(8);
+        while (!GenerateUtils.check(account)) {
+            account = GenerateUtils.getCharAndNumr(8);
+        }
+        param.put("account", account);
+        Encryption.HashPassword password = Encryption.encrypt(md5Pwd);
+        param.put("pwd", password.getPassword());
+        param.put("salt", password.getSalt());
+        try {
+            validationService.checkCode(code, mobile);
+            accountService.saveUser(param);
+            logger.info("result=" + param.getString("result"));
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        } catch (InvalidCodeException e) {
+            model.put("result", ResultDict.VERIFY_ERROR.getCode());
+            model.put("result_message", ResultDict.VERIFY_ERROR.getValue());
         }
     }
 

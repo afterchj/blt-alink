@@ -1,6 +1,7 @@
 package com.tpadsz.after.dao;
 
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +14,9 @@ public interface AccountDao {
     int findByUser(String uname);
 
     int findByMobile(String mobile);
+
+    List<Map> getFirms();
+
+    void saveUser(Map map);
+
 }
