@@ -34,6 +34,15 @@
 		)
 	</update>
 
+	<select id="getTotal" parameterType="map" resultType="int">
+		SELECT COUNT(0) total
+		FROM f_light l
+		INNER JOIN f_mesh m ON m.id = l.mid
+		WHERE 1 = 1
+		AND m.mesh_id = #{meshId}
+		AND m.uid = #{uid}
+	</select>
+
     <select id="getAll" resultType="map" parameterType="map">
 		SELECT
 -- 			m.mesh_id,
@@ -51,8 +60,7 @@
 		INNER JOIN f_light l ON g.id = l.gid
 		INNER JOIN f_light_setting ls ON ls.lid = l.id
 		INNER JOIN f_scene s ON s.id = ls.sid
-		WHERE
-			m.uid = #{uid}
+		WHERE m.uid = #{uid}
 		AND m.mesh_id =  #{meshId}
 		ORDER BY s.scene_id,g.group_id
     </select>
@@ -67,17 +75,19 @@
 		INNER JOIN f_scene s ON m.id = s.mid
 		WHERE s.uid =  #{uid}
 		AND m.mesh_id =  #{meshId}
-		GROUP BY mesh_id,s.scene_id,s.sname
+		GROUP BY m.mesh_id,s.scene_id,s.sname
 	</select>
 
     <select id="getGroups" resultType="map" parameterType="map">
 		SELECT
 		    m.mesh_id,
 			g.group_id,
-			g.gname
+			g.gname,
+			l.lcount
 		FROM
 			f_group g
 		INNER JOIN f_mesh m ON g.mid=m.id
+		INNER JOIN (SELECT COUNT(0) lcount,gid FROM f_light GROUP BY gid) l ON g.id=l.gid
 		WHERE m.uid = #{uid}
 		AND m.mesh_id = #{meshId}
 		GROUP BY mesh_id,g.group_id,g.gname

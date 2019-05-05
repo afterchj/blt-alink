@@ -39,6 +39,11 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public int getTotal(Map map) {
+        return bltConsoleDao.getTotal(map);
+    }
+
+    @Override
     public void saveApplyScene(Map map) {
         bltConsoleDao.saveApplyScene(map);
     }

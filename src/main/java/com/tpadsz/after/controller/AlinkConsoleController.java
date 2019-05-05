@@ -34,7 +34,9 @@ public class AlinkConsoleController extends BaseDecodedController {
     public void bltInfo(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         List scenes = bltConsoleService.getScenes(param);
         List groups = bltConsoleService.getGroups(param);
+        int total=bltConsoleService.getTotal(param);
         Map info = new HashMap();
+        info.put("total",total);
         if (scenes.size() == 0) {
             model.put("result", ResultDict.NO_SCENE.getCode());
             model.put("result_message", ResultDict.NO_SCENE.getValue());

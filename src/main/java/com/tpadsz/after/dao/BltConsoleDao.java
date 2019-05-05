@@ -16,6 +16,8 @@ public interface BltConsoleDao {
 
     List getAll(Map map);
 
+    int getTotal(Map map);
+
     void saveApplyScene(Map map);
 
     void saveSceneName(Map map);
