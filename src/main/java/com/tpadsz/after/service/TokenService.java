@@ -1,5 +1,6 @@
 package com.tpadsz.after.service;
 
+import com.tpadsz.after.exception.AccountDisabledException;
 import com.tpadsz.after.exception.InvalidCodeException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.exception.TokenNotEffectiveException;
@@ -12,6 +13,5 @@ import java.util.concurrent.TimeoutException;
  */
 public interface TokenService {
 
-    void verifyToken(String uid, String token) throws SystemAlgorithmException, TokenNotEffectiveException,
-            InterruptedException, MemcachedException, TimeoutException;
+    void verifyToken(String uid, String token) throws SystemAlgorithmException, TokenNotEffectiveException,AccountDisabledException,InterruptedException, MemcachedException, TimeoutException;
 }

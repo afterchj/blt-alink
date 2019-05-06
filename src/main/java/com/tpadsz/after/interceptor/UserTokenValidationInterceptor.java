@@ -2,6 +2,7 @@ package com.tpadsz.after.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.exception.AccountDisabledException;
 import com.tpadsz.after.exception.TokenNotEffectiveException;
 import com.tpadsz.after.exception.TokenReplacedException;
 import com.tpadsz.after.service.TokenService;
@@ -43,9 +44,11 @@ public class UserTokenValidationInterceptor extends HandlerInterceptorAdapter {
                     return true;
                 } catch (TokenReplacedException e) {
                     data.put("result", ResultDict.TOKEN_REPLACED.getCode());
+                } catch (AccountDisabledException e) {
+                    data.put("result", ResultDict.ACCOUNT_IS_DISABLED.getCode());
                 } catch (TokenNotEffectiveException e) {
                     data.put("result", ResultDict.TOKEN_NOT_CORRECT.getCode());
-                } catch (Exception e) {
+                }  catch (Exception e) {
                     data.put("result", ResultDict.SYSTEM_ERROR.getCode());
 //					logger.error("严重 :: ", e);
                 }

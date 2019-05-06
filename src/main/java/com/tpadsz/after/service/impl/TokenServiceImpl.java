@@ -1,6 +1,7 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.constants.MemcachedObjectType;
+import com.tpadsz.after.exception.AccountDisabledException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.exception.TokenNotEffectiveException;
 import com.tpadsz.after.exception.TokenReplacedException;
@@ -29,7 +30,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void verifyToken(String uid, String token) throws SystemAlgorithmException, TokenNotEffectiveException,
-            InterruptedException, MemcachedException, TimeoutException {
+            InterruptedException, MemcachedException, TimeoutException, AccountDisabledException {
         try {
             if (StringUtils.isBlank(token)) {
                 throw new TokenNotEffectiveException();
@@ -42,6 +43,8 @@ public class TokenServiceImpl implements TokenService {
             } else {
                 if(StringUtils.isBlank(expected)) {
                     throw new TokenNotEffectiveException();
+                }else if("disabled".equals(expected)){
+                    throw new AccountDisabledException();
                 }else {
                     throw new TokenReplacedException();
                 }
