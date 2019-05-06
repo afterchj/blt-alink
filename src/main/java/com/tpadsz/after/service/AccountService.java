@@ -2,7 +2,6 @@ package com.tpadsz.after.service;
 
 import com.tpadsz.after.exception.RepetitionException;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,8 +14,6 @@ public interface AccountService {
     int findByUser(String uname);
 
     int findByMobile(String mobile);
-
-    List<Map> getFirms();
 
     void saveUser(Map map);
 }

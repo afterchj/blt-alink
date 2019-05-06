@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Map;
@@ -67,13 +68,6 @@ public class AccountController extends BaseDecodedController {
             model.put("result_message", msg);
         }
     }
-
-    @RequestMapping("/getFirms")
-    public void getFirms(ModelMap model) {
-        List<Map> firms = accountService.getFirms();
-        model.put("firms", firms);
-    }
-
     @RequestMapping("/register")
     public void saveUser(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         String mobile = param.getString("mobile");

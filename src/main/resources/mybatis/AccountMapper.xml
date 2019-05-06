@@ -16,10 +16,6 @@
         CALL regist_user (?,?,?,?,?,?,?)
     </select>
 
-    <select id="getFirms" parameterType="map" resultType="int">
-        SELECT id,coname label FROM f_firm
-    </select>
-
     <update id="updateUser" parameterType="map">
         UPDATE f_user_account SET pwd=#{pwd},salt=#{salt},update_date=NOW() WHERE mobile=#{mobile}
     </update>

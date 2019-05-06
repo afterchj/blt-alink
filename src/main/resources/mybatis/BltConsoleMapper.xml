@@ -83,7 +83,7 @@
 			m.mesh_id,
 			g.group_id,
 			g.gname,
-			g.pid,
+			IFNULL(g.pid,0) pid,
 			l.lcount
 		FROM
 			f_group g
@@ -91,7 +91,7 @@
 		INNER JOIN f_mesh m ON m.id = g.mid
 		INNER JOIN (SELECT COUNT(0) lcount,gid FROM f_light GROUP BY gid) l ON g.id=l.gid
 		WHERE 1=1
-		WHERE m.uid = #{uid}
+		AND m.uid = #{uid}
 		AND m.mesh_id = #{meshId}
 		GROUP BY m.mesh_id,g.group_id,g.gname,g.pid,l.lcount
 	</select>

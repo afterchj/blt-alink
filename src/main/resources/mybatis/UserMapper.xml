@@ -14,7 +14,7 @@
 		CALL regist_user (?,?,?,?)
 	</select>
 
-    <select id="getFirms" parameterType="map" resultType="int">
+    <select id="getFirms" parameterType="map" resultType="map">
 		SELECT id,coname label FROM f_firm
 	</select>
 

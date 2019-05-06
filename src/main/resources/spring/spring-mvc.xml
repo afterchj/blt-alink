@@ -25,6 +25,7 @@
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
+            <mvc:exclude-mapping path="/getFirms**"/>
             <bean class="com.tpadsz.after.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
 
@@ -34,7 +35,8 @@
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
-            <mvc:exclude-mapping path="/user/**"/>
+            <mvc:exclude-mapping path="/user/verify**"/>
+            <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/lightConsole/**"/>
             <mvc:exclude-mapping path="/account/pwd/login*"/>
             <mvc:exclude-mapping path="/account/code/login*"/>
@@ -44,7 +46,6 @@
     </mvc:interceptors>
 
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-
         <property name="contentNegotiationManager">
             <bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
                 <property name="ignoreAcceptHeader" value="true"/>
