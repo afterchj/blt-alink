@@ -80,17 +80,20 @@
 
     <select id="getGroups" resultType="map" parameterType="map">
 		SELECT
-		    m.mesh_id,
+			m.mesh_id,
 			g.group_id,
 			g.gname,
+			g.pid,
 			l.lcount
 		FROM
 			f_group g
-		INNER JOIN f_mesh m ON g.mid=m.id
+		LEFT JOIN f_place p ON p.id=g.pid
+		INNER JOIN f_mesh m ON m.id = g.mid
 		INNER JOIN (SELECT COUNT(0) lcount,gid FROM f_light GROUP BY gid) l ON g.id=l.gid
+		WHERE 1=1
 		WHERE m.uid = #{uid}
 		AND m.mesh_id = #{meshId}
-		GROUP BY mesh_id,g.group_id,g.gname
+		GROUP BY m.mesh_id,g.group_id,g.gname,g.pid,l.lcount
 	</select>
 
     <delete id="deleteScene" parameterType="map">
