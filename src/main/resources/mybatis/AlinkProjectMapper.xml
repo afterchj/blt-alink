@@ -41,8 +41,19 @@
         SELECT p.name from alink.f_project p where p.uid = #{uid} and p.name=#{name}
     </select>
 
+    <select id="findRepeatMid" resultType="int">
+        SELECT COUNT(*) from alink.f_place where uid = #{uid} and mid = #{mid}
+    </select>
+
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
         INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,update_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),NOW())
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createPlace" parameterType="com.tpadsz.after.entity.AdjustPlace">
+        INSERT INTO alink.f_place (place_id,pname,uid,mid,create_date,update_date) VALUES(#{placeId},#{pname},#{uid},#{mid},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
