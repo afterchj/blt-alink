@@ -93,4 +93,8 @@ public interface ProjectDao {
     String findRepeatNameByUid(@Param("uid")String uid,@Param("mname")String mname,@Param("projectId")Integer projectId);
 
     String findRepeatPnameByUid(@Param("uid")String uid,@Param("name")String name);
+
+    void createPlace(AdjustPlace place);
+
+    int findRepeatMid(AdjustPlace place);
 }

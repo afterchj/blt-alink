@@ -1,6 +1,7 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.ProjectDao;
+import com.tpadsz.after.entity.AdjustPlace;
 import com.tpadsz.after.entity.DeleteLog;
 import com.tpadsz.after.entity.Mesh;
 import com.tpadsz.after.entity.Project;
@@ -208,6 +209,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void unfreezingOld(Integer id, String flag) {
         projectDao.unfreezingOld(id, flag);
+    }
+
+    @Override
+    public void createPlace(AdjustPlace place) {
+        int count = projectDao.findRepeatMid(place);
+        if(count==0) {
+            projectDao.createPlace(place);
+        }
     }
 
     @Override

@@ -52,4 +52,5 @@ public interface ProjectService {
 
     void unfreezingOld(Integer id,String flag);
 
+    void createPlace(AdjustPlace place);
 }
