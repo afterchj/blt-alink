@@ -8,6 +8,7 @@ import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,7 +196,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         if (mid == null) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-            System.out.println("method:groupsLists" + "mid is null");
+//            System.out.println("method:groupsLists" + "mid is null");
             return;
         }
         List<GroupList> groupLists = groupOperationService.getGroupAll(mid);
@@ -236,7 +237,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         if (mid == null) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-            System.out.println("method:renameLight" + "mid is null");
+//            System.out.println("method:renameLight" + "mid is null");
             return;
         }
         try {
@@ -443,6 +444,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             lightMap = lightAjustService.getLid(lmac);
             //服务端未找到该灯
             if (lightMap == null || lightMap.size() == 0) {
+                //Map<String, Integer> lightMap默认不会分配内存空间需要实例化
+                //否则lightMap.put会报空指针
+                lightMap = new HashedMap();
                 lightList = new LightList();
                 lightList.setMid(mid);
                 lightList.setLmac(lmac);
@@ -453,14 +457,15 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 //创建灯
                 lightAjustService.saveTempLight(lightList);
                 lightMap.put("id", lightList.getId());
-                logger.info("method:saveScene lmac:{} cannot find the light", lmac);
+//                logger.info("method:saveScene lmac:{} cannot find the light", lmac);
+            }else {
+                //服务端有灯
+                //mid不一致
+                if (lightMap.get("mid").intValue() != mid.intValue()) {
+                    lightAjustService.updateLight(lmac, groupId, mid, pid);//更新灯信息
+                    sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
+                }
             }
-            //mid不一致
-            if (lightMap.get("mid").intValue() != mid.intValue()) {
-                lightAjustService.updateLight(lmac, groupId, mid, pid);//更新灯信息
-                sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
-            }
-
             x = array.getJSONObject(i).getString("x");
             y = array.getJSONObject(i).getString("y");
             off = array.getJSONObject(i).getString("off");
