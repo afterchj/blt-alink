@@ -8,6 +8,7 @@ import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -443,6 +444,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             lightMap = lightAjustService.getLid(lmac);
             //服务端未找到该灯
             if (lightMap == null || lightMap.size() == 0) {
+                //Map<String, Integer> lightMap默认不会分配内存空间需要实例化
+                //否则lightMap.put会报空指针
+                lightMap = new HashedMap();
                 lightList = new LightList();
                 lightList.setMid(mid);
                 lightList.setLmac(lmac);

@@ -8,6 +8,7 @@ import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
 import com.tpadsz.after.util.Encryption;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -237,16 +238,28 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void saveTempLightTest() {
-        LightList lightList = new LightList();
-        lightList.setMid(1000);
-        lightList.setLmac("1-1-1-1");
-        lightList.setLname("1-1-1-1");
-        lightList.setGroupId(0);
-        lightList.setProductId("2018");
-        lightList.setPid(140);
-        //创建灯
-        lightAjustService.saveTempLight(lightList);
-        System.out.println("id: " + lightList.getId());
+        Map<String, Integer> lightMap = lightAjustService.getLid("1-1-1-1");
+        if (lightMap == null || lightMap.size() == 0) {
+            lightMap = new HashedMap();
+            LightList lightList = new LightList();
+            lightList.setMid(18604);
+            lightList.setLmac("1-1-1-1");
+            lightList.setLname("1-1-1-1");
+            lightList.setGroupId(1033);
+            lightList.setProductId("2018");
+            lightList.setPid(142);
+            //创建灯
+            lightAjustService.saveTempLight(lightList);
+            lightMap.put("id", lightList.getId());
+        }
+        System.out.println(lightMap.get("id"));
+    }
+
+    @Test
+    public void test5(){
+        Map<String, Integer> lightMap = new HashedMap();
+        lightMap.put("id",1602);
+        System.out.println(lightMap.get("id"));
     }
 
     @Test
@@ -386,7 +399,7 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test4(){
+    public void splitTest4(){
         String productId = "8200";
         productId = productId.split(" ")[0];
         System.out.println(productId);
