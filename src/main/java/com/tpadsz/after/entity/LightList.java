@@ -26,6 +26,16 @@ public class LightList {
     private String voltage;
     private String current;
 
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
+    private Integer pid;
+
     public Integer getId() {
         return id;
     }

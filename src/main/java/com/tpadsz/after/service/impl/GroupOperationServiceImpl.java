@@ -1,7 +1,11 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.GroupOperationDao;
-import com.tpadsz.after.entity.*;
+import com.tpadsz.after.entity.AdjustPlace;
+import com.tpadsz.after.entity.Group;
+import com.tpadsz.after.entity.GroupConsoleLog;
+import com.tpadsz.after.entity.GroupList;
+import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import org.springframework.stereotype.Service;
 
@@ -105,6 +109,19 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     @Override
     public String getGname(Group group) {
         return groupOperationDao.getGname(group);
+    }
+
+    @Override
+    public Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws DefaultPlaceNotFoundException {
+        if (pid==null){
+            //v2.0版本 获取默认区域
+            pid = groupOperationDao.getDefaultPlace(uid,mid);
+            if (pid == null){
+                //未发现默认区域
+                throw new DefaultPlaceNotFoundException();
+            }
+        }
+        return groupOperationDao.getDefaultPlace(uid,mid);
     }
 
 //    @Override

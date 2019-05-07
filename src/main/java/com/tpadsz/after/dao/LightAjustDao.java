@@ -34,12 +34,13 @@ public interface LightAjustDao {
 
     void saveTempLight(LightList lightList);//创建临时灯
 
-    void updateLightGidAndMid(@Param("lmac") String lmac, @Param("gid") Integer gid, @Param("mid") Integer mid,@Param
-            ("lname") String lname);//更新灯信息
+//    void updateLightGidAndMid(@Param("lmac") String lmac, @Param("gid") Integer gid, @Param("mid") Integer mid,@Param
+//            ("lname") String lname);//更新灯信息
 
+    void updateLightGidAndMid(LightList lightList);//更新灯信息
     void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除light_setting
 
-    void updateLight(@Param("lmac") String lmac, @Param("groupId") Integer groupId, @Param("mid") Integer mid);
+    void updateLight(@Param("lmac") String lmac, @Param("groupId") Integer groupId, @Param("mid") Integer mid, @Param("pid") Integer pid);
 
     List<LightReturn> getAllByMid(@Param("mid") Integer mid);//查询网络下所有灯的信息
 

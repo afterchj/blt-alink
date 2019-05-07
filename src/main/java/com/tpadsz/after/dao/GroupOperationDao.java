@@ -53,5 +53,7 @@ public interface GroupOperationDao {
 
     String getGname(Group group);//获取组名
 
+    Integer getDefaultPlace(@Param("uid") String uid, @Param("mid") Integer mid);//获取默认区域
+
 //    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

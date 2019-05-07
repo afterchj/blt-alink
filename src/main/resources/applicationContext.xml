@@ -20,12 +20,12 @@
 
     <!-- 第二种方式：加载多个properties文件 -->
     <!--<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">-->
-        <!--<property name="locations">-->
-            <!--<list>-->
-                <!--<value>classpath:setup.development.properties</value>-->
-            <!--</list>-->
-        <!--</property>-->
-        <!--<property name="fileEncoding" value="UTF-8"/>-->
+    <!--<property name="locations">-->
+    <!--<list>-->
+    <!--<value>classpath:setup.development.properties</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--<property name="fileEncoding" value="UTF-8"/>-->
     <!--</bean>-->
 
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">

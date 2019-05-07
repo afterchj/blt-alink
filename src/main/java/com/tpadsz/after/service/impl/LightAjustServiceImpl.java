@@ -46,12 +46,15 @@ public class LightAjustServiceImpl implements LightAjustService {
      * @throws Exception
      */
     @Override
-    public void saveLight(List<LightList> lightLists) throws Exception {
+    public String saveLight(List<LightList> lightLists) throws Exception {
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Integer nowMid;
         Map<String,Integer> lightMap;
+        StringBuffer sb;
+        String lmacs;
         try {
+            sb = new StringBuffer();
             for (int i = 1; i <= lightLists.size(); i++) {
                 lightMap = lightAjustDao.getLid(lightLists.get(i-1).getLmac());
                 //该灯数据库没有记录
@@ -60,17 +63,15 @@ public class LightAjustServiceImpl implements LightAjustService {
                     lightAjustDao1.saveLight(lightLists.get(i-1));
                 }else {
                     //有灯 更新灯记录
-
                     nowMid = lightLists.get(i-1).getMid();
                     //数据库中的mid和当前扫描入网的mid不是同一网络//Integer默认比较[-128,128]
                     if (lightMap.get("mid").intValue()!=nowMid.intValue()){
                         //删除light_setting中的场景记录
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
-                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(),
-                                lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
-
+                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }
                 }
+                sb.append(lightLists.get(i-1).getLmac()).append(",");
                 if (i % 500 == 0 || i == lightLists.size()) {
                     //手动每500个一提交，提交后无法回滚
                     sqlSession.commit();
@@ -78,6 +79,9 @@ public class LightAjustServiceImpl implements LightAjustService {
                     sqlSession.clearCache();
                 }
             }
+            lmacs = sb.toString();
+            lmacs = lmacs.substring(0,lmacs.length()-",".length());
+            return lmacs;
         } catch (Exception e) {
             //回滚
             sqlSession.rollback();
@@ -108,7 +112,7 @@ public class LightAjustServiceImpl implements LightAjustService {
                         //mid不一致删除场景信息
                         //更新灯表 更新 gid,update_date,mid,lmac,lname
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
-                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid(), lightLists.get(i-1).getMid(),lightLists.get(i-1).getLname());
+                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }else {
                         //在同一网络中
                         //更新灯表 更新 gid,update_date
@@ -150,8 +154,8 @@ public class LightAjustServiceImpl implements LightAjustService {
     }
 
     @Override
-    public void updateLight(String lmac, Integer groupId, Integer mid) {
-        lightAjustDao.updateLight(lmac,groupId,mid);
+    public void updateLight(String lmac, Integer groupId, Integer mid, Integer pid) {
+        lightAjustDao.updateLight(lmac,groupId,mid, pid);
     }
 
     @Override

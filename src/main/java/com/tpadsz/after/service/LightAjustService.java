@@ -17,7 +17,7 @@ public interface LightAjustService {
 
     void updateLightName(String lmac, String lname);
 
-    void saveLight(List<LightList> lightLists) throws Exception;
+    String saveLight(List<LightList> lightLists) throws Exception;
 
     Integer deleteLight(String lmac);
 
@@ -33,7 +33,7 @@ public interface LightAjustService {
 
     void deleteLightSettingByLmac(String lmac);
 
-    void updateLight(String lmac, Integer groupId, Integer mid);
+    void updateLight(String lmac, Integer groupId, Integer mid, Integer pid);
 
     List<LightReturn> getAllByMid(Integer mid);
 }

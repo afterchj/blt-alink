@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
@@ -95,25 +96,16 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         if ("1".equals(bltFlag)) {
             //创建组
             if ("0".equals(operation)) {
-//                Integer placeId = params.getInteger("placeId");
-//                String pname = params.getString("pname");
-//                if (placeId==null && StringUtils.isBlank(pname)){
-//                    model.put("result", ResultDict.PARAMS_BLANK.getCode());
-//                    model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-//                    return;
-//                }
-//                Integer pid = groupOperationService.getPid(placeId, mid);
-//                if (pid == null) {
-////                        创建区域
-//                    AdjustPlace adjustPlace = new AdjustPlace();
-//                    adjustPlace.setUid(uid);
-//                    adjustPlace.setMid(mid);
-//                    adjustPlace.setPlaceId(placeId);
-//                    adjustPlace.setPname(pname);
-//                    groupOperationService.savePlace(adjustPlace);
-//                    pid = adjustPlace.getId();
-//                }
-//                group.setPid(pid);
+                Integer pid = params.getInteger("pid");
+                try {
+                    pid = groupOperationService.getDefaultPlace(pid,uid,mid);
+                } catch (DefaultPlaceNotFoundException e) {
+
+                    model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
+                    model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
+                    return;
+                }
+                group.setPid(pid);
                 String dbGname = groupOperationService.getGname(group);
                 if (StringUtils.isNotBlank(dbGname)){
                     //组名重复
@@ -125,8 +117,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     groupOperationService.saveGroup(group);//创建组
                 } else {
                     //数据库存在该组,只改名 组中的灯???
-                    groupOperationService.updateGroupNameByMid(group);
+//                    groupOperationService.updateGroupNameByMid(group);
                     logger.info("method:groupOperation db has the group: {},meshId: {}", groupId, meshId);
+                    model.put("result", ResultDict.DUPLICATE_GID.getCode());
+                    model.put("result_message", ResultDict.DUPLICATE_GID.getValue());
+                    return;
                 }
                 groupOperationService.saveGroupLog(uid, meshId, operation,
                         bltFlag, groupId);//创建组日志
@@ -139,8 +134,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 if (gid != null) {
                     groupOperationService.updateGroupNameByMid(group);
                 } else {
-                    //不存在灯 ???
+                    //不存在组 ???
                     logger.info("method:groupOperation cannot find the group:{},meshId:{}", groupId, meshId);
+                    model.put("result", ResultDict.NO_GROUP.getCode());
+                    model.put("result_message", ResultDict.NO_GROUP.getValue());
+                    return;
                 }
                 groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
                 model.put("result", ResultDict.SUCCESS.getCode());
@@ -163,7 +161,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     groupOperationService.deleteGroup(group);
                     groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
                 } else {
+                    //不存在改组
                     logger.info("method:groupOperation cannot find the group:{},meshId:{}", groupId, meshId);
+                    model.put("result", ResultDict.NO_GROUP.getCode());
+                    model.put("result_message", ResultDict.NO_GROUP.getValue());
+                    return;
                 }
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -206,7 +208,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 
     /**
      * 重命名灯
-     *
      * @param params |lmac|String|灯mac地址|
      *               |lname|String|重命名的灯名称|
      *               |bltFlag|String|"1":连接蓝牙；"0":未连蓝牙|
@@ -221,7 +222,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String meshId = params.getString("meshId");
         Integer groupId = params.getInteger("groupId");
         String productId = params.getString("productId");
+        productId = productId.split(" ")[0];
         String uid = params.getString("uid");
+        Integer pid = params.getInteger("pid");
         String operation = "4";
         if (StringUtils.isBlank(bltFlag) || StringUtils.isBlank(lmac) || StringUtils.isBlank(lname)) {
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
@@ -234,6 +237,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
             System.out.println("method:renameLight" + "mid is null");
+            return;
+        }
+        try {
+            pid = groupOperationService.getDefaultPlace(pid,params.getString("uid"),mid);
+        } catch (DefaultPlaceNotFoundException e) {
+            model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
+            model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
             return;
         }
 
@@ -256,6 +266,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 lightList.setMid(mid);
                 lightList.setProductId(productId);
                 lightList.setGroupId(groupId);
+                lightList.setPid(pid);
                 //创建灯
                 lightAjustService.saveTempLight(lightList);
 //                System.out.println("method:renameLight cannot find the light:"+lmac);
@@ -263,8 +274,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 //数据库中的mid和当前扫描入网的mid不是同一网络//Integer默认比较[-128,128]
                 if (lightMap.get("mid").intValue() != mid.intValue()) {
                     lightAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景
-                    //更新 lname,gid,mid,update_date
-                    lightAjustService.updateLight(lmac, groupId, mid);
+                    //更新 lname,gid,mid,update_date,pid
+                    lightAjustService.updateLight(lmac, groupId, mid, pid);
                 } else {
                     //只更新灯名
                     lightAjustService.updateLightName(lmac, lname);
@@ -280,7 +291,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 
     /**
      * 保存默认场景
-     *
      * @param params
      * @param model
      */
@@ -296,7 +306,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             return;
         }
         Integer mid = groupOperationService.getMeshSerialNo(meshId, uid);
-
         if (mid == null) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
@@ -356,7 +365,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String bltFlag = params.getString("bltFlag");
         String uid = params.getString("uid");
         String sname = params.getString("sname");
-        if (StringUtils.isBlank(meshId) || sceneId == null || bltFlag == null) {
+        Integer pid = params.getInteger("pid");
+        if (StringUtils.isBlank(meshId) || sceneId == null || bltFlag == null ) {
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
             model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             return;
@@ -384,6 +394,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
 //            System.out.println("method:saveScene" + "mid is null");
             logger.error("method:saveScene meshId:{} mid is null", meshId);
+            return;
+        }
+        try {
+            pid = groupOperationService.getDefaultPlace(pid,uid,mid);
+        } catch (DefaultPlaceNotFoundException e) {
+            model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
+            model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
             return;
         }
         //sid 为空判断
@@ -422,8 +439,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
                 return;
             }
+            productId = productId.split(" ")[0];
             lightMap = lightAjustService.getLid(lmac);
-            //服务端未找到该灯或者
+            //服务端未找到该灯
             if (lightMap == null || lightMap.size() == 0) {
                 lightList = new LightList();
                 lightList.setMid(mid);
@@ -431,6 +449,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 lightList.setLname(lmac);
                 lightList.setGroupId(groupId);
                 lightList.setProductId(productId);
+                lightList.setPid(pid);
                 //创建灯
                 lightAjustService.saveTempLight(lightList);
                 lightMap.put("id", lightList.getId());
@@ -438,7 +457,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }
             //mid不一致
             if (lightMap.get("mid").intValue() != mid.intValue()) {
-                lightAjustService.updateLight(lmac, groupId, mid);//更新灯信息
+                lightAjustService.updateLight(lmac, groupId, mid, pid);//更新灯信息
                 sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
             }
 
@@ -474,6 +493,15 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             logger.error("method:saveScene; service:saveLightSetting(); db rollback;sid:{},mid:{}", sid, mid);
 //            e.printStackTrace();
         }
+    }
+
+    /**
+     * 删除灯前进行通信
+     */
+    @RequestMapping(value = "/communicationTest", method = RequestMethod.POST)
+    public void communicationTest(@ModelAttribute("decodedParams") JSONObject params, ModelMap model ){
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
     }
 
     /**
@@ -517,6 +545,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         group = new Group();
         group.setMid(mid);
         group.setMeshId(meshId);
+        group.setUid(uid);
         List<LightList> lightLists;
         String result;
         StringBuffer sb;
@@ -534,13 +563,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 }
                 try {
                     //mybatis 批量添加灯
-                    lightAjustService.saveLight(lightLists);
-                    sb = new StringBuffer();
-                    for (LightList lightList : lightLists) {
-                        sb.append(lightList.getLmac()).append(",");
-                    }
-                    lmacs = sb.toString();
-                    lmacs = lmacs.substring(0, lmacs.length() - ",".length());
+                    lmacs = lightAjustService.saveLight(lightLists);
                     lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
                     List<LightReturn> lightReturns = lightAjustService.getAllByMid(mid);
                     model.put("result", ResultDict.SUCCESS.getCode());
@@ -606,7 +629,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     /**
      * "0":扫描灯
      * "2":移动灯
-     *
      * @param
      * @return 返回灯集合
      */
@@ -616,6 +638,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String lname;
         String productId;
         Integer dGroupId = 0;
+        Integer pid;
         if ("0".equals(operation)) {
             //扫描灯
             group.setGroupId(0);
@@ -637,6 +660,14 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.NO_GROUP.getValue());
             return null;
         }
+        pid = params.getInteger("pid");
+        try {
+            pid = groupOperationService.getDefaultPlace(pid,group.getUid(),group.getMid());
+        } catch (DefaultPlaceNotFoundException e) {
+            model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
+            model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
+            return null;
+        }
 
         LightList lightList;
         JSONArray array = params.getJSONArray("lightGroup");
@@ -656,6 +687,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
                 return null;
             }
+            productId = productId.split(" ")[0];
             lightList = new LightList();
             lightList.setGid(gid);
             lightList.setGroupId(dGroupId);
@@ -665,7 +697,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }else {
                 lightList.setLname(lname);
             }
-            lightList.setLname(lname);
+            lightList.setPid(pid);
+//            lightList.setLname(lname);
             lightList.setProductId(productId);
             lightList.setMid(group.getMid());
             lightLists.add(lightList);
