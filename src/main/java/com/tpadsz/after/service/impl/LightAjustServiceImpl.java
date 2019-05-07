@@ -51,10 +51,9 @@ public class LightAjustServiceImpl implements LightAjustService {
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Integer nowMid;
         Map<String,Integer> lightMap;
-        StringBuffer sb;
+        StringBuffer sb = new StringBuffer();
         String lmacs;
         try {
-            sb = new StringBuffer();
             for (int i = 1; i <= lightLists.size(); i++) {
                 lightMap = lightAjustDao.getLid(lightLists.get(i-1).getLmac());
                 //该灯数据库没有记录
@@ -99,10 +98,12 @@ public class LightAjustServiceImpl implements LightAjustService {
     }
 
     @Override
-    public void updateLightGid(List<LightList> lightLists) throws Exception{
+    public void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws Exception{
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Map<String,Integer> lightMap;
+        StringBuffer sb = new StringBuffer();
+        String lmacs;
         try {
             for (int i = 1; i <= lightLists.size(); i++) {
                 lightMap = lightAjustDao.getLid(lightLists.get(i-1).getLmac());
@@ -122,13 +123,19 @@ public class LightAjustServiceImpl implements LightAjustService {
                     //创建灯
                     lightAjustDao1.saveLight(lightLists.get(i-1));
                 }
+                sb.append(lightLists.get(i-1).getLmac()).append(",");
                 if (i % 500 == 0 || i == lightLists.size()) {
+                    lmacs = sb.toString();
+                    lmacs = lmacs.substring(0,lmacs.length()-",".length());
+                    lightAjustDao1.saveLightAjustLog(meshId, bltFlag, operation, lmacs);//记录日志
+                    sb = new StringBuffer();//重置StringBuffer
                     //手动每500个一提交，提交后无法回滚
                     sqlSession.commit();
                     //清理缓存，防止溢出
                     sqlSession.clearCache();
                 }
             }
+
         } catch (Exception e) {
             //回滚
             sqlSession.rollback();

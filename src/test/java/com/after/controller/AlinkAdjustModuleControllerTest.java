@@ -137,7 +137,7 @@ public class AlinkAdjustModuleControllerTest {
             lightList = new LightList();
             lightList.setLmac(i+"aa-aa-aa-aa");
             lightList.setLname("灯10001");
-            lightList.setMid(18604);
+            lightList.setMid(11624386);
             lightList.setGid(1032);
             lightList.setProductId("1234");
             lightList.setPid(142);
@@ -156,16 +156,17 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void updateLightGidTest() throws Exception {
         List<LightList> lightLists = new ArrayList<>();
-        LightList lightList = new LightList();
-        lightList.setLmac("aa-aa-aa-aa");
-        lightList.setLname("灯1000");
-        lightList.setMid(1000);
-        lightList.setGid(1029);
-        lightList.setProductId("1234");
-        lightList.setPid(139);
-        lightLists.add(lightList);
-        lightAjustService.updateLightGid(lightLists);
-        System.out.println("success");
+        for (int i=0;i<2;i++){
+            LightList lightList = new LightList();
+            lightList.setLmac(i+"aa-aa-aa-aa");
+            lightList.setLname("灯1000");
+            lightList.setMid(11624386);
+            lightList.setGid(1029);
+            lightList.setProductId("1234");
+            lightList.setPid(142);
+            lightLists.add(lightList);
+        }
+        lightAjustService.updateLightGid(lightLists, "11624386", "1", "2");
     }
 
     @Test

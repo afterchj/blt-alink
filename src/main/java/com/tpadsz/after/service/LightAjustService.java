@@ -21,7 +21,7 @@ public interface LightAjustService {
 
     Integer deleteLight(String lmac);
 
-    void updateLightGid(List<LightList> lightLists) throws Exception;
+    void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws Exception;
 
 //    void saveLightColor(String uid,String meshId,String lmac, String x, String y);
 
