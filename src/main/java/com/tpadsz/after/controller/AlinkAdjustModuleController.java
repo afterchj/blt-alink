@@ -196,7 +196,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         if (mid == null) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-            System.out.println("method:groupsLists" + "mid is null");
+//            System.out.println("method:groupsLists" + "mid is null");
             return;
         }
         List<GroupList> groupLists = groupOperationService.getGroupAll(mid);
@@ -237,7 +237,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         if (mid == null) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-            System.out.println("method:renameLight" + "mid is null");
+//            System.out.println("method:renameLight" + "mid is null");
             return;
         }
         try {
@@ -457,14 +457,15 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 //创建灯
                 lightAjustService.saveTempLight(lightList);
                 lightMap.put("id", lightList.getId());
-                logger.info("method:saveScene lmac:{} cannot find the light", lmac);
+//                logger.info("method:saveScene lmac:{} cannot find the light", lmac);
+            }else {
+                //服务端有灯
+                //mid不一致
+                if (lightMap.get("mid").intValue() != mid.intValue()) {
+                    lightAjustService.updateLight(lmac, groupId, mid, pid);//更新灯信息
+                    sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
+                }
             }
-            //mid不一致
-            if (lightMap.get("mid").intValue() != mid.intValue()) {
-                lightAjustService.updateLight(lmac, groupId, mid, pid);//更新灯信息
-                sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
-            }
-
             x = array.getJSONObject(i).getString("x");
             y = array.getJSONObject(i).getString("y");
             off = array.getJSONObject(i).getString("off");
