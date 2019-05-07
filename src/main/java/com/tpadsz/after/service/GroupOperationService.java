@@ -1,6 +1,7 @@
 package com.tpadsz.after.service;
 
 import com.tpadsz.after.entity.*;
+import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,8 @@ public interface GroupOperationService {
     void savePlace(AdjustPlace adjustPlace);
 
     String getGname(Group group);
+
+    Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws DefaultPlaceNotFoundException;
 
 //    List<GroupList> getGroups(Integer mid);
 }

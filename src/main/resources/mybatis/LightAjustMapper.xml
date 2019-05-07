@@ -12,8 +12,8 @@
     </update>
 
     <insert id="saveLight" parameterType="com.tpadsz.after.entity.LightList">
-        INSERT INTO alink.f_light ( product_id, lmac, lname, mid, gid, create_date, update_date )
-        VALUES( #{productId},#{lmac},#{lname},#{mid},#{gid},now(),now() )
+        INSERT INTO alink.f_light ( product_id, lmac, lname, mid, gid, create_date, update_date, pid )
+        VALUES( #{productId},#{lmac},#{lname},#{mid},#{gid},now(),now(),#{pid} )
     </insert>
 
     <delete id="deleteLight" >
@@ -34,13 +34,20 @@
     </select>
 
     <insert id="saveTempLight" parameterType="com.tpadsz.after.entity.LightList" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO alink.f_light ( lmac, lname, mid, create_date, update_date ,product_id,gid)
-	    values (#{lmac},#{lname},#{mid},now(),now() ,#{productId},
+        INSERT INTO alink.f_light ( lmac, lname, mid, create_date, update_date,pid ,product_id,gid)
+	    values (#{lmac},#{lname},#{mid},now(),now() ,#{pid},#{productId},
 	    (select id from alink.f_group where group_id=#{groupId} and mid=#{mid}))
     </insert>
 
-    <update id="updateLightGidAndMid">
-        UPDATE alink.f_light SET gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now() WHERE lmac=#{lmac}
+    <!--<update id="updateLightGidAndMid">-->
+        <!--UPDATE alink.f_light SET gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now() WHERE lmac=#{lmac}-->
+    <!--</update>-->
+    <update id="updateLightGidAndMid" parameterType="com.tpadsz.after.entity.LightList">
+        UPDATE alink.f_light
+        <set>
+            gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now(),<if test="pid!=null">pid=#{pid},</if>
+        </set>
+        WHERE lmac=#{lmac}
     </update>
 
     <delete id="deleteLightSettingByLmac">
@@ -48,7 +55,7 @@
     </delete>
 
     <update id="updateLight">
-        UPDATE alink.f_light SET mid=#{mid}, lname=#{lmac}, update_date=now(), gid =
+        UPDATE alink.f_light SET mid=#{mid}, lname=#{lmac}, update_date=now(), pid=#{pid}, gid =
         ( SELECT id FROM alink.f_group WHERE mid=#{mid} AND group_id = #{groupId} limit 1) WHERE lmac=#{lmac}
     </update>
 

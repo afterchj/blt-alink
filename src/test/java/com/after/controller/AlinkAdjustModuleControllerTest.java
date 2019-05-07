@@ -3,6 +3,7 @@ package com.after.controller;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.*;
+import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
@@ -131,16 +132,18 @@ public class AlinkAdjustModuleControllerTest {
     public void saveLightTest() throws Exception {
         List<LightList> lightLists = new ArrayList<>();
         LightList lightList;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             lightList = new LightList();
-            lightList.setLmac(i + "iii");
-            lightList.setLname("iii");
-            lightList.setMid(3);
-            lightList.setGid(17);
+            lightList.setLmac(i+"aa-aa-aa-aa");
+            lightList.setLname("灯10001");
+            lightList.setMid(18604);
+            lightList.setGid(1032);
             lightList.setProductId("1234");
+            lightList.setPid(142);
             lightLists.add(lightList);
         }
-        lightAjustService.saveLight(lightLists);
+        String lmacs = lightAjustService.saveLight(lightLists);
+        System.out.println("lmacs: "+lmacs);
     }
 
     @Test
@@ -153,8 +156,12 @@ public class AlinkAdjustModuleControllerTest {
     public void updateLightGidTest() throws Exception {
         List<LightList> lightLists = new ArrayList<>();
         LightList lightList = new LightList();
-        lightList.setGid(1);
-        lightList.setLmac("aa-aa-aa");
+        lightList.setLmac("aa-aa-aa-aa");
+        lightList.setLname("灯1000");
+        lightList.setMid(1000);
+        lightList.setGid(1029);
+        lightList.setProductId("1234");
+        lightList.setPid(139);
         lightLists.add(lightList);
         lightAjustService.updateLightGid(lightLists);
         System.out.println("success");
@@ -231,11 +238,12 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void saveTempLightTest() {
         LightList lightList = new LightList();
-        lightList.setMid(3);
+        lightList.setMid(1000);
         lightList.setLmac("1-1-1-1");
         lightList.setLname("1-1-1-1");
         lightList.setGroupId(0);
         lightList.setProductId("2018");
+        lightList.setPid(140);
         //创建灯
         lightAjustService.saveTempLight(lightList);
         System.out.println("id: " + lightList.getId());
@@ -328,7 +336,7 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void test3(){
-     lightAjustService.updateLight("dd-dd-dd-dd",0,3);
+     lightAjustService.updateLight("aa-aa-aa-aa",1030,1001,140);
     }
 
     @Test
@@ -344,7 +352,7 @@ public class AlinkAdjustModuleControllerTest {
         getSession().getMapper(LightAjustDao.class).updateLightGidAndLmac("aa-aa-aa-aa",2);
     }
     @Test
-    public void test4(){
+    public void getGnameTest4(){
         Group group = new Group();
         group.setMid(24);
         group.setGname("A组");
@@ -353,5 +361,34 @@ public class AlinkAdjustModuleControllerTest {
             //组名重复
             System.out.println("组名重复");
         }
+    }
+
+    @Test
+    public void saveGroupTest4(){
+        Group group = new Group();
+        group.setGname("组1000");
+        group.setMid(1001);
+        group.setGroupId(1);
+        group.setPid(140);
+        groupOperationService.saveGroup(group);
+    }
+
+    @Test
+    public void getDefaultPlaceTest4(){
+        Integer defaultPlace;
+        try {
+            defaultPlace = groupOperationService.getDefaultPlace(null,"9", 186044);
+        } catch (DefaultPlaceNotFoundException e) {
+            System.out.println("DefaultPlaceNotFound");
+            return;
+        }
+        System.out.println("defaultPlace: "+defaultPlace);
+    }
+
+    @Test
+    public void test4(){
+        String productId = "8200";
+        productId = productId.split(" ")[0];
+        System.out.println(productId);
     }
 }
