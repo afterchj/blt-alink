@@ -10,6 +10,8 @@ public class DeleteLog implements Serializable {
     private Date delete_date;
     private String uid;
     private Integer lightFlag;
+    private Integer deleteId;
+    private String deleteFlag;
     private String other;
 
     public DeleteLog() {
@@ -41,6 +43,22 @@ public class DeleteLog implements Serializable {
 
     public void setDelete_date(Date delete_date) {
         this.delete_date = delete_date;
+    }
+
+    public Integer getDeleteId() {
+        return deleteId;
+    }
+
+    public void setDeleteId(Integer deleteId) {
+        this.deleteId = deleteId;
+    }
+
+    public String getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
     public String getUid() {

@@ -235,6 +235,8 @@ public class AlinkProjectController extends BaseDecodedController {
             DeleteLog deleteLog = new DeleteLog();
             deleteLog.setUid(uid);
             deleteLog.setLightFlag(lightFlag);
+            deleteLog.setDeleteId(Integer.valueOf(id));
+            deleteLog.setDeleteFlag(deleteFlag);
             deleteLog.setDelete_date(new Date());
             projectService.saveDeleteLog(deleteLog);
             model.put("result", ResultDict.SUCCESS.getCode());

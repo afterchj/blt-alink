@@ -264,7 +264,7 @@
     </insert>
 
     <insert id="saveDeleteLog" parameterType="com.tpadsz.after.entity.DeleteLog">
-        INSERT INTO alink.f_delete_log(delete_date,uid,lightFlag) VALUES(#{delete_date},#{uid},#{lightFlag})
+        INSERT INTO alink.f_delete_log(delete_date,uid,lightFlag,deleteId,deleteFlag) VALUES(#{delete_date},#{uid},#{lightFlag},#{deleteId},#{deleteFlag})
     </insert>
     <!--删除部分-->
 
