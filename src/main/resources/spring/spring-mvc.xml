@@ -25,7 +25,7 @@
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
-            <mvc:exclude-mapping path="/adjust/communicationTest"/>
+            <!--<mvc:exclude-mapping path="/adjust/communicationTest"/>-->
             <bean class="com.tpadsz.after.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
 
