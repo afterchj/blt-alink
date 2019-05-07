@@ -175,7 +175,6 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         String projectId = params.getString("projectId");
         String mname = params.getString("mname");
-        String flag = params.getString("flag");
         String meshId = "";
         int limitNum = 1;
         boolean isDuplicate;
@@ -192,17 +191,16 @@ public class AlinkProjectController extends BaseDecodedController {
                 int result = projectService.createMesh(mesh);
                 if (result == 1) {
                     projectService.deleteMeshId(limitNum);
-                    if(flag==null) {
                         AdjustPlace place = new AdjustPlace();
                         place.setPlaceId(1);
                         place.setPname("区域1");
                         place.setUid(uid);
                         place.setMid(mesh.getId());
                         projectService.createPlace(place);
-                    }
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("meshId", meshId);
                     model.put("mid", mesh.getId());
+                    model.put("pid", place.getId());
                 } else {
                     model.put("result", ResultDict.DUPLICATE_NAME.getCode());
                 }
@@ -217,26 +215,6 @@ public class AlinkProjectController extends BaseDecodedController {
                 model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             }
         } while (isDuplicate);
-        return null;
-    }
-
-
-    @RequestMapping(value = "/createPlace", method = RequestMethod.POST)
-    public String createPlace(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        String uid = params.getString("uid");
-        String mid = params.getString("mid");
-        try {
-            AdjustPlace place = new AdjustPlace();
-            place.setPlaceId(1);
-            place.setPname("区域1");
-            place.setUid(uid);
-            place.setMid(Integer.valueOf(mid));
-            projectService.createPlace(place);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("pid", place.getId());
-        } catch (Exception e) {
-            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-        }
         return null;
     }
 
@@ -395,6 +373,15 @@ public class AlinkProjectController extends BaseDecodedController {
 
     private void oldDeal(String sceneinfo, String groupinfo, List<Mesh> meshList, String uid)
             throws Exception {
+        for (int i = 0; i < meshList.size(); i++) {
+            AdjustPlace place = new AdjustPlace();
+            place.setPlaceId(1);
+            place.setPname("区域1");
+            place.setUid(uid);
+            place.setMid(meshList.get(i).getId());
+            projectService.createPlace(place);
+        }
+
         if (!"[]".equals(sceneinfo)) {
             List<SceneInfo> sceneInfoList = JSONArray.parseArray(sceneinfo, SceneInfo.class);
             for (int i = 0; i < sceneInfoList.size(); i++) {
