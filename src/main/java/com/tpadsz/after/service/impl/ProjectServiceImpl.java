@@ -113,6 +113,7 @@ public class ProjectServiceImpl implements ProjectService {
                     projectDao.deleteSceneByPid(id, uid);
                     projectDao.deleteSceneSettingBySid(sids);
                 }
+                projectDao.deletePlaceByPid(id, uid);
                 projectDao.deleteGroupByPid(id, uid);
                 projectDao.deleteGroupSettingByPid(id, uid);
                 projectDao.deleteProByPid(id, uid);
@@ -127,6 +128,7 @@ public class ProjectServiceImpl implements ProjectService {
                 projectDao.deleteSceneByMid(id, uid);
                 projectDao.deleteGroupSettingByMid(id, uid);
                 projectDao.deleteGroupByMid(id);
+                projectDao.deletePlaceByMid(id);
                 if (meshId != null) {
                     projectDao.recordMeshId(meshId);
                 }

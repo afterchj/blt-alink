@@ -57,6 +57,8 @@ public interface ProjectDao {
 
     void deleteGroupSettingByMid(@Param("id")int id, @Param("uid")String uid);
 
+    void deletePlaceByPid(@Param("id")int id, @Param("uid")String uid);
+
     void deleteGroupByPid(@Param("id")int id, @Param("uid")String uid);
 
     void deleteGroupSettingByPid(@Param("id")int id, @Param("uid")String uid);
@@ -64,6 +66,8 @@ public interface ProjectDao {
     void deleteSceneByMid(@Param("id")int id, @Param("uid")String uid);
 
     void deleteGroupByMid(@Param("id")int id);
+
+    void deletePlaceByMid(@Param("id")int id);
 
     int findLightByPid(@Param("id")int id, @Param("uid")String uid);
 
@@ -97,4 +101,5 @@ public interface ProjectDao {
     void createPlace(AdjustPlace place);
 
     int findRepeatMid(AdjustPlace place);
+
 }

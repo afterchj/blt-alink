@@ -197,6 +197,10 @@
         </foreach>
     </delete>
 
+    <delete id="deletePlaceByPid">
+        DELETE FROM alink.f_place WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+    </delete>
+
     <delete id="deleteGroupByPid">
         DELETE FROM alink.f_group WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
@@ -223,6 +227,10 @@
 
     <delete id="deleteGroupByMid" parameterType="int">
         DELETE FROM alink.f_group WHERE mid=#{id}
+    </delete>
+
+    <delete id="deletePlaceByMid" parameterType="int">
+        DELETE FROM alink.f_place WHERE mid=#{id}
     </delete>
 
     <select id="findLightByPid" resultType="int">
