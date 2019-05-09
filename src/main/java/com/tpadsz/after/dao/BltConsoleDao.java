@@ -16,7 +16,7 @@ public interface BltConsoleDao {
 
     List getAll(Map map);
 
-    int getPid();
+    Integer getPid(Map map);
 
     int getTotal(Map map);
 

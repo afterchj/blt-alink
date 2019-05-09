@@ -98,11 +98,11 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.tpadsz.after</groupId>
-            <artifactId>blt-light-api</artifactId>
-            <version>1.0-RELEASE</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.tpadsz.after</groupId>-->
+            <!--<artifactId>blt-light-api</artifactId>-->
+            <!--<version>1.0-RELEASE</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

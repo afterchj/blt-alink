@@ -1,5 +1,7 @@
 package com.tpadsz.after.service;
 
+import com.tpadsz.after.exception.NotExitException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +20,11 @@ public interface BltConsoleService {
 
     int getTotal(Map map);
 
-    int getPid();
+    Integer getPid(Map map);
 
     void saveApplyScene(Map map);
 
-    void saveSceneName(Map map);
+    void saveSceneName(Map map) throws NotExitException;
 
     void deleteScene(Map map);
 

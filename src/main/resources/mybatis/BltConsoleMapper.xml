@@ -34,7 +34,7 @@
 		)
 	</update>
 
-	<select id="getTotal" parameterType="map" resultType="int">
+    <select id="getTotal" parameterType="map" resultType="int">
 		SELECT COUNT(0) total
 		FROM f_light l
 		INNER JOIN f_mesh m ON m.id = l.mid
@@ -43,8 +43,8 @@
 		AND m.uid = #{uid}
 	</select>
 
-	<select id="getPid" parameterType="map" resultType="int">
-		SELECT id FROM f_place WHERE mid=(SELECT  id FROM f_mesh WHERE mesh_id =#{meshId} AND uid=#{uid})
+    <select id="getPid" parameterType="map" resultType="Integer">
+		SELECT id FROM f_place WHERE mid=(SELECT  id FROM f_mesh WHERE mesh_id =#{meshId} AND uid=#{uid}) limit 1
 	</select>
 
     <select id="getAll" resultType="map" parameterType="map">
@@ -70,17 +70,20 @@
     </select>
 
     <select id="getScenes" resultType="map" parameterType="map">
-		SELECT
-			m.mesh_id,
-			s.scene_id,
-			s.sname
-		FROM
-			f_mesh m
-		INNER JOIN f_scene s ON m.id = s.mid
-		WHERE s.uid =  #{uid}
-		AND m.mesh_id =  #{meshId}
-		GROUP BY m.mesh_id,s.scene_id,s.sname
-	</select>
+        SELECT
+        m.mesh_id,
+        s.scene_id,
+        s.sname
+        FROM
+        f_mesh m
+        INNER JOIN f_scene s ON m.id = s.mid
+        WHERE s.uid = #{uid}
+        AND m.mesh_id = #{meshId}
+        <if test="sceneId!=null">
+            AND s.scene_id=#{sceneId}
+        </if>
+        GROUP BY m.mesh_id,s.scene_id,s.sname
+    </select>
 
     <select id="getGroups" resultType="map" parameterType="map">
 		SELECT
@@ -88,7 +91,7 @@
 			g.group_id,
 			g.gname,
 -- 			IFNULL(g.pid,0) pid,
-			l.lcount
+			IFNULL(l.lcount,0) lcount
 		FROM
 			f_group g
 		LEFT JOIN f_place p ON p.id=g.pid

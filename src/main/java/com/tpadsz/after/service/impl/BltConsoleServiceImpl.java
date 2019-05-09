@@ -1,6 +1,8 @@
 package com.tpadsz.after.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.tpadsz.after.dao.BltConsoleDao;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,8 +46,8 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
-    public int getPid() {
-        return bltConsoleDao.getPid();
+    public Integer getPid(Map map) {
+        return bltConsoleDao.getPid(map);
     }
 
     @Override
@@ -54,8 +56,14 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
-    public void saveSceneName(Map map) {
-        bltConsoleDao.saveSceneName(map);
+    public void saveSceneName(Map map) throws NotExitException {
+        List list = getScenes(map);
+        if (list.size() > 0) {
+            bltConsoleDao.saveSceneName(map);
+            System.out.println("list="+JSON.toJSONString(list));
+        } else {
+            throw new NotExitException("场景不存在！");
+        }
     }
 
     @Override
