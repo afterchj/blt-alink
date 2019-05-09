@@ -12,7 +12,7 @@ public interface AccountDao {
 
     int findByUser(String uname);
 
-    int findByMobile(String mobile);
+    int getCount(Map map);
 
     void saveUser(Map map);
 

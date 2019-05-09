@@ -18,6 +18,8 @@ public interface BltConsoleService {
 
     int getTotal(Map map);
 
+    int getPid();
+
     void saveApplyScene(Map map);
 
     void saveSceneName(Map map);

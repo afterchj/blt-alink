@@ -43,6 +43,10 @@
 		AND m.uid = #{uid}
 	</select>
 
+	<select id="getPid" parameterType="map" resultType="int">
+		SELECT id FROM f_place WHERE mid=(SELECT  id FROM f_mesh WHERE mesh_id =#{meshId} AND uid=#{uid})
+	</select>
+
     <select id="getAll" resultType="map" parameterType="map">
 		SELECT
 -- 			m.mesh_id,
@@ -83,13 +87,13 @@
 			m.mesh_id,
 			g.group_id,
 			g.gname,
-			IFNULL(g.pid,0) pid,
+-- 			IFNULL(g.pid,0) pid,
 			l.lcount
 		FROM
 			f_group g
 		LEFT JOIN f_place p ON p.id=g.pid
-		INNER JOIN f_mesh m ON m.id = g.mid
-		INNER JOIN (SELECT COUNT(0) lcount,gid FROM f_light GROUP BY gid) l ON g.id=l.gid
+		LEFT JOIN f_mesh m ON m.id = g.mid
+		LEFT JOIN (SELECT COUNT(0) lcount,gid FROM f_light GROUP BY gid) l ON g.id=l.gid
 		WHERE 1=1
 		AND m.uid = #{uid}
 		AND m.mesh_id = #{meshId}

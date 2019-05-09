@@ -44,6 +44,11 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public int getPid() {
+        return bltConsoleDao.getPid();
+    }
+
+    @Override
     public void saveApplyScene(Map map) {
         bltConsoleDao.saveApplyScene(map);
     }

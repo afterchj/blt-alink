@@ -37,12 +37,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public int findByMobile(String mobile) {
-        return accountDao.findByMobile(mobile);
+    public int getCount(Map map) {
+        return accountDao.getCount(map);
     }
 
     @Override
-    public void saveUser(Map map) {
+    public void saveUser(Map map) throws RepetitionException {
+        int count = getCount(map);
+        if (count > 0) {
+            throw new RepetitionException(203, "该手机号已被绑定");
+        }
         accountDao.saveUser(map);
     }
 }
