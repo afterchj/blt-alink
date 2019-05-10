@@ -1,6 +1,5 @@
 package com.tpadsz.after.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.tpadsz.after.dao.BltConsoleDao;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
@@ -60,7 +59,6 @@ public class BltConsoleServiceImpl implements BltConsoleService {
         List list = getScenes(map);
         if (list.size() > 0) {
             bltConsoleDao.saveSceneName(map);
-            System.out.println("list="+JSON.toJSONString(list));
         } else {
             throw new NotExitException("场景不存在！");
         }
