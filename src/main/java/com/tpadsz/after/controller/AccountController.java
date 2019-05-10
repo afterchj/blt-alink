@@ -3,7 +3,6 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.dd.ResultDict;
-import com.tpadsz.after.exception.AccountDisabledException;
 import com.tpadsz.after.exception.InvalidCodeException;
 import com.tpadsz.after.exception.MobileNotExistedException;
 import com.tpadsz.after.exception.RepetitionException;
@@ -19,11 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hongjian.chen on 2019/3/6.
@@ -38,10 +32,8 @@ public class AccountController extends BaseDecodedController {
     private AccountService accountService;
     @Autowired
     private ValidationService validationService;
-
-    @Resource
+    @Autowired
     private AlinkLoginService alinkLoginService;
-
 
     @RequestMapping("/fillAccount")
     public void fillAccount(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
@@ -93,13 +85,27 @@ public class AccountController extends BaseDecodedController {
         param.put("salt", password.getSalt());
         try {
             validationService.checkCode(code, mobile);
-            accountService.saveUser(param);
-            logger.info("result=" + param.getString("result"));
+            try {
+                accountService.saveUser(param);
+                logger.info("result=" + param.getString("result"));
+            } catch (RepetitionException e) {
+                model.put("result", e.getCode());
+                model.put("result_message", e.getMessage());
+            }
+            AppUser appUser = alinkLoginService.findUserByMobile(mobile);
+            String token = alinkLoginService.generateToken(appUser.getId());
+            model.put("token", token);
+            appUser.setPwd(null);
+            appUser.setSalt(null);
+            model.put("user", appUser);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
         } catch (InvalidCodeException e) {
             model.put("result", ResultDict.VERIFY_ERROR.getCode());
             model.put("result_message", ResultDict.VERIFY_ERROR.getValue());
+        } catch (Exception e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
         }
     }
 
@@ -109,16 +115,13 @@ public class AccountController extends BaseDecodedController {
         String flag = (String) param.get("flag");
         try {
             if (StringUtils.isNotEmpty(mobile)) {
-                AppUser appUser = alinkLoginService.findUserByMobile(mobile);
+                int count = accountService.getCount(param);
                 if ("0".equals(flag)) {
-                    if (appUser == null) {
+                    if (count == 0) {
                         throw new MobileNotExistedException();
                     }
-                    if (appUser.getStatus() == 0) {
-                        throw new AccountDisabledException();
-                    }
                 } else if ("1".equals(flag)) {
-                    if (appUser != null) {
+                    if (count > 0) {
                         throw new RepetitionException(12, "该手机号已被绑定！");
                     }
                 }
@@ -131,9 +134,6 @@ public class AccountController extends BaseDecodedController {
         } catch (MobileNotExistedException e) {
             model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
             model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
-        } catch (AccountDisabledException e) {
-            model.put("result", ResultDict.ACCOUNT_DISABLED.getCode());
-            model.put("result_message", ResultDict.ACCOUNT_DISABLED.getValue());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());

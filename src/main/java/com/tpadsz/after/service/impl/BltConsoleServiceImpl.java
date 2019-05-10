@@ -1,6 +1,7 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.BltConsoleDao;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,13 +45,23 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public Integer getPid(Map map) {
+        return bltConsoleDao.getPid(map);
+    }
+
+    @Override
     public void saveApplyScene(Map map) {
         bltConsoleDao.saveApplyScene(map);
     }
 
     @Override
-    public void saveSceneName(Map map) {
-        bltConsoleDao.saveSceneName(map);
+    public void saveSceneName(Map map) throws NotExitException {
+        List list = getScenes(map);
+        if (list.size() > 0) {
+            bltConsoleDao.saveSceneName(map);
+        } else {
+            throw new NotExitException("场景不存在！");
+        }
     }
 
     @Override

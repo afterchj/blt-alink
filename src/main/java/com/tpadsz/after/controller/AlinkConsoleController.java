@@ -3,6 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -34,9 +35,11 @@ public class AlinkConsoleController extends BaseDecodedController {
     public void bltInfo(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         List scenes = bltConsoleService.getScenes(param);
         List groups = bltConsoleService.getGroups(param);
-        int total=bltConsoleService.getTotal(param);
+        int total = bltConsoleService.getTotal(param);
+        Integer pid = bltConsoleService.getPid(param);
         Map info = new HashMap();
-        info.put("total",total);
+        info.put("total", total);
+        info.put("pid", pid);
         if (scenes.size() == 0) {
             model.put("result", ResultDict.NO_SCENE.getCode());
             model.put("result_message", ResultDict.NO_SCENE.getValue());
@@ -76,9 +79,14 @@ public class AlinkConsoleController extends BaseDecodedController {
     @RequestMapping("/rename")
     public void consoleRenameScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
-        bltConsoleService.saveSceneName(param);
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
+        try {
+            bltConsoleService.saveSceneName(param);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        } catch (NotExitException e) {
+            model.put("result", 601);
+            model.put("result_message", e.getMessage());
+        }
     }
 
     @RequestMapping("/clean")
@@ -90,14 +98,17 @@ public class AlinkConsoleController extends BaseDecodedController {
             if (sceneId > 3) {
                 bltConsoleService.deleteScene(param);
             } else {
-                String sname = "场景" + (sceneId+1);
+                String sname = "场景" + (sceneId + 1);
                 param.put("sname", sname);
-                bltConsoleService.saveSceneName(param);
+                try {
+                    bltConsoleService.saveSceneName(param);
+                } catch (NotExitException e) {
+                }
 //                logger.info("id=" + sceneId + ",name=" + sname);
             }
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
         }
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
     }
 
     @RequestMapping("/apply")
