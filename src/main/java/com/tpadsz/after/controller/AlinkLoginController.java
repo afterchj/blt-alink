@@ -56,7 +56,7 @@ public class AlinkLoginController extends BaseDecodedController {
             } else {
                 AppUser appUser = alinkLoginService.loginByTpad(input, pwd, inputFlag);
                 if (appUser.getStatus() == 0) {
-                    result = ResultDict.ACCOUNT_IS_DISABLED;
+                    result = ResultDict.ACCOUNT_DISABLED;
                 } else {
                     String token = alinkLoginService.generateToken(appUser.getId());
                     model.put("user", appUser);
@@ -96,8 +96,8 @@ public class AlinkLoginController extends BaseDecodedController {
                     model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
                     model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
                 } else if (appUser.getStatus() == 0) {
-                    model.put("result", ResultDict.ACCOUNT_IS_DISABLED.getCode());
-                    model.put("result_message", ResultDict.ACCOUNT_IS_DISABLED.getValue());
+                    model.put("result", ResultDict.ACCOUNT_DISABLED.getCode());
+                    model.put("result_message", ResultDict.ACCOUNT_DISABLED.getValue());
                 } else {
                     String token = alinkLoginService.generateToken(appUser.getId());
                     model.put("token", token);
