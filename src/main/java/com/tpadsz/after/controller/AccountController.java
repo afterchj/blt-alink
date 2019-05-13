@@ -3,6 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.exception.AccountDisabledException;
 import com.tpadsz.after.exception.InvalidCodeException;
 import com.tpadsz.after.exception.MobileNotExistedException;
 import com.tpadsz.after.exception.RepetitionException;
@@ -115,13 +116,16 @@ public class AccountController extends BaseDecodedController {
         String flag = (String) param.get("flag");
         try {
             if (StringUtils.isNotEmpty(mobile)) {
-                int count = accountService.getCount(param);
+                AppUser appUser = alinkLoginService.findUserByMobile(mobile);
                 if ("0".equals(flag)) {
-                    if (count == 0) {
+                    if (appUser == null) {
                         throw new MobileNotExistedException();
                     }
+                    if (appUser.getStatus() == 0) {
+                        throw new AccountDisabledException();
+                    }
                 } else if ("1".equals(flag)) {
-                    if (count > 0) {
+                    if (appUser != null) {
                         throw new RepetitionException(12, "该手机号已被绑定！");
                     }
                 }
@@ -134,6 +138,9 @@ public class AccountController extends BaseDecodedController {
         } catch (MobileNotExistedException e) {
             model.put("result", ResultDict.MOBILE_NOT_EXISTED.getCode());
             model.put("result_message", ResultDict.MOBILE_NOT_EXISTED.getValue());
+        } catch (AccountDisabledException e) {
+            model.put("result", ResultDict.ACCOUNT_DISABLED.getCode());
+            model.put("result_message", ResultDict.ACCOUNT_DISABLED.getValue());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
