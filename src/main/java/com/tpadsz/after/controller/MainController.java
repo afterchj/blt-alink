@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +26,11 @@ public class MainController {
 
     @ResponseBody
     @RequestMapping(value = "/getFirms", method = RequestMethod.GET)
-    public List<Map> getFirms(ModelMap model) {
-        List<Map> firms = userService.getFirms();
+    public List<Map> getFirms(String keyword, ModelMap model) {
+        logger.info("keyword=" + keyword);
+        Map map = new HashMap();
+        map.put("keyword", keyword);
+        List<Map> firms = userService.getFirms(map);
         model.put("firms", firms);
         return firms;
     }

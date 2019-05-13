@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public List<Map> getFirms() {
-        return userDao.getFirms();
+    public List<Map> getFirms(Map keyword) {
+        return userDao.getFirms(keyword);
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public interface UserDao {
 
-    List<Map> getFirms();
+    List<Map> getFirms(Map keyword);
 
     void saveUser(Map map);
 

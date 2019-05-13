@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public interface UserService {
 
-    List<Map> getFirms();
+    List<Map> getFirms(Map keyword);
 
     void saveUser(Map map);
 

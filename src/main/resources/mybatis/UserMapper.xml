@@ -16,6 +16,10 @@
 
     <select id="getFirms" parameterType="map" resultType="map">
 		SELECT id,coname label FROM f_firm
+        WHERE 1=1
+		<if test="keyword!=null and keyword!=''">
+          AND  coname LIKE CONCAT('%',#{keyword},'%')
+        </if>
 	</select>
 
     <update id="updateUser" parameterType="map">
