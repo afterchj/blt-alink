@@ -73,6 +73,13 @@ public class AccountController extends BaseDecodedController {
     @RequestMapping("/register")
     public void saveUser(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         String mobile = param.getString("mobile");
+        AppUser appUser = alinkLoginService.findUserByMobile(mobile);
+        if (appUser != null) {
+            model.put("result", ResultDict.MOBILE_REPET.getCode());
+            model.put("result_message", ResultDict.MOBILE_REPET.getValue());
+            return;
+        }
+        model.put("user", appUser);
         String code = param.getString("code");
         String plainPwd = "00000000";
         String md5Pwd = Encryption.getMD5Str(plainPwd);
@@ -86,19 +93,11 @@ public class AccountController extends BaseDecodedController {
         param.put("salt", password.getSalt());
         try {
             validationService.checkCode(code, mobile);
-            try {
-                accountService.saveUser(param);
-                logger.info("result=" + param.getString("result"));
-            } catch (RepetitionException e) {
-                model.put("result", e.getCode());
-                model.put("result_message", e.getMessage());
-            }
-            AppUser appUser = alinkLoginService.findUserByMobile(mobile);
             String token = alinkLoginService.generateToken(appUser.getId());
             model.put("token", token);
             appUser.setPwd(null);
             appUser.setSalt(null);
-            model.put("user", appUser);
+            accountService.saveUser(param);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
         } catch (InvalidCodeException e) {
