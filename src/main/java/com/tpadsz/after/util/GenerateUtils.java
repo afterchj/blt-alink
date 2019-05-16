@@ -18,6 +18,11 @@ public class GenerateUtils {
         for (int i = 0; i < length; i++) {
             // 输出字母还是数字
             if (num1 == 5) {
+                if (num2 == 0) {
+                    val = val.substring(0, val.length() - 1);
+                    i--;
+                    num1--;
+                }
                 charOrNum = "num";
             } else if (num2 == 3) {
                 if (val.matches(reg)) {
@@ -29,34 +34,38 @@ public class GenerateUtils {
             } else {
                 charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
             }
-            int isDuplicateNum = 0;
+            int isDuplicateNum;
             int randomValue;
             // 字符串
             if ("char".equalsIgnoreCase(charOrNum)) {
                 // 取得大写字母还是小写字母
-//                int choice = random.nextInt(2) % 2 == 0 ? 65 : 97;
+                // int choice = random.nextInt(2) % 2 == 0 ? 65 : 97;
                 do {
+                    isDuplicateNum = 0;
                     randomValue = 65 + random.nextInt(26);
                     char[] arr = val.toCharArray();
                     for (int j = 0; j < arr.length; j++) {
-                        if(randomValue==arr[j]){
+                        if (randomValue == arr[j]) {
                             isDuplicateNum++;
                         }
                     }
-                } while (isDuplicateNum==2);
+                } while (isDuplicateNum == 2);
                 val += (char) randomValue;
                 num1++;
             } else if ("num".equalsIgnoreCase(charOrNum)) { // 数字
-                randomValue = random.nextInt(10);
-                if(num2==2){
+                if (num2 == 2) {
                     do {
+                        isDuplicateNum = 0;
+                        randomValue = random.nextInt(10);
                         String[] arr = val.split("");
                         for (int j = 0; j < arr.length; j++) {
-                            if(String.valueOf(randomValue).equals(arr[j])){
+                            if (String.valueOf(randomValue).equals(arr[j])) {
                                 isDuplicateNum++;
                             }
                         }
-                    } while (isDuplicateNum==2);
+                    } while (isDuplicateNum == 2);
+                }else {
+                    randomValue = random.nextInt(10);
                 }
                 val += String.valueOf(randomValue);
                 num2++;
@@ -64,7 +73,6 @@ public class GenerateUtils {
         }
         return val;
     }
-
 
     public static boolean check(String str) {
         char[] arr=str.toCharArray();
