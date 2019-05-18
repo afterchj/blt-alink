@@ -25,4 +25,12 @@
     <update id="updateUser" parameterType="map">
 		UPDATE f_user_account SET pwd=#{pwd},salt=#{salt},update_date=NOW() WHERE mobile=#{mobile}
 	</update>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into alink.create_mesh_id(mesh_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.mesh_id})
+        </foreach>
+    </insert>
 </mapper>

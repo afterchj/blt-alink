@@ -15,4 +15,6 @@ public interface UserDao {
 
     void updateUser(Map map);
 
+    void insertBatch(Map map);
+
 }

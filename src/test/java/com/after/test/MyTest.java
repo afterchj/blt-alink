@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.AccountDao;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.HttpUtils;
+import com.tpadsz.after.util.RandomNumberGenerator;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +31,23 @@ public class MyTest {
     }
 
     public static SqlSessionTemplate getSqlSessionTemplate() {
+        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         return (SqlSessionTemplate) ctx.getBean("sqlSessionTemplate");
     }
 
 
     @Test
     public void test() {
-//        System.out.println("template=" + getSqlSessionTemplate());
+        SqlSessionTemplate sqlSessionTemplate = getSqlSessionTemplate();
+        System.out.println("template=" + sqlSessionTemplate);
+        List<Map> list=new ArrayList<>();
+        for (int i = 0; i < 5000; i++) {
+            Map map=new HashMap();
+            map.put("mesh_id", RandomNumberGenerator.generateNumber2());
+            list.add(map);
+        }
+        sqlSessionTemplate.insert("com.tpadsz.after.dao.UserDao.insertBatch",list);
+
 //        System.out.println("xMemcachedClient=" + ctx.getBean("xMemcachedClient"));
     }
 
