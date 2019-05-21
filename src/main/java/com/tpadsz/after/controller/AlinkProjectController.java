@@ -9,7 +9,6 @@ import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.ProjectService;
 import com.tpadsz.after.service.SceneAjustService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -191,12 +190,12 @@ public class AlinkProjectController extends BaseDecodedController {
                 int result = projectService.createMesh(mesh);
                 if (result == 1) {
                     projectService.deleteMeshId(limitNum);
-                        AdjustPlace place = new AdjustPlace();
-                        place.setPlaceId(1);
-                        place.setPname("区域1");
-                        place.setUid(uid);
-                        place.setMid(mesh.getId());
-                        projectService.createPlace(place);
+                    AdjustPlace place = new AdjustPlace();
+                    place.setPlaceId(1);
+                    place.setPname("区域1");
+                    place.setUid(uid);
+                    place.setMid(mesh.getId());
+                    projectService.createPlace(place);
                     model.put("result", ResultDict.SUCCESS.getCode());
                     model.put("meshId", meshId);
                     model.put("mid", mesh.getId());
@@ -326,6 +325,8 @@ public class AlinkProjectController extends BaseDecodedController {
                     group.setGroupId(entry.getValue().getGroupId());
                     int gid = groupOperationService.getGid(group);
                     lightList.setGid(gid);
+                    Integer pid = groupOperationService.getDefaultPlace(null,params.getString("uid"),group.getMid());
+                    lightList.setPid(pid);
                     flightList.add(lightList);
                 }
                 lightAjustService.saveLight(flightList);
@@ -410,6 +411,8 @@ public class AlinkProjectController extends BaseDecodedController {
                         group.setGname(groupInfoList.get(i).getGname());
                         group.setMid(meshList.get(j).getId());
                         group.setGroupId(groupInfoList.get(i).getGroupId());
+                        Integer pid = groupOperationService.getDefaultPlace(null,uid,group.getMid());
+                        group.setPid(pid);
                         groupOperationService.saveGroup(group);
                         groupInfoList.get(i).setGid(group.getId());
                         break;
