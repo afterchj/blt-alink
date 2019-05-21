@@ -121,7 +121,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
                 throw new DefaultPlaceNotFoundException();
             }
         }
-        return groupOperationDao.getDefaultPlace(uid,mid);
+        return pid;
     }
 
 //    @Override
