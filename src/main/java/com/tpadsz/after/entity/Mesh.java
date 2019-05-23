@@ -9,6 +9,7 @@ public class Mesh {
     private Integer id;
     private String mname;
     private String mesh_id;
+    private String mesh_type;
     private String is_repeat;
     private String pwd;
     private String uid;
@@ -43,6 +44,14 @@ public class Mesh {
 
     public void setMesh_id(String mesh_id) {
         this.mesh_id = mesh_id;
+    }
+
+    public String getMesh_type() {
+        return mesh_type;
+    }
+
+    public void setMesh_type(String mesh_type) {
+        this.mesh_type = mesh_type;
     }
 
     public String getIs_repeat() {

@@ -174,6 +174,7 @@ public class AlinkProjectController extends BaseDecodedController {
         String uid = params.getString("uid");
         String projectId = params.getString("projectId");
         String mname = params.getString("mname");
+        String meshType = params.getString("meshType");
         String meshId = "";
         int limitNum = 1;
         boolean isDuplicate;
@@ -184,6 +185,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 Mesh mesh = new Mesh();
                 mesh.setMname(mname);
                 mesh.setMesh_id(meshId);
+                mesh.setMesh_type(meshType);
                 mesh.setPwd(meshId.substring(4));
                 mesh.setUid(uid);
                 mesh.setProject_id(Integer.parseInt(projectId));

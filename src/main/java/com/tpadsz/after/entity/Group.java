@@ -75,7 +75,7 @@ public class Group {
         this.gname = gname;
     }
 
-    public Integer getMid() {
+    public Integer  getMid() {
         return mid;
     }
 

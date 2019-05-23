@@ -46,7 +46,7 @@
     </select>
 
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,update_date) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),NOW())
+        INSERT INTO alink.f_mesh (mname,mesh_id,mesh_type,pwd,uid,project_id,create_date,update_date) VALUES(#{mname},#{mesh_id},#{mesh_type},#{pwd},#{uid},#{project_id},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
