@@ -1,10 +1,7 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.GroupOperationDao;
-import com.tpadsz.after.entity.AdjustPlace;
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.GroupConsoleLog;
-import com.tpadsz.after.entity.GroupList;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import org.springframework.stereotype.Service;
@@ -122,6 +119,16 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             }
         }
         return pid;
+    }
+
+    @Override
+    public void saveGroupSetting(GroupSetting groupSetting) {
+        groupOperationDao.saveGroupSetting(groupSetting);
+    }
+
+    @Override
+    public void deleteGroupSetting(Integer sid) {
+        groupOperationDao.deleteGroupSetting(sid);
     }
 
 //    @Override

@@ -50,5 +50,9 @@ public interface GroupOperationService {
 
     Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws DefaultPlaceNotFoundException;
 
+    void saveGroupSetting(GroupSetting groupSetting);
+
+    void deleteGroupSetting(Integer sid);
+
 //    List<GroupList> getGroups(Integer mid);
 }

@@ -157,4 +157,14 @@
     <select id="getDefaultPlace" resultType="integer">
         SELECT id FROM alink.f_place WHERE mid=#{mid} and uid=#{uid} limit 1
     </select>
+
+    <insert id="saveGroupSetting">
+        INSERT INTO alink.f_group_setting ( mid, sid, x, y, create_date, update_date, gid )
+        VALUES
+	      (#{mid},#{sid},#{x},#{y},now(),now(),(select id from alink.f_group where group_id=#{groupId} and mid=#{mid}))
+    </insert>
+
+    <delete id="deleteGroupSetting">
+        DELETE FROM alink.f_group_setting WHERE sid=#{sid}
+    </delete>
 </mapper>

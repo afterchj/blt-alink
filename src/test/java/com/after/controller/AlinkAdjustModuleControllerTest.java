@@ -405,4 +405,20 @@ public class AlinkAdjustModuleControllerTest {
         productId = productId.split(" ")[0];
         System.out.println(productId);
     }
+
+    @Test
+    public void saveGroupSettingTest4(){
+        GroupSetting groupSetting = new GroupSetting();
+        groupSetting.setGroupId(0);
+        groupSetting.setMid(697);
+        groupSetting.setSid(2);
+        groupSetting.setX("1");
+        groupSetting.setY("1");
+        groupOperationService.saveGroupSetting(groupSetting);
+    }
+
+    @Test
+    public void test4(){
+        groupOperationService.deleteGroupSetting(2);
+    }
 }

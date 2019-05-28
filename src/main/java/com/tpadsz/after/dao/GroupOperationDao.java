@@ -1,9 +1,6 @@
 package com.tpadsz.after.dao;
 
-import com.tpadsz.after.entity.AdjustPlace;
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.GroupConsoleLog;
-import com.tpadsz.after.entity.GroupList;
+import com.tpadsz.after.entity.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -54,6 +51,10 @@ public interface GroupOperationDao {
     String getGname(Group group);//获取组名
 
     Integer getDefaultPlace(@Param("uid") String uid, @Param("mid") Integer mid);//获取默认区域
+
+    void saveGroupSetting(GroupSetting groupSetting);//保存场景中组的xy值
+
+    void deleteGroupSetting(@Param("sid") Integer sid);//删除场景中组的xy值
 
 //    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }
