@@ -1,5 +1,7 @@
 package com.after.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.*;
@@ -418,7 +420,21 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test4(){
+    public void deleteGroupSettingTest4(){
         groupOperationService.deleteGroupSetting(2);
+    }
+
+    @Test
+    public void test4(){
+        Map<String,Object> map = new HashedMap();
+        map.put("groupList",null);
+        JSONObject jsonObject =new JSONObject(map);
+        JSONArray jsonArray = jsonObject.getJSONArray("groupList");
+//        System.out.println(jsonArray.size());
+        if (jsonArray!=null){
+            if (jsonArray.size()>0) {
+                System.out.println("empty");
+            }
+        }
     }
 }

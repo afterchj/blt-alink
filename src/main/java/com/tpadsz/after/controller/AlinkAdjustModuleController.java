@@ -428,21 +428,23 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String off;
         Map<String, Integer> lightMap;
         GroupSetting groupSetting;
-        if (!groupList.isEmpty()&&array.size()>0){
-            //删除group_setting信息
-            groupOperationService.deleteGroupSetting(sid);
-            //v2.1.0新版本添加groupList集合
-            for (int i=0; i<groupList.size(); i++){
-                groupSetting = new GroupSetting();
-                groupId = groupList.getJSONObject(i).getInteger("groupId");
-                x =  groupList.getJSONObject(i).getString("x");
-                y = groupList.getJSONObject(i).getString("y");
-                groupSetting.setX(x);
-                groupSetting.setY(y);
-                groupSetting.setSid(sid);
-                groupSetting.setMid(mid);
-                groupSetting.setGroupId(groupId);
-                groupOperationService.saveGroupSetting(groupSetting);
+        if (groupList!=null){
+            if (groupList.size()>0) {
+                //删除group_setting信息
+                groupOperationService.deleteGroupSetting(sid);
+                //v2.1.0新版本添加groupList集合
+                for (int i = 0; i < groupList.size(); i++) {
+                    groupSetting = new GroupSetting();
+                    groupId = groupList.getJSONObject(i).getInteger("groupId");
+                    x = groupList.getJSONObject(i).getString("x");
+                    y = groupList.getJSONObject(i).getString("y");
+                    groupSetting.setX(x);
+                    groupSetting.setY(y);
+                    groupSetting.setSid(sid);
+                    groupSetting.setMid(mid);
+                    groupSetting.setGroupId(groupId);
+                    groupOperationService.saveGroupSetting(groupSetting);
+                }
             }
         }
         if (array.isEmpty() || array.size() < 1) {
