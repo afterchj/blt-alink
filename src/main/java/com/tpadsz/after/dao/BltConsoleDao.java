@@ -12,7 +12,9 @@ public interface BltConsoleDao {
 
     List getGroups(Map map);
 
-    List getLights(Map map);
+    List getGroupsInfo(Map map);
+
+    List getLightsInfo(Map map);
 
     List getAll(Map map);
 

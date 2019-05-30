@@ -103,6 +103,40 @@
 		GROUP BY m.mesh_id,g.group_id,g.gname,g.pid,l.lcount
 	</select>
 
+	<select id="getGroupsInfo" resultType="map" parameterType="map">
+		SELECT
+			g.id,
+			g.group_id,
+			g.gname,
+			g.group_id,
+			gs.x,
+			gs.y
+		FROM f_group_setting gs
+		INNER JOIN f_mesh m ON m.id=gs.mid
+		INNER JOIN f_scene s ON s.id=gs.sid
+		INNER JOIN f_group g ON gs.gid = g.id
+		WHERE s.uid=#{uid}
+		AND s.scene_id=#{sceneId}
+		AND m.mesh_id=#{meshId}
+		GROUP BY g.id
+		ORDER BY g.id
+	</select>
+
+	<select id="getLightsInfo" resultType="map" parameterType="map">
+		SELECT
+			l.id,
+			ls.x,
+			ls.y
+		FROM f_light_setting ls
+		INNER JOIN f_light l ON l.id=ls.lid
+		INNER JOIN f_mesh m ON m.id=l.mid
+		INNER JOIN f_scene s ON s.id=ls.sid
+		WHERE s.uid=#{uid}
+		AND s.scene_id=#{sceneId}
+		AND m.mesh_id=#{meshId}
+		GROUP BY l.id
+		ORDER BY l.id
+	</select>
     <delete id="deleteScene" parameterType="map">
 		DELETE
 		FROM

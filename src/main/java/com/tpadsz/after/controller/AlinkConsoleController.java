@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -114,10 +113,18 @@ public class AlinkConsoleController extends BaseDecodedController {
     @RequestMapping("/apply")
     public void consoleApplyScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
-        String x = param.getString("x");
-        String y = param.getString("y");
-        if (StringUtils.isNotEmpty(x) && StringUtils.isNotEmpty(y)) {
-            bltConsoleService.saveApplyScene(param);
+//        String x = param.getString("x");
+//        String y = param.getString("y");
+//        if (StringUtils.isNotEmpty(x) && StringUtils.isNotEmpty(y)) {
+//            bltConsoleService.saveApplyScene(param);
+//        }
+        List lights = bltConsoleService.getLightsInfo(param);
+        List groups = bltConsoleService.getGroupsInfo(param);
+        if (groups.size() > 0) {
+            model.put("groups", lights);
+        }
+        if (lights.size() > 0) {
+            model.put("lights", lights);
         }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());

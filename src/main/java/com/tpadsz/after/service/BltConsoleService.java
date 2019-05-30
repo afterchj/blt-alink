@@ -14,9 +14,11 @@ public interface BltConsoleService {
 
     List getGroups(Map map);
 
-    List getAll(Map map);
+    List getGroupsInfo(Map map);
 
-    List getLights(Map map);
+    List getLightsInfo(Map map);
+
+    List getAll(Map map);
 
     int getTotal(Map map);
 
