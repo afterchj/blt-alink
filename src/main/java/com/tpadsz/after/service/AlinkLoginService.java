@@ -3,10 +3,9 @@ package com.tpadsz.after.service;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.AdminNotAllowedException;
 import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
-
-import java.util.List;
 
 /**
  * @program: blt-light
@@ -17,7 +16,7 @@ import java.util.List;
 public interface AlinkLoginService {
 
 
-    AppUser loginByTpad(String input, String password, String inputFlag) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException;
+    AppUser loginByTpad(String input, String password, String inputFlag) throws SystemAlgorithmException, AccountNotCorrectException,PasswordNotCorrectException,AdminNotAllowedException;
 
     boolean checkPassword(String actual, String expected, String salt);
 
@@ -28,4 +27,6 @@ public interface AlinkLoginService {
     AppUser findUserByMobile(String mobile);
 
     String generateToken(String uid) throws SystemAlgorithmException;
+
+    Integer findRoleIdByUid(String uid);
 }

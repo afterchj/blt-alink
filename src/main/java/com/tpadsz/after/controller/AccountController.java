@@ -3,10 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.dd.ResultDict;
-import com.tpadsz.after.exception.AccountDisabledException;
-import com.tpadsz.after.exception.InvalidCodeException;
-import com.tpadsz.after.exception.MobileNotExistedException;
-import com.tpadsz.after.exception.RepetitionException;
+import com.tpadsz.after.exception.*;
 import com.tpadsz.after.service.AccountService;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.service.ValidationService;
@@ -120,6 +117,10 @@ public class AccountController extends BaseDecodedController {
                     if (appUser == null) {
                         throw new MobileNotExistedException();
                     }
+                    Integer role_id = alinkLoginService.findRoleIdByUid(appUser.getId());
+                    if (role_id !=4) {
+                        throw new AdminNotAllowedException();
+                    }
                     if (appUser.getStatus() == 0) {
                         throw new AccountDisabledException();
                     }
@@ -140,6 +141,9 @@ public class AccountController extends BaseDecodedController {
         } catch (AccountDisabledException e) {
             model.put("result", ResultDict.ACCOUNT_DISABLED.getCode());
             model.put("result_message", ResultDict.ACCOUNT_DISABLED.getValue());
+        } catch (AdminNotAllowedException e) {
+            model.put("result", ResultDict.ADMIN_NOT_ALLOWED.getCode());
+            model.put("result_message", ResultDict.ADMIN_NOT_ALLOWED.getValue());
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());

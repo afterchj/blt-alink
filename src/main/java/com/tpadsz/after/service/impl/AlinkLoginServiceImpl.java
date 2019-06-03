@@ -5,6 +5,7 @@ import com.tpadsz.after.dao.AlinkLoginDao;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.exception.AccountNotCorrectException;
+import com.tpadsz.after.exception.AdminNotAllowedException;
 import com.tpadsz.after.exception.PasswordNotCorrectException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AlinkLoginService;
@@ -13,9 +14,7 @@ import net.rubyeye.xmemcached.XMemcachedClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -35,8 +34,7 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
     private XMemcachedClient client;
 
     @Override
-    public AppUser loginByTpad(String input, String password, String inputFlag) throws SystemAlgorithmException,
-            AccountNotCorrectException, PasswordNotCorrectException {
+    public AppUser loginByTpad(String input, String password, String inputFlag) throws SystemAlgorithmException,AccountNotCorrectException, PasswordNotCorrectException,AdminNotAllowedException {
         AppUser appUser = null;
         try {
             if("0".equals(inputFlag)) {
@@ -51,6 +49,10 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
         }
         if (appUser == null) {
             throw new AccountNotCorrectException();
+        }
+        Integer role_id = alinkLoginDao.findRoleIdByUid(appUser.getId());
+        if(role_id!=4){
+            throw new AdminNotAllowedException();
         }
         boolean isCorrect = checkPassword(password, appUser.getPwd(), appUser.getSalt());
         if (!isCorrect) {
@@ -72,6 +74,11 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
             throw new SystemAlgorithmException();
         }
         return token;
+    }
+
+    @Override
+    public Integer findRoleIdByUid(String uid) {
+        return alinkLoginDao.findRoleIdByUid(uid);
     }
 
 

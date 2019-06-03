@@ -5,10 +5,7 @@ import com.tpadsz.after.constants.MemcachedObjectType;
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
 import com.tpadsz.after.entity.dd.ResultDict;
-import com.tpadsz.after.exception.AccountNotCorrectException;
-import com.tpadsz.after.exception.InvalidCodeException;
-import com.tpadsz.after.exception.PasswordNotCorrectException;
-import com.tpadsz.after.exception.SystemAlgorithmException;
+import com.tpadsz.after.exception.*;
 import com.tpadsz.after.service.AlinkLoginService;
 import com.tpadsz.after.service.ValidationService;
 import net.rubyeye.xmemcached.XMemcachedClient;
@@ -73,6 +70,8 @@ public class AlinkLoginController extends BaseDecodedController {
             result = ResultDict.PASSWORD_NOT_CORRECT;
         } catch (AccountNotCorrectException e) {
             result = ResultDict.ACCOUNT_NOT_CORRECT;
+        } catch (AdminNotAllowedException e) {
+            result = ResultDict.ADMIN_NOT_ALLOWED;
         } catch (SystemAlgorithmException e) {
             result = ResultDict.SYSTEM_ERROR;
         }

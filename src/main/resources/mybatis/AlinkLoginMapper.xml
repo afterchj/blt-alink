@@ -40,4 +40,8 @@
         SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where uname=#{uname}
     </select>
 
+    <select id="findRoleIdByUid" resultType="Integer" parameterType="string">
+        SELECT role_id FROM f_user_role WHERE user_id=#{uid}
+    </select>
+
 </mapper>

@@ -2,8 +2,7 @@ package com.tpadsz.after.dao;
 
 import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.LoginLog;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @program: blt-light
@@ -23,4 +22,5 @@ public interface AlinkLoginDao {
 
     AppUser findUserByUname(String uname);
 
+    Integer findRoleIdByUid(@Param("uid") String uid);
 }
