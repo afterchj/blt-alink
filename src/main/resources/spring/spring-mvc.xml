@@ -44,6 +44,7 @@
             <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/user/register**"/>
             <mvc:exclude-mapping path="/user/fillAccount**"/>
+            <mvc:exclude-mapping path="/timeLine/**"/>
             <bean class="com.tpadsz.after.interceptor.UserTokenValidationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
