@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 
 @Configuration
-@PropertySource("classpath:setup.production.properties")
+@PropertySource("classpath:setup.test.properties")
 public class SpringConfig {
 
     @Value("${memcache.server}")
