@@ -60,10 +60,18 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void test(){
+    public void deleteTest(){
         String data="{\"uid\":\"7\",\"meshId\":\"46280379\",\"tid\":1000}";
         JSONObject jsonObject = JSONObject.parseObject(data);
         Integer delete = timeLineService.delete(jsonObject);
         System.out.println(delete);
+    }
+
+    @Test
+    public void createMeshToPCTest(){
+        String data = "{\"count\":\"7\"}";
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        String meshToPC = timeLineService.createMeshToPC(jsonObject);
+        System.out.println(meshToPC);
     }
 }

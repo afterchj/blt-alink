@@ -19,4 +19,6 @@ public interface TimeLineService {
     List<TimeLineList> get(JSONObject params);
 
     Integer delete(JSONObject params);
+
+    String createMeshToPC(JSONObject params);
 }

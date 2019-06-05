@@ -1,12 +1,11 @@
 package com.tpadsz.after.dao;
 
-import com.tpadsz.after.entity.TimeLine;
-import com.tpadsz.after.entity.TimeLineList;
-import com.tpadsz.after.entity.TimePointParams;
+import com.tpadsz.after.entity.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -25,4 +24,10 @@ public interface TimeLineDao {
     List<TimeLineList> getByUidAndMeshId(@Param("uid") String uid, @Param("meshId") String meshId);
 
     Integer delete(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    Map<String,Object> getOneMeshId();
+
+    int deleteOneMeshId(@Param("id") Integer id);
+
+    void insertRepeated( @Param("mesh_id") String mesh_id);
 }
