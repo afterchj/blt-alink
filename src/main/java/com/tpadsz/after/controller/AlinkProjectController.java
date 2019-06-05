@@ -191,7 +191,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 mesh.setProject_id(Integer.parseInt(projectId));
                 int result = projectService.createMesh(mesh);
                 if (result == 1) {
-                    projectService.deleteMeshId(limitNum);
+                    projectService.deleteMeshId(meshId);
                     AdjustPlace place = new AdjustPlace();
                     place.setPlaceId(1);
                     place.setPname("区域1");
@@ -208,7 +208,7 @@ public class AlinkProjectController extends BaseDecodedController {
             } catch (DuplicateKeyException e) {
                 isDuplicate = true;
                 projectService.recordMeshId(meshId);
-                projectService.deleteMeshId(limitNum);
+                projectService.deleteMeshId(meshId);
             } catch (RepetitionException e) {
                 isDuplicate = true;
                 limitNum++;

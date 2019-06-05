@@ -93,10 +93,8 @@
         ORDER BY a.id DESC limit 1
     </select>
 
-    <delete id="deleteMeshId" parameterType="int">
-        DELETE FROM alink.create_mesh_id WHERE id=(select id from
-        (SELECT * from alink.create_mesh_id ORDER BY id ASC LIMIT #{limitNum}) as a
-        ORDER BY a.id DESC limit 1)
+    <delete id="deleteMeshId" parameterType="string">
+        DELETE FROM alink.create_mesh_id WHERE mesh_id = #{mesh_id}
     </delete>
 
     <insert id="recordMeshId" parameterType="string">

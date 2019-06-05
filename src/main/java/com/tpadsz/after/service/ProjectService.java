@@ -26,7 +26,7 @@ public interface ProjectService {
 
     String findMeshId(int limitNum);
 
-    void deleteMeshId(int limitNum);
+    void deleteMeshId(String meshId);
 
     void recordMeshId(String meshId);
 

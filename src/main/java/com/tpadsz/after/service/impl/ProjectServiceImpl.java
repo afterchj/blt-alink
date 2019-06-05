@@ -84,8 +84,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteMeshId(int limitNum) {
-        projectDao.deleteMeshId(limitNum);
+    public void deleteMeshId(String meshId) {
+        projectDao.deleteMeshId(meshId);
     }
 
     @Override

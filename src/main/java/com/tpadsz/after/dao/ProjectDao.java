@@ -18,7 +18,7 @@ public interface ProjectDao {
 
     String findMeshId(@Param("limitNum")int limitNum);
 
-    void deleteMeshId(@Param("limitNum")int limitNum);
+    void deleteMeshId(@Param("mesh_id")String meshId);
 
     void recordMeshId(@Param("mesh_id")String meshId);
 
