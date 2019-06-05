@@ -9,21 +9,23 @@
     </insert>
 
     <insert id="createTimePoint" parameterType="java.util.List" useGeneratedKeys="false">
-        INSERT INTO `f_time_point`( `tsid`, `sid`, `time`, `state`, `create_date`, `update_date`)       VALUES
-            <foreach collection="list" item="item" index="index" separator=",">
-              (
-                (select id from f_time_line where tid=#{item.tid} and mid=(select id from f_mesh where mesh_id=#{item.mesh_id} and uid=#{item.uid})),
-                <if test="item.scene_id!=null">
-                    (select id from f_scene where scene_id=#{item.scene_id} and mid=(select id from f_mesh where mesh_id=#{item.mesh_id} and uid=#{item.uid})),
-                </if>
-                <if test="item.scene_id==null">
-                    NULL ,
-                </if>
-              #{item.time},
-              #{item.state},
-              now(),
-              now())
-          </foreach>
+        INSERT INTO `f_time_point`( `tsid`, `sid`, `time`, `state`, `create_date`, `update_date`) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            (select id from f_time_line where tid=#{item.tid} and mid=(select id from f_mesh where
+            mesh_id=#{item.mesh_id} and uid=#{item.uid})),
+            <if test="item.scene_id!=null">
+                (select id from f_scene where scene_id=#{item.scene_id} and mid=(select id from f_mesh where
+                mesh_id=#{item.mesh_id} and uid=#{item.uid})),
+            </if>
+            <if test="item.scene_id==null">
+                NULL ,
+            </if>
+            #{item.time},
+            #{item.state},
+            now(),
+            now())
+        </foreach>
     </insert>
 
     <update id="updateTname">
@@ -46,7 +48,7 @@
         </collection>
     </resultMap>
     <select id="getByUidAndMeshId" resultMap="timeLineLists">
-         SELECT
+          SELECT
                	l.tname,
                	l.tid,
                	l.state,
@@ -55,27 +57,24 @@
                	p.scene_id as sceneId,
                	p.time,
                	p.state as pstate
-               FROM
-               	( SELECT id,tname,tid,state,repetition,week FROM f_time_line WHERE mid = ( SELECT id FROM f_mesh WHERE
-               	 mesh_id =#{meshId} AND uid = #{uid} )) l
-               	LEFT JOIN (
+          FROM
+               	( SELECT id,tname,tid,state,repetition,week FROM f_time_line WHERE mid = ( SELECT id FROM f_mesh WHERE mesh_id =#{meshId} AND uid = #{uid} )) l
+          LEFT JOIN (
                 SELECT
-               	po.tsid AS tsid,
-               	po.time AS time,
-               	po.state AS state,
-               	s.scene_id AS scene_id
-               FROM
-               	f_time_point po,
-               	f_scene s
-               WHERE
-               	s.mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} )
+               	  po.tsid AS tsid,
+               	  po.time AS time,
+               	  po.state AS state,
+               	  s.scene_id AS scene_id
+                FROM
+               	  f_time_point po,
+               	  f_scene s
+                WHERE
+               	  s.mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} )
                	AND po.sid = s.id
                	union
-               	select p2.tsid,p2.time,p2.state,scene_id from (select tsid,time,state,null as scene_id from f_time_point where sid is null) p2 left join ( SELECT id FROM f_time_line WHERE mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} ) ) l2 on p2.tsid=l2.id
-               	) p ON l.id = p.tsid
-               ORDER BY
-               	tid,
-               	p.time
+               	select p2.tsid,p2.time,p2.state,scene_id from (select tsid,time,state,null as scene_id from f_time_point where sid is null) p2 left join ( SELECT id FROM f_time_line WHERE mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} ) ) l2 on p2.tsid=l2.id) p
+          ON l.id = p.tsid
+          ORDER BY tid,p.time
     </select>
 
     <delete id="delete">
@@ -84,4 +83,16 @@
         where l.mid=(SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid}) and l.tid=#{tid}
     </delete>
 
+
+    <select id="getOneMeshId" resultType="map">
+        select id,mesh_id from create_mesh_id limit 1
+    </select>
+
+    <delete id="deleteOneMeshId">
+        DELETE FROM create_mesh_id WHERE id=#{id}
+    </delete>
+
+    <insert id="insertRepeated">
+        INSERT INTO repeated_mesh_id( mesh_id) VALUES ( #{mesh_id});
+    </insert>
 </mapper>

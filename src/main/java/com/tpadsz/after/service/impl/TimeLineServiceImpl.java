@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -64,6 +65,36 @@ public class TimeLineServiceImpl implements TimeLineService {
         Integer tid = params.getInteger("tid");
         return timeLineDao.delete(uid,meshId,tid);
     }
+
+    /**
+     * 创建多个meshId
+     * @param params count 创建meshId的个数
+     * @return 返回String类型的meshId集合
+     */
+    @Override
+    public String createMeshToPC(JSONObject params) {
+        StringBuffer sb = new StringBuffer();
+        Integer count = params.getInteger("count");
+        Map<String,Object> map;
+        for (int i=0;i<count;i++){
+            int num=0;
+            do{
+                map = timeLineDao.getOneMeshId();
+                String mesh_id = String.valueOf(map.get("mesh_id"));
+                Integer id = (Integer) map.get("id");
+                num = timeLineDao.deleteOneMeshId(id);
+                if (num>0){
+                    //删除num个MeshId
+                    sb.append(mesh_id).append(",");
+                    timeLineDao.insertRepeated(mesh_id);
+                    break;
+                }
+            }while (num<=0);
+        }
+        return sb.toString().substring(0,sb.toString().lastIndexOf(","));
+    }
+
+
 
     public TimeLine setTimeLine(JSONObject params){
         TimeLine timeLine = new TimeLine();
