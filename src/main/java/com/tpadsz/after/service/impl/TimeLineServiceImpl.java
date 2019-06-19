@@ -103,7 +103,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLine.setWeek(params.getString("week"));
         timeLine.setState(params.getString("state"));
         timeLine.setRepetition(params.getString("repetition"));
-        timeLine.setMesh_id(params.getString("meshId"));;
+        timeLine.setMesh_id(params.getString("meshId"));
         return timeLine;
     }
 
