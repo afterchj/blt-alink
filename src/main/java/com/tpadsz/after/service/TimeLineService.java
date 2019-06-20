@@ -18,9 +18,11 @@ public interface TimeLineService {
 
     List<TimeLineList> get(JSONObject params);
 
-    Integer delete(JSONObject params);
+    void delete(JSONObject params);
 
     String createMeshToPC(JSONObject params);
 
     void updateTimePointState(JSONObject params);
+
+    void deleteOne(String uid,String meshId,Integer tid);
 }

@@ -63,8 +63,10 @@ public class TimeLineController extends BaseDecodedController{
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public void update(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-
-        timeLineService.delete(params);
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        Integer tid = params.getInteger("tid");
+        timeLineService.deleteOne(uid,meshId,tid);
         timeLineService.create(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -72,14 +74,14 @@ public class TimeLineController extends BaseDecodedController{
     }
 
     /**
-     * 删除定时TimeLine
+     * 删除定时TimeLine(批量删除)
      * @param params
      * @param model
      */
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public void delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
 
-        Integer count = timeLineService.delete(params);
+        timeLineService.delete(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }

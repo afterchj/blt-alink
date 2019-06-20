@@ -115,4 +115,13 @@
               </where>
         </foreach>
     </update>
+
+    <insert id="insertRolePermission" parameterType="java.util.List">
+        INSERT INTO f_role_permission_copy1 (role_id, permission_id) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.role_id},
+            #{item.permission_id})
+        </foreach>
+
+    </insert>
 </mapper>

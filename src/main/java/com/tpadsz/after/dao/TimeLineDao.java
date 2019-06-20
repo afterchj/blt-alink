@@ -34,4 +34,6 @@ public interface TimeLineDao {
     void insertRepeated( @Param("mesh_id") String mesh_id);
 
     void updateTimePointState(@Param(value = "list") List<TimePointParams> timePointList);
+
+    void insertRolePermission(List<Map<String,Integer>> list);
 }

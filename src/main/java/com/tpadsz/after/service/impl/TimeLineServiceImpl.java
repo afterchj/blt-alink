@@ -59,11 +59,20 @@ public class TimeLineServiceImpl implements TimeLineService {
     }
 
     @Override
-    public Integer delete(JSONObject params) {
+    public void delete(JSONObject params) {
         String uid = params.getString("uid");
         String meshId = params.getString("meshId");
-        Integer tid = params.getInteger("tid");
-        return timeLineDao.delete(uid,meshId,tid);
+        JSONArray timeLineArray = params.getJSONArray("timeLineLists");
+        for (int i=0;i<timeLineArray.size();i++){
+            Integer tid = timeLineArray.getJSONObject(i).getInteger("tid");
+            timeLineDao.delete(uid,meshId,tid);
+        }
+
+    }
+
+    @Override
+    public void deleteOne(String uid,String meshId,Integer tid){
+        timeLineDao.delete(uid,meshId,tid);
     }
 
     /**

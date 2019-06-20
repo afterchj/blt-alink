@@ -1,6 +1,7 @@
 package com.after.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.dao.TimeLineDao;
 import com.tpadsz.after.entity.TimeLineList;
 import com.tpadsz.after.service.TimeLineService;
 import org.apache.ibatis.session.SqlSession;
@@ -9,7 +10,10 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -61,10 +65,9 @@ public class TimeLineControllerTest {
 
     @Test
     public void deleteTest(){
-        String data="{\"uid\":\"7\",\"meshId\":\"46280379\",\"tid\":1000}";
+        String data="{\"uid\":\"7\",\"meshId\":\"46280379\",\"timeLineLists\":[{\"tid\":0},{\"tid\":4}]}";
         JSONObject jsonObject = JSONObject.parseObject(data);
-        Integer delete = timeLineService.delete(jsonObject);
-        System.out.println(delete);
+        timeLineService.delete(jsonObject);
     }
 
     @Test
@@ -76,10 +79,79 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void test(){
+    public void updateTimePointStateTest(){
         String data = "{\"uid\":\"7\",\"meshId\":\"46280379\",\"timeLineList\":[{\"tid\":\"51\",\"state\":\"2\"}]}";
         JSONObject jsonObject = JSONObject.parseObject(data);
         timeLineService.updateTimePointState(jsonObject);
 
     }
+
+    @Test
+    public void insertRolePermissionTest(){
+        List<Map<String,Integer>> maps = new ArrayList<>();
+        Map<String,Integer> map;
+        //1 6 11 15 20 25 28 30
+        for (int i=1;i<48;i++) {
+            switch (i) {
+                case 1:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 1);
+                    maps.add(map);
+                    break;
+                case 6:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 6);
+                    maps.add(map);
+                    break;
+                case 11:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 11);
+                    maps.add(map);
+                    break;
+                case 15:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 20);
+                    maps.add(map);
+                    break;
+                case 20:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 20);
+                    maps.add(map);
+                    break;
+                case 28:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 28);
+                    maps.add(map);
+                    break;
+                case 25:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 25);
+                    maps.add(map);
+                    break;
+                case 30:
+                    map = new HashMap<>();
+                    map.put("role_id", 4);
+                    map.put("permission_id", 30);
+                    maps.add(map);
+                    break;
+            }
+        }
+
+//        System.out.println(maps.toString());
+        getSession().getMapper(TimeLineDao.class).insertRolePermission(maps);
+    }
+
+    @Test
+    public void deleteOneTest(){
+        timeLineService.deleteOne("7","46280379",2);
+    }
+
+
 }
