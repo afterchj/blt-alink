@@ -94,6 +94,23 @@ public class TimeLineServiceImpl implements TimeLineService {
         return sb.toString().substring(0,sb.toString().lastIndexOf(","));
     }
 
+    @Override
+    public void updateTimePointState(JSONObject params) {
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        JSONArray timeLineArray = params.getJSONArray("timeLineList");
+        TimePointParams timePointParams;
+        List<TimePointParams> timePointList = new ArrayList<>();
+        for (int i=0;i<timeLineArray.size();i++){
+            timePointParams = new TimePointParams();
+            timePointParams.setMesh_id(meshId);
+            timePointParams.setUid(uid);
+            timePointParams.setTid(timeLineArray.getJSONObject(i).getInteger("tid"));
+            timePointParams.setState(timeLineArray.getJSONObject(i).getString("state"));
+            timePointList.add(timePointParams);
+        }
+        timeLineDao.updateTimePointState(timePointList);
+    }
 
 
     public TimeLine setTimeLine(JSONObject params){

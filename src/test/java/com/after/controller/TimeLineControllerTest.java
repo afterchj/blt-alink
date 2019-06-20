@@ -74,4 +74,12 @@ public class TimeLineControllerTest {
         String meshToPC = timeLineService.createMeshToPC(jsonObject);
         System.out.println(meshToPC);
     }
+
+    @Test
+    public void test(){
+        String data = "{\"uid\":\"7\",\"meshId\":\"46280379\",\"timeLineList\":[{\"tid\":\"51\",\"state\":\"2\"}]}";
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        timeLineService.updateTimePointState(jsonObject);
+
+    }
 }

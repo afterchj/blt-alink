@@ -99,6 +99,18 @@ public class TimeLineController extends BaseDecodedController{
     }
 
     /**
+     * 全开全关接口
+     * @param params
+     * @param model
+     */
+    @RequestMapping(value = "/allOnOrAllOff", method = RequestMethod.POST)
+    public void allOnOrAllOff(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        timeLineService.updateTimePointState(params);
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+    }
+
+    /**
      *PC端补充网络ID数量的接口
      * @param params
      * @param model

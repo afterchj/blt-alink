@@ -1,6 +1,8 @@
 package com.tpadsz.after.dao;
 
-import com.tpadsz.after.entity.*;
+import com.tpadsz.after.entity.TimeLine;
+import com.tpadsz.after.entity.TimeLineList;
+import com.tpadsz.after.entity.TimePointParams;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -30,4 +32,6 @@ public interface TimeLineDao {
     int deleteOneMeshId(@Param("id") Integer id);
 
     void insertRepeated( @Param("mesh_id") String mesh_id);
+
+    void updateTimePointState(@Param(value = "list") List<TimePointParams> timePointList);
 }

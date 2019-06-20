@@ -21,4 +21,6 @@ public interface TimeLineService {
     Integer delete(JSONObject params);
 
     String createMeshToPC(JSONObject params);
+
+    void updateTimePointState(JSONObject params);
 }
