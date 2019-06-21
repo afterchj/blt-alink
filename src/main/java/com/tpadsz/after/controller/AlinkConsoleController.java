@@ -101,6 +101,7 @@ public class AlinkConsoleController extends BaseDecodedController {
                 param.put("sname", sname);
                 try {
                     bltConsoleService.saveSceneName(param);
+                    bltConsoleService.restScene(param);
                 } catch (NotExitException e) {
                 }
 //                logger.info("id=" + sceneId + ",name=" + sname);

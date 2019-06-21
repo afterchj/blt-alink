@@ -173,4 +173,19 @@
 				)
 			)
 	</update>
+	<update id="restScene" parameterType="map">
+		UPDATE f_light_setting l,(SELECT x,y FROM f_scene_setting WHERE sid=#{sceneId}) r SET l.x=r.x,l.y = r.y,l.update_date=NOW() WHERE l.id IN (
+			SELECT	rec.id
+				FROM (SELECT ls.id FROM f_light_setting ls
+					INNER JOIN f_light l ON l.id = ls.lid
+					INNER JOIN f_mesh m ON m.id = l.mid
+					INNER JOIN f_scene s ON s.id = ls.sid
+					WHERE 1=1
+					AND	s.uid =#{uid}
+					AND s.scene_id = #{sceneId}
+					AND m.mesh_id = #{meshId}
+					GROUP BY l.id
+					ORDER BY s.scene_id) rec
+			)
+	</update>
 </mapper>

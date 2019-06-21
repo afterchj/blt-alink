@@ -60,6 +60,11 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public void restScene(Map map) {
+        bltConsoleDao.restScene(map);
+    }
+
+    @Override
     public void saveSceneName(Map map) throws NotExitException {
         List list = getScenes(map);
         if (list.size() > 0) {

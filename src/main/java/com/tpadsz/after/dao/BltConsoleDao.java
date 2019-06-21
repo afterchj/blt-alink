@@ -24,6 +24,8 @@ public interface BltConsoleDao {
 
     void saveApplyScene(Map map);
 
+    void restScene(Map map);
+
     void saveSceneName(Map map);
 
     void deleteScene(Map map);
