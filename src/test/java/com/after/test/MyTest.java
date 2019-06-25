@@ -39,14 +39,18 @@ public class MyTest {
     @Test
     public void test() {
         SqlSessionTemplate sqlSessionTemplate = getSqlSessionTemplate();
-        System.out.println("template=" + sqlSessionTemplate);
-        List<Map> list=new ArrayList<>();
-        for (int i = 0; i < 5000; i++) {
-            Map map=new HashMap();
-            map.put("mesh_id", RandomNumberGenerator.generateNumber2());
-            list.add(map);
-        }
-        sqlSessionTemplate.insert("com.tpadsz.after.dao.UserDao.insertBatch",list);
+        Map map=new HashMap();
+        map.put("uid",10);
+        map.put("sceneId",0);
+        map.put("meshId","77661234");
+//        System.out.println("template=" + sqlSessionTemplate);
+//        List<Map> list=new ArrayList<>();
+//        for (int i = 0; i < 5000; i++) {
+//            Map map=new HashMap();
+//            map.put("mesh_id", RandomNumberGenerator.generateNumber2());
+//            list.add(map);
+//        }
+        sqlSessionTemplate.insert("com.tpadsz.after.dao.BltConsoleDao.restScene",map);
 
 //        System.out.println("xMemcachedClient=" + ctx.getBean("xMemcachedClient"));
     }

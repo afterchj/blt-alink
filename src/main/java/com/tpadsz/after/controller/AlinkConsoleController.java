@@ -97,14 +97,16 @@ public class AlinkConsoleController extends BaseDecodedController {
             if (sceneId > 3) {
                 bltConsoleService.deleteScene(param);
             } else {
-                String sname = "场景" + (sceneId + 1);
-                param.put("sname", sname);
                 try {
-                    bltConsoleService.saveSceneName(param);
                     bltConsoleService.restScene(param);
+                    String sname = "场景" + (sceneId + 1);
+                    param.put("sname", sname);
+                    bltConsoleService.saveSceneName(param);
                 } catch (NotExitException e) {
+                    model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+                    model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
+                    e.printStackTrace();
                 }
-//                logger.info("id=" + sceneId + ",name=" + sname);
             }
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
