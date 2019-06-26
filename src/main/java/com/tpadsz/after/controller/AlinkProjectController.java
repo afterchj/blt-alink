@@ -327,7 +327,7 @@ public class AlinkProjectController extends BaseDecodedController {
                     group.setGroupId(entry.getValue().getGroupId());
                     int gid = groupOperationService.getGid(group);
                     lightList.setGid(gid);
-                    Integer pid = groupOperationService.getDefaultPlace(null,params.getString("uid"),group.getMid());
+                    Integer pid = groupOperationService.getDefaultPlace(null, params.getString("uid"), group.getMid());
                     lightList.setPid(pid);
                     flightList.add(lightList);
                 }
@@ -413,7 +413,7 @@ public class AlinkProjectController extends BaseDecodedController {
                         group.setGname(groupInfoList.get(i).getGname());
                         group.setMid(meshList.get(j).getId());
                         group.setGroupId(groupInfoList.get(i).getGroupId());
-                        Integer pid = groupOperationService.getDefaultPlace(null,uid,group.getMid());
+                        Integer pid = groupOperationService.getDefaultPlace(null, uid, group.getMid());
                         group.setPid(pid);
                         groupOperationService.saveGroup(group);
                         groupInfoList.get(i).setGid(group.getId());
@@ -422,6 +422,18 @@ public class AlinkProjectController extends BaseDecodedController {
                 }
             }
         }
+    }
+
+
+    @RequestMapping(value = "/uploadFromPc", method = RequestMethod.POST)
+    public String uploadFromPc(String meshId,String info, ModelMap model) {
+        try {
+            projectService.savePcInfo(meshId, info);
+            model.put("result", ResultDict.SUCCESS.getCode());
+        }catch (Exception e){
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
     }
 
 }

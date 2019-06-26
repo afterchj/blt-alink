@@ -271,4 +271,8 @@
             update alink.f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}
     </update>
 
+    <insert id="savePcInfo" parameterType="string">
+        INSERT INTO f_pc_info (mesh_id,info,create_date) VALUES(#{meshId},#{info},NOW())
+    </insert>
+
 </mapper>

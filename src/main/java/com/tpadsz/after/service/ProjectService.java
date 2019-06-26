@@ -53,4 +53,6 @@ public interface ProjectService {
     void unfreezingOld(Integer id,String flag);
 
     void createPlace(AdjustPlace place);
+
+    void savePcInfo(String meshId, String info);
 }

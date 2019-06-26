@@ -26,6 +26,7 @@
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
             <mvc:exclude-mapping path="/getFirms**"/>
+            <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <!--<mvc:exclude-mapping path="/adjust/communicationTest"/>-->
             <bean class="com.tpadsz.after.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
@@ -45,6 +46,7 @@
             <mvc:exclude-mapping path="/user/register**"/>
             <mvc:exclude-mapping path="/user/fillAccount**"/>
             <mvc:exclude-mapping path="/timeLine/**"/>
+            <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <bean class="com.tpadsz.after.interceptor.UserTokenValidationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

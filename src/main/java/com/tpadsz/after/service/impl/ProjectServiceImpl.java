@@ -222,6 +222,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void savePcInfo(String meshId, String info) {
+        projectDao.savePcInfo(meshId,info);
+    }
+
+    @Override
     public void saveDeleteLog(DeleteLog deleteLog) {
         projectDao.saveDeleteLog(deleteLog);
     }

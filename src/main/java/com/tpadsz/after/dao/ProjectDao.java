@@ -102,4 +102,5 @@ public interface ProjectDao {
 
     int findRepeatMid(AdjustPlace place);
 
+    void savePcInfo(@Param("meshId")String meshId, @Param("info")String info);
 }
