@@ -28,7 +28,7 @@
             <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
-            <mvc:exclude-mapping path="/project/downloadFromPc**"/>
+            <mvc:exclude-mapping path="/project/download**"/>
             <!--<mvc:exclude-mapping path="/adjust/communicationTest"/>-->
             <bean class="com.tpadsz.after.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
@@ -50,7 +50,7 @@
             <mvc:exclude-mapping path="/timeLine/**"/>
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
-            <mvc:exclude-mapping path="/project/downloadFromPc**"/>
+            <mvc:exclude-mapping path="/project/download**"/>
             <bean class="com.tpadsz.after.interceptor.UserTokenValidationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

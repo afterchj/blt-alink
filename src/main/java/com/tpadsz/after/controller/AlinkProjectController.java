@@ -456,8 +456,8 @@ public class AlinkProjectController extends BaseDecodedController {
     }
 
 
-    @RequestMapping(value = "/downloadFromPc", method = RequestMethod.POST)
-    public String downloadFromPc(String meshId, ModelMap model) {
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
+    public String download(String meshId, ModelMap model) {
         try {
             String info = projectService.getInfoByMeshId(meshId);
             model.put("data", info);
