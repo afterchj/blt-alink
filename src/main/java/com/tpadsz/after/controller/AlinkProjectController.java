@@ -1,5 +1,6 @@
 package com.tpadsz.after.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
@@ -13,6 +14,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -426,9 +428,24 @@ public class AlinkProjectController extends BaseDecodedController {
 
 
     @RequestMapping(value = "/uploadFromPc", method = RequestMethod.POST)
-    public String uploadFromPc(String meshId,String info, ModelMap model) {
+    public String uploadFromPc(@RequestBody Map<String,Object> map, ModelMap model) {
         try {
-            projectService.savePcInfo(meshId, info);
+            String meshId = String.valueOf(map.get("meshId"));
+            projectService.savePcInfo(meshId, JSON.toJSONString(map));
+            model.put("result", ResultDict.SUCCESS.getCode());
+        }catch (Exception e){
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
+
+
+
+
+    @RequestMapping(value = "/downloadFromPc", method = RequestMethod.POST)
+    public String downloadFromPc(String meshId, ModelMap model) {
+        try {
+            String info = projectService.getInfoByMeshId(meshId);
             model.put("result", ResultDict.SUCCESS.getCode());
         }catch (Exception e){
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());

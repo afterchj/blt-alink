@@ -55,4 +55,6 @@ public interface ProjectService {
     void createPlace(AdjustPlace place);
 
     void savePcInfo(String meshId, String info);
+
+    String getInfoByMeshId(String meshId);
 }

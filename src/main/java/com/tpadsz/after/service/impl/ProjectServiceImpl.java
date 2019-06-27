@@ -227,6 +227,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public String getInfoByMeshId(String meshId) {
+        return null;
+    }
+
+
+    @Override
     public void saveDeleteLog(DeleteLog deleteLog) {
         projectDao.saveDeleteLog(deleteLog);
     }
