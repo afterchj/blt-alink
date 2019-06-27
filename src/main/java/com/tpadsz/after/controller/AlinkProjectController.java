@@ -430,8 +430,24 @@ public class AlinkProjectController extends BaseDecodedController {
     @RequestMapping(value = "/uploadFromPc", method = RequestMethod.POST)
     public String uploadFromPc(@RequestBody Map<String,Object> map, ModelMap model) {
         try {
+            if(map.get("meshId")==null){
+                model.put("result", ResultDict.PARAMS_BLANK.getCode());
+                return null;
+            }
             String meshId = String.valueOf(map.get("meshId"));
-            projectService.savePcInfo(meshId, JSON.toJSONString(map));
+            projectService.savePcInfo(meshId, JSON.toJSONString(map.get("info")));
+            model.put("result", ResultDict.SUCCESS.getCode());
+        }catch (Exception e){
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/meshList", method = RequestMethod.POST)
+    public String meshList(ModelMap model) {
+        try {
+            List<String> meshList = projectService.findMeshList();
+            model.put("data", meshList);
             model.put("result", ResultDict.SUCCESS.getCode());
         }catch (Exception e){
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
@@ -440,12 +456,11 @@ public class AlinkProjectController extends BaseDecodedController {
     }
 
 
-
-
     @RequestMapping(value = "/downloadFromPc", method = RequestMethod.POST)
     public String downloadFromPc(String meshId, ModelMap model) {
         try {
             String info = projectService.getInfoByMeshId(meshId);
+            model.put("data", info);
             model.put("result", ResultDict.SUCCESS.getCode());
         }catch (Exception e){
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());

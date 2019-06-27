@@ -228,7 +228,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public String getInfoByMeshId(String meshId) {
-        return null;
+        return projectDao.getInfoByMeshId(meshId);
+    }
+
+    @Override
+    public List<String> findMeshList() {
+        return projectDao.findMeshList();
     }
 
 

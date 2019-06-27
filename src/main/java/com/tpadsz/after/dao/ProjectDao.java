@@ -105,4 +105,8 @@ public interface ProjectDao {
     void savePcInfo(@Param("meshId")String meshId, @Param("info")String info);
 
     String downloadFromPc(@Param("meshId")String meshId);
+
+    List<String> findMeshList();
+
+    String getInfoByMeshId(@Param("meshId") String meshId);
 }

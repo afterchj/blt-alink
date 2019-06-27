@@ -266,7 +266,6 @@
     </insert>
     <!--删除部分-->
 
-
     <update id="oldMove">
             update alink.f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}
     </update>
@@ -274,5 +273,13 @@
     <insert id="savePcInfo" parameterType="string">
         INSERT INTO f_pc_info (mesh_id,info,create_date) VALUES(#{meshId},#{info},NOW())
     </insert>
+
+    <select id="findMeshList" resultType="string">
+        SELECT DISTINCT(mesh_id) from f_pc_info ORDER BY create_date
+    </select>
+
+    <select id="getInfoByMeshId" resultType="string">
+        SELECT info from f_pc_info WHERE mesh_id=#{meshId} ORDER BY create_date desc limit 1
+    </select>
 
 </mapper>

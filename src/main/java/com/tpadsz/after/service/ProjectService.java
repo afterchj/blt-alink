@@ -57,4 +57,6 @@ public interface ProjectService {
     void savePcInfo(String meshId, String info);
 
     String getInfoByMeshId(String meshId);
+
+    List<String> findMeshList();
 }
