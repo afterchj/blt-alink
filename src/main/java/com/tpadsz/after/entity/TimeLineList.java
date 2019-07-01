@@ -1,7 +1,5 @@
 package com.tpadsz.after.entity;
 
-import java.util.List;
-
 /**
  * @program: blt-alink
  * @description:
@@ -10,22 +8,22 @@ import java.util.List;
  **/
 public class TimeLineList {
 
-    private String tname;
-    private Integer tid;
-    private String state;
-    private String repetition;
-    private String week;
+//    private String tname;
+//    private Integer tid;
+//    private String state;
+//    private String repetition;
+//    private String week;
 //    private Date create_date;
 //    private Date update_date;
-    private List<TimePointList> timePointLists;
-
-    public String getTname() {
-        return tname;
-    }
-
-    public void setTname(String tname) {
-        this.tname = tname;
-    }
+//    private List<TimePointList> timePointLists;
+    private Integer tid;
+    private Integer id;
+    private String item_title;
+    private String dayObj;
+    private Integer ischoose;
+    private String item_desc;
+    private Integer item_set;
+    private Integer item_tag;
 
     public Integer getTid() {
         return tid;
@@ -35,31 +33,62 @@ public class TimeLineList {
         this.tid = tid;
     }
 
-    public String getState() {
-        return state;
+    public Integer getId() {
+        return id;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getRepetition() {
-        return repetition;
+    public String getItem_title() {
+        return item_title;
     }
 
-    public void setRepetition(String repetition) {
-        this.repetition = repetition;
+    public void setItem_title(String item_title) {
+        this.item_title = item_title;
     }
 
-    public String getWeek() {
-        return week;
+    public String getDayObj() {
+        return dayObj;
     }
 
-    public void setWeek(String week) {
-        this.week = week;
+    public void setDayObj(String dayObj) {
+        this.dayObj = dayObj;
     }
 
-//    public Date getCreate_date() {
+    public Integer getIschoose() {
+        return ischoose;
+    }
+
+    public void setIschoose(Integer ischoose) {
+        this.ischoose = ischoose;
+    }
+
+    public String getItem_desc() {
+        return item_desc;
+    }
+
+    public void setItem_desc(String item_desc) {
+        this.item_desc = item_desc;
+    }
+
+    public Integer getItem_set() {
+        return item_set;
+    }
+
+    public void setItem_set(Integer item_set) {
+        this.item_set = item_set;
+    }
+
+    public Integer getItem_tag() {
+        return item_tag;
+    }
+
+    public void setItem_tag(Integer item_tag) {
+        this.item_tag = item_tag;
+    }
+    //    public Date getCreate_date() {
 //        return create_date;
 //    }
 //
@@ -75,25 +104,12 @@ public class TimeLineList {
 //        this.update_date = update_date;
 //    }
 
-    public List<TimePointList> getTimePointLists() {
-        return timePointLists;
-    }
+//    public List<TimePointList> getTimePointLists() {
+//        return timePointLists;
+//    }
 
-    public void setTimePointLists(List<TimePointList> timePointLists) {
-        this.timePointLists = timePointLists;
-    }
+//    public void setTimePointLists(List<TimePointList> timePointLists) {
+//        this.timePointLists = timePointLists;
+//    }
 
-    @Override
-    public String toString() {
-        return "TimeLineList{" +
-                "tname='" + tname + '\'' +
-                ", tid=" + tid +
-                ", state='" + state + '\'' +
-                ", repetition='" + repetition + '\'' +
-                ", week='" + week + '\'' +
-//                ", create_date=" + create_date +
-//                ", update_date=" + update_date +
-                ", timePointLists=" + timePointLists +
-                '}';
-    }
 }

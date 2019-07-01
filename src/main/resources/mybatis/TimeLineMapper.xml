@@ -3,13 +3,14 @@
 <mapper namespace="com.tpadsz.after.dao.TimeLineDao">
 
     <insert id="createTimeLine" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO f_time_line ( `tname`, `tid`, `state`, `repetition`, `week`, `create_date`, `update_date`, `mid` )
-        VALUES(#{tname}, #{tid}, #{state}, #{repetition}, #{week}, now( ), now(),
-             ( SELECT id FROM f_mesh WHERE mesh_id = #{mesh_id} ))
+        INSERT INTO f_time_line ( `tname`, `tid`, `state`, `repetition`, `week`, `create_date`, `update_date`, `mid` ,`dayObj`, `ischoose`, `item_desc`, `item_set`, `item_tag`)
+        VALUES(#{tname}, #{tid}, #{state}, #{repetition}, #{week}, now( ), now(),( SELECT id FROM f_mesh WHERE
+        mesh_id = #{mesh_id} ),#{dayObj},#{ischoose},#{item_desc},#{item_set},#{item_tag})
     </insert>
 
     <insert id="createTimePoint" parameterType="java.util.List" useGeneratedKeys="false">
-        INSERT INTO `f_time_point`( `tsid`, `sid`, `time`, `state`, `create_date`, `update_date`) VALUES
+        INSERT INTO `f_time_point`( `tsid`, `sid`, `time`, `state`, `create_date`, `update_date`, `hour`, `minute`,
+        `pos_x`, `ttime`, `detail_sence_id`,light_status) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
             (select id from f_time_line where tid=#{item.tid} and mid=(select id from f_mesh where
@@ -27,7 +28,7 @@
             #{item.time},
             #{item.state},
             now(),
-            now())
+            now(),#{item.hour},#{item.minute},#{item.pos_x},#{item.ttime},#{item.detail_sence_id},#{item.light_status})
         </foreach>
     </insert>
 
@@ -123,5 +124,12 @@
             #{item.permission_id})
         </foreach>
 
+    </insert>
+
+    <insert id="insertTimeDatail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO f_time_detail( `hour`, `state`, `minute`, `pos_x`, `scene_id`, `time`, `tsid`, `ttime`,
+        `create_date`,light_status)
+        VALUES ( #{hour}, #{state}, #{minute}, #{pos_x}, #{scene_id}, #{time}, (SELECT id FROM f_time_line WHERE tid = #{tid} AND mid = ( SELECT id FROM f_mesh WHERE
+                  mesh_id=#{mesh_id} AND uid = #{uid} )), #{ttime}, now(),#{light_status})
     </insert>
 </mapper>

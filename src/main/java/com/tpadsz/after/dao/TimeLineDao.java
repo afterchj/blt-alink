@@ -1,7 +1,7 @@
 package com.tpadsz.after.dao;
 
+import com.tpadsz.after.entity.TimeBean;
 import com.tpadsz.after.entity.TimeLine;
-import com.tpadsz.after.entity.TimeLineList;
 import com.tpadsz.after.entity.TimePointParams;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public interface TimeLineDao {
 
     void updateTname(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("tname") String tname,@Param("uid") String uid);
 
-    List<TimeLineList> getByUidAndMeshId(@Param("uid") String uid, @Param("meshId") String meshId);
+    List<TimeBean> getByUidAndMeshId(@Param("uid") String uid, @Param("meshId") String meshId);
 
     Integer delete(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
 
@@ -36,4 +36,6 @@ public interface TimeLineDao {
     void updateTimePointState(@Param(value = "list") List<TimePointParams> timePointList);
 
     void insertRolePermission(List<Map<String,Integer>> list);
+
+    void insertTimeDatail(TimePointParams timePointParams);
 }
