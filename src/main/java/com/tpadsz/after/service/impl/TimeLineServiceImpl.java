@@ -201,17 +201,19 @@ public class TimeLineServiceImpl implements TimeLineService {
                 timeLineDao.insertTimeDatail(timePointParams);
                 Integer detailId = timePointParams.getId();
 //                System.out.println("detailId: "+detailId);
-                JSONArray detailValueList = timePointArray.getJSONObject(i).getJSONArray("detailValueList");
-                for(int j=0;j<detailValueList.size();j++){
+                JSONArray detailValueList = timePointArray.getJSONObject(i).getJSONArray("detailvalueList");
+                if (detailValueList!=null){
+                    for(int j=0;j<detailValueList.size();j++){
 //                    timePointParams.setState(detailValueList.getJSONObject(j).getString("state"));
-                    timePointParams.setTime(detailValueList.getJSONObject(j).getInteger("time"));
-                    timePointParams.setHour(detailValueList.getJSONObject(j).getInteger("hour"));
-                    timePointParams.setMinute(detailValueList.getJSONObject(j).getInteger("minute"));
-                    timePointParams.setPos_x(detailValueList.getJSONObject(j).getInteger("pos_x"));
-                    timePointParams.setScene_id(detailValueList.getJSONObject(j).getInteger("sence_index"));
-                    timePointParams.setLight_status(detailValueList.getJSONObject(j).getInteger("light_status"));
-                    timePointParams.setDetail_sence_id(detailId);
-                    timePointList.add(timePointParams);
+                        timePointParams.setTime(detailValueList.getJSONObject(j).getInteger("time"));
+                        timePointParams.setHour(detailValueList.getJSONObject(j).getInteger("hour"));
+                        timePointParams.setMinute(detailValueList.getJSONObject(j).getInteger("minute"));
+                        timePointParams.setPos_x(detailValueList.getJSONObject(j).getInteger("pos_x"));
+                        timePointParams.setScene_id(detailValueList.getJSONObject(j).getInteger("sence_index"));
+                        timePointParams.setLight_status(detailValueList.getJSONObject(j).getInteger("light_status"));
+                        timePointParams.setDetail_sence_id(detailId);
+                        timePointList.add(timePointParams);
+                    }
                 }
             }else {
                 //单场景
