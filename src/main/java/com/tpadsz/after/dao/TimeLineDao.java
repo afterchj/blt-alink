@@ -38,4 +38,24 @@ public interface TimeLineDao {
     void insertRolePermission(List<Map<String,Integer>> list);
 
     void insertTimeDatail(TimePointParams timePointParams);
+
+    void createTimeJson(@Param("tid") Integer tid,@Param("meshId") String meshId,@Param("uid") String uid,@Param
+            ("jsonString")
+            String
+            jsonString);
+
+    void deleteTimeLine(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    void deleteTimePoint(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    void deleteTimeDetail(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    void deleteTimeJson(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    TimeBean getTimeJson(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("uid") String uid);
+
+    void updateTimeJson(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("uid") String uid, @Param
+            ("json") String json);
+
+//    void updateTimeJson(@Param("tid") Integer tid, @Param("") String meshId, String uid, String json);
 }

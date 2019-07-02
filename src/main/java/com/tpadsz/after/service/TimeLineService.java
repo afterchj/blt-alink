@@ -1,7 +1,6 @@
 package com.tpadsz.after.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.TimeBean;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface TimeLineService {
 
     void rename(JSONObject params);
 
-    List<TimeBean> get(JSONObject params);
+    List<JSONObject>  get(JSONObject params);
 
     void delete(JSONObject params);
 

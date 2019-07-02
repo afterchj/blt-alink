@@ -1,43 +1,45 @@
 package com.tpadsz.after.entity;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by zhangjun.chen on 2019/6/5.
  */
 public class TimeBean implements Serializable {
-    private String meshId;
-    private List<TimeLineListObj> timeLineListObjList;
-    private List<TimeLinePointBean> timeLinePointBeanList;//和上一行index同步
+    private Integer tid;
+    private Integer mid;
+    private String json;
 
-    public String getMeshId() {
-        return meshId;
+    @Override
+    public String toString() {
+        return "TimeBean{" +
+                "tid=" + tid +
+                ", mid=" + mid +
+                ", json='" + json + '\'' +
+                '}';
     }
 
-    public void setMeshId(String meshId) {
-        this.meshId = meshId;
+    public Integer getTid() {
+        return tid;
     }
 
-    public List<TimeLineListObj> getTimeLineListObjList() {
-        return timeLineListObjList;
+    public void setTid(Integer tid) {
+        this.tid = tid;
     }
 
-    public void setTimeLineListObjList(List<TimeLineListObj> timeLineListObjList) {
-        this.timeLineListObjList = timeLineListObjList;
+    public Integer getMid() {
+        return mid;
     }
 
-    public List<TimeLinePointBean> getTimeLinePointBeanList() {
-        return timeLinePointBeanList;
+    public void setMid(Integer mid) {
+        this.mid = mid;
     }
 
-    public void setTimeLinePointBeanList(List<TimeLinePointBean> timeLinePointBeanList) {
-        this.timeLinePointBeanList = timeLinePointBeanList;
+    public String getJson() {
+        return json;
     }
 
-    public TimeBean(String meshId, List<TimeLineListObj> timeLineListObjList, List<TimeLinePointBean> timeLinePointBeanList) {
-        this.meshId = meshId;
-        this.timeLineListObjList = timeLineListObjList;
-        this.timeLinePointBeanList = timeLinePointBeanList;
+    public void setJson(String json) {
+        this.json = json;
     }
 }

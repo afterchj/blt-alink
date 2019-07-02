@@ -3,19 +3,19 @@
 <mapper namespace="com.tpadsz.after.dao.TimeLineDao">
 
     <insert id="createTimeLine" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO f_time_line ( `tname`, `tid`, `state`, `repetition`, `week`, `create_date`, `update_date`, `mid` ,`dayObj`, `ischoose`, `item_desc`, `item_set`, `item_tag`)
-        VALUES(#{tname}, #{tid}, #{state}, #{repetition}, #{week}, now( ), now(),( SELECT id FROM f_mesh WHERE
+        INSERT INTO f_time_line ( `tname`, `tid`, `repetition`, `week`, `create_date`, `update_date`, `mid` ,`dayObj`, `ischoose`, `item_desc`, `item_set`, `item_tag`)
+        VALUES(#{tname}, #{tid}, #{repetition}, #{week}, now( ), now(),( SELECT id FROM f_mesh WHERE
         mesh_id = #{mesh_id} ),#{dayObj},#{ischoose},#{item_desc},#{item_set},#{item_tag})
     </insert>
 
     <insert id="createTimePoint" parameterType="java.util.List" useGeneratedKeys="false">
-        INSERT INTO `f_time_point`( `tsid`, `sid`, `time`, `state`, `create_date`, `update_date`, `hour`, `minute`,
-        `pos_x`, `ttime`, `detail_sence_id`,light_status) VALUES
+        INSERT INTO `f_time_point`( `tsid`, `sid`, `time`, `create_date`, `update_date`, `hour`, `minute`,
+        `pos_x`, `detail_sence_id`,light_status) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
             (select id from f_time_line where tid=#{item.tid} and mid=(select id from f_mesh where
             mesh_id=#{item.mesh_id} and uid=#{item.uid})),
-            <if test="item.scene_id!=null and item.scene_id!=23">
+            <if test="item.scene_id!=null and item.scene_id!=23 and item.scene_id!=21 and item.scene_id!=22" >
                 (select id from f_scene where scene_id=#{item.scene_id} and mid=(select id from f_mesh where
                 mesh_id=#{item.mesh_id} and uid=#{item.uid})),
             </if>
@@ -25,62 +25,25 @@
             <if test="item.scene_id==23">
                 23,
             </if>
+            <if test="item.scene_id==21">
+                21,
+            </if>
+            <if test="item.scene_id==22">
+                22,
+            </if>
             #{item.time},
-            #{item.state},
             now(),
-            now(),#{item.hour},#{item.minute},#{item.pos_x},#{item.ttime},#{item.detail_sence_id},#{item.light_status})
+            now(),#{item.hour},#{item.minute},#{item.pos_x},#{item.detail_sence_id},#{item.light_status})
         </foreach>
     </insert>
 
     <update id="updateTname">
         update f_time_line set tname=#{tname},update_date=now() where tid=#{tid} and mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid})
     </update>
-    <resultMap id="timeLineLists" type="com.tpadsz.after.entity.TimeLineList">
-        <result property="tname" column="tname"/>
-        <result property="tid" column="tid"/>
-        <result property="state" column="state"/>
-        <result property="repetition" column="repetition"/>
-        <result property="week" column="week"/>
-        <!--<result property="create_date" column="create_date"/>-->
-        <!--<result property="update_date" column="update_date"/>-->
-        <collection property="timePointLists" ofType="com.tpadsz.after.entity.TimePointList">
-            <result property="sceneId" column="sceneId"/>
-            <result property="time" column="time"/>
-            <result property="state" column="pstate"/>
-            <!--<result property="create_date" column="pcreate_date"/>-->
-            <!--<result property="update_date" column="pupdate_date"/>-->
-        </collection>
-    </resultMap>
-    <select id="getByUidAndMeshId" resultMap="timeLineLists">
-          SELECT
-               	l.tname,
-               	l.tid,
-               	l.state,
-               	l.repetition,
-               	l.week,
-               	p.scene_id as sceneId,
-               	p.time,
-               	p.state as pstate
-          FROM
-               	( SELECT id,tname,tid,state,repetition,week FROM f_time_line WHERE mid = ( SELECT id FROM f_mesh WHERE mesh_id =#{meshId} AND uid = #{uid} )) l
-          LEFT JOIN (
-                SELECT
-               	  po.tsid AS tsid,
-               	  po.time AS time,
-               	  po.state AS state,
-               	  s.scene_id AS scene_id
-                FROM
-               	  f_time_point po,
-               	  f_scene s
-                WHERE
-               	  s.mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} )
-               	AND po.sid = s.id
-               	union
-               	select p2.tsid,p2.time,p2.state,scene_id from (select tsid,time,state,null as scene_id from f_time_point where sid is null) p2 left join ( SELECT id FROM f_time_line WHERE mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} ) ) l2 on p2.tsid=l2.id
-               	union select tsid,time,state,23 from f_time_point where sid=23 and tsid in(select id from f_time_line where mid = ( SELECT id FROM f_mesh WHERE mesh_id = #{meshId} AND uid = #{uid} ))
-               	) p
-          ON l.id = p.tsid
-          ORDER BY tid,p.time
+
+    <select id="getByUidAndMeshId" resultType="com.tpadsz.after.entity.TimeBean">
+          select tid,mid,json from f_time_json where mid= ( SELECT id FROM f_mesh WHERE
+                  mesh_id=#{meshId} AND uid = #{uid} )
     </select>
 
     <delete id="delete">
@@ -132,4 +95,38 @@
         VALUES ( #{hour}, #{state}, #{minute}, #{pos_x}, #{scene_id}, #{time}, (SELECT id FROM f_time_line WHERE tid = #{tid} AND mid = ( SELECT id FROM f_mesh WHERE
                   mesh_id=#{mesh_id} AND uid = #{uid} )), #{ttime}, now(),#{light_status})
     </insert>
+
+    <insert id="createTimeJson">
+        INSERT INTO f_time_json(`tid`, `mid`, `json`) VALUES ( #{tid},
+        ( SELECT id FROM f_mesh WHERE mesh_id=#{meshId} AND uid = #{uid} ) , #{jsonString})
+    </insert>
+
+    <delete id="deleteTimeLine">
+        delete from f_time_line where tid=#{tid} and mid=(SELECT id FROM f_mesh WHERE mesh_id=#{meshId} AND uid =
+        #{uid} )
+    </delete>
+    <delete id="deleteTimePoint">
+        delete from f_time_point where tsid=(select id from f_time_line where tid=#{tid} and mid=(SELECT id FROM
+        f_mesh WHERE mesh_id=#{meshId} AND uid =
+        #{uid} ))
+    </delete>
+    <delete id="deleteTimeDetail">
+        delete from f_time_detail where tsid=(select id from f_time_line where tid=#{tid} and mid=(SELECT id FROM
+        f_mesh WHERE mesh_id=#{meshId} AND uid =
+        #{uid} ))
+    </delete>
+    <delete id="deleteTimeJson">
+        delete from f_time_json where tid=#{tid} and mid=(SELECT id FROM f_mesh WHERE mesh_id=#{meshId} AND uid =
+        #{uid})
+    </delete>
+
+    <select id="getTimeJson" resultType="com.tpadsz.after.entity.TimeBean">
+        select tid,mid,json from f_time_json  where tid=#{tid} and mid=(SELECT id FROM f_mesh WHERE mesh_id=#{meshId} AND uid =
+        #{uid})
+    </select>
+
+    <update id="updateTimeJson">
+        update f_time_json set json=#{json} where tid=#{tid} and mid=(SELECT id FROM f_mesh WHERE mesh_id=#{meshId} AND uid =
+        #{uid})
+    </update>
 </mapper>

@@ -18,7 +18,7 @@ public class TimePointParams {
         this.id = id;
     }
 
-    private String time;
+    private Integer time;
     private String state;
     private Integer scene_id;
     private String uid;
@@ -79,11 +79,11 @@ public class TimePointParams {
         this.detail_sence_id = detail_sence_id;
     }
 
-    public String getTime() {
+    public Integer getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Integer time) {
         this.time = time;
     }
 

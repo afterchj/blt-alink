@@ -38,6 +38,9 @@ public class TimeLineServiceImpl implements TimeLineService {
         if (count2==null){
             return false;
         }
+
+        String jsonStr = params.toJSONString();
+        timeLineDao.createTimeJson(params.getInteger("tid"),params.getString("meshId"),params.getString("uid"),jsonStr);
         return true;
     }
 
@@ -48,14 +51,30 @@ public class TimeLineServiceImpl implements TimeLineService {
         String tname = params.getString("tname");
         String uid = params.getString("uid");
         timeLineDao.updateTname(tid,meshId,tname,uid);
+        TimeBean timeBean = timeLineDao.getTimeJson(tid,meshId,uid);
+        String json = timeBean.getJson();
+        JSONObject jsonObject = JSONObject.parseObject(json);
+        jsonObject.remove("tname");
+        jsonObject.put("tname",tname);
+        jsonObject.remove("item_title");
+        jsonObject.put("item_title",tname);
+        json = jsonObject.toJSONString();
+        timeLineDao.updateTimeJson(tid,meshId,uid,json);
+
     }
 
     @Override
-    public List<TimeBean> get(JSONObject params) {
+    public List<JSONObject> get(JSONObject params) {
         String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         List<TimeBean> timeLineLists = timeLineDao.getByUidAndMeshId(uid,meshId);
-        return timeLineLists;
+        List<JSONObject> json = new ArrayList<>();
+        for (TimeBean timeBean:timeLineLists){
+            String jsonStr = timeBean.getJson();
+            JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+            json.add(jsonObject);
+        }
+        return json;
     }
 
     @Override
@@ -65,7 +84,11 @@ public class TimeLineServiceImpl implements TimeLineService {
         JSONArray timeLineArray = params.getJSONArray("timeLineLists");
         for (int i=0;i<timeLineArray.size();i++){
             Integer tid = timeLineArray.getJSONObject(i).getInteger("tid");
-            timeLineDao.delete(uid,meshId,tid);
+            timeLineDao.deleteTimePoint(uid,meshId,tid);
+            timeLineDao.deleteTimeDetail(uid,meshId,tid);
+            timeLineDao.deleteTimeJson(uid,meshId,tid);
+            timeLineDao.deleteTimeLine(uid,meshId,tid);
+//            timeLineDao.delete(uid,meshId,tid);
         }
 
     }
@@ -77,7 +100,9 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Override
     public void createTimeLine(JSONObject params) {
-        setTimePointList(params);
+        TimeLine timeLine = setTimeLine(params);
+        String jsonStr = params.toJSONString();
+        timeLineDao.createTimeJson(params.getInteger("tid"),params.getString("meshId"),params.getString("uid"),jsonStr);
     }
 
     /**
@@ -155,35 +180,33 @@ public class TimeLineServiceImpl implements TimeLineService {
         TimePointParams timePointParams;
         JSONArray timePointArray = params.getJSONArray("timePointList");
         for (int i=0;i<timePointArray.size();i++){
-            Integer sceneId = timePointArray.getJSONObject(i).getInteger("sceneId");
+            Integer sceneId = timePointArray.getJSONObject(i).getInteger("sence_index");
             timePointParams = new TimePointParams();
             timePointParams.setMesh_id(meshId);
             timePointParams.setUid(uid);
             timePointParams.setTid(tid);
             timePointParams.setScene_id(sceneId);
-            timePointParams.setState(timePointArray.getJSONObject(i).getString("state"));
-            timePointParams.setTime(timePointArray.getJSONObject(i).getString("time"));
+//            timePointParams.setState(timePointArray.getJSONObject(i).getString("state"));
+            timePointParams.setTime(timePointArray.getJSONObject(i).getInteger("time"));
             timePointParams.setHour(timePointArray.getJSONObject(i).getInteger("hour"));
             timePointParams.setMinute(timePointArray.getJSONObject(i).getInteger("minute"));
             timePointParams.setPos_x(timePointArray.getJSONObject(i).getInteger("pos_x"));
-            timePointParams.setTtime(timePointArray.getJSONObject(i).getInteger("ttime"));
             timePointParams.setDetail_sence_id(0);
             timePointParams.setLight_status(timePointArray.getJSONObject(i).getInteger("light_status"));
             if (sceneId==23){
                 //多场景
                 timeLineDao.insertTimeDatail(timePointParams);
                 Integer detailId = timePointParams.getId();
-                System.out.println("detailId: "+detailId);
+//                System.out.println("detailId: "+detailId);
                 JSONArray detailValueList = timePointArray.getJSONObject(i).getJSONArray("detailValueList");
                 for(int j=0;j<detailValueList.size();j++){
-                    timePointParams.setState(detailValueList.getJSONObject(j).getString("state"));
-                    timePointParams.setTime(detailValueList.getJSONObject(j).getString("time"));
-                    timePointParams.setTtime(detailValueList.getJSONObject(j).getInteger("tttime"));
+//                    timePointParams.setState(detailValueList.getJSONObject(j).getString("state"));
+                    timePointParams.setTime(detailValueList.getJSONObject(j).getInteger("time"));
                     timePointParams.setHour(detailValueList.getJSONObject(j).getInteger("hour"));
                     timePointParams.setMinute(detailValueList.getJSONObject(j).getInteger("minute"));
                     timePointParams.setPos_x(detailValueList.getJSONObject(j).getInteger("pos_x"));
-                    timePointParams.setScene_id(detailValueList.getJSONObject(j).getInteger("sceneId"));
-                    timePointParams.setLight_status(detailValueList.getJSONObject(j).getInteger("llight_status"));
+                    timePointParams.setScene_id(detailValueList.getJSONObject(j).getInteger("sence_index"));
+                    timePointParams.setLight_status(detailValueList.getJSONObject(j).getInteger("light_status"));
                     timePointParams.setDetail_sence_id(detailId);
                     timePointList.add(timePointParams);
                 }
