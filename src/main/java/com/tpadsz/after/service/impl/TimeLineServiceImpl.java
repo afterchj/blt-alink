@@ -95,7 +95,10 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Override
     public void deleteOne(String uid,String meshId,Integer tid){
-        timeLineDao.delete(uid,meshId,tid);
+        timeLineDao.deleteTimePoint(uid,meshId,tid);
+        timeLineDao.deleteTimeDetail(uid,meshId,tid);
+        timeLineDao.deleteTimeJson(uid,meshId,tid);
+        timeLineDao.deleteTimeLine(uid,meshId,tid);
     }
 
     @Override

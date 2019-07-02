@@ -90,10 +90,10 @@
     </insert>
 
     <insert id="insertTimeDatail" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO f_time_detail( `hour`, `state`, `minute`, `pos_x`, `scene_id`, `time`, `tsid`, `ttime`,
+        INSERT INTO f_time_detail( `hour`, `minute`, `pos_x`, `scene_id`, `time`, `tsid`,
         `create_date`,light_status)
-        VALUES ( #{hour}, #{state}, #{minute}, #{pos_x}, #{scene_id}, #{time}, (SELECT id FROM f_time_line WHERE tid = #{tid} AND mid = ( SELECT id FROM f_mesh WHERE
-                  mesh_id=#{mesh_id} AND uid = #{uid} )), #{ttime}, now(),#{light_status})
+        VALUES ( #{hour}, #{minute}, #{pos_x}, #{scene_id}, #{time}, (SELECT id FROM f_time_line WHERE tid = #{tid} AND mid = ( SELECT id FROM f_mesh WHERE
+                  mesh_id=#{mesh_id} AND uid = #{uid} )), now(),#{light_status})
     </insert>
 
     <insert id="createTimeJson">
