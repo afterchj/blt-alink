@@ -70,9 +70,9 @@ public class TimeLineControllerTest {
 
     @Test
     public void updateTimePointStateTest() {
-        String data = "{\"uid\":\"7\",\"meshId\":\"84137526\",\"timeLineList\":[{\"tid\":\"51\",\"state\":\"2\"}]}";
+        String data = "{\"uid\":\"7\",\"meshId\":\"84137526\",\"tid\":2,\"state\":\"1\"}";
         JSONObject jsonObject = JSONObject.parseObject(data);
-        timeLineService.updateTimePointState(jsonObject);
+        timeLineService.updateTimeLineState(jsonObject);
 
     }
 

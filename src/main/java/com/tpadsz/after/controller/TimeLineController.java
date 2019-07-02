@@ -104,9 +104,9 @@ public class TimeLineController extends BaseDecodedController{
      * @param params
      * @param model
      */
-    @RequestMapping(value = "/allOnOrAllOff", method = RequestMethod.POST)
+    @RequestMapping(value = "/onOrOff", method = RequestMethod.POST)
     public void allOnOrAllOff(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-        timeLineService.updateTimePointState(params);
+        timeLineService.updateTimeLineState(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }

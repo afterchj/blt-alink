@@ -65,19 +65,9 @@
         INSERT INTO repeated_mesh_id( mesh_id) VALUES ( #{mesh_id});
     </insert>
 
-    <update id="updateTimePointState" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            update f_time_point
-              <set>
-                  sid=null,
-                  state=#{item.state},
-                  update_date = now()
-              </set>
-              <where>
-                  tsid = ( SELECT id FROM f_time_line WHERE tid = #{item.tid} AND mid = ( SELECT id FROM f_mesh WHERE
-                  mesh_id=#{item.mesh_id} AND uid = #{item.uid} ) );
-              </where>
-        </foreach>
+    <update id="updateTimeLineState" parameterType="com.tpadsz.after.entity.TimePointParams">
+            update f_time_line set item_set=#{state} where tid=#{tid} and mid=(SELECT id FROM f_mesh WHERE
+                  mesh_id=#{mesh_id} AND uid = #{uid} )
     </update>
 
     <insert id="insertRolePermission" parameterType="java.util.List">
