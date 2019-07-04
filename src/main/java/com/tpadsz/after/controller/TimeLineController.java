@@ -1,7 +1,6 @@
 package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.TimeLineList;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.TimeLineService;
 import org.springframework.stereotype.Controller;
@@ -54,6 +53,7 @@ public class TimeLineController extends BaseDecodedController{
         timeLineService.rename(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
+
     }
 
     /**
@@ -93,9 +93,8 @@ public class TimeLineController extends BaseDecodedController{
      */
     @RequestMapping(value = "/get",method = RequestMethod.POST)
     public void get(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-
-        List<TimeLineList> timeLineLists = timeLineService.get(params);
-        model.put("timeLineLists",timeLineLists);
+        List<JSONObject>  timeLineList = timeLineService.get(params);
+        model.put("timeLineList",timeLineList);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }
@@ -105,9 +104,9 @@ public class TimeLineController extends BaseDecodedController{
      * @param params
      * @param model
      */
-    @RequestMapping(value = "/allOnOrAllOff", method = RequestMethod.POST)
+    @RequestMapping(value = "/onOrOff", method = RequestMethod.POST)
     public void allOnOrAllOff(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-        timeLineService.updateTimePointState(params);
+        timeLineService.updateTimeLineState(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }

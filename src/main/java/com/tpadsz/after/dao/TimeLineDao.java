@@ -1,7 +1,7 @@
 package com.tpadsz.after.dao;
 
+import com.tpadsz.after.entity.TimeBean;
 import com.tpadsz.after.entity.TimeLine;
-import com.tpadsz.after.entity.TimeLineList;
 import com.tpadsz.after.entity.TimePointParams;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public interface TimeLineDao {
 
     void updateTname(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("tname") String tname,@Param("uid") String uid);
 
-    List<TimeLineList> getByUidAndMeshId(@Param("uid") String uid, @Param("meshId") String meshId);
+    List<TimeBean> getByUidAndMeshId(@Param("uid") String uid, @Param("meshId") String meshId);
 
     Integer delete(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
 
@@ -33,7 +33,29 @@ public interface TimeLineDao {
 
     void insertRepeated( @Param("mesh_id") String mesh_id);
 
-    void updateTimePointState(@Param(value = "list") List<TimePointParams> timePointList);
+    void updateTimeLineState(TimePointParams timePointParams);
 
     void insertRolePermission(List<Map<String,Integer>> list);
+
+    void insertTimeDatail(TimePointParams timePointParams);
+
+    void createTimeJson(@Param("tid") Integer tid,@Param("meshId") String meshId,@Param("uid") String uid,@Param
+            ("jsonString")
+            String
+            jsonString);
+
+    void deleteTimeLine(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    void deleteTimePoint(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    void deleteTimeDetail(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    void deleteTimeJson(@Param("uid") String uid, @Param("meshId") String meshId, @Param("tid") Integer tid);
+
+    TimeBean getTimeJson(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("uid") String uid);
+
+    void updateTimeJson(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("uid") String uid, @Param
+            ("json") String json);
+
+//    void updateTimeJson(@Param("tid") Integer tid, @Param("") String meshId, String uid, String json);
 }
