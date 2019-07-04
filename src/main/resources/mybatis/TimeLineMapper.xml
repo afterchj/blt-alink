@@ -26,10 +26,10 @@
                 23,
             </if>
             <if test="item.scene_id==21">
-                21,
+                -1,
             </if>
             <if test="item.scene_id==22">
-                22,
+                -2,
             </if>
             #{item.time},
             now(),
