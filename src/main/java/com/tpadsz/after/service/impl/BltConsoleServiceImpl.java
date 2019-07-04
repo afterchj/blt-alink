@@ -55,6 +55,16 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public Integer getCount(Map map) throws NotExitException {
+        int count = bltConsoleDao.getCount(map);
+        if (count > 0) {
+            throw new NotExitException("该场景在定时列表中，不可删除！");
+        } else {
+            return count;
+        }
+    }
+
+    @Override
     public void saveApplyScene(Map map) {
         bltConsoleDao.saveApplyScene(map);
     }
