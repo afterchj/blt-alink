@@ -31,9 +31,11 @@ public class ConfigurationTest {
     @Test
     public void testXmemcached() throws InterruptedException, MemcachedException, TimeoutException {
         // set: 第一个参数是key，第二个参数是超时时间，第三个参数是value
+        xMemcachedClient.set("uic_cache_message_verify_123456",0, "12345");//添加或者更新
         xMemcachedClient.set("first", 3, "tianjin");//添加或者更新
         xMemcachedClient.set("second", 2, "chengdu");//添加,key不存在添加成功返回true,否则返回false
         xMemcachedClient.replace("first", 3, "Beijing");//替换,key已经存在替换成功返回true,不存在返回false
+        System.out.println("code=======================" + xMemcachedClient.get("uic_cache_message_verify_123456"));
         System.out.println("first=======================" + xMemcachedClient.get("first"));
         System.out.println("second======================" + xMemcachedClient.get("second"));
         System.out.println("--------------------------------------------------------------");

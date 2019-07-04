@@ -71,9 +71,6 @@ public class HttpUtils {
             case "12":
                 body = buildRequestBody(SMSContains.XM_LIFE.getSender(), receiver, SMSContains.XM_LIFE.getTemplate(), templateParas);
                 break;
-            case "13":
-                body = buildRequestBody(SMSContains.ALINK_LAIGHT.getSender(), receiver, SMSContains.ALINK_LAIGHT.getTemplate(), templateParas);
-                break;
             default:
                 body = buildRequestBody(SMSContains.ALINK_LAIGHT.getSender(), receiver, SMSContains.ALINK_LAIGHT.getTemplate(), templateParas);
                 break;

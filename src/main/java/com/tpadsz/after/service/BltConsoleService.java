@@ -24,8 +24,12 @@ public interface BltConsoleService {
 
     Integer getPid(Map map);
 
+    Integer getCount(Map map)throws NotExitException;
+
     void saveApplyScene(Map map);
+
     void restScene(Map map);
+
     void saveSceneName(Map map) throws NotExitException;
 
     void deleteScene(Map map);

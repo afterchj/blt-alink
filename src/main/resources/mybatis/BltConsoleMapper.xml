@@ -84,7 +84,16 @@
         </if>
         GROUP BY m.mesh_id,s.scene_id,s.sname
     </select>
-
+	<select id="getCount" resultType="Integer" parameterType="map">
+		SELECT COUNT(0) tcount FROM f_time_point WHERE sid = (
+			SELECT s.id
+			FROM f_mesh m
+			INNER JOIN f_scene s ON m.id = s.mid
+			WHERE s.uid = #{uid}
+			AND m.mesh_id = #{meshId}
+			AND s.scene_id=#{sceneId}
+			)
+	</select>
     <select id="getGroups" resultType="map" parameterType="map">
 		SELECT
 			m.mesh_id,

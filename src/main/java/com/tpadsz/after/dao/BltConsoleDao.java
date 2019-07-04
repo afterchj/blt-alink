@@ -20,6 +20,8 @@ public interface BltConsoleDao {
 
     Integer getPid(Map map);
 
+    Integer getCount(Map map);
+
     int getTotal(Map map);
 
     void saveApplyScene(Map map);
