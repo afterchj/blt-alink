@@ -222,8 +222,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void savePcInfo(String meshId, String info) {
-        projectDao.savePcInfo(meshId,info);
+    public void savePcInfo(String meshId,String meshName, String info) {
+        projectDao.savePcInfo(meshId,meshName,info);
     }
 
     @Override
@@ -232,7 +232,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<String> findMeshList() {
+    public List findMeshList() {
         return projectDao.findMeshList();
     }
 

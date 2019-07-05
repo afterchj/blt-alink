@@ -102,9 +102,9 @@ public interface ProjectDao {
 
     int findRepeatMid(AdjustPlace place);
 
-    void savePcInfo(@Param("meshId")String meshId, @Param("info")String info);
+    void savePcInfo(@Param("meshId")String meshId, @Param("meshName")String meshName,@Param("info")String info);
 
-    List<String> findMeshList();
+    List findMeshList();
 
     String getInfoByMeshId(@Param("meshId") String meshId);
 }

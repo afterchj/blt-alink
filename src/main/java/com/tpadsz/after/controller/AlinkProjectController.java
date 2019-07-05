@@ -431,7 +431,8 @@ public class AlinkProjectController extends BaseDecodedController {
     public String uploadFromPc(@RequestBody Map<String,Object> map, ModelMap model) {
         try {
             String meshId = String.valueOf(map.get("meshId"));
-            projectService.savePcInfo(meshId, JSON.toJSONString(map.get("info")));
+            String meshName = String.valueOf(map.get("meshName"));
+            projectService.savePcInfo(meshId,meshName, JSON.toJSONString(map.get("info")));
             model.put("result", ResultDict.SUCCESS.getCode());
         }catch (Exception e){
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
@@ -442,7 +443,7 @@ public class AlinkProjectController extends BaseDecodedController {
     @RequestMapping(value = "/meshList", method = RequestMethod.POST)
     public String meshList(ModelMap model) {
         try {
-            List<String> meshList = projectService.findMeshList();
+            List meshList = projectService.findMeshList();
             model.put("data", meshList);
             model.put("result", ResultDict.SUCCESS.getCode());
         }catch (Exception e){
