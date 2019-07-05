@@ -275,7 +275,7 @@
     </insert>
 
     <select id="findMeshList" resultType="map">
-        SELECT DISTINCT(mesh_id) AS meshId,mesh_name AS meshName from f_pc_info ORDER BY create_date
+        SELECT a.mesh_id AS meshId,a.mesh_name AS meshName FROM (SELECT * FROM f_pc_info ORDER BY update_date DESC) AS a GROUP BY a.mesh_id
     </select>
 
     <select id="getInfoByMeshId" resultType="string">
