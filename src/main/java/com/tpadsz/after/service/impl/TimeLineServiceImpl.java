@@ -208,6 +208,10 @@ public class TimeLineServiceImpl implements TimeLineService {
                 JSONArray detailValueList = timePointArray.getJSONObject(i).getJSONArray("detailvalueList");
                 if (detailValueList != null) {
                     for (int j = 0; j < detailValueList.size(); j++) {
+                        timePointParams = new TimePointParams();
+                        timePointParams.setMesh_id(meshId);
+                        timePointParams.setUid(uid);
+                        timePointParams.setTid(tid);
 //                    timePointParams.setState(detailValueList.getJSONObject(j).getString("state"));
                         timePointParams.setTime(detailValueList.getJSONObject(j).getInteger("time"));
                         timePointParams.setHour(detailValueList.getJSONObject(j).getInteger("hour"));
