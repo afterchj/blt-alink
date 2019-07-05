@@ -19,7 +19,7 @@
                 (select id from f_scene where scene_id=#{item.scene_id} and mid=(select id from f_mesh where
                 mesh_id=#{item.mesh_id} and uid=#{item.uid})),
             </if>
-            <if test="item.scene_id==null ">
+            <if test="item.scene_id==null">
                 NULL ,
             </if>
             <if test="item.scene_id==23">

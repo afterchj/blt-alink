@@ -217,7 +217,7 @@ public class TimeLineServiceImpl implements TimeLineService {
                         timePointParams.setHour(detailValueList.getJSONObject(j).getInteger("hour"));
                         timePointParams.setMinute(detailValueList.getJSONObject(j).getInteger("minute"));
                         timePointParams.setPos_x(detailValueList.getJSONObject(j).getInteger("pos_x"));
-                        timePointParams.setScene_id(detailValueList.getJSONObject(j).getInteger("sence_index"));
+                        timePointParams.setScene_id((detailValueList.getJSONObject(j).getInteger("sence_index")-1));
                         timePointParams.setLight_status(detailValueList.getJSONObject(j).getInteger("light_status"));
                         timePointParams.setDetail_sence_id(detailId);
                         timePointList.add(timePointParams);
