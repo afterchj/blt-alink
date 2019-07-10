@@ -5,7 +5,7 @@
     <insert id="createTimeLine" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO f_time_line ( `tname`, `tid`, `repetition`, `week`, `create_date`, `update_date`, `mid` ,`dayObj`, `ischoose`, `item_desc`, `item_set`, `item_tag`)
         VALUES(#{tname}, #{tid}, #{repetition}, #{week}, now( ), now(),( SELECT id FROM f_mesh WHERE
-        mesh_id = #{mesh_id} ),#{dayObj},#{ischoose},#{item_desc},#{item_set},#{item_tag})
+        mesh_id = #{mesh_id} and uid=#{uid}),#{dayObj},#{ischoose},#{item_desc},#{item_set},#{item_tag})
     </insert>
 
     <insert id="createTimePoint" parameterType="java.util.List" useGeneratedKeys="false">

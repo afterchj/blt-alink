@@ -161,6 +161,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     public TimeLine setTimeLine(JSONObject params) {
         TimeLine timeLine = new TimeLine();
+        timeLine.setUid(params.getString("uid"));
         timeLine.setTname(params.getString("tname"));
         timeLine.setTid(params.getInteger("tid"));
         timeLine.setWeek(params.getString("week"));

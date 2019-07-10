@@ -43,7 +43,7 @@ public class SceneAjustServiceImpl implements SceneAjustService {
         SceneAjustDao sceneAjustDao1 = sqlSession.getMapper(SceneAjustDao.class);
         try {
             //删除light_setting中之前保存的场景
-            sceneAjustDao1.deleteLightSetting(lightSettingList.get(0).getSid());
+//            sceneAjustDao1.deleteLightSetting(lightSettingList.get(0).getSid());
             for (int i=1;i<=lightSettingList.size();i++){
                 sceneAjustDao1.saveLightSetting(lightSettingList.get(i-1));
                 if (i%500==0||i==lightSettingList.size()){

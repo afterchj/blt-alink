@@ -24,6 +24,15 @@ public class TimeLine {
     private String item_desc;
     private Integer item_set;
     private Integer item_tag;
+    private String uid;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getDayObj() {
         return dayObj;
@@ -172,6 +181,7 @@ public class TimeLine {
                 ", item_desc='" + item_desc + '\'' +
                 ", item_set=" + item_set +
                 ", item_tag=" + item_tag +
+                ", uid='" + uid + '\'' +
                 '}';
     }
 }
