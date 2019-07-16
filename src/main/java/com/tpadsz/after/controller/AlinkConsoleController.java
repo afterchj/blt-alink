@@ -125,7 +125,7 @@ public class AlinkConsoleController extends BaseDecodedController {
         List lights = bltConsoleService.getLightsInfo(param);
         List groups = bltConsoleService.getGroupsInfo(param);
         if (groups.size() > 0) {
-            model.put("groups", lights);
+            model.put("groups", groups);
         }
         if (lights.size() > 0) {
             model.put("lights", lights);
