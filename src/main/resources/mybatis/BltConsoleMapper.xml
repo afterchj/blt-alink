@@ -133,7 +133,7 @@
 
 	<select id="getLightsInfo" resultType="map" parameterType="map">
 		SELECT
-			l.id,
+			l.lmac,
 			ls.x,
 			ls.y
 		FROM f_light_setting ls
