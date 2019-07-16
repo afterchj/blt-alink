@@ -161,6 +161,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     public TimeLine setTimeLine(JSONObject params) {
         TimeLine timeLine = new TimeLine();
+        timeLine.setUid(params.getString("uid"));
         timeLine.setTname(params.getString("tname"));
         timeLine.setTid(params.getInteger("tid"));
         timeLine.setWeek(params.getString("week"));
@@ -188,6 +189,16 @@ public class TimeLineServiceImpl implements TimeLineService {
         JSONArray timePointArray = params.getJSONArray("timePointList");
         for (int i = 0; i < timePointArray.size(); i++) {
             Integer sceneId = timePointArray.getJSONObject(i).getInteger("sence_index");
+            if (sceneId==21){
+                //全开
+                sceneId=-1;
+            }else if (sceneId==22){
+                sceneId=-2;
+            }else if (sceneId==23){
+                sceneId=23;
+            }else {
+                sceneId=sceneId-1;
+            }
             timePointParams = new TimePointParams();
             timePointParams.setMesh_id(meshId);
             timePointParams.setUid(uid);
@@ -208,12 +219,25 @@ public class TimeLineServiceImpl implements TimeLineService {
                 JSONArray detailValueList = timePointArray.getJSONObject(i).getJSONArray("detailvalueList");
                 if (detailValueList != null) {
                     for (int j = 0; j < detailValueList.size(); j++) {
+                        timePointParams = new TimePointParams();
+                        timePointParams.setMesh_id(meshId);
+                        timePointParams.setUid(uid);
+                        timePointParams.setTid(tid);
 //                    timePointParams.setState(detailValueList.getJSONObject(j).getString("state"));
                         timePointParams.setTime(detailValueList.getJSONObject(j).getInteger("time"));
                         timePointParams.setHour(detailValueList.getJSONObject(j).getInteger("hour"));
                         timePointParams.setMinute(detailValueList.getJSONObject(j).getInteger("minute"));
                         timePointParams.setPos_x(detailValueList.getJSONObject(j).getInteger("pos_x"));
-                        timePointParams.setScene_id(detailValueList.getJSONObject(j).getInteger("sence_index"));
+                        int sence_index = detailValueList.getJSONObject(j).getInteger("sence_index");
+                        if (sence_index==21){
+                            //全开
+                            sence_index=-1;
+                        }else if (sence_index==22){
+                            sence_index=-2;
+                        }else {
+                            sence_index=sence_index-1;
+                        }
+                        timePointParams.setScene_id(sence_index);
                         timePointParams.setLight_status(detailValueList.getJSONObject(j).getInteger("light_status"));
                         timePointParams.setDetail_sence_id(detailId);
                         timePointList.add(timePointParams);

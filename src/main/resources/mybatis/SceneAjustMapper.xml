@@ -13,7 +13,7 @@
     </insert>
 
     <insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >
-        INSERT INTO alink.f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
+        REPLACE INTO alink.f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
     </insert>
 
     <delete id="deleteLightSetting">

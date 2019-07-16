@@ -5,7 +5,7 @@
     <insert id="createTimeLine" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO f_time_line ( `tname`, `tid`, `repetition`, `week`, `create_date`, `update_date`, `mid` ,`dayObj`, `ischoose`, `item_desc`, `item_set`, `item_tag`)
         VALUES(#{tname}, #{tid}, #{repetition}, #{week}, now( ), now(),( SELECT id FROM f_mesh WHERE
-        mesh_id = #{mesh_id} ),#{dayObj},#{ischoose},#{item_desc},#{item_set},#{item_tag})
+        mesh_id = #{mesh_id} and uid=#{uid}),#{dayObj},#{ischoose},#{item_desc},#{item_set},#{item_tag})
     </insert>
 
     <insert id="createTimePoint" parameterType="java.util.List" useGeneratedKeys="false">
@@ -15,21 +15,12 @@
             (
             (select id from f_time_line where tid=#{item.tid} and mid=(select id from f_mesh where
             mesh_id=#{item.mesh_id} and uid=#{item.uid})),
-            <if test="item.scene_id!=null and item.scene_id!=23 and item.scene_id!=21 and item.scene_id!=22" >
+            <if test="item.scene_id!=null and item.scene_id!=-1 and item.scene_id!=-2 and item.scene_id!=23" >
                 (select id from f_scene where scene_id=#{item.scene_id} and mid=(select id from f_mesh where
                 mesh_id=#{item.mesh_id} and uid=#{item.uid})),
             </if>
-            <if test="item.scene_id==null ">
-                NULL ,
-            </if>
-            <if test="item.scene_id==23">
-                23,
-            </if>
-            <if test="item.scene_id==21">
-                -1,
-            </if>
-            <if test="item.scene_id==22">
-                -2,
+            <if test="item.scene_id==23 or item.scene_id==-1 or item.scene_id==-2">
+                #{item.scene_id},
             </if>
             #{item.time},
             now(),

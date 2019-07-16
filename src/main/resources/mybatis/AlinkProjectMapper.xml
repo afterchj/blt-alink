@@ -271,11 +271,11 @@
     </update>
 
     <insert id="savePcInfo" parameterType="string">
-        INSERT INTO f_pc_info (mesh_id,info,create_date) VALUES(#{meshId},#{info},NOW())
+        INSERT INTO f_pc_info (mesh_id,mesh_name,info,create_date) VALUES(#{meshId},#{meshName},#{info},NOW())
     </insert>
 
-    <select id="findMeshList" resultType="string">
-        SELECT DISTINCT(mesh_id) from f_pc_info ORDER BY create_date
+    <select id="findMeshList" resultType="map">
+        SELECT a.mesh_id AS meshId,a.mesh_name AS meshName FROM (SELECT * FROM f_pc_info ORDER BY update_date DESC) AS a GROUP BY a.mesh_id
     </select>
 
     <select id="getInfoByMeshId" resultType="string">
