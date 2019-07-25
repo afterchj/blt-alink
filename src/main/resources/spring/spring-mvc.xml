@@ -25,6 +25,7 @@
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
+            <mvc:exclude-mapping path="/pc/**"/>
             <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
@@ -39,6 +40,7 @@
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
+            <mvc:exclude-mapping path="/pc/**"/>
             <mvc:exclude-mapping path="/lightConsole/**"/>
             <mvc:exclude-mapping path="/account/pwd/login*"/>
             <mvc:exclude-mapping path="/account/code/login*"/>
@@ -86,7 +88,15 @@
         </property>
     </bean>
 
-
+    <!-- 文件上传配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 默认编码 -->
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 上传文件大小限制为31M，31*1024*1024 -->
+        <property name="maxUploadSize" value="32505856"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
     <!--定义跳转的文件的前后缀 ，视图模式配置 -->
     <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
     <!--<property name="prefix" value="/WEB-INF/view/"/>-->
