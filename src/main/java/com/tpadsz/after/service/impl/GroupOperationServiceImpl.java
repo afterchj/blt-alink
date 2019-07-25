@@ -1,8 +1,10 @@
 package com.tpadsz.after.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.entity.*;
-import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
+import com.tpadsz.after.exception.GroupDuplicateException;
+import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import org.springframework.stereotype.Service;
 
@@ -93,10 +95,10 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         return groupOperationDao.getGroupConsoleLogByGid(groupId,uid,meshId);
     }
 
-    @Override
-    public Integer getPid(Integer placeId, Integer mid) {
-        return groupOperationDao.getPid(placeId,mid);
-    }
+//    @Override
+//    public Integer getPid(Integer placeId, Integer mid) {
+//        return groupOperationDao.getPid(placeId,mid);
+//    }
 
     @Override
     public void savePlace(AdjustPlace adjustPlace) {
@@ -109,16 +111,26 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws DefaultPlaceNotFoundException {
-        if (pid==null){
-            //v2.0版本 获取默认区域
-            pid = groupOperationDao.getDefaultPlace(uid,mid);
-            if (pid == null){
-                //未发现默认区域
-                throw new DefaultPlaceNotFoundException();
-            }
+    public Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws PlaceNotFoundException {
+//        if (pid==null){
+//            //v2.0版本 获取默认区域
+//            pid=1;
+//            pid = groupOperationDao.getDefaultPlace(uid,mid);
+//            if (pid == null){
+//                //未发现默认区域
+//                throw new DefaultPlaceNotFoundException();
+//            }
+//        }
+
+        if (pid == null){
+            pid = 1;//v2.0版本 获取默认区域
         }
-        return pid;
+        Integer id = groupOperationDao.getPlaceId(pid,uid,mid);
+        if (id == null){
+            //未发现区域
+            throw new PlaceNotFoundException();
+        }
+        return id;
     }
 
     @Override
@@ -129,6 +141,30 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     @Override
     public void deleteGroupSetting(Integer sid) {
         groupOperationDao.deleteGroupSetting(sid);
+    }
+
+    @Override
+    public void moveGroup(JSONObject params) throws GroupDuplicateException, PlaceNotFoundException {
+        Integer pid = params.getInteger("pid");//目标区域id
+        String meshId = params.getString("meshId");
+        String uid = params.getString("uid");
+        Integer groupId = params.getInteger("groupId");
+        String gname = params.getString("gname");//组名
+        pid = groupOperationDao.getPid(pid,meshId);
+        if (pid == null){
+            throw new PlaceNotFoundException();
+        }
+        Integer oldPid = groupOperationDao.getPlaceIdByGroup(groupId,meshId);
+        if (pid.intValue() != oldPid.intValue()){
+            String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
+            if (oldGname!=null){
+                //组名重复
+                throw new GroupDuplicateException();
+            }
+            //不同区域之间移动
+            groupOperationDao.moveGroup(pid,meshId,groupId);
+            groupOperationDao.updateLightPid(groupId,pid,meshId);//修改灯信息的pid
+        }
     }
 
 //    @Override

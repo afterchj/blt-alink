@@ -44,7 +44,7 @@ public interface GroupOperationDao {
 
     GroupConsoleLog getGroupConsoleLogByGid(@Param("groupId") Integer groupId,@Param("uid") String uid,@Param("meshId") String meshId);//获取lmac地址
 
-    Integer getPid(@Param("placeId") Integer placeId, @Param("mid") Integer mid);
+    Integer getPid(@Param("placeId") Integer placeId, @Param("meshId") String meshId);
 
     void savePlace(AdjustPlace adjustPlace);
 
@@ -55,6 +55,16 @@ public interface GroupOperationDao {
     void saveGroupSetting(GroupSetting groupSetting);//保存场景中组的xy值
 
     void deleteGroupSetting(@Param("sid") Integer sid);//删除场景中组的xy值
+
+    Integer getPlaceId(@Param("pid") Integer pid, @Param("uid") String uid, @Param("mid") Integer mid);//获取区域id
+
+    Integer getPlaceIdByGroup(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
+
+    void moveGroup(@Param("pid") Integer pid, @Param("meshId") String meshId, @Param("groupId") Integer groupId);
+
+    String getGnameByPidAndMeshId(@Param("pid") Integer pid, @Param("meshId") String meshId,@Param("gname") String gname);
+    
+    void updateLightPid(@Param("groupId") Integer groupId, @Param("pid") Integer pid,@Param("meshId") String meshId);
 
 //    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

@@ -1,7 +1,9 @@
 package com.tpadsz.after.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
-import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
+import com.tpadsz.after.exception.GroupDuplicateException;
+import com.tpadsz.after.exception.PlaceNotFoundException;
 
 import java.util.List;
 import java.util.Map;
@@ -42,17 +44,19 @@ public interface GroupOperationService {
 
     GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId);
 
-    Integer getPid(Integer placeId, Integer mid);
+//    Integer getPid(Integer placeId, Integer mid);
 
     void savePlace(AdjustPlace adjustPlace);
 
     String getGname(Group group);
 
-    Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws DefaultPlaceNotFoundException;
+    Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws PlaceNotFoundException;
 
     void saveGroupSetting(GroupSetting groupSetting);
 
     void deleteGroupSetting(Integer sid);
+
+    void moveGroup(JSONObject params) throws GroupDuplicateException, PlaceNotFoundException;
 
 //    List<GroupList> getGroups(Integer mid);
 }
