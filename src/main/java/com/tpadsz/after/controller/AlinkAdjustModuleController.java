@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.entity.dd.ResultDict;
-import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
+import com.tpadsz.after.exception.GroupDuplicateException;
+import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
@@ -100,8 +101,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 Integer pid = params.getInteger("pid");
                 try {
                     pid = groupOperationService.getDefaultPlace(pid,uid,mid);
-                } catch (DefaultPlaceNotFoundException e) {
-
+                } catch (PlaceNotFoundException e) {
                     model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
                     model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
                     return;
@@ -153,10 +153,14 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     group.setGid(gid);
                     //查询组内灯的数量
                     Integer lightNum = groupOperationService.getLightNum(group);
-                    //组内有灯
+                    //组内有灯,不许删除
                     if (lightNum != null) {
-                        //移动组中的灯到未分组中
-                        groupOperationService.updateGidInLight(group);
+//                        //移动组中的灯到未分组中
+//                        groupOperationService.updateGidInLight(group);
+                        model.put("result", ResultDict.GROUP_EXISTED_LIGHTS.getCode());
+                        model.put("result_message", ResultDict.GROUP_EXISTED_LIGHTS.getValue());
+                        return;
+
                     }
                     //删除组表
                     groupOperationService.deleteGroup(group);
@@ -242,7 +246,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         try {
             pid = groupOperationService.getDefaultPlace(pid,params.getString("uid"),mid);
-        } catch (DefaultPlaceNotFoundException e) {
+        } catch (PlaceNotFoundException e) {
             model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
             model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
             return;
@@ -399,7 +403,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         try {
             pid = groupOperationService.getDefaultPlace(pid,uid,mid);
-        } catch (DefaultPlaceNotFoundException e) {
+        } catch (PlaceNotFoundException e) {
             model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
             model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
             return;
@@ -684,7 +688,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         pid = params.getInteger("pid");
         try {
             pid = groupOperationService.getDefaultPlace(pid,group.getUid(),group.getMid());
-        } catch (DefaultPlaceNotFoundException e) {
+        } catch (PlaceNotFoundException e) {
             model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
             model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
             return null;
@@ -748,6 +752,29 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
         return;
+    }
+
+    /**
+     * 移动组
+     * @param params
+     * @param model
+     */
+    @RequestMapping(value = "/moveGroup",method = RequestMethod.POST)
+    public void moveGroup(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        try {
+            groupOperationService.moveGroup(params);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        } catch (GroupDuplicateException e) {
+//            e.printStackTrace();
+            model.put("result", ResultDict.DUPLICATE_GID.getCode());
+            model.put("result_message", ResultDict.DUPLICATE_GID.getValue());
+        } catch (PlaceNotFoundException e) {
+//            e.printStackTrace();
+            model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
+            model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
+        }
+
     }
 
 }

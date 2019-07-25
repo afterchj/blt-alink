@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.*;
-import com.tpadsz.after.exception.DefaultPlaceNotFoundException;
+import com.tpadsz.after.exception.GroupDuplicateException;
+import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.SceneAjustService;
@@ -337,17 +338,17 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void getPidTest3(){
-        Integer pid = groupOperationService.getPid(0, 3);
-        if (pid==null){
-            AdjustPlace adjustPlace = new AdjustPlace();
-            adjustPlace.setUid("aaaa");
-            adjustPlace.setMid(3);
-            adjustPlace.setPlaceId(0);
-            adjustPlace.setPname("区域1");
-            groupOperationService.savePlace(adjustPlace);
-            pid = adjustPlace.getId();
-        }
-        System.out.println("pid: "+pid);
+//        Integer pid = groupOperationService.getPid(0, 3);
+//        if (pid==null){
+//            AdjustPlace adjustPlace = new AdjustPlace();
+//            adjustPlace.setUid("aaaa");
+//            adjustPlace.setMid(3);
+//            adjustPlace.setPlaceId(0);
+//            adjustPlace.setPname("区域1");
+//            groupOperationService.savePlace(adjustPlace);
+//            pid = adjustPlace.getId();
+//        }
+//        System.out.println("pid: "+pid);
     }
 
     @Test
@@ -394,7 +395,7 @@ public class AlinkAdjustModuleControllerTest {
         Integer defaultPlace;
         try {
             defaultPlace = groupOperationService.getDefaultPlace(null,"9", 186044);
-        } catch (DefaultPlaceNotFoundException e) {
+        } catch (PlaceNotFoundException e) {
             System.out.println("DefaultPlaceNotFound");
             return;
         }
@@ -435,6 +436,21 @@ public class AlinkAdjustModuleControllerTest {
             if (jsonArray.size()>0) {
                 System.out.println("empty");
             }
+        }
+    }
+
+    @Test
+    public void test6(){
+        String jsonStr = "{\"uid\":\"11\",\"gname\":\"组1\",\"groupId\":1,\"meshId\":\"89034617\",\"operation\":\"0\"," +
+                "\"bltFlag\":\"1\",\"pid\":2}";
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);//2368
+        try {
+            groupOperationService.moveGroup(jsonObject);
+        } catch (GroupDuplicateException e) {
+            e.printStackTrace();
+            System.out.println("GroupDuplicateException");
+        } catch (PlaceNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

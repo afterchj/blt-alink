@@ -142,7 +142,7 @@
     </resultMap>
 
     <select id="getPid" resultType="integer">
-        select id from alink.f_place WHERE place_id=#{placeId} and mid=#{mid}
+        select id from alink.f_place WHERE place_id=#{placeId} and mid=(select id from f_mesh where mesh_id=#{meshId})
     </select>
 
     <insert id="savePlace" parameterType="com.tpadsz.after.entity.AdjustPlace" useGeneratedKeys="true" keyProperty="id">
@@ -151,11 +151,19 @@
     </insert>
 
     <select id="getGname" resultType="string">
-        select gname FROM  alink.f_group WHERE mid=#{mid} and gname=#{gname}
+        select gname FROM  alink.f_group WHERE mid=#{mid} and gname=#{gname} and pid=#{pid}
+    </select>
+
+    <select id="getGnameByPidAndMeshId" resultType="string">
+        select gname FROM  alink.f_group WHERE mid=(select id from f_mesh where mesh_id=#{meshId}) and gname=#{gname} and pid=#{pid}
     </select>
 
     <select id="getDefaultPlace" resultType="integer">
         SELECT id FROM alink.f_place WHERE mid=#{mid} and uid=#{uid} limit 1
+    </select>
+
+    <select id="getPlaceId" resultType="integer">
+        SELECT id FROM alink.f_place WHERE place_id=#{pid} and mid=#{mid} and uid=#{uid} limit 1
     </select>
 
     <insert id="saveGroupSetting">
@@ -167,4 +175,17 @@
     <delete id="deleteGroupSetting">
         DELETE FROM alink.f_group_setting WHERE sid=#{sid}
     </delete>
+
+    <select id="getPlaceIdByGroup" resultType="integer">
+        select p.id from f_group g,f_place p where g.pid=p.id and  g.group_id=#{groupId} and g.mid=(select id from
+        f_mesh where mesh_id=#{meshId})
+    </select>
+
+    <update id="moveGroup">
+        update f_group set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
+    </update>
+
+    <update id="updateLightPid">
+        update f_light set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and gid=(select id from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
+    </update>
 </mapper>
