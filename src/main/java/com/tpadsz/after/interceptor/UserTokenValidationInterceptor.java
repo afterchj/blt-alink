@@ -28,7 +28,6 @@ public class UserTokenValidationInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
-        logger.warn("UserTokenValidationInterceptor...");
         JSONObject params = (JSONObject) request.getAttribute("decodedParams");
         String token = params.getString("token");
         String uid = params.getString("uid");
