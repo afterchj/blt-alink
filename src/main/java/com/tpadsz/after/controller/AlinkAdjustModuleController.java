@@ -155,12 +155,10 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     Integer lightNum = groupOperationService.getLightNum(group);
                     //组内有灯,不许删除
                     if (lightNum != null) {
-//                        //移动组中的灯到未分组中
 //                        groupOperationService.updateGidInLight(group);
                         model.put("result", ResultDict.GROUP_EXISTED_LIGHTS.getCode());
                         model.put("result_message", ResultDict.GROUP_EXISTED_LIGHTS.getValue());
                         return;
-
                     }
                     //删除组表
                     groupOperationService.deleteGroup(group);
@@ -664,13 +662,18 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String productId;
         Integer dGroupId = 0;
         Integer pid;
+        dGroupId = params.getInteger("dGroupId");
+        //扫描灯
         if ("0".equals(operation)) {
-            //扫描灯
-            group.setGroupId(0);
+            //v2.0 2.1版本默认groupId为0
+            if (dGroupId==null){
+                dGroupId = 0;
+            }
+            //2.2版本传递groupId
+            group.setGroupId(dGroupId);
         }
         if ("2".equals(operation)) {
             //移动灯
-            dGroupId = params.getInteger("dGroupId");
             if (dGroupId == null) {
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
