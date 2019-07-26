@@ -687,8 +687,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.NO_GROUP.getValue());
             return null;
         }
-        pid = params.getInteger("pid");
+        pid = params.getInteger("pid");//传递区域Id
         try {
+            //获得区域序列号
             pid = groupOperationService.getDefaultPlace(pid,group.getUid(),group.getMid());
         } catch (PlaceNotFoundException e) {
             model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
@@ -769,8 +770,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.SUCCESS.getValue());
         } catch (GroupDuplicateException e) {
 //            e.printStackTrace();
-            model.put("result", ResultDict.DUPLICATE_GID.getCode());
-            model.put("result_message", ResultDict.DUPLICATE_GID.getValue());
+            model.put("result", ResultDict.DUPLICATE_GNAME.getCode());
+            model.put("result_message", ResultDict.DUPLICATE_GNAME.getValue());
         } catch (PlaceNotFoundException e) {
 //            e.printStackTrace();
             model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
