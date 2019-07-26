@@ -70,7 +70,7 @@ public class AccountController extends BaseDecodedController {
     @RequestMapping("/register")
     public void saveUser(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         String mobile = param.getString("mobile");
-        AppUser appUser = this.alinkLoginService.findUserByMobile(mobile);
+        AppUser appUser = alinkLoginService.findUserByMobile(mobile);
         if (appUser != null) {
             model.put("result", ResultDict.MOBILE_REPET.getCode());
             model.put("result_message", ResultDict.MOBILE_REPET.getValue());
@@ -88,17 +88,20 @@ public class AccountController extends BaseDecodedController {
             param.put("salt", password.getSalt());
             try {
                 validationService.checkCode(code, mobile);
+                accountService.saveUser(param);
+                appUser = alinkLoginService.findUserByMobile(mobile);
                 String token = alinkLoginService.generateToken(appUser.getId());
                 model.put("token", token);
-                accountService.saveUser(param);
-                appUser = this.alinkLoginService.findUserByMobile(mobile);
                 model.put("user", appUser);
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
             } catch (InvalidCodeException var11) {
                 model.put("result", ResultDict.VERIFY_ERROR.getCode());
                 model.put("result_message", ResultDict.VERIFY_ERROR.getValue());
-            } catch (Exception var12) {
+            } catch (RepetitionException var12) {
+                model.put("result", var12.getCode());
+                model.put("result_message", var12.getMessage());
+            } catch (Exception e) {
                 model.put("result", ResultDict.SYSTEM_ERROR.getCode());
                 model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
             }

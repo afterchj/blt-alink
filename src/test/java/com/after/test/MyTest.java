@@ -4,6 +4,7 @@ package com.after.test;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.AccountDao;
+import com.tpadsz.after.dao.PCFileDao;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.HttpUtils;
 import com.tpadsz.after.util.RandomNumberGenerator;
@@ -61,7 +62,8 @@ public class MyTest {
         Map map = JSON.parseObject(str);
         SqlSession session = getSession();
         session.getMapper(AccountDao.class).updateAccount(map);
-        System.out.println(map.size());
+        Map result=session.getMapper(PCFileDao.class).getFile(null);
+        System.out.println("result="+ result);
     }
 
     @Test

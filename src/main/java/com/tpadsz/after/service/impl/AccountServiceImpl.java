@@ -43,9 +43,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void saveUser(Map map) throws RepetitionException {
+        String username = (String) map.get("uname");
         int count = getCount(map);
         if (count > 0) {
             throw new RepetitionException(203, "该手机号已被绑定");
+        }
+        if (StringUtils.isNotEmpty(username)) {
+            int temp = findByUser(username);
+            if (temp > 0) {
+                throw new RepetitionException(101, "用户名已存在！");
+            }
         }
         accountDao.saveUser(map);
     }
