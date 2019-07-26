@@ -660,9 +660,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String lmac;
         String lname;
         String productId;
-        Integer dGroupId = 0;
         Integer pid;
-        dGroupId = params.getInteger("dGroupId");
+        Integer dGroupId = params.getInteger("dGroupId");
         //扫描灯
         if ("0".equals(operation)) {
             //v2.0 2.1版本默认groupId为0
