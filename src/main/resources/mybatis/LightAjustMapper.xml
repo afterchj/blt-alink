@@ -64,6 +64,6 @@
     </select>
 
     <update id="updateLightGidAndLmac">
-        UPDATE alink.f_light SET gid=#{gid},update_date=now(),pid=#{pid} WHERE lmac=#{lmac}
+        UPDATE alink.f_light SET gid=#{gid},update_date=now() WHERE lmac=#{lmac}
     </update>
 </mapper>

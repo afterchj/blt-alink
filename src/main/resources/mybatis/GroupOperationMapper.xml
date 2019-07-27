@@ -188,4 +188,7 @@
     <update id="updateLightPid">
         update f_light set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and gid=(select id from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
     </update>
+    <delete id="deleteLight">
+        DELETE FROM f_light WHERE gid=#{gid} and mid=#{mid}
+    </delete>
 </mapper>

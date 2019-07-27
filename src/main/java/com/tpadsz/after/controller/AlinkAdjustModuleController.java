@@ -154,12 +154,12 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     //查询组内灯的数量
                     Integer lightNum = groupOperationService.getLightNum(group);
                     //组内有灯,不许删除
-                    if (lightNum != null) {
-//                        groupOperationService.updateGidInLight(group);
-                        model.put("result", ResultDict.GROUP_EXISTED_LIGHTS.getCode());
-                        model.put("result_message", ResultDict.GROUP_EXISTED_LIGHTS.getValue());
-                        return;
-                    }
+//                    if (lightNum != null) {
+                        groupOperationService.updateGidInLight(group);
+//                        model.put("result", ResultDict.GROUP_EXISTED_LIGHTS.getCode());
+//                        model.put("result_message", ResultDict.GROUP_EXISTED_LIGHTS.getValue());
+//                        return;
+//                    }
                     //删除组表
                     groupOperationService.deleteGroup(group);
                     groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);

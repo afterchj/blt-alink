@@ -83,6 +83,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     @Override
     public void deleteGroup(Group group) {
         groupOperationDao.deleteGroup(group);
+        groupOperationDao.deleteLight(group);
     }
 
     @Override
