@@ -122,15 +122,15 @@ public class GroupOperationServiceImpl implements GroupOperationService {
 //            }
 //        }
 
-        if (pid == null){
-            pid = 1;//v2.0版本 获取默认区域
-        }
-        Integer id = groupOperationDao.getPlaceId(pid,uid,mid);
-        if (id == null){
-            //未发现区域
-            throw new PlaceNotFoundException();
-        }
-        return id;
+//        if (pid == null){
+//            pid = 1;//v2.0版本 获取默认区域
+//        }
+//        Integer id = groupOperationDao.getPlaceId(pid,uid,mid);
+//        if (id == null){
+//            //未发现区域
+//            throw new PlaceNotFoundException();
+//        }
+        return pid;
     }
 
     @Override

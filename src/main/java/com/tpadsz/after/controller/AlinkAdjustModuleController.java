@@ -770,8 +770,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.SUCCESS.getValue());
         } catch (GroupDuplicateException e) {
 //            e.printStackTrace();
-            model.put("result", ResultDict.DUPLICATE_GNAME.getCode());
-            model.put("result_message", ResultDict.DUPLICATE_GNAME.getValue());
+//            model.put("result", ResultDict.DUPLICATE_GNAME.getCode());
+//            model.put("result_message", ResultDict.DUPLICATE_GNAME.getValue());
         } catch (PlaceNotFoundException e) {
 //            e.printStackTrace();
             model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());

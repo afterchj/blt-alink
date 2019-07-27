@@ -45,7 +45,7 @@
             <mvc:exclude-mapping path="/account/pwd/login*"/>
             <mvc:exclude-mapping path="/account/code/login*"/>
             <mvc:exclude-mapping path="/user/verify*"/>
-            <!--<mvc:exclude-mapping path="/adjust/**"/>-->
+            <mvc:exclude-mapping path="/adjust/**"/>
             <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/user/register**"/>
             <mvc:exclude-mapping path="/user/fillAccount**"/>
