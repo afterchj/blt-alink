@@ -38,7 +38,7 @@ public interface GroupOperationService {
 
 //    List<LightList> getLightList(Group group);
 
-    void deleteGroup(Group group);
+    void deleteGroup(Group group, Integer version);
 
     Integer getSceneSerialNo(Integer mid, Integer sceneId,String uid);
 
@@ -56,7 +56,7 @@ public interface GroupOperationService {
 
     void deleteGroupSetting(Integer sid);
 
-    void moveGroup(JSONObject params) throws GroupDuplicateException, PlaceNotFoundException;
+    void moveGroup(JSONObject params) throws GroupDuplicateException;
 
 //    List<GroupList> getGroups(Integer mid);
 }

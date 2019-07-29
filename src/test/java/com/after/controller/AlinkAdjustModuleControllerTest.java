@@ -366,7 +366,7 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void updateLightGidAndLmacTest4(){
-        getSession().getMapper(LightAjustDao.class).updateLightGidAndLmac("aa-aa-aa-aa",2);
+//        getSession().getMapper(LightAjustDao.class).updateLightGidAndLmac("aa-aa-aa-aa",2);
     }
     @Test
     public void getGnameTest4(){
@@ -449,8 +449,6 @@ public class AlinkAdjustModuleControllerTest {
         } catch (GroupDuplicateException e) {
             e.printStackTrace();
             System.out.println("GroupDuplicateException");
-        } catch (PlaceNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }

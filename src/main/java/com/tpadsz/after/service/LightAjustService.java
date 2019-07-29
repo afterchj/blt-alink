@@ -15,7 +15,7 @@ import java.util.Map;
 public interface LightAjustService {
     void saveLightAjustLog(String meshId, String bltFlag,String operation, String lmacs);
 
-    void updateLightName(String lmac, String lname);
+    void updateLightName(String lmac, String lname, Integer pid);
 
     String saveLight(List<LightList> lightLists) throws Exception;
 

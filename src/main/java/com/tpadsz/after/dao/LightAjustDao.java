@@ -18,7 +18,7 @@ import java.util.Map;
 public interface LightAjustDao {
     void saveLightAjustLog(@Param("meshId") String meshId, @Param("bltFlag") String bltFlag, @Param("operation") String operation, @Param("lmacs") String lmacs);//保存灯操作日志
 
-    void updateLightName(@Param("lmac") String lmac, @Param("lname") String lname);//重命名灯
+    void updateLightName(@Param("lmac") String lmac, @Param("lname") String lname, @Param("pid") Integer pid);//重命名灯
 
     void saveLight(LightList lightList);//扫描灯
 
@@ -44,5 +44,5 @@ public interface LightAjustDao {
 
     List<LightReturn> getAllByMid(@Param("mid") Integer mid);//查询网络下所有灯的信息
 
-    void updateLightGidAndLmac(@Param("lmac") String lmac, @Param("gid") Integer gid);
+    void updateLightGidAndLmac(LightList lightList);
 }

@@ -35,8 +35,8 @@ public class LightAjustServiceImpl implements LightAjustService {
     }
 
     @Override
-    public void updateLightName(String lmac, String lname) {
-        lightAjustDao.updateLightName(lmac, lname);
+    public void updateLightName(String lmac, String lname, Integer pid) {
+        lightAjustDao.updateLightName(lmac, lname,pid);
     }
 
     /**
@@ -67,8 +67,8 @@ public class LightAjustServiceImpl implements LightAjustService {
                     if (lightMap.get("mid").intValue()!=nowMid.intValue()){
                         //删除light_setting中的场景记录
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
-                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }
+                    lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                 }
                 sb.append(lightLists.get(i-1).getLmac()).append(",");
                 if (i % 500 == 0 || i == lightLists.size()) {
@@ -111,13 +111,13 @@ public class LightAjustServiceImpl implements LightAjustService {
                 if (lightMap!=null&& lightMap.size()>0) {
                     if (lightMap.get("mid").intValue()!=lightLists.get(i-1).getMid().intValue()){
                         //mid不一致删除场景信息
-                        //更新灯表 更新 gid,update_date,mid,lmac,lname
+                        //更新灯表 更新 gid,update_date,mid,lmac,lname,pid
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
                         lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }else {
                         //在同一网络中
-                        //更新灯表 更新 gid,update_date
-                        lightAjustDao1.updateLightGidAndLmac(lightLists.get(i-1).getLmac(),lightLists.get(i-1).getGid());
+                        //更新灯表 更新 gid,update_date,pid
+                        lightAjustDao1.updateLightGidAndLmac(lightLists.get(i-1));
                     }
                 }else {
                     //创建灯
@@ -169,4 +169,5 @@ public class LightAjustServiceImpl implements LightAjustService {
     public List<LightReturn> getAllByMid(Integer mid) {
         return lightAjustDao.getAllByMid(mid);
     }
+
 }

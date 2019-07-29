@@ -81,9 +81,12 @@ public class GroupOperationServiceImpl implements GroupOperationService {
 //    }
 
     @Override
-    public void deleteGroup(Group group) {
+    public void deleteGroup(Group group, Integer version) {
         groupOperationDao.deleteGroup(group);
-        groupOperationDao.deleteLight(group);
+        if (version==null ){
+            //v2.1.0 直接删除
+            groupOperationDao.deleteLight(group);
+        }
     }
 
     @Override
@@ -145,16 +148,16 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public void moveGroup(JSONObject params) throws GroupDuplicateException, PlaceNotFoundException {
+    public void moveGroup(JSONObject params) throws GroupDuplicateException {
         Integer pid = params.getInteger("pid");//目标区域id
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         Integer groupId = params.getInteger("groupId");
         String gname = params.getString("gname");//组名
-        pid = groupOperationDao.getPid(pid,meshId);
-        if (pid == null){
-            throw new PlaceNotFoundException();
-        }
+//        pid = groupOperationDao.getPid(pid,meshId);
+//        if (pid == null){
+//            throw new PlaceNotFoundException();
+//        }
         Integer oldPid = groupOperationDao.getPlaceIdByGroup(groupId,meshId);
         if (pid.intValue() != oldPid.intValue()){
             String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);

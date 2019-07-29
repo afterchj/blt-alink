@@ -191,4 +191,5 @@
     <delete id="deleteLight">
         DELETE FROM f_light WHERE gid=#{gid} and mid=#{mid}
     </delete>
+
 </mapper>
