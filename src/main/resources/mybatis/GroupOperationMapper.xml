@@ -192,4 +192,8 @@
         DELETE FROM f_light WHERE gid=#{gid} and mid=#{mid}
     </delete>
 
+    <select id="getGidByGroupIdAndMeshId" resultType="integer">
+        select id from f_group where group_id=#{groupId} and mid=(select id from f_mesh where mesh_id=#{meshId})
+    </select>
+
 </mapper>

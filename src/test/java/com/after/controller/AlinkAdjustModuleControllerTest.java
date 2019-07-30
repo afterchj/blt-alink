@@ -451,4 +451,14 @@ public class AlinkAdjustModuleControllerTest {
             System.out.println("GroupDuplicateException");
         }
     }
+
+    @Test
+    public void moveLightsToDiffGroupsTest(){
+        String jsonStr = "{\"uid\":\"11\",\"token\":\"aaa\",\"meshId\":\"89034617\"," +
+                "\"lightList\":[{\"lmac\":\"aa-aa-aa-aaa\",\"groupId\":1}]}";
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        lightAjustService.moveLightsToDiffGroups(jsonObject);
+
+    }
+
 }

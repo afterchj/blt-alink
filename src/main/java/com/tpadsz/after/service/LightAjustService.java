@@ -1,5 +1,6 @@
 package com.tpadsz.after.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
 
@@ -36,4 +37,6 @@ public interface LightAjustService {
     void updateLight(String lmac, Integer groupId, Integer mid, Integer pid);
 
     List<LightReturn> getAllByMid(Integer mid);
+
+    void moveLightsToDiffGroups(JSONObject params);
 }

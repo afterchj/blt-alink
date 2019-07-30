@@ -1,6 +1,10 @@
 package com.tpadsz.after.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
+import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
 import com.tpadsz.after.service.LightAjustService;
@@ -25,6 +29,9 @@ public class LightAjustServiceImpl implements LightAjustService {
 
     @Resource
     private LightAjustDao lightAjustDao;
+
+    @Resource
+    private GroupOperationDao groupOperationDao;
 
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
@@ -168,6 +175,51 @@ public class LightAjustServiceImpl implements LightAjustService {
     @Override
     public List<LightReturn> getAllByMid(Integer mid) {
         return lightAjustDao.getAllByMid(mid);
+    }
+
+    @Override
+    public void moveLightsToDiffGroups(JSONObject params) {
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        JSONArray lights =  params.getJSONArray("lightList");
+        Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
+        Integer pid = groupOperationDao.getDefaultPlace(uid,mid);
+        LightList lightList;
+        Group group;
+        for (int i=0;i<lights.size();i++){
+            lightList = new LightList();
+            String lmac = lights.getJSONObject(i).getString("lmac");
+            Integer groupId = lights.getJSONObject(i).getInteger("groupId");
+            Integer gid = groupOperationDao.getGidByGroupIdAndMeshId(groupId,meshId);
+            if (gid == null){
+                //不存在该组 创建组
+                String gname = "组"+groupId;
+                group = new Group();
+                group.setGname(gname);
+                group.setMid(mid);
+                group.setPid(pid);
+                group.setGroupId(groupId);
+                String dbGname = groupOperationDao.getGname(group);
+                int count=0;
+                //区域内组名重复 组名后添加"(1)"后缀
+                while (dbGname!=null){
+                    count++;
+                    gname = gname+"("+count+")";
+                    group.setGname(gname);
+                    dbGname = groupOperationDao.getGname(group);
+                }
+                //创建组
+                groupOperationDao.saveGroup(group);
+                gid = group.getId();
+                System.out.println("gid: "+group.getId());
+
+            }
+            lightList.setGid(gid);
+            lightList.setLmac(lmac);
+            lightList.setPid(pid);
+            //移动灯到对应的组
+            lightAjustDao.updateLightGidAndLmac(lightList);
+        }
     }
 
 }

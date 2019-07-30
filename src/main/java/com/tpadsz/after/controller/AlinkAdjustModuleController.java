@@ -662,6 +662,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String productId;
         Integer pid;
         Integer dGroupId = params.getInteger("dGroupId");
+        pid = params.getInteger("pid");//区域序列号
         //扫描灯
         if ("0".equals(operation)) {
             //v2.0 2.1版本默认groupId为0
@@ -682,12 +683,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         Integer gid = groupOperationService.getGid(group);//目的组的gid
         if (gid == null) {
-            //目标组未创建
             model.put("result", ResultDict.NO_GROUP.getCode());
             model.put("result_message", ResultDict.NO_GROUP.getValue());
             return null;
         }
-        pid = params.getInteger("pid");//传递区域Id
+
 //        try {
 //            //获得区域序列号
 //            pid = groupOperationService.getDefaultPlace(pid,group.getUid(),group.getMid());
@@ -758,7 +758,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     }
 
     /**
-     * 移动组
+     * 移动组 v2.2.0
      * @param params
      * @param model
      */
@@ -773,6 +773,18 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
         }
 
+    }
+
+    /**
+     * 移动灯到不同的组 v2.2.0
+     * @param params
+     * @param model
+     */
+    @RequestMapping(value = "/moveLightsToDiffGroups",method = RequestMethod.POST)
+    public void moveLightsToDiffGroups(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        lightAjustService.moveLightsToDiffGroups(params);
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
     }
 
 }
