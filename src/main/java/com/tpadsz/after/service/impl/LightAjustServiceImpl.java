@@ -222,4 +222,25 @@ public class LightAjustServiceImpl implements LightAjustService {
         }
     }
 
+    @Override
+    public void updateLightXY(JSONObject params) {
+//        String uid = params.getString("uid");
+//        String meshId = params.getString("meshId");
+        JSONArray lights =  params.getJSONArray("lightList");
+//        Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
+        LightList lightList;
+        for (int i=0;i<lights.size();i++){
+            lightList = new LightList();
+            String lmac = lights.getJSONObject(i).getString("lmac");
+            String x = lights.getJSONObject(i).getString("x");
+            String y = lights.getJSONObject(i).getString("y");
+//            lightList.setMid(mid);
+            lightList.setLmac(lmac);
+            lightList.setX(x);
+            lightList.setY(y);
+            lightAjustDao.updateLightXY(lightList);
+        }
+
+    }
+
 }

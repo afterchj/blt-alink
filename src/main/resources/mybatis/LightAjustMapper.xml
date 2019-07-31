@@ -66,4 +66,8 @@
     <update id="updateLightGidAndLmac" parameterType="com.tpadsz.after.entity.LightList">
         UPDATE alink.f_light SET gid=#{gid},update_date=now(),pid=#{pid} WHERE lmac=#{lmac}
     </update>
+
+    <update id="updateLightXY">
+        UPDATE f_light set x=#{x},y=#{y} where lmac=#{lmac}
+    </update>
 </mapper>

@@ -45,4 +45,6 @@ public interface LightAjustDao {
     List<LightReturn> getAllByMid(@Param("mid") Integer mid);//查询网络下所有灯的信息
 
     void updateLightGidAndLmac(LightList lightList);
+
+    void updateLightXY(LightList lightList);
 }

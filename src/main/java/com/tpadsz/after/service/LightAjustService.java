@@ -39,4 +39,6 @@ public interface LightAjustService {
     List<LightReturn> getAllByMid(Integer mid);
 
     void moveLightsToDiffGroups(JSONObject params);
+
+    void updateLightXY(JSONObject params);
 }

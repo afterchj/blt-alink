@@ -787,4 +787,16 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }
 
+    /**
+     * 进入网络更新灯的xy值
+     * @param params
+     * @param model
+     */
+    @RequestMapping(value = "/accessNetUploadLightXY",method = RequestMethod.POST)
+    public void accessNetUploadLightXY(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        lightAjustService.updateLightXY(params);
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+    }
+
 }
