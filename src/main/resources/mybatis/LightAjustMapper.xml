@@ -68,6 +68,14 @@
     </update>
 
     <update id="updateLightXY">
-        UPDATE f_light set x=#{x},y=#{y} where lmac=#{lmac}
+        UPDATE f_light_adjust set x=#{x},y=#{y},update_date=now() where lid=(select id from f_light where lmac=#{lmac})
     </update>
+
+    <select id="getLightAdjust" parameterType="string" resultType="integer">
+        select count(*) from f_light_adjust where lid=(select id from f_light where lmac=#{lmac})
+    </select>
+
+    <insert id="insertLightXY">
+        insert into f_light_adjust(lid,x,y,create_date,update_date) VALUES((select id from f_light where lmac=#{lmac}),#{x},#{y},now(),now())
+    </insert>
 </mapper>

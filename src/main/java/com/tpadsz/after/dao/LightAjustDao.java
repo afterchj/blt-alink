@@ -47,4 +47,8 @@ public interface LightAjustDao {
     void updateLightGidAndLmac(LightList lightList);
 
     void updateLightXY(LightList lightList);
+
+    Integer getLightAdjust(@Param("lmac") String lmac);
+
+    void insertLightXY(LightList lightList);
 }

@@ -788,7 +788,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     }
 
     /**
-     * 进入网络更新灯的xy值
+     * 进入网络更新灯的xy值 v2.2.0
      * @param params
      * @param model
      */

@@ -461,4 +461,12 @@ public class AlinkAdjustModuleControllerTest {
 
     }
 
+    @Test
+    public void updateLightXYTest(){
+        String jsonStr = "{\"uid\":\"11\",\"token\":\"aaa\",\"meshId\":\"89034617\"," +
+                "\"lightList\":[{\"lmac\":\"aa-aa-aa-aa\",\"x\":\"100\",\"y\":\"100\"}]}";
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        lightAjustService.updateLightXY(jsonObject);
+    }
+
 }

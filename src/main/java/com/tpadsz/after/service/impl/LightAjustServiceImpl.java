@@ -238,9 +238,13 @@ public class LightAjustServiceImpl implements LightAjustService {
             lightList.setLmac(lmac);
             lightList.setX(x);
             lightList.setY(y);
-            lightAjustDao.updateLightXY(lightList);
+            Integer count = lightAjustDao.getLightAdjust(lmac);
+            if (count>0){
+                lightAjustDao.updateLightXY(lightList);
+            }else {
+                lightAjustDao.insertLightXY(lightList);
+            }
         }
-
     }
 
 }
