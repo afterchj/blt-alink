@@ -217,8 +217,18 @@ public class LightAjustServiceImpl implements LightAjustService {
             lightList.setGid(gid);
             lightList.setLmac(lmac);
             lightList.setPid(pid);
+            lightList.setLname(lmac);
+            lightList.setMid(mid);
+            Map<String, Integer> lightMap = lightAjustDao.getLid(lmac);
             //移动灯到对应的组
-            lightAjustDao.updateLightGidAndLmac(lightList);
+            if (lightMap==null){
+                //数据库中没有该灯 创建灯
+                lightAjustDao.saveLight(lightList);
+            }else {
+                lightAjustDao.updateLightGidAndLmac(lightList);
+            }
+
+
         }
     }
 
