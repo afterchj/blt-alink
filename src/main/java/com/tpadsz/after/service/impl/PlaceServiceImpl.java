@@ -57,14 +57,23 @@ public class PlaceServiceImpl implements PlaceService {
         Integer pid = params.getInteger("pid");//区域序列号
         Integer count = lightAjustDao.getLightByPid(pid);
         if (count>0){
-            throw new NotExitException("该区域内存在设备");
+            throw new NotExitException("该区域中存在设备");
         }
         groupOperationDao.deleteGroupByPid(pid);//删除组
         placeDao.deletePlaceByPid(pid);//删除区域
     }
 
     @Override
-    public void rename(JSONObject params) {
-
+    public void rename(JSONObject params) throws NameDuplicateException {
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        Integer pid = params.getInteger("pid");//区域序列号
+        String pname = params.getString("pname");
+        Integer count = placeDao.getPname(uid,meshId,pname);
+        if (count>0){
+            //区域名重复
+            throw new NameDuplicateException("区域名重复");
+        }
+        placeDao.updatePname(pid,pname);
     }
 }

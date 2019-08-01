@@ -53,13 +53,13 @@ public class PlaceController extends BaseDecodedController {
     public void delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
         try {
             placeService.delete(params);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
         } catch (NotExitException e) {
 //            e.printStackTrace();
             model.put("result", ResultDict.EXISTED_LIGHTS.getCode());
             model.put("result_message", ResultDict.EXISTED_LIGHTS.getValue());
         }
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
     }
 
     /**
@@ -69,9 +69,16 @@ public class PlaceController extends BaseDecodedController {
      */
     @RequestMapping(value = "/rename",method = RequestMethod.POST)
     public void rename(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-        placeService.rename(params);
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
+        try {
+            placeService.rename(params);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        } catch (NameDuplicateException e) {
+            e.printStackTrace();//区域名重复
+            model.put("result", ResultDict.DUPLICATE_NAME.getCode());
+            model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
+        }
+
     }
 
 }

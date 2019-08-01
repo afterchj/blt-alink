@@ -15,5 +15,5 @@ public interface PlaceService {
 
     void delete(JSONObject params) throws NotExitException;
 
-    void rename(JSONObject params);
+    void rename(JSONObject params) throws NameDuplicateException;
 }
