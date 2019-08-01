@@ -84,8 +84,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     public void deleteGroup(Group group, Integer version) {
         groupOperationDao.deleteGroup(group);
         if (version==null ){
-            //v2.1.0 直接删除
-            groupOperationDao.deleteLight(group);
+            //v2.1.0 灯移动到未分组
+            groupOperationDao.updateGidInLight(group);
         }
     }
 
