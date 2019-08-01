@@ -423,7 +423,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Integer groupId;
         String productId;
         LightList lightList;
-        List<LightSetting> lightSettingList = new ArrayList<>(array.size() + 1);//配置list容量为jsonArray的size()
+        List<LightSetting> lightSettingList = new ArrayList<LightSetting>(array.size() + 1);//配置list容量为jsonArray的size()
         LightSetting lightSetting;
         String x;
         String y;
@@ -575,7 +575,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         group.setMid(mid);
         group.setMeshId(meshId);
         group.setUid(uid);
-        List<LightList> lightLists;
+        List<LightList> lightLists = new ArrayList<>();
         String result;
         StringBuffer sb;
         String lmacs;
@@ -705,7 +705,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             return null;
         }
-        List<LightList> lightLists = new ArrayList<>(array.size() + 1);//配置list容量为jsonarray的size()
+        List<LightList> lightLists = new ArrayList<LightList>(array.size() + 1);//配置list容量为jsonarray的size()
         for (int i = 0; i < array.size(); i++) {
             lmac = array.getJSONObject(i).getString("lmac");
             lname = array.getJSONObject(i).getString("lname");

@@ -475,5 +475,4 @@ public class AlinkAdjustModuleControllerTest {
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         lightAjustService.updateLightXY(jsonObject);
     }
-
 }

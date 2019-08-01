@@ -185,11 +185,16 @@ public class LightAjustServiceImpl implements LightAjustService {
         Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
         Integer pid = groupOperationDao.getDefaultPlace(uid,mid);
         LightList lightList;
+        String lmac;
+        Integer groupId;
+        String productId;
         Group group;
         for (int i=0;i<lights.size();i++){
             lightList = new LightList();
-            String lmac = lights.getJSONObject(i).getString("lmac");
-            Integer groupId = lights.getJSONObject(i).getInteger("groupId");
+            lmac = lights.getJSONObject(i).getString("lmac");
+            groupId = lights.getJSONObject(i).getInteger("groupId");
+            productId = lights.getJSONObject(i).getString("productId");
+            productId = productId.split(" ")[0];
             Integer gid = groupOperationDao.getGidByGroupIdAndMeshId(groupId,meshId);
             if (gid == null){
                 //不存在该组 创建组
@@ -219,6 +224,7 @@ public class LightAjustServiceImpl implements LightAjustService {
             lightList.setPid(pid);
             lightList.setLname(lmac);
             lightList.setMid(mid);
+            lightList.setProductId(productId);
             Map<String, Integer> lightMap = lightAjustDao.getLid(lmac);
             //移动灯到对应的组
             if (lightMap==null){
