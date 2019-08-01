@@ -46,10 +46,11 @@
             <mvc:exclude-mapping path="/account/code/login*"/>
             <mvc:exclude-mapping path="/user/verify*"/>
             <mvc:exclude-mapping path="/adjust/**"/>
+            <mvc:exclude-mapping path="/timeLine/**"/>
+            <mvc:exclude-mapping path="/place/**"/>
             <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/user/register**"/>
             <mvc:exclude-mapping path="/user/fillAccount**"/>
-            <mvc:exclude-mapping path="/timeLine/**"/>
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
             <mvc:exclude-mapping path="/project/download**"/>

@@ -453,6 +453,13 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
+    public void test7(){
+        Integer id = null;
+        id = id+1;
+        System.out.println(id+1);
+    }
+
+    @Test
     public void moveLightsToDiffGroupsTest(){
         String jsonStr = "{\"uid\":\"11\",\"token\":\"aaa\",\"meshId\":\"89034617\"," +
                 "\"lightList\":[{\"lmac\":\"aa-aa-aa-aaa\",\"groupId\":1}]}";
