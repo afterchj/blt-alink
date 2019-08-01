@@ -14,4 +14,8 @@
         select count(*) from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} and pname=#{pname}
     </select>
 
+    <delete id="deletePlaceByPid">
+        DELETE FROM f_place where id=#{pid}
+    </delete>
+
 </mapper>

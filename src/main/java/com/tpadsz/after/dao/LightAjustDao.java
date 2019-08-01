@@ -51,4 +51,6 @@ public interface LightAjustDao {
     Integer getLightAdjust(@Param("lmac") String lmac);
 
     void insertLightXY(LightList lightList);
+
+    Integer getLightByPid(@Param("pid") Integer pid);
 }

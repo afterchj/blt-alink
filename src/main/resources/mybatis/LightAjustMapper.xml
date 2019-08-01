@@ -78,4 +78,8 @@
     <insert id="insertLightXY">
         insert into f_light_adjust(lid,x,y,create_date,update_date) VALUES((select id from f_light where lmac=#{lmac}),#{x},#{y},now(),now())
     </insert>
+
+    <select id="getLightByPid" resultType="integer">
+        select count(*) from f_light where pid=#{pid}
+    </select>
 </mapper>

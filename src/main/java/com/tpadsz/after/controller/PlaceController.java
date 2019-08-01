@@ -3,6 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.NameDuplicateException;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.PlaceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +51,13 @@ public class PlaceController extends BaseDecodedController {
      */
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public void delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-        placeService.delete(params);
+        try {
+            placeService.delete(params);
+        } catch (NotExitException e) {
+//            e.printStackTrace();
+            model.put("result", ResultDict.EXISTED_LIGHTS.getCode());
+            model.put("result_message", ResultDict.EXISTED_LIGHTS.getValue());
+        }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }

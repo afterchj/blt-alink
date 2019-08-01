@@ -13,7 +13,7 @@ public enum ResultDict {
     PARAMS_NOT_PARSED("302", "参数解析错误"), MESHID_NOT_NULL("115", "未发现该网络"),
     NO_SCENE("301", "该用户或网络下没有创建场景"), NO_GROUP("302", "该用户或网络下没有创建组"),
     DUPLICATE_NAME("303", "名称重复"), DUPLICATE_GID("304", "组重复"), NO_DEFAULT_PLACE("305", "未发现区域"),
-    GROUP_EXISTED_LIGHTS("307", "该组中有灯存在");
+    EXISTED_LIGHTS("307", "存在设备");
 
     ResultDict(String code, String value) {
         this.value = value;

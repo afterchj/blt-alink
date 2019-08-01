@@ -17,4 +17,6 @@ public interface PlaceDao {
     //创建区域
 
     Integer getPname(@Param("uid") String uid, @Param("meshId") String meshId, @Param("pname") String pname);//区域名是否重复
+
+    void deletePlaceByPid(@Param("pid") Integer pid);
 }

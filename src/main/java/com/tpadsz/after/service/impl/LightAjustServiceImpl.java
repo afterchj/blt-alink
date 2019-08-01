@@ -74,8 +74,8 @@ public class LightAjustServiceImpl implements LightAjustService {
                     if (lightMap.get("mid").intValue()!=nowMid.intValue()){
                         //删除light_setting中的场景记录
                         lightAjustDao1.deleteLightSettingByLmac(lightLists.get(i-1).getLmac());
+                        lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }
-                    lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                 }
                 sb.append(lightLists.get(i-1).getLmac()).append(",");
                 if (i % 500 == 0 || i == lightLists.size()) {

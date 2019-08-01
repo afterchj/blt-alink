@@ -2,8 +2,11 @@ package com.tpadsz.after.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.dao.GroupOperationDao;
+import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.exception.NameDuplicateException;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.PlaceService;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,12 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Resource
     private PlaceDao placeDao;
+
+    @Resource
+    private LightAjustDao lightAjustDao;
+
+    @Resource
+    private GroupOperationDao groupOperationDao;
 
     @Override
     public void create(JSONObject params) throws NameDuplicateException {
@@ -42,8 +51,16 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void delete(JSONObject params) {
-
+    public void delete(JSONObject params) throws NotExitException {
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        Integer pid = params.getInteger("pid");//区域序列号
+        Integer count = lightAjustDao.getLightByPid(pid);
+        if (count>0){
+            throw new NotExitException("该区域内存在设备");
+        }
+        groupOperationDao.deleteGroupByPid(pid);//删除组
+        placeDao.deletePlaceByPid(pid);//删除区域
     }
 
     @Override

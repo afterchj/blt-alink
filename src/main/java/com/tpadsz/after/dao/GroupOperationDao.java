@@ -70,5 +70,7 @@ public interface GroupOperationDao {
 
     Integer getGidByGroupIdAndMeshId(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
 
+    void deleteGroupByPid(@Param("pid") Integer pid);
+
 //    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

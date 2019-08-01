@@ -156,8 +156,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                         Integer version = params.getInteger("version");
                         //组内有灯,不许删除 v2.2.0
                         if (version!=null &&version==2){
-                            model.put("result", ResultDict.GROUP_EXISTED_LIGHTS.getCode());
-                            model.put("result_message", ResultDict.GROUP_EXISTED_LIGHTS.getValue());
+                            model.put("result", ResultDict.EXISTED_LIGHTS.getCode());
+                            model.put("result_message", ResultDict.EXISTED_LIGHTS.getValue());
                             return;
                         }
                         groupOperationService.deleteGroup(group,version);

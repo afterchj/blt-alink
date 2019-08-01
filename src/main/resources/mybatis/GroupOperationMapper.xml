@@ -196,4 +196,8 @@
         select id from f_group where group_id=#{groupId} and mid=(select id from f_mesh where mesh_id=#{meshId})
     </select>
 
+    <delete id="deleteGroupByPid">
+        DELETE from alink.f_group WHERE pid=#{pid}
+    </delete>
+
 </mapper>

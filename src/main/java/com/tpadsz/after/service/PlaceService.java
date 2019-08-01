@@ -2,6 +2,7 @@ package com.tpadsz.after.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.exception.NameDuplicateException;
+import com.tpadsz.after.exception.NotExitException;
 
 /**
  * @program: blt-alink
@@ -12,7 +13,7 @@ import com.tpadsz.after.exception.NameDuplicateException;
 public interface PlaceService {
     void create(JSONObject params) throws NameDuplicateException;
 
-    void delete(JSONObject params);
+    void delete(JSONObject params) throws NotExitException;
 
     void rename(JSONObject params);
 }
