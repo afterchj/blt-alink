@@ -10,7 +10,6 @@ import java.util.List;
  **/
 public class PlaceExtend extends Place {
 
-    private Integer lcount;//区域灯数量
     private List<GroupList> groupList;
 
     public List<GroupList> getGroupList() {
@@ -21,21 +20,12 @@ public class PlaceExtend extends Place {
         this.groupList = groupList;
     }
 
-    public Integer getLcount() {
-        return lcount;
-    }
-
-    public void setLcount(Integer lcount) {
-        this.lcount = lcount;
-    }
-
     @Override
     public String toString() {
         return "PlaceExtend{" +
                 "id=" + getId() +
                 ", pname='" + getPname() + '\'' +
                 ", place_id=" + getPlace_id() +
-                ", lcount=" + lcount +
                 ", groupList=" + groupList +
                 '}';
     }

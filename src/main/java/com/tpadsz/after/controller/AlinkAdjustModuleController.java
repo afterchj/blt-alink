@@ -210,19 +210,24 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Integer version = params.getInteger("version");
         List<PlaceExtend> places;
         List<GroupList> groupLists;
-        if (version==2 && placeNum.size()>1){
-            //v2.2.0版本 && 区域数大于1
-            places = placeService.getPlacesAndGroups(placeNum);
-            model.put("data", places);
-        }
-        if (version==null || placeNum.size()<=1){
+        if (version!=null && 2==version){
+            //v2.1.0版本
+            if (placeNum.size()>1){
+                //区域数大于1
+                places = placeService.getPlacesAndGroups(placeNum);
+                model.put("data", places);
+            }else {
+                //区域数小于等于1
+                groupLists = groupOperationService.getGroupAll(mid);
+                model.put("data", groupLists);
+            }
+        }else if (version==null){
             //v2.1.0版本 || 区域数小于等于1
             groupLists = groupOperationService.getGroupAll(mid);
             model.put("data", groupLists);
         }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-
         return;
     }
 

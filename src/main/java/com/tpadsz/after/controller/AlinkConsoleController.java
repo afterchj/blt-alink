@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
+import com.tpadsz.after.service.PlaceService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -30,27 +32,31 @@ public class AlinkConsoleController extends BaseDecodedController {
     @Autowired
     private BltConsoleService bltConsoleService;
 
+    @Resource
+    private PlaceService placeService;
+
     @RequestMapping("/show")
     public void bltInfo(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         List scenes = bltConsoleService.getScenes(param);
-        List groups = bltConsoleService.getGroups(param);
         int total = bltConsoleService.getTotal(param);
         Integer pid = bltConsoleService.getPid(param);
+        List groups = bltConsoleService.getGroups(param);
         Map info = new HashMap();
         info.put("total", total);
         info.put("pid", pid);
-        if (scenes.size() == 0) {
-            model.put("result", ResultDict.NO_SCENE.getCode());
-            model.put("result_message", ResultDict.NO_SCENE.getValue());
-        } else {
-            info.put("scenes", scenes);
-        }
         if (groups.size() == 0) {
             model.put("result", ResultDict.NO_GROUP.getCode());
             model.put("result_message", ResultDict.NO_GROUP.getValue());
         } else {
             info.put("groups", groups);
         }
+        if (scenes.size() == 0) {
+            model.put("result", ResultDict.NO_SCENE.getCode());
+            model.put("result_message", ResultDict.NO_SCENE.getValue());
+        } else {
+            info.put("scenes", scenes);
+        }
+
         if (info.size() > 0) {
             model.put("data", info);
             model.put("result", ResultDict.SUCCESS.getCode());
@@ -76,7 +82,8 @@ public class AlinkConsoleController extends BaseDecodedController {
     }
 
     @RequestMapping("/rename")
-    public void consoleRenameScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
+    public void consoleRenameScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap
+            model) {
         session.setAttribute("param", param);
         try {
             bltConsoleService.saveSceneName(param);
@@ -89,7 +96,8 @@ public class AlinkConsoleController extends BaseDecodedController {
     }
 
     @RequestMapping("/clean")
-    public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
+    public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap
+            model) {
         session.setAttribute("param", param);
         String flag = param.getString("bltFlag");
         int sceneId = param.getInteger("sceneId");
@@ -115,7 +123,8 @@ public class AlinkConsoleController extends BaseDecodedController {
     }
 
     @RequestMapping("/apply")
-    public void consoleApplyScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
+    public void consoleApplyScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap
+            model) {
         session.setAttribute("param", param);
 //        String x = param.getString("x");
 //        String y = param.getString("y");
