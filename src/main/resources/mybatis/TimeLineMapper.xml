@@ -14,10 +14,10 @@
         <foreach collection="list" item="item" index="index" separator=",">
             (
             (select id from f_time_line where tid=#{item.tid} and mid=(select id from f_mesh where
-            mesh_id=#{item.mesh_id} and uid=#{item.uid})),
+            mesh_id=#{item.mesh_id} and uid=#{item.uid}) limit 1),
             <if test="item.scene_id!=null and item.scene_id!=-1 and item.scene_id!=-2 and item.scene_id!=23" >
                 (select id from f_scene where scene_id=#{item.scene_id} and mid=(select id from f_mesh where
-                mesh_id=#{item.mesh_id} and uid=#{item.uid})),
+                mesh_id=#{item.mesh_id} and uid=#{item.uid}) limit 1),
             </if>
             <if test="item.scene_id==23 or item.scene_id==-1 or item.scene_id==-2">
                 #{item.scene_id},
@@ -110,4 +110,9 @@
         update f_time_json set json=#{json} where tid=#{tid} and mid=(SELECT id FROM f_mesh WHERE mesh_id=#{meshId} AND uid =
         #{uid})
     </update>
+
+    <select id="getTimeLine" resultType="int">
+        select count(*) from f_time_line where mid=(SELECT id FROM f_mesh WHERE mesh_id=#{mesh_id} AND uid =
+        #{uid})
+    </select>
 </mapper>

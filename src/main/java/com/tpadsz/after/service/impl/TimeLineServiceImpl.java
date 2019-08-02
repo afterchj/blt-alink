@@ -34,6 +34,7 @@ public class TimeLineServiceImpl implements TimeLineService {
             return false;
         }
         List<TimePointParams> timePointParamsList = setTimePointList(params);
+        int timeLineCount = timeLineDao.getTimeLine(timeLine);
         Integer count2 = timeLineDao.createTimePoint(timePointParamsList);
         if (count2 == null) {
             return false;

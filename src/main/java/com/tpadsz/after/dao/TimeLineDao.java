@@ -57,5 +57,7 @@ public interface TimeLineDao {
     void updateTimeJson(@Param("tid") Integer tid, @Param("meshId") String meshId, @Param("uid") String uid, @Param
             ("json") String json);
 
+    int getTimeLine(TimeLine timeLine);
+
 //    void updateTimeJson(@Param("tid") Integer tid, @Param("") String meshId, String uid, String json);
 }

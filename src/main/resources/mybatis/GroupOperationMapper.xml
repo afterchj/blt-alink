@@ -62,7 +62,6 @@
         	LEFT JOIN alink.f_product p ON l.product_id = p.product_id
         ORDER BY
         	group_id
-
     </select>
     
     <resultMap id="groupLists" type="com.tpadsz.after.entity.GroupList">

@@ -2,14 +2,19 @@ package com.after.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.service.PlaceService;
+import org.apache.commons.collections.map.HashedMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -34,5 +39,25 @@ public class PlaceControllerTest {
         } catch (NameDuplicateException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @Test
+    public void getPlaceByMeshIdTest(){
+        String jsonStr = "{\"uid\":\"1\",\"token\":\"aaa\",\"meshId\":\"45790182\"}";
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        List<Map<String, Object>> placeByMeshId = placeService.getPlaceByMeshId(jsonObject);
+        System.out.println(placeByMeshId.toString());
+    }
+
+    @Test
+    public void getPlacesAndGroupsTest(){
+        List<Map<String, Object>> placeNum = new ArrayList<>();
+        Map<String,Object> placeMap = new HashedMap();
+        placeMap.put("pid",2501);
+        placeMap.put("mid",20066);
+        placeNum.add(placeMap);
+        List<PlaceExtend> places = placeService.getPlacesAndGroups(placeNum);
+        System.out.println(places.toString());
+
     }
 }

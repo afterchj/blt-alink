@@ -21,4 +21,55 @@
     <update id="updatePname">
         update f_place set pname=#{pname} where id=#{pid}
     </update>
+
+    <select id="getPlaceByMeshId" resultType="map">
+        select id as pid,mid from f_place where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid})
+    </select>
+
+    <!--<resultMap id="placeList" type="com.tpadsz.after.entity.PlaceExtend">-->
+        <!--<id column="id" property="id"/>-->
+        <!--<result column="pname" property="pname"/>-->
+        <!--<result column="place_id" property="place_id"/>-->
+        <!--<result column="lcount" property="lcount"/>-->
+        <!--<collection property="groupList" ofType="com.tpadsz.after.entity.GroupBasic">-->
+            <!--<result column="group_id" property="group_id"/>-->
+            <!--<result column="gname" property="gname"/>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+    <resultMap id="placeList" type="com.tpadsz.after.entity.PlaceExtend">
+        <id column="id" property="id"/>
+        <result column="pname" property="pname"/>
+        <result column="place_id" property="place_id"/>
+        <collection property="groupList" ofType="com.tpadsz.after.entity.GroupList">
+            <id property="id" column="id"/>
+            <!--property实体类中定义的属性 column数据库中字段名-->
+            <result property="groupId" column="group_id"/>
+            <result property="gname" column="gname"/>
+            <!-- property指的是在bean中字段名 ofType类的全定向名 -->
+            <!--一对多-->
+            <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
+                <id property="lid" column="lid"/>
+                <result property="lmac" column="lmac"/>
+                <result property="lname" column="lname"/>
+                <result property="productId" column="product_id"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="getPlacesAndGroups" resultMap="placeList">
+        select
+            p.id,p.place_id,p.pname,
+    	    g.id,
+        	g.group_id,
+        	g.gname,
+        	l.id as lid,
+        	l.lmac,
+        	l.lname,
+        	l.product_id
+        from f_place p left join f_group g on p.id=g.pid
+        left join f_light l on g.id=l.gid
+        where p.mid=20066
+        order by place_id,group_id
+    </select>
 </mapper>

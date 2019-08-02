@@ -1,7 +1,11 @@
 package com.tpadsz.after.dao;
 
+import com.tpadsz.after.entity.PlaceExtend;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -21,4 +25,8 @@ public interface PlaceDao {
     void deletePlaceByPid(@Param("pid") Integer pid);
 
     void updatePname(@Param("pid") Integer pid, @Param("pname") String pname);//重命名区域
+
+    List<Map<String, Object>> getPlaceByMeshId(@Param("meshId")String meshId, @Param("uid")String uid);
+
+    List<PlaceExtend> getPlacesAndGroups(@Param("mid") int mid);
 }

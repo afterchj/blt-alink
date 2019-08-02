@@ -231,6 +231,12 @@ public class LightAjustServiceImpl implements LightAjustService {
                 //数据库中没有该灯 创建灯
                 lightAjustDao.saveLight(lightList);
             }else {
+                //不在当前网络
+                if (lightMap.get("mid").intValue()!=mid.intValue()){
+                    //删除light_setting中的场景记录
+                    lightAjustDao.deleteLightSettingByLmac(lmac);
+                    lightAjustDao.updateLightGidAndMid(lightList);
+                }
                 lightAjustDao.updateLightGidAndLmac(lightList);
             }
 

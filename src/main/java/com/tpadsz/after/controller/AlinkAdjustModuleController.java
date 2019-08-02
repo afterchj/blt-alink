@@ -7,6 +7,7 @@ import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
+import com.tpadsz.after.service.PlaceService;
 import com.tpadsz.after.service.SceneAjustService;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 
     @Resource
     private SceneAjustService sceneAjustService;
+
+    @Resource
+    private PlaceService placeService;
 
     private Logger logger = LoggerFactory.getLogger(AlinkAdjustModuleController.class);
 
@@ -195,16 +199,30 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             return;
         }
         Integer mid = groupOperationService.getMeshSerialNo(meshId, uid);
+
         if (mid == null) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
 //            System.out.println("method:groupsLists" + "mid is null");
             return;
         }
-        List<GroupList> groupLists = groupOperationService.getGroupAll(mid);
+        List<Map<String,Object>> placeNum = placeService.getPlaceByMeshId(params);
+        Integer version = params.getInteger("version");
+        List<PlaceExtend> places;
+        List<GroupList> groupLists;
+        if (version==2 && placeNum.size()>1){
+            //v2.2.0版本 && 区域数大于1
+            places = placeService.getPlacesAndGroups(placeNum);
+            model.put("data", places);
+        }
+        if (version==null || placeNum.size()<=1){
+            //v2.1.0版本 || 区域数小于等于1
+            groupLists = groupOperationService.getGroupAll(mid);
+            model.put("data", groupLists);
+        }
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-        model.put("data", groupLists);
+
         return;
     }
 

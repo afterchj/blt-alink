@@ -5,12 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.PlaceDao;
+import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.PlaceService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -75,5 +78,18 @@ public class PlaceServiceImpl implements PlaceService {
             throw new NameDuplicateException("区域名重复");
         }
         placeDao.updatePname(pid,pname);
+    }
+
+    @Override
+    public List<Map<String, Object>> getPlaceByMeshId(JSONObject param) {
+        String meshId = param.getString("meshId");
+        String uid = param.getString("uid");
+        return placeDao.getPlaceByMeshId(meshId,uid);
+    }
+
+    @Override
+    public List<PlaceExtend> getPlacesAndGroups(List<Map<String, Object>> placeNum) {
+        int mid = (int) placeNum.get(0).get("mid");
+        return placeDao.getPlacesAndGroups(mid);
     }
 }
