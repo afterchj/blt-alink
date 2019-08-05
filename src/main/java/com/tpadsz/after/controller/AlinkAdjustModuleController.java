@@ -168,7 +168,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     }
                     groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
                 } else {
-                    //不存在改组
+                    //不存在组
                     logger.info("method:groupOperation cannot find the group:{},meshId:{}", groupId, meshId);
                     model.put("result", ResultDict.NO_GROUP.getCode());
                     model.put("result_message", ResultDict.NO_GROUP.getValue());
