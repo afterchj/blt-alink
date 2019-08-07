@@ -6,7 +6,6 @@ import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
 import com.tpadsz.after.service.PlaceService;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -124,14 +123,9 @@ public class AlinkConsoleController extends BaseDecodedController {
     }
 
     @RequestMapping("/apply")
-    public void consoleApplyScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap
-            model) {
+    public void consoleApplyScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
-        String x = param.getString("x");
-        String y = param.getString("y");
-        if (StringUtils.isNotEmpty(x) && StringUtils.isNotEmpty(y)) {
-            bltConsoleService.saveApplyScene(param);
-        }
+        bltConsoleService.saveApplyScene(param);
         List lights = bltConsoleService.getLightsInfo(param);
         List groups = bltConsoleService.getGroupsInfo(param);
         if (groups.size() > 0) {
