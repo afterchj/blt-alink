@@ -15,7 +15,7 @@
     </parameterMap>
 
     <select id="saveOperation" parameterMap="consoleMapper" statementType="CALLABLE">
-		CALL alink.save_operation (?,?,?,?,?,?,?,?,?)
+		CALL save_operation (?,?,?,?,?,?,?,?,?)
 	</select>
 
     <update id="saveSceneName" parameterType="map">
@@ -84,7 +84,7 @@
         </if>
         GROUP BY m.mesh_id,s.scene_id,s.sname
     </select>
-	<select id="getCount" resultType="Integer" parameterType="map">
+    <select id="getCount" resultType="Integer" parameterType="map">
 		SELECT COUNT(0) tcount FROM f_time_point WHERE sid = (
 			SELECT s.id
 			FROM f_mesh m
@@ -112,7 +112,7 @@
 		GROUP BY m.mesh_id,g.group_id,g.gname,g.pid,l.lcount
 	</select>
 
-	<select id="getGroupsInfo" resultType="map" parameterType="map">
+    <select id="getGroupsInfo" resultType="map" parameterType="map">
 		SELECT
 			g.id,
 			g.group_id,
@@ -131,7 +131,7 @@
 		ORDER BY g.id
 	</select>
 
-	<select id="getLightsInfo" resultType="map" parameterType="map">
+    <select id="getLightsInfo" resultType="map" parameterType="map">
 		SELECT
 			l.lmac,
 			ls.x,
@@ -163,26 +163,30 @@
 	</delete>
 
     <update id="saveApplyScene" parameterType="map">
-		UPDATE f_scene_setting set x=#{x},y=#{y},update_date=NOW()
-		WHERE
-			sid = (
+		REPLACE INTO f_light_adjust(lid,x,y,create_date,update_date)
+			SELECT
+				l.id,
+				ls.x,
+				ls.y,
+				NOW(),
+				NOW()
+			FROM
+				f_light l
+			INNER JOIN f_light_setting ls ON l.id = ls.lid
+			INNER JOIN f_scene s ON s.id=ls.sid
+			WHERE 1 = 1
+			AND s.scene_id = #{sceneId}
+			AND l.mid = (
 				SELECT
-					s.id
+					id
 				FROM
-					f_scene s
-				WHERE s.scene_id = #{sceneId}
-				AND s.uid = #{uid}
-				AND mid = (
-					SELECT
-						id
-					FROM
-						f_mesh
-					WHERE
-						mesh_id = #{meshId}
-				)
-			)
+					f_mesh
+				WHERE
+					uid = #{uid}
+				AND mesh_id = #{meshId}
+			)GROUP BY l.id;
 	</update>
-	<update id="restScene" parameterType="map">
+    <update id="restScene" parameterType="map">
 		UPDATE f_light_setting l,(SELECT x,y FROM f_scene_setting WHERE sid=#{sceneId}) r SET l.x=r.x,l.y = r.y,l.update_date=NOW() WHERE l.id IN (
 			SELECT	rec.id
 				FROM (SELECT ls.id FROM f_light_setting ls
