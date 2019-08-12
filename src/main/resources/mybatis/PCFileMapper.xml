@@ -3,8 +3,12 @@
 <mapper namespace="com.tpadsz.after.dao.PCFileDao">
 
     <select id="getFile" resultType="map" parameterType="map">
-		select * from f_pc_file order by update_date desc limit 1
-	</select>
+        select * from f_pc_file where 1=1
+        <if test="meshId !=null">
+            and file_name=#{fileName}
+        </if>
+        order by update_date desc limit 1
+    </select>
     <insert id="saveFile" parameterType="map">
 	    insert into f_pc_file(file_name,file_version,file_path,create_date,update_date) value (#{file_name},#{file_version},#{file_path},now(),now())
     </insert>

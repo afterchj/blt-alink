@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-    public static String getPath() {
+    public static String getPath(String key) {
         Properties pro = new Properties();
         try {
             InputStream in = PropertiesUtil.class.getResourceAsStream("/common.properties");
@@ -20,6 +20,6 @@ public class PropertiesUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return pro.getProperty("upload", "/mydata/alink/ota");
+        return pro.getProperty(key, "/mydata/alink/imgs");
     }
 }
