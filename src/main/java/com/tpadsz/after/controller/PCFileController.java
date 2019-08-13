@@ -30,16 +30,11 @@ public class PCFileController {
 
     @RequestMapping("/upload")
     public String uploadFile(String params, MultipartFile file) {
-        logger.warn("file=" + file);
         String path = PropertiesUtil.getPath("upload");
         String downloadPath = PropertiesUtil.getPath("otaPath");
         Map map = new HashMap();
         String str = file.getOriginalFilename();
-        String fileName = str;
-        int prefix = str.lastIndexOf("_");
-        if (prefix != -1) {
-            fileName = str.substring(0, prefix);
-        }
+        String fileName = str.substring(0,str.lastIndexOf("."));
         File targetFile = new File(path, str);
         if (!targetFile.getParentFile().exists()) {
             targetFile.getParentFile().mkdirs();
