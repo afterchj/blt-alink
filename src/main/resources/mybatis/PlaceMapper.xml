@@ -3,43 +3,34 @@
 <mapper namespace="com.tpadsz.after.dao.PlaceDao">
 
     <select id="getLastPlace" resultType="integer">
-        select place_id from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} order by place_id desc limit 1
+        select place_id from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and uid=#{uid} order by place_id desc limit 1
     </select>
 
-    <insert id="savePlace">
-        insert into f_place (place_id,pname,uid,mid,create_date,update_date) VALUES(#{placeId},#{pname},#{uid},(select id from f_mesh where mesh_id=#{meshId}),now(),now())
+    <insert id="savePlace" useGeneratedKeys="true" keyProperty="id" parameterType="com.tpadsz.after.entity.PlaceSave">
+        insert into alink.f_place (place_id,pname,uid,mid,create_date,update_date)
+        VALUES(#{placeId},#{pname},#{uid},(select id from alink.f_mesh where mesh_id=#{meshId}),now(),now())
     </insert>
 
     <select id="getPname" resultType="integer">
-        select count(*) from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} and pname=#{pname}
+        select count(*) from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and uid=#{uid} and pname=#{pname}
     </select>
 
     <delete id="deletePlaceByPid">
-        DELETE FROM f_place where id=#{pid}
+        DELETE FROM alink.f_place where id=#{pid}
     </delete>
 
     <update id="updatePname">
-        update f_place set pname=#{pname} where id=#{pid}
+        update alink.f_place set pname=#{pname} where id=#{pid}
     </update>
 
     <select id="getPlaceByMeshId" resultType="map">
-        select id as pid,mid from f_place where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid})
+        select id as pid,mid from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId} and uid=#{uid})
     </select>
 
-    <!--<resultMap id="placeList" type="com.tpadsz.after.entity.PlaceExtend">-->
-        <!--<id column="id" property="id"/>-->
-        <!--<result column="pname" property="pname"/>-->
-        <!--<result column="place_id" property="place_id"/>-->
-        <!--<result column="lcount" property="lcount"/>-->
-        <!--<collection property="groupList" ofType="com.tpadsz.after.entity.GroupBasic">-->
-            <!--<result column="group_id" property="group_id"/>-->
-            <!--<result column="gname" property="gname"/>-->
-        <!--</collection>-->
-    <!--</resultMap>-->
     <resultMap id="placeList" type="com.tpadsz.after.entity.PlaceExtend">
         <id column="id" property="id"/>
         <result column="pname" property="pname"/>
-        <result column="place_id" property="place_id"/>
+        <result column="place_id" property="placeId"/>
         <collection property="groupList" ofType="com.tpadsz.after.entity.GroupList">
             <id property="id" column="id"/>
             <!--property实体类中定义的属性 column数据库中字段名-->
@@ -67,9 +58,14 @@
         	l.lmac,
         	l.lname,
         	l.product_id
-        from f_place p left join f_group g on p.id=g.pid
-        left join f_light l on g.id=l.gid
-        where p.mid=20066
+        from alink.f_place p left join alink.f_group g on p.id=g.pid
+        left join alink.f_light l on g.id=l.gid
+        where p.mid=#{mid}
         order by place_id,group_id
+    </select>
+
+    <select id="getPlaceByPlaceIdAndMeshId" resultType="string">
+        select pname from alink.f_place where mid=(SELECT id FROM alink.f_mesh WHERE mesh_id = #{meshId}) and
+                                            place_id=#{placeId}
     </select>
 </mapper>

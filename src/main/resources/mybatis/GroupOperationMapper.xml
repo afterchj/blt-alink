@@ -2,11 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tpadsz.after.dao.GroupOperationDao">
 
-    <!--<insert id="saveGroup" parameterType="com.tpadsz.after.entity.Group" useGeneratedKeys="true" keyProperty="id">-->
-        <!--INSERT INTO alink.f_group-->
-            <!--(group_id,gname,mid,create_date,update_date)-->
-            <!--VALUES(#{groupId},#{gname},#{mid},NOW(),NOW())-->
-    <!--</insert>-->
     <!--有区域-->
     <insert id="saveGroup" parameterType="com.tpadsz.after.entity.Group" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO alink.f_group
@@ -16,8 +11,8 @@
 
     <insert id="saveGroupLog">
         INSERT INTO alink.f_group_log
-            (uid,mesh_id,operation,blt_flag,create_date,group_id)
-            VALUES(#{uid},#{meshId},#{operation},#{bltFlag},NOW(),#{groupId})
+        (uid,mesh_id,operation,blt_flag,create_date,group_id)
+        VALUES(#{uid},#{meshId},#{operation},#{bltFlag},NOW(),#{groupId})
     </insert>
 
     <select id="getMeshSerialNo" resultType="integer">
@@ -29,17 +24,52 @@
     </select>
 
     <update id="updateGroupNameByMid">
-        UPDATE alink.f_group SET gname=#{gname},update_date=now() WHERE mid=#{mid} and group_id=#{groupId}
+        UPDATE alink.f_group
+        SET gname=#{gname},update_date=now()
+        WHERE mid=#{mid} and group_id=#{groupId}
     </update>
-    
+
+    <update id="updateGroupNameByMeshId">
+        UPDATE alink.f_group
+        SET gname=#{gname},update_date=now()
+        WHERE mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
+    </update>
+
+    <resultMap id="groupLists" type="com.tpadsz.after.entity.GroupList">
+        <id property="id" column="id"/>
+        <!--property实体类中定义的属性 column数据库中字段名-->
+        <result property="groupId" column="group_id"/>
+        <result property="gname" column="gname"/>
+        <!--<result property="mid" column="mid"/>-->
+        <!--<result property="createDate" column="create_date"/>-->
+        <!--<result property="updateDate" column="update_date"/>-->
+        <!-- property指的是在bean中字段名 ofType类的全定向名 -->
+        <!--一对多-->
+        <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
+            <id property="lid" column="lid"/>
+            <result property="lmac" column="lmac"/>
+            <result property="lname" column="lname"/>
+            <result property="gid" column="gid"/>
+            <result property="typeId" column="type_id"/>
+            <result property="productId" column="product_id"/>
+            <!--<association property="typeList" javaType="com.tpadsz.after.entity.TypeList">-->
+            <result property="productName" column="product_name"/>
+            <result property="irrEff" column="irr_eff"/>
+            <result property="power" column="power"/>
+            <result property="voltage" column="voltage"/>
+            <result property="current" column="current"/>
+            <result property="tname" column="tname"/>
+            <result property="tnum" column="tnum"/>
+            <!--</association>-->
+        </collection>
+    </resultMap>
+
     <select id="getGroupAll" resultMap="groupLists">
         SELECT
     	    g.id,
         	g.group_id,
         	g.gname,
-        	g.mid,
-        	g.create_date,
-        	g.update_date,
+#         	g.mid,
         	l.id as lid,
         	l.lmac,
         	l.lname,
@@ -63,35 +93,6 @@
         ORDER BY
         	group_id
     </select>
-    
-    <resultMap id="groupLists" type="com.tpadsz.after.entity.GroupList">
-        <id property="id" column="id"/>
-        <!--property实体类中定义的属性 column数据库中字段名-->
-        <result property="groupId" column="group_id"/>
-        <result property="gname" column="gname"/>
-        <result property="mid" column="mid"/>
-        <result property="createDate" column="create_date"/>
-        <result property="updateDate" column="update_date"/>
-        <!-- property指的是在bean中字段名 ofType类的全定向名 -->
-        <!--一对多-->
-        <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
-            <id property="lid" column="lid"/>
-            <result property="lmac" column="lmac"/>
-            <result property="lname" column="lname"/>
-            <result property="gid" column="gid"/>
-            <result property="typeId" column="type_id"/>
-            <result property="productId" column="product_id"/>
-            <!--<association property="typeList" javaType="com.tpadsz.after.entity.TypeList">-->
-            <result property="productName" column="product_name"/>
-            <result property="irrEff" column="irr_eff"/>
-            <result property="power" column="power"/>
-            <result property="voltage" column="voltage"/>
-            <result property="current" column="current"/>
-            <result property="tname" column="tname"/>
-            <result property="tnum" column="tnum"/>
-            <!--</association>-->
-        </collection>
-    </resultMap>
 
     <select id="getLightColor" resultType="map">
         select x,y from alink.f_console_log WHERE lmac=#{lmac} order by log_date desc limit 1
@@ -141,7 +142,7 @@
     </resultMap>
 
     <select id="getPid" resultType="integer">
-        select id from alink.f_place WHERE place_id=#{placeId} and mid=(select id from f_mesh where mesh_id=#{meshId})
+        select id from alink.f_place WHERE place_id=#{placeId} and mid=(select id from alink.f_mesh where mesh_id=#{meshId})
     </select>
 
     <insert id="savePlace" parameterType="com.tpadsz.after.entity.AdjustPlace" useGeneratedKeys="true" keyProperty="id">
@@ -154,19 +155,16 @@
     </select>
 
     <select id="getGnameByPidAndMeshId" resultType="string">
-        select gname FROM  alink.f_group WHERE mid=(select id from f_mesh where mesh_id=#{meshId}) and gname=#{gname} and pid=#{pid}
+        select gname FROM  alink.f_group WHERE mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and gname=#{gname} and pid=#{pid}
     </select>
 
     <select id="getDefaultPlace" resultType="integer">
         SELECT id FROM alink.f_place WHERE mid=#{mid} and uid=#{uid} limit 1
     </select>
 
-    <select id="getPlaceId" resultType="integer">
-        SELECT id FROM alink.f_place WHERE place_id=#{pid} and mid=#{mid} and uid=#{uid} limit 1
-    </select>
-
     <insert id="saveGroupSetting">
-        INSERT INTO alink.f_group_setting ( mid, sid, x, y, create_date, update_date, gid )
+        INSERT INTO alink.f_group_setting
+        ( mid, sid, x, y, create_date, update_date, gid )
         VALUES
 	      (#{mid},#{sid},#{x},#{y},now(),now(),(select id from alink.f_group where group_id=#{groupId} and mid=#{mid}))
     </insert>
@@ -175,24 +173,18 @@
         DELETE FROM alink.f_group_setting WHERE sid=#{sid}
     </delete>
 
-    <select id="getPlaceIdByGroup" resultType="integer">
-        select p.id from f_group g,f_place p where g.pid=p.id and  g.group_id=#{groupId} and g.mid=(select id from
-        f_mesh where mesh_id=#{meshId})
-    </select>
-
     <update id="moveGroup">
-        update f_group set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
+        update alink.f_group set pid=#{pid} where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and  group_id=#{groupId}
     </update>
 
     <update id="updateLightPid">
-        update f_light set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and gid=(select id from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
+        update alink.f_light
+        set pid=#{pid}
+        where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and gid=(select id from alink.f_group where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
     </update>
-    <delete id="deleteLight">
-        DELETE FROM f_light WHERE gid=#{gid} and mid=#{mid}
-    </delete>
 
     <select id="getGidByGroupIdAndMeshId" resultType="integer">
-        select id from f_group where group_id=#{groupId} and mid=(select id from f_mesh where mesh_id=#{meshId})
+        select id from alink.f_group where group_id=#{groupId} and mid=(select id from alink.f_mesh where mesh_id=#{meshId})
     </select>
 
     <delete id="deleteGroupByPid">

@@ -13,18 +13,18 @@ public class LightList {
     private String lmac;
     private String lname;
     private Integer gid;
-    private Integer typeId;
+//    private Integer typeId;
     private String x;
     private String y;
-    private String tname;
-    private String tnum;
+//    private String tname;
+//    private String tnum;
     private Integer groupId;
     private Integer mid;
-    private String productName;
-    private String irrEff;
-    private String power;
-    private String voltage;
-    private String current;
+//    private String productName;
+//    private String irrEff;
+//    private String power;
+//    private String voltage;
+//    private String current;
 
     public Integer getPid() {
         return pid;
@@ -51,45 +51,45 @@ public class LightList {
         this.lid = lid;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getIrrEff() {
-        return irrEff;
-    }
-
-    public void setIrrEff(String irrEff) {
-        this.irrEff = irrEff;
-    }
-
-    public String getPower() {
-        return power;
-    }
-
-    public void setPower(String power) {
-        this.power = power;
-    }
-
-    public String getVoltage() {
-        return voltage;
-    }
-
-    public void setVoltage(String voltage) {
-        this.voltage = voltage;
-    }
-
-    public String getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(String current) {
-        this.current = current;
-    }
+//    public String getProductName() {
+//        return productName;
+//    }
+//
+//    public void setProductName(String productName) {
+//        this.productName = productName;
+//    }
+//
+//    public String getIrrEff() {
+//        return irrEff;
+//    }
+//
+//    public void setIrrEff(String irrEff) {
+//        this.irrEff = irrEff;
+//    }
+//
+//    public String getPower() {
+//        return power;
+//    }
+//
+//    public void setPower(String power) {
+//        this.power = power;
+//    }
+//
+//    public String getVoltage() {
+//        return voltage;
+//    }
+//
+//    public void setVoltage(String voltage) {
+//        this.voltage = voltage;
+//    }
+//
+//    public String getCurrent() {
+//        return current;
+//    }
+//
+//    public void setCurrent(String current) {
+//        this.current = current;
+//    }
 
     public Integer getMid() {
         return mid;
@@ -107,21 +107,21 @@ public class LightList {
         this.groupId = groupId;
     }
 
-    public String getTname() {
-        return tname;
-    }
+//    public String getTname() {
+//        return tname;
+//    }
+//
+//    public void setTname(String tname) {
+//        this.tname = tname;
+//    }
 
-    public void setTname(String tname) {
-        this.tname = tname;
-    }
-
-    public String getTnum() {
-        return tnum;
-    }
-
-    public void setTnum(String tnum) {
-        this.tnum = tnum;
-    }
+//    public String getTnum() {
+//        return tnum;
+//    }
+//
+//    public void setTnum(String tnum) {
+//        this.tnum = tnum;
+//    }
 
     public String getX() {
         return x;
@@ -143,13 +143,13 @@ public class LightList {
         this.gid = gid;
     }
 
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
+//    public Integer getTypeId() {
+//        return typeId;
+//    }
+//
+//    public void setTypeId(Integer typeId) {
+//        this.typeId = typeId;
+//    }
 
     public Integer getGid() {
         return gid;
@@ -187,18 +187,18 @@ public class LightList {
                 ", lmac='" + lmac + '\'' +
                 ", lname='" + lname + '\'' +
                 ", gid=" + gid +
-                ", typeId=" + typeId +
+//                ", typeId=" + typeId +
                 ", x='" + x + '\'' +
                 ", y='" + y + '\'' +
-                ", tname='" + tname + '\'' +
-                ", tnum='" + tnum + '\'' +
+//                ", tname='" + tname + '\'' +
+//                ", tnum='" + tnum + '\'' +
                 ", groupId=" + groupId +
                 ", mid=" + mid +
-                ", productName='" + productName + '\'' +
-                ", irrEff='" + irrEff + '\'' +
-                ", power='" + power + '\'' +
-                ", voltage='" + voltage + '\'' +
-                ", current='" + current + '\'' +
+//                ", productName='" + productName + '\'' +
+//                ", irrEff='" + irrEff + '\'' +
+//                ", power='" + power + '\'' +
+//                ", voltage='" + voltage + '\'' +
+//                ", current='" + current + '\'' +
                 '}';
     }
 }

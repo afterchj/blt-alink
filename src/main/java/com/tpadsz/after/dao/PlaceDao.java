@@ -1,6 +1,7 @@
 package com.tpadsz.after.dao;
 
 import com.tpadsz.after.entity.PlaceExtend;
+import com.tpadsz.after.entity.PlaceSave;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,7 @@ import java.util.Map;
 public interface PlaceDao {
     Integer getLastPlace(@Param("uid") String uid, @Param("meshId") String meshId);//获取网络中区域id最大的区域
 
-    void savePlace(@Param("uid") String uid, @Param("meshId") String meshId, @Param("placeId") Integer placeId,@Param("pname") String pname);
-    //创建区域
+    void savePlace(PlaceSave placeSave);//创建区域
 
     Integer getPname(@Param("uid") String uid, @Param("meshId") String meshId, @Param("pname") String pname);//区域名是否重复
 
@@ -29,4 +29,6 @@ public interface PlaceDao {
     List<Map<String, Object>> getPlaceByMeshId(@Param("meshId")String meshId, @Param("uid")String uid);
 
     List<PlaceExtend> getPlacesAndGroups(@Param("mid") int mid);
+
+    String getPlaceByPlaceIdAndMeshId(@Param("placeId") Integer placeId, @Param("meshId") String meshId);
 }

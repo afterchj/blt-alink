@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * @program: blt-alink
@@ -58,7 +59,8 @@ public class LightAjustServiceImpl implements LightAjustService {
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Integer nowMid;
         Map<String,Integer> lightMap;
-        StringBuffer sb = new StringBuffer();
+//        StringBuffer sb = new StringBuffer();
+        StringJoiner sj = new StringJoiner(",");//分隔符分割的字符串拼接
         String lmacs;
         try {
             for (int i = 1; i <= lightLists.size(); i++) {
@@ -77,7 +79,8 @@ public class LightAjustServiceImpl implements LightAjustService {
                         lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }
                 }
-                sb.append(lightLists.get(i-1).getLmac()).append(",");
+//                sb.append(lightLists.get(i-1).getLmac()).append(",");
+                sj.add(lightLists.get(i-1).getLmac());
                 if (i % 500 == 0 || i == lightLists.size()) {
                     //手动每500个一提交，提交后无法回滚
                     sqlSession.commit();
@@ -85,8 +88,9 @@ public class LightAjustServiceImpl implements LightAjustService {
                     sqlSession.clearCache();
                 }
             }
-            lmacs = sb.toString();
-            lmacs = lmacs.substring(0,lmacs.length()-",".length());
+            lmacs = sj.toString();
+//            lmacs = sb.toString();
+//            lmacs = lmacs.substring(0,lmacs.length()-",".length());
             return lmacs;
         } catch (Exception e) {
             //回滚

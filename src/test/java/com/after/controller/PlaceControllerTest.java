@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.PlaceService;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.text.StrBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -59,5 +61,22 @@ public class PlaceControllerTest {
         List<PlaceExtend> places = placeService.getPlacesAndGroups(placeNum);
         System.out.println(places.toString());
 
+    }
+
+    @Test
+    public void DeleteTest() throws NotExitException {
+        String jsonStr = "{\"uid\":\"1\",\"token\":\"aaa\",\"meshId\":\"45790182\",\"pid\":2545}";
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        placeService.delete(jsonObject);
+    }
+
+    @Test
+    public void test2(){
+        StrBuilder sb1 = new StrBuilder();
+        StrBuilder sb2 = new StrBuilder();
+        sb2.append("1");
+        sb1.append("1").append(",").append("2");
+        sb1 = sb2;
+        System.out.println(sb1.toString());
     }
 }

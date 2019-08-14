@@ -9,7 +9,6 @@ import java.util.List;
  * @create: 2019-08-02 09:44
  **/
 public class PlaceExtend extends Place {
-
     private List<GroupList> groupList;
 
     public List<GroupList> getGroupList() {
@@ -20,13 +19,6 @@ public class PlaceExtend extends Place {
         this.groupList = groupList;
     }
 
-    @Override
-    public String toString() {
-        return "PlaceExtend{" +
-                "id=" + getId() +
-                ", pname='" + getPname() + '\'' +
-                ", place_id=" + getPlace_id() +
-                ", groupList=" + groupList +
-                '}';
-    }
+
+
 }

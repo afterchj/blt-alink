@@ -10,14 +10,14 @@ public class Place {
 
     private Integer id;
     private String pname;
-    private Integer place_id;
+    private Integer placeId;
 
-    public Integer getPlace_id() {
-        return place_id;
+    public Integer getPlaceId() {
+        return placeId;
     }
 
-    public void setPlace_id(Integer place_id) {
-        this.place_id = place_id;
+    public void setPlaceId(Integer placeId) {
+        this.placeId = placeId;
     }
 
     public Integer getId() {
@@ -41,7 +41,7 @@ public class Place {
         return "Place{" +
                 "id=" + id +
                 ", pname='" + pname + '\'' +
-                ", place_id=" + place_id +
+                ", placeId=" + placeId +
                 '}';
     }
 }

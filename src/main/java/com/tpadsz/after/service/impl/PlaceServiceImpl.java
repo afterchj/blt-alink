@@ -6,9 +6,11 @@ import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.PlaceExtend;
+import com.tpadsz.after.entity.PlaceSave;
+import com.tpadsz.after.entity.SavePlaceFactory;
 import com.tpadsz.after.exception.NameDuplicateException;
-import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.PlaceService;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -35,7 +37,8 @@ public class PlaceServiceImpl implements PlaceService {
     private GroupOperationDao groupOperationDao;
 
     @Override
-    public void create(JSONObject params) throws NameDuplicateException {
+    public Map<String,Integer> create(JSONObject params) throws NameDuplicateException {
+        Map<String,Integer> placeMap = new HashedMap();
         String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         String pname = params.getString("pname");
@@ -50,17 +53,28 @@ public class PlaceServiceImpl implements PlaceService {
             placeId=0;
         }
         placeId = placeId+1;
-        placeDao.savePlace(uid,meshId,placeId,pname);
+//        PlaceSave placeSave = new PlaceSave();
+//        placeSave.setMeshId(meshId);
+//        placeSave.setPlace_id(placeId);
+//        placeSave.setUid(uid);
+//        placeSave.setPname(pname);
+        PlaceSave placeSave = SavePlaceFactory.savePlace(uid,meshId,pname,placeId);
+        placeDao.savePlace(placeSave);
+        placeMap.put("pid",placeSave.getId());
+        placeMap.put("placeId",placeId);
+        return placeMap;
     }
 
     @Override
-    public void delete(JSONObject params) throws NotExitException {
+    public void delete(JSONObject params){
         String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         Integer pid = params.getInteger("pid");//区域序列号
         Integer count = lightAjustDao.getLightByPid(pid);
         if (count>0){
-            throw new NotExitException("该区域中存在设备");
+            //区域内存在设备 将设备放到未分组
+            lightAjustDao.updateLightByPidAndMeshId(pid,meshId);
+//            throw new NotExitException("该区域中存在设备");
         }
         groupOperationDao.deleteGroupByPid(pid);//删除组
         placeDao.deletePlaceByPid(pid);//删除区域

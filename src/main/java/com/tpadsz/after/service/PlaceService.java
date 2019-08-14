@@ -3,7 +3,6 @@ package com.tpadsz.after.service;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
-import com.tpadsz.after.exception.NotExitException;
 
 import java.util.List;
 import java.util.Map;
@@ -15,9 +14,9 @@ import java.util.Map;
  * @create: 2019-08-01 09:35
  **/
 public interface PlaceService {
-    void create(JSONObject params) throws NameDuplicateException;
+    Map<String,Integer> create(JSONObject params) throws NameDuplicateException;
 
-    void delete(JSONObject params) throws NotExitException;
+    void delete(JSONObject params);
 
     void rename(JSONObject params) throws NameDuplicateException;
 

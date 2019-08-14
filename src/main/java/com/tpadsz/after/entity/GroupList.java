@@ -1,6 +1,5 @@
 package com.tpadsz.after.entity;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,48 +13,38 @@ public class GroupList {
     private Integer id;
     private Integer groupId;
     private String gname;
-    private Integer mid;
-    private String meshId;
-    private String x;
-    private String y;
-//    private int status;
-
-//    public int getStatus() {
-//        return status;
-//    }
-
-//    public void setStatus(int status) {
-//        this.status = status;
-//    }
-
-    public String getX() {
-        return x;
-    }
-
-    public void setX(String x) {
-        this.x = x;
-    }
-
-    public String getY() {
-        return y;
-    }
-
-    public void setY(String y) {
-        this.y = y;
-    }
-
-    public String getMeshId() {
-        return meshId;
-    }
-
-    public void setMeshId(String meshId) {
-        this.meshId = meshId;
-    }
-
+//    private Integer mid;
+//    private String meshId;
+//    private String x;
+//    private String y;
     private Integer pid;
-    private Date createDate;
-    private Date updateDate;
+//    private Date createDate;
+//    private Date updateDate;
     private List<LightList> lightLists;
+
+//    public String getX() {
+//        return x;
+//    }
+//
+//    public void setX(String x) {
+//        this.x = x;
+//    }
+//
+//    public String getY() {
+//        return y;
+//    }
+//
+//    public void setY(String y) {
+//        this.y = y;
+//    }
+//
+//    public String getMeshId() {
+//        return meshId;
+//    }
+//
+//    public void setMeshId(String meshId) {
+//        this.meshId = meshId;
+//    }
 
     public List<LightList> getLightLists() {
         return lightLists;
@@ -89,13 +78,13 @@ public class GroupList {
         this.gname = gname;
     }
 
-    public Integer getMid() {
-        return mid;
-    }
-
-    public void setMid(Integer mid) {
-        this.mid = mid;
-    }
+//    public Integer getMid() {
+//        return mid;
+//    }
+//
+//    public void setMid(Integer mid) {
+//        this.mid = mid;
+//    }
 
     public Integer getPid() {
         return pid;
@@ -105,21 +94,21 @@ public class GroupList {
         this.pid = pid;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
+//    public Date getCreateDate() {
+//        return createDate;
+//    }
+//
+//    public void setCreateDate(Date createDate) {
+//        this.createDate = createDate;
+//    }
+//
+//    public Date getUpdateDate() {
+//        return updateDate;
+//    }
+//
+//    public void setUpdateDate(Date updateDate) {
+//        this.updateDate = updateDate;
+//    }
 
     @Override
     public String toString() {
@@ -127,13 +116,13 @@ public class GroupList {
                 "id=" + id +
                 ", groupId=" + groupId +
                 ", gname='" + gname + '\'' +
-                ", mid=" + mid +
-                ", meshId='" + meshId + '\'' +
-                ", x='" + x + '\'' +
-                ", y='" + y + '\'' +
+//                ", mid=" + mid +
+//                ", meshId='" + meshId + '\'' +
+//                ", x='" + x + '\'' +
+//                ", y='" + y + '\'' +
                 ", pid=" + pid +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
+//                ", createDate=" + createDate +
+//                ", updateDate=" + updateDate +
                 ", lightLists=" + lightLists +
                 '}';
     }

@@ -24,13 +24,8 @@
         UPDATE alink.f_light SET gid=#{gid} WHERE lmac=#{lmac}
     </update>
 
-    <!--<insert id="saveLightColor">-->
-        <!--INSERT INTO alink.f_console_log (uid,mid,gid,lmac,x,y,cmd,log_date)-->
-	    <!--VALUES(#{uid},#{meshId},'0',#{lmac},#{x},#{y},'1',now())-->
-    <!--</insert>-->
-
     <select id="getLid" resultType="map">
-        select id,mid from alink.f_light WHERE  lmac=#{lmac}
+        select id,mid from alink.f_light WHERE lmac=#{lmac}
     </select>
 
     <insert id="saveTempLight" parameterType="com.tpadsz.after.entity.LightList" useGeneratedKeys="true" keyProperty="id">
@@ -39,9 +34,6 @@
 	    (select id from alink.f_group where group_id=#{groupId} and mid=#{mid}))
     </insert>
 
-    <!--<update id="updateLightGidAndMid">-->
-        <!--UPDATE alink.f_light SET gid=#{gid}, mid=#{mid},lname=#{lname},update_date=now() WHERE lmac=#{lmac}-->
-    <!--</update>-->
     <update id="updateLightGidAndMid" parameterType="com.tpadsz.after.entity.LightList">
         UPDATE alink.f_light
         <set>
@@ -68,18 +60,26 @@
     </update>
 
     <update id="updateLightXY">
-        UPDATE f_light_adjust set x=#{x},y=#{y},update_date=now() where lid=(select id from f_light where lmac=#{lmac})
+        UPDATE alink.f_light_adjust set x=#{x},y=#{y},update_date=now() where lid=(select id from alink.f_light where lmac=#{lmac})
     </update>
 
     <select id="getLightAdjust" parameterType="string" resultType="integer">
-        select count(*) from f_light_adjust where lid=(select id from f_light where lmac=#{lmac})
+        select count(*) from alink.f_light_adjust where lid=(select id from alink.f_light where lmac=#{lmac})
     </select>
 
     <insert id="insertLightXY">
-        insert into f_light_adjust(lid,x,y,create_date,update_date) VALUES((select id from f_light where lmac=#{lmac}),#{x},#{y},now(),now())
+        insert into alink.f_light_adjust(lid,x,y,create_date,update_date)
+        VALUES((select id from alink.f_light where lmac=#{lmac}),#{x},#{y},now(),now())
     </insert>
 
     <select id="getLightByPid" resultType="integer">
-        select count(*) from f_light where pid=#{pid}
+        select count(*) from alink.f_light where pid=#{pid}
     </select>
+
+    <update id="updateLightByPidAndMeshId">
+        UPDATE alink.f_light
+        SET pid = ( SELECT id FROM alink.f_place WHERE mid = ( SELECT id FROM alink.f_mesh WHERE mesh_id = #{meshId} ) AND
+        place_id = 0 ),gid = ( SELECT id FROM alink.f_group WHERE mid = ( SELECT id FROM alink.f_mesh WHERE mesh_id = #{meshId} ) AND group_id = 0 )
+        WHERE pid = #{pid}
+    </update>
 </mapper>

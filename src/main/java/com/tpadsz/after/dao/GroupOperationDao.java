@@ -36,8 +36,6 @@ public interface GroupOperationDao {
 
     void updateGidInLight(Group group);//更新灯表gid
 
-//    List<LightList> getLightList(Group group);//查询未分组内灯信息
-
     void deleteGroup(Group group);//删除组
 
     Integer getSceneSeriaNo(@Param("mid") Integer mid, @Param("sceneId") Integer sceneId, @Param("uid") String uid);//获取sid
@@ -56,21 +54,13 @@ public interface GroupOperationDao {
 
     void deleteGroupSetting(@Param("sid") Integer sid);//删除场景中组的xy值
 
-    Integer getPlaceId(@Param("pid") Integer pid, @Param("uid") String uid, @Param("mid") Integer mid);//获取区域id
-
-    Integer getPlaceIdByGroup(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
-
     void moveGroup(@Param("pid") Integer pid, @Param("meshId") String meshId, @Param("groupId") Integer groupId);
 
     String getGnameByPidAndMeshId(@Param("pid") Integer pid, @Param("meshId") String meshId,@Param("gname") String gname);
     
     void updateLightPid(@Param("groupId") Integer groupId, @Param("pid") Integer pid,@Param("meshId") String meshId);
 
-    void deleteLight(Group group);
-
     Integer getGidByGroupIdAndMeshId(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
 
     void deleteGroupByPid(@Param("pid") Integer pid);
-
-//    List<GroupList> getGroups(@Param("mid") Integer mid);//获取所有组的信息(比getGroupAll更简单，不包含灯的产品类型)
 }

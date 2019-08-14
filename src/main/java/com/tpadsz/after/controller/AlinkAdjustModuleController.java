@@ -25,13 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 客户端和服务端可能有数据不一致情况
  *
  * @program: blt-alink
  * @description: 场景和组调节模块
  * @author: Mr.Ma
  * @create: 2019-03-06 13:27
- * @see
  **/
 @Controller
 @RequestMapping("/adjust")
@@ -69,12 +67,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String meshId = params.getString("meshId");//网络id
         Integer mid;
         Group group;
-        if (StringUtils.isBlank(operation) || StringUtils.isBlank(bltFlag) || StringUtils.isBlank(meshId) ||
-                StringUtils.isBlank(gname) || groupId == null) {
-            model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-            return;
-        }
         //未连蓝牙
         if (bltFlag.equals("0")) {
             saveLog(uid, meshId, operation, bltFlag, model, groupId, null);
@@ -102,13 +94,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             //创建组
             if ("0".equals(operation)) {
                 Integer pid = params.getInteger("pid");
-//                try {
-//                    pid = groupOperationService.getDefaultPlace(pid,uid,mid);
-//                } catch (PlaceNotFoundException e) {
-//                    model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
-//                    model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
-//                    return;
-//                }
                 group.setPid(pid);
                 String dbGname = groupOperationService.getGname(group);
                 if (StringUtils.isNotBlank(dbGname)){
@@ -157,14 +142,15 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     //查询组内灯的数量
                     Integer lightNum = groupOperationService.getLightNum(group);
                     if (lightNum != null) {
-                        Integer version = params.getInteger("version");
-                        //组内有灯,不许删除 v2.2.0
-                        if (version!=null &&version==2){
-                            model.put("result", ResultDict.EXISTED_LIGHTS.getCode());
-                            model.put("result_message", ResultDict.EXISTED_LIGHTS.getValue());
-                            return;
-                        }
-                        groupOperationService.deleteGroup(group,version);
+//                        Integer version = params.getInteger("version");
+//                        组内有灯,不许删除 v2.2.0
+//                        if (version!=null &&version==2){
+//                            model.put("result", ResultDict.EXISTED_LIGHTS.getCode());
+//                            model.put("result_message", ResultDict.EXISTED_LIGHTS.getValue());
+//                            return;
+//                        }
+//                        groupOperationService.deleteGroup(group,version);
+                        groupOperationService.deleteGroup(group);
                     }
                     groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
                 } else {
@@ -212,17 +198,17 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         List<GroupList> groupLists;
         if (version!=null && 2==version){
             //v2.1.0版本
-            if (placeNum.size()>1){
+//            if (placeNum.size()>1){
                 //区域数大于1
                 places = placeService.getPlacesAndGroups(placeNum);
                 model.put("data", places);
-            }else {
-                //区域数小于等于1
-                groupLists = groupOperationService.getGroupAll(mid);
-                model.put("data", groupLists);
-            }
+//            }else {
+//                区域数小于等于1
+//                groupLists = groupOperationService.getGroupAll(mid);
+//                model.put("data", groupLists);
+//            }
         }else if (version==null){
-            //v2.1.0版本 || 区域数小于等于1
+            //v2.1.0版本
             groupLists = groupOperationService.getGroupAll(mid);
             model.put("data", groupLists);
         }
@@ -446,7 +432,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Integer groupId;
         String productId;
         LightList lightList;
-        List<LightSetting> lightSettingList = new ArrayList<LightSetting>(array.size() + 1);//配置list容量为jsonArray的size()
+        List<LightSetting> lightSettingList = new ArrayList<>(array.size() + 1);//配置list容量为jsonArray的size()
         LightSetting lightSetting;
         String x;
         String y;
@@ -675,7 +661,10 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     /**
      * "0":扫描灯
      * "2":移动灯
-     * @param
+     * @param model
+     * @param operation
+     * @param group
+     * @param params
      * @return 返回灯集合
      */
     public List<LightList> GetLightList(ModelMap model, String
@@ -710,16 +699,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.NO_GROUP.getValue());
             return null;
         }
-
-//        try {
-//            //获得区域序列号
-//            pid = groupOperationService.getDefaultPlace(pid,group.getUid(),group.getMid());
-//        } catch (PlaceNotFoundException e) {
-//            model.put("result_message", ResultDict.NO_DEFAULT_PLACE.getValue());
-//            model.put("result", ResultDict.NO_DEFAULT_PLACE.getCode());
-//            return null;
-//        }
-
         LightList lightList;
         JSONArray array = params.getJSONArray("lightGroup");
         if (array.isEmpty() || array.size() < 1) {
@@ -788,9 +767,10 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     @RequestMapping(value = "/moveGroup",method = RequestMethod.POST)
     public void moveGroup(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
         try {
-            groupOperationService.moveGroup(params);
+            Map<String, Object> placeMap = groupOperationService.moveGroup(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
+            model.put("place",placeMap);
         } catch (GroupDuplicateException e) {
             model.put("result", ResultDict.DUPLICATE_NAME.getCode());
             model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
@@ -821,5 +801,4 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
     }
-
 }

@@ -24,20 +24,12 @@ public interface LightAjustDao {
 
     Integer deleteLight(@Param("lmac") String lmac);//删除灯
 
-    void updateLightGid(@Param("lmac") String lmac,@Param("gid") Integer gid);//移动灯
-
-//    void saveLightColor(Param("uid") String uid,@Param("meshId") String meshId,@Param("lmac")String lmac,@Param("x")String x, @Param("y") String y);//扫描灯时，保存灯的x,y值，开关状态
-
-//    String getLightOff(@Param("lmac") String lmac);//获取灯开关状态
-
     Map<String,Integer> getLid(@Param("lmac") String lmac);//获取mid 查询灯是否存在
 
     void saveTempLight(LightList lightList);//创建临时灯
 
-//    void updateLightGidAndMid(@Param("lmac") String lmac, @Param("gid") Integer gid, @Param("mid") Integer mid,@Param
-//            ("lname") String lname);//更新灯信息
-
     void updateLightGidAndMid(LightList lightList);//更新灯信息
+
     void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除light_setting
 
     void updateLight(@Param("lmac") String lmac, @Param("groupId") Integer groupId, @Param("mid") Integer mid, @Param("pid") Integer pid);
@@ -53,4 +45,6 @@ public interface LightAjustDao {
     void insertLightXY(LightList lightList);
 
     Integer getLightByPid(@Param("pid") Integer pid);
+
+    void updateLightByPidAndMeshId(@Param("pid") Integer pid, @Param("meshId") String meshId);
 }

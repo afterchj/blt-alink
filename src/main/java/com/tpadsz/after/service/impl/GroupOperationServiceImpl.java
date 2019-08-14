@@ -2,10 +2,12 @@ package com.tpadsz.after.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
+import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,13 +26,16 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     @Resource
     private GroupOperationDao groupOperationDao;
 
+    @Resource
+    private PlaceDao placeDao;
+
     @Override
-    public void saveGroupLog(String uid, String meshId,String operation, String bltFlag, Integer groupId) {
-        groupOperationDao.saveGroupLog(uid,meshId,operation,bltFlag, groupId);
+    public void saveGroupLog(String uid, String meshId, String operation, String bltFlag, Integer groupId) {
+        groupOperationDao.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
     }
 
     @Override
-    public Integer getMeshSerialNo(String meshId,String uid) {
+    public Integer getMeshSerialNo(String meshId, String uid) {
         return groupOperationDao.getMeshSerialNo(meshId, uid);
     }
 
@@ -43,7 +48,6 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     public Integer saveGroup(Group group) {
         return groupOperationDao.saveGroup(group);
     }
-
 
     @Override
     public void updateGroupNameByMid(Group group) {
@@ -81,22 +85,25 @@ public class GroupOperationServiceImpl implements GroupOperationService {
 //    }
 
     @Override
-    public void deleteGroup(Group group, Integer version) {
+//    public void deleteGroup(Group group, Integer version) {
+    public void deleteGroup(Group group) {
+        //灯移动到未分组
+        groupOperationDao.updateGidInLight(group);
         groupOperationDao.deleteGroup(group);
-        if (version==null ){
-            //v2.1.0 灯移动到未分组
-            groupOperationDao.updateGidInLight(group);
-        }
+//        if (version==null ){
+//        v2 .1 .0 灯移动到未分组
+//            groupOperationDao.updateGidInLight(group);
+//        }
     }
 
     @Override
-    public Integer getSceneSerialNo(Integer mid, Integer sceneId,String uid) {
+    public Integer getSceneSerialNo(Integer mid, Integer sceneId, String uid) {
         return groupOperationDao.getSceneSeriaNo(mid, sceneId, uid);
     }
 
     @Override
-    public GroupConsoleLog getGroupConsoleLogByGid(Integer groupId,String uid,String meshId) {
-        return groupOperationDao.getGroupConsoleLogByGid(groupId,uid,meshId);
+    public GroupConsoleLog getGroupConsoleLogByGid(Integer groupId, String uid, String meshId) {
+        return groupOperationDao.getGroupConsoleLogByGid(groupId, uid, meshId);
     }
 
 //    @Override
@@ -115,7 +122,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public Integer getDefaultPlace(Integer pid,String uid, Integer mid) throws PlaceNotFoundException {
+    public Integer getDefaultPlace(Integer pid, String uid, Integer mid) throws PlaceNotFoundException {
 //        if (pid==null){
 //            //v2.0版本 获取默认区域
 //            pid=1;
@@ -148,31 +155,63 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public void moveGroup(JSONObject params) throws GroupDuplicateException {
-        Integer pid = params.getInteger("pid");//目标区域id
+    public Map<String, Object> moveGroup(JSONObject params) throws GroupDuplicateException {
+        Map<String, Object> placeMap = new HashedMap();
+        Integer pid = params.getInteger("pid");//目标区域序列号
+        Integer placeId = params.getInteger("placeId");//目标区域id
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         Integer groupId = params.getInteger("groupId");
         String gname = params.getString("gname");//组名
-//        pid = groupOperationDao.getPid(pid,meshId);
-//        if (pid == null){
-//            throw new PlaceNotFoundException();
-//        }
-        Integer oldPid = groupOperationDao.getPlaceIdByGroup(groupId,meshId);
-        if (pid.intValue() != oldPid.intValue()){
-            String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
-            if (oldGname!=null){
-                //组名重复
-                throw new GroupDuplicateException();
+        String pname;
+        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
+        if (pname == null){
+            //区域未创建 创建区域
+            StringBuffer sb = new StringBuffer();
+            StringBuffer preSb = new StringBuffer();
+            sb.append("区域").append((placeId-1));
+            preSb.append("区域").append((placeId-1));
+            pname = sb.toString();
+            Integer pnameCount = placeDao.getPname(uid, meshId, pname);
+            int num = 1;
+            while (pnameCount>0){
+                //区域名重复
+                pname = sb.append("(").append(num).append(")").toString();
+                sb = preSb;
+                pnameCount = placeDao.getPname(uid, meshId, pname);
+                num++;
             }
-            //不同区域之间移动
-            groupOperationDao.moveGroup(pid,meshId,groupId);
-            groupOperationDao.updateLightPid(groupId,pid,meshId);//修改灯信息的pid
+            PlaceSave placeSave = SavePlaceFactory.savePlace(uid,meshId,pname,placeId);
+            placeDao.savePlace(placeSave);
+            pid  = placeSave.getId();
         }
+//        }
+        String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
+//            int count=0;
+//            //移动后组名重复 组名后添加"(1)"后缀
+//            while (oldGname!=null){
+//                count++;
+//                gname = gname+"("+count+")";
+//                oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
+//            }
+//            if(count>0){
+//                //修改组名
+//                Group group = new Group();
+//                group.setGroupId(groupId);
+//                group.setGname(gname);
+//                group.setMeshId(meshId);
+//                groupOperationDao.updateGroupNameByMid(group);
+//            }
+        if (oldGname != null) {
+            //组名重复
+            throw new GroupDuplicateException();
+        }
+        //不同区域之间移动
+        groupOperationDao.moveGroup(pid, meshId, groupId);
+        groupOperationDao.updateLightPid(groupId, pid, meshId);//修改灯信息的pid
+        placeMap.put("pid",pid);
+        placeMap.put("placeId",placeId);
+        placeMap.put("pname",pname);
+        return placeMap;
     }
-
-//    @Override
-//    public List<GroupList> getGroups(Integer mid) {
-//        return groupOperationDao.getGroups(mid);
-//    }
 }

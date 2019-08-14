@@ -196,7 +196,7 @@ public class AlinkProjectController extends BaseDecodedController {
                     projectService.deleteMeshId(meshId);
                     AdjustPlace place = new AdjustPlace();
                     place.setPlaceId(1);
-                    place.setPname("区域1");
+                    place.setPname("扫描区");
                     place.setUid(uid);
                     place.setMid(mesh.getId());
                     projectService.createPlace(place);
@@ -204,6 +204,8 @@ public class AlinkProjectController extends BaseDecodedController {
                     model.put("meshId", meshId);
                     model.put("mid", mesh.getId());
                     model.put("pid", place.getId());
+                    model.put("placeId", place.getPlaceId());
+                    model.put("pname", place.getPname());
                 } else {
                     model.put("result", ResultDict.DUPLICATE_NAME.getCode());
                 }
