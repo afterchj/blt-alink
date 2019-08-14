@@ -35,7 +35,7 @@ public class PlaceController extends BaseDecodedController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public void create(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         try {
-            Map<String, Integer> placeMap = placeService.create(params);
+            Map<String, Object> placeMap = placeService.create(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
             model.put("place",placeMap);

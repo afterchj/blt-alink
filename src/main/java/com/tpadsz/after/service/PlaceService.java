@@ -14,7 +14,7 @@ import java.util.Map;
  * @create: 2019-08-01 09:35
  **/
 public interface PlaceService {
-    Map<String,Integer> create(JSONObject params) throws NameDuplicateException;
+    Map<String,Object> create(JSONObject params) throws NameDuplicateException;
 
     void delete(JSONObject params);
 

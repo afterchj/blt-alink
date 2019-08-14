@@ -37,8 +37,8 @@ public class PlaceServiceImpl implements PlaceService {
     private GroupOperationDao groupOperationDao;
 
     @Override
-    public Map<String,Integer> create(JSONObject params) throws NameDuplicateException {
-        Map<String,Integer> placeMap = new HashedMap();
+    public Map<String,Object> create(JSONObject params) throws NameDuplicateException {
+        Map<String,Object> placeMap = new HashedMap();
         String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         String pname = params.getString("pname");
@@ -62,6 +62,7 @@ public class PlaceServiceImpl implements PlaceService {
         placeDao.savePlace(placeSave);
         placeMap.put("pid",placeSave.getId());
         placeMap.put("placeId",placeId);
+        placeMap.put("pname",pname);
         return placeMap;
     }
 
