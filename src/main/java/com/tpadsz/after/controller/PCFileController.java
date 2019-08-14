@@ -29,17 +29,12 @@ public class PCFileController {
     private org.apache.log4j.Logger logger = Logger.getLogger(this.getClass());
 
     @RequestMapping("/upload")
-    public Map uploadFile(String params, MultipartFile file) {
-        JSONObject object = JSON.parseObject(params);
+    public String uploadFile(String params, MultipartFile file) {
+        String path = PropertiesUtil.getPath("upload");
+        String downloadPath = PropertiesUtil.getPath("otaPath");
         Map map = new HashMap();
-        logger.warn("params=" + params);
-        String path = PropertiesUtil.getPath();
         String str = file.getOriginalFilename();
-        String fileName = str;
-        int prefix = str.lastIndexOf("_");
-        if (prefix != -1) {
-            fileName = str.substring(0, prefix);
-        }
+        String fileName = str.substring(0,str.lastIndexOf("."));
         File targetFile = new File(path, str);
         if (!targetFile.getParentFile().exists()) {
             targetFile.getParentFile().mkdirs();
@@ -48,25 +43,33 @@ public class PCFileController {
             if (StringUtils.isNotEmpty(fileName)) {
                 file.transferTo(targetFile);
             }
-            object.put("file_name", fileName);
-            object.put("file_path", "http://iotsztp.com/file/ota/" + str);
+            map.put("file_name", fileName);
+            map.put("file_path", downloadPath + str);
             map.put("code", "000");
             map.put("result", "success");
-            fileService.saveFile(object);
+            fileService.saveFile(map);
+            logger.warn("map=" + JSON.toJSONString(map));
         } catch (Exception e) {
+            e.printStackTrace();
             map.put("code", "500");
             map.put("result", "fail");
-            logger.error("error:" + e.getMessage());
+            return "500";
         }
-        return map;
+        return "000";
     }
 
     @RequestMapping("/fileInfo")
-    public Map getFile() {
-        logger.warn("download file...");
+    public Map getFile(String params) {
+        JSONObject object = new JSONObject();
+        try {
+            object = JSON.parseObject(params);
+        } catch (Exception e) {
+            object.put("fileName", params);
+        }
+        logger.warn("download file..." + object.toJSONString());
         Map map = new HashMap();
         try {
-            map = fileService.getFile(null);
+            map.putAll(fileService.getFile(object));
             map.put("code", "000");
             map.put("result", "success");
         } catch (Exception e) {
