@@ -56,4 +56,8 @@ public interface GroupOperationService {
     void deleteGroupSetting(Integer sid);
 
     Map<String, Object> moveGroup(JSONObject params) throws GroupDuplicateException;
+
+    Map<String, Object> saveGroup(JSONObject params);
+
+    Group createGroup(Integer mid,Integer pid,Integer groupId);
 }

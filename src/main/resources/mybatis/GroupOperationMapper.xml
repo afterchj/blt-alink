@@ -151,11 +151,11 @@
     </insert>
 
     <select id="getGname" resultType="string">
-        select gname FROM  alink.f_group WHERE mid=#{mid} and gname=#{gname} and pid=#{pid}
+        select gname FROM  alink.f_group WHERE mid=#{mid} and gname=#{gname}
     </select>
 
     <select id="getGnameByPidAndMeshId" resultType="string">
-        select gname FROM  alink.f_group WHERE mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and gname=#{gname} and pid=#{pid}
+        select gname FROM  alink.f_group WHERE mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and gname=#{gname}
     </select>
 
     <select id="getDefaultPlace" resultType="integer">
@@ -190,5 +190,9 @@
     <delete id="deleteGroupByPid">
         DELETE from alink.f_group WHERE pid=#{pid}
     </delete>
+
+    <select id="getLastGroup" resultType="integer">
+        SELECT group_id FROM alink.f_group WHERE mid=#{mid} ORDER BY group_id DESC LIMIT 1
+    </select>
 
 </mapper>

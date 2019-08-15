@@ -67,7 +67,9 @@ public class PlaceControllerTest {
     public void DeleteTest() throws NotExitException {
         String jsonStr = "{\"uid\":\"1\",\"token\":\"aaa\",\"meshId\":\"45790182\",\"pid\":2545}";
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-        placeService.delete(jsonObject);
+        jsonObject.put("cid","20");
+        System.out.println(jsonObject.toString());
+//        placeService.delete(jsonObject);
     }
 
     @Test
@@ -79,4 +81,6 @@ public class PlaceControllerTest {
         sb1 = sb2;
         System.out.println(sb1.toString());
     }
+
+
 }

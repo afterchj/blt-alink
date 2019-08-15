@@ -180,23 +180,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             placeDao.savePlace(placeSave);
             pid  = placeSave.getPid();
         }
-//        }
         String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
-//            int count=0;
-//            //移动后组名重复 组名后添加"(1)"后缀
-//            while (oldGname!=null){
-//                count++;
-//                gname = gname+"("+count+")";
-//                oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
-//            }
-//            if(count>0){
-//                //修改组名
-//                Group group = new Group();
-//                group.setGroupId(groupId);
-//                group.setGname(gname);
-//                group.setMeshId(meshId);
-//                groupOperationDao.updateGroupNameByMid(group);
-//            }
         if (oldGname != null) {
             //组名重复
             throw new GroupDuplicateException();
@@ -208,5 +192,46 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         placeMap.put("placeId",placeId);
         placeMap.put("pname",pname);
         return placeMap;
+    }
+
+    @Override
+    public Map<String, Object> saveGroup(JSONObject params) {
+        Map<String,Object> groupMap = new HashedMap();
+        String uid = params.getString("uid");
+        String meshId = params.getString("meshId");
+        Integer pid = params.getInteger("pid");
+        Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
+        Integer preGroupId = groupOperationDao.getLastGroup(mid);
+        Integer groupId = preGroupId + 1;
+        Group group = createGroup(mid,pid,groupId);
+        groupMap.put("gname",group.getGname());
+        groupMap.put("groupId",group.getGroupId());
+        return groupMap;
+    }
+
+    public Group createGroup(Integer mid,Integer pid,Integer groupId){
+        Group group = new Group();
+        group.setMid(mid);
+        group.setPid(pid);
+        group.setGroupId(groupId);
+        StringBuffer sb = new StringBuffer();
+        StringBuffer preSb = new StringBuffer();
+        sb.append("组").append(groupId);
+        preSb.append("组").append(groupId);
+        String gname;
+        group.setGname(sb.toString());
+        String dbGname = groupOperationDao.getGname(group);
+        int count=0;
+        //区域内组名重复 组名后添加"(1)"后缀
+        while (dbGname!=null){
+            count++;
+            gname = sb.append("(").append(count).append(")").toString();
+            group.setGname(gname);
+            sb = preSb;
+            dbGname = groupOperationDao.getGname(group);
+        }
+        //创建组
+        groupOperationDao.saveGroup(group);
+        return group;
     }
 }

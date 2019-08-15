@@ -7,6 +7,7 @@ import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -36,6 +37,9 @@ public class LightAjustServiceImpl implements LightAjustService {
 
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
+
+    @Resource
+    private GroupOperationService groupOperationService;
 
     @Override
     public void saveLightAjustLog(String meshId, String bltFlag, String operation, String lmacs) {
@@ -202,30 +206,31 @@ public class LightAjustServiceImpl implements LightAjustService {
             Integer gid = groupOperationDao.getGidByGroupIdAndMeshId(groupId,meshId);
             if (gid == null){
                 //不存在该组 创建组
-                StringBuffer sb = new StringBuffer();
-                StringBuffer preSb = new StringBuffer();
-                sb.append("组").append(groupId);
-                preSb.append("组").append(groupId);
-                String gname = sb.toString();
-                group = new Group();
-                group.setGname(gname);
-                group.setMid(mid);
-                group.setPid(pid);
-                group.setGroupId(groupId);
-                String dbGname = groupOperationDao.getGname(group);
-                int count=0;
-                //区域内组名重复 组名后添加"(1)"后缀
-                while (dbGname!=null){
-                    count++;
-                    gname = sb.append("(").append(count).append(")").toString();
-                    group.setGname(gname);
-                    sb = preSb;
-                    dbGname = groupOperationDao.getGname(group);
-                }
-                //创建组
-                groupOperationDao.saveGroup(group);
+                group = groupOperationService.createGroup(mid,pid,groupId);
                 gid = group.getId();
-//                System.out.println("gid: "+group.getId());
+//                group = new Group();
+//                group.setMid(mid);
+//                group.setPid(pid);
+//                group.setGroupId(groupId);
+//                StringBuffer sb = new StringBuffer();
+//                StringBuffer preSb = new StringBuffer();
+//                sb.append("组").append(groupId);
+//                preSb.append("组").append(groupId);
+//                String gname;
+//                String dbGname = groupOperationDao.getGname(group);
+//                int count=0;
+//                //区域内组名重复 组名后添加"(1)"后缀
+//                while (dbGname!=null){
+//                    count++;
+//                    gname = sb.append("(").append(count).append(")").toString();
+//                    group.setGname(gname);
+//                    sb = preSb;
+//                    dbGname = groupOperationDao.getGname(group);
+//                }
+//                //创建组
+//                groupOperationDao.saveGroup(group);
+//                gid = group.getId();
+////                System.out.println("gid: "+group.getId());
             }
             lightList.setGid(gid);
             lightList.setLmac(lmac);

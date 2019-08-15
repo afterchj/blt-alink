@@ -50,6 +50,10 @@ public class AlinkAdjustModuleControllerTest {
     SceneAjustService sceneAjustService = ac.getBean("sceneAjustService",
             SceneAjustService.class);
 
+    public JSONObject getJson(String strJson){
+        return JSONObject.parseObject(strJson);
+    }
+
     @Test
     public void getMeshSerialNoTest() {
         Integer mid = groupOperationService.getMeshSerialNo
@@ -474,5 +478,13 @@ public class AlinkAdjustModuleControllerTest {
                 "\"lightList\":[{\"lmac\":\"aa-aa-aa-aa\",\"x\":\"100\",\"y\":\"100\"}]}";
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         lightAjustService.updateLightXY(jsonObject);
+    }
+
+    @Test
+    public void saveGroup2Test(){
+        String jsonStr ="{\"uid\":\"1\",\"token\":\"aaa\",\"meshId\":\"60428315\",\"pname\":\"区域3\",\"pid\":2577}";
+        JSONObject jsonObject = getJson(jsonStr);
+        Map<String, Object> map = groupOperationService.saveGroup(jsonObject);
+        System.out.println(map.get("gname")+", "+map.get("groupId"));
     }
 }
