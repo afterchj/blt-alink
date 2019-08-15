@@ -8,7 +8,7 @@ package com.tpadsz.after.entity;
  **/
 public class Place {
 
-    private Integer id;
+    private Integer pid;
     private String pname;
     private Integer placeId;
 
@@ -20,12 +20,12 @@ public class Place {
         this.placeId = placeId;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getPid() {
+        return pid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 
     public String getPname() {
@@ -36,12 +36,4 @@ public class Place {
         this.pname = pname;
     }
 
-    @Override
-    public String toString() {
-        return "Place{" +
-                "id=" + id +
-                ", pname='" + pname + '\'' +
-                ", placeId=" + placeId +
-                '}';
-    }
 }

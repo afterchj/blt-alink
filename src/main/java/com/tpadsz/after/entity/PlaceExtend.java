@@ -9,16 +9,13 @@ import java.util.List;
  * @create: 2019-08-02 09:44
  **/
 public class PlaceExtend extends Place {
-    private List<GroupList> groupList;
+    private List<GroupExtend> groupList;
 
-    public List<GroupList> getGroupList() {
+    public List<GroupExtend> getGroupList() {
         return groupList;
     }
 
-    public void setGroupList(List<GroupList> groupList) {
+    public void setGroupList(List<GroupExtend> groupList) {
         this.groupList = groupList;
     }
-
-
-
 }

@@ -36,8 +36,6 @@ public interface GroupOperationService {
 
     void updateGidInLight(Group group);
 
-//    List<LightList> getLightList(Group group);
-
 //    void deleteGroup(Group group, Integer version);
     void deleteGroup(Group group);
 

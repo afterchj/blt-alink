@@ -60,7 +60,7 @@ public class PlaceServiceImpl implements PlaceService {
 //        placeSave.setPname(pname);
         PlaceSave placeSave = SavePlaceFactory.savePlace(uid,meshId,pname,placeId);
         placeDao.savePlace(placeSave);
-        placeMap.put("pid",placeSave.getId());
+        placeMap.put("pid",placeSave.getPid());
         placeMap.put("placeId",placeId);
         placeMap.put("pname",pname);
         return placeMap;

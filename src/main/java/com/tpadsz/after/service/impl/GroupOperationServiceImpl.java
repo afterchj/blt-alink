@@ -79,11 +79,6 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         groupOperationDao.updateGidInLight(group);
     }
 
-//    @Override
-//    public List<LightList> getLightList(Group group) {
-//        return groupOperationDao.getLightList(group);
-//    }
-
     @Override
 //    public void deleteGroup(Group group, Integer version) {
     public void deleteGroup(Group group) {
@@ -183,7 +178,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             }
             PlaceSave placeSave = SavePlaceFactory.savePlace(uid,meshId,pname,placeId);
             placeDao.savePlace(placeSave);
-            pid  = placeSave.getId();
+            pid  = placeSave.getPid();
         }
 //        }
         String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);

@@ -6,7 +6,7 @@
         select place_id from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and uid=#{uid} order by place_id desc limit 1
     </select>
 
-    <insert id="savePlace" useGeneratedKeys="true" keyProperty="id" parameterType="com.tpadsz.after.entity.PlaceSave">
+    <insert id="savePlace" useGeneratedKeys="true" keyProperty="pid" parameterType="com.tpadsz.after.entity.PlaceSave">
         insert into alink.f_place (place_id,pname,uid,mid,create_date,update_date)
         VALUES(#{placeId},#{pname},#{uid},(select id from alink.f_mesh where mesh_id=#{meshId}),now(),now())
     </insert>
@@ -28,17 +28,17 @@
     </select>
 
     <resultMap id="placeList" type="com.tpadsz.after.entity.PlaceExtend">
-        <id column="id" property="id"/>
+        <id column="id" property="pid"/>
         <result column="pname" property="pname"/>
         <result column="place_id" property="placeId"/>
-        <collection property="groupList" ofType="com.tpadsz.after.entity.GroupList">
-            <id property="id" column="id"/>
+        <collection property="groupList" ofType="com.tpadsz.after.entity.GroupExtend">
+            <!--<id property="id" column="id"/>-->
             <!--property实体类中定义的属性 column数据库中字段名-->
             <result property="groupId" column="group_id"/>
             <result property="gname" column="gname"/>
             <!-- property指的是在bean中字段名 ofType类的全定向名 -->
             <!--一对多-->
-            <collection property="lightLists" ofType="com.tpadsz.after.entity.LightList">
+            <collection property="lightLists" ofType="com.tpadsz.after.entity.LightExtend">
                 <id property="lid" column="lid"/>
                 <result property="lmac" column="lmac"/>
                 <result property="lname" column="lname"/>
@@ -51,7 +51,7 @@
     <select id="getPlacesAndGroups" resultMap="placeList">
         select
             p.id,p.place_id,p.pname,
-    	    g.id,
+#     	    g.id,
         	g.group_id,
         	g.gname,
         	l.id as lid,

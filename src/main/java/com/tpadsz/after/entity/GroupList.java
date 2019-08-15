@@ -20,7 +20,7 @@ public class GroupList {
     private Integer pid;
 //    private Date createDate;
 //    private Date updateDate;
-    private List<LightList> lightLists;
+    private List<LightExtend> lightLists;
 
 //    public String getX() {
 //        return x;
@@ -46,11 +46,12 @@ public class GroupList {
 //        this.meshId = meshId;
 //    }
 
-    public List<LightList> getLightLists() {
+
+    public List<LightExtend> getLightLists() {
         return lightLists;
     }
 
-    public void setLightLists(List<LightList> lightLists) {
+    public void setLightLists(List<LightExtend> lightLists) {
         this.lightLists = lightLists;
     }
 
