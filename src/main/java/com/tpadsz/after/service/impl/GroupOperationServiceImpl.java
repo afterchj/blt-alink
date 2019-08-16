@@ -164,8 +164,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             //区域未创建 创建区域
             StringBuffer sb = new StringBuffer();
             StringBuffer preSb = new StringBuffer();
-            sb.append("区域").append((placeId-1));
-            preSb.append("区域").append((placeId-1));
+            sb.append("区域").append((placeId));
+            preSb.append("区域").append((placeId));
             pname = sb.toString();
             Integer pnameCount = placeDao.getPname(uid, meshId, pname);
             int num = 1;

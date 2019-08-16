@@ -208,29 +208,6 @@ public class LightAjustServiceImpl implements LightAjustService {
                 //不存在该组 创建组
                 group = groupOperationService.createGroup(mid,pid,groupId);
                 gid = group.getId();
-//                group = new Group();
-//                group.setMid(mid);
-//                group.setPid(pid);
-//                group.setGroupId(groupId);
-//                StringBuffer sb = new StringBuffer();
-//                StringBuffer preSb = new StringBuffer();
-//                sb.append("组").append(groupId);
-//                preSb.append("组").append(groupId);
-//                String gname;
-//                String dbGname = groupOperationDao.getGname(group);
-//                int count=0;
-//                //区域内组名重复 组名后添加"(1)"后缀
-//                while (dbGname!=null){
-//                    count++;
-//                    gname = sb.append("(").append(count).append(")").toString();
-//                    group.setGname(gname);
-//                    sb = preSb;
-//                    dbGname = groupOperationDao.getGname(group);
-//                }
-//                //创建组
-//                groupOperationDao.saveGroup(group);
-//                gid = group.getId();
-////                System.out.println("gid: "+group.getId());
             }
             lightList.setGid(gid);
             lightList.setLmac(lmac);

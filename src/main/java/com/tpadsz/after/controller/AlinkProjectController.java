@@ -195,7 +195,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 if (result == 1) {
                     projectService.deleteMeshId(meshId);
                     AdjustPlace place = new AdjustPlace();
-                    place.setPlaceId(1);
+                    place.setPlaceId(0);
                     place.setPname("扫描区");
                     place.setUid(uid);
                     place.setMid(mesh.getId());
