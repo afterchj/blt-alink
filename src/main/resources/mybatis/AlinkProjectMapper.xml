@@ -26,62 +26,62 @@
     </resultMap>
 
     <select id="findRepeatIdByUid" resultMap="standardMeshMap" parameterType="string">
-        SELECT * from ( SELECT * from alink.f_mesh m WHERE m.uid = #{uid} and LENGTH(m.mesh_id)=8) as a where a.mesh_id LIKE CONCAT(#{mesh_id},'%')
+        SELECT * from ( SELECT * from f_mesh m WHERE m.uid = #{uid} and LENGTH(m.mesh_id)=8) as a where a.mesh_id LIKE CONCAT(#{mesh_id},'%')
     </select>
 
     <select id="findFullyRepeatIdByUid" resultType="int" parameterType="string">
-        SELECT COUNT(1) from alink.f_mesh where mesh_id = #{mesh_id}
+        SELECT COUNT(1) from f_mesh where mesh_id = #{mesh_id}
     </select>
 
     <select id="findRepeatNameByUid" resultType="string">
-        SELECT mname from alink.f_mesh where uid = #{uid} and mname=#{mname} and project_id=#{projectId}
+        SELECT mname from f_mesh where uid = #{uid} and mname=#{mname} and project_id=#{projectId}
     </select>
 
     <select id="findRepeatPnameByUid" resultType="string" parameterType="string">
-        SELECT p.name from alink.f_project p where p.uid = #{uid} and p.name=#{name}
+        SELECT p.name from f_project p where p.uid = #{uid} and p.name=#{name}
     </select>
 
     <select id="findRepeatMid" resultType="int">
-        SELECT COUNT(*) from alink.f_place where uid = #{uid} and mid = #{mid}
+        SELECT COUNT(*) from f_place where uid = #{uid} and mid = #{mid}
     </select>
 
     <insert id="createMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,mesh_type,pwd,uid,project_id,create_date,update_date) VALUES(#{mname},#{mesh_id},#{mesh_type},#{pwd},#{uid},#{project_id},NOW(),NOW())
+        INSERT INTO f_mesh (mname,mesh_id,mesh_type,pwd,uid,project_id,create_date,update_date) VALUES(#{mname},#{mesh_id},#{mesh_type},#{pwd},#{uid},#{project_id},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createPlace" parameterType="com.tpadsz.after.entity.AdjustPlace">
-        INSERT INTO alink.f_place (place_id,pname,uid,mid,create_date,update_date) VALUES(#{placeId},#{pname},#{uid},#{mid},NOW(),NOW())
+        INSERT INTO f_place (place_id,pname,uid,mid,create_date,update_date) VALUES(#{placeId},#{pname},#{uid},#{mid},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createOldMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,update_date,other) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),NOW(),'old')
+        INSERT INTO f_mesh (mname,mesh_id,pwd,uid,project_id,create_date,update_date,other) VALUES(#{mname},#{mesh_id},#{pwd},#{uid},#{project_id},NOW(),NOW(),'old')
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createOldDuplicatedMesh" parameterType="com.tpadsz.after.entity.Mesh">
-        INSERT INTO alink.f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{uid},#{pwd},#{uid},#{project_id},NOW(),'old')
+        INSERT INTO f_mesh (mname,mesh_id,is_repeat,pwd,uid,project_id,create_date,other) VALUES(#{mname},#{mesh_id},#{uid},#{pwd},#{uid},#{project_id},NOW(),'old')
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createProject" parameterType="com.tpadsz.after.entity.Project">
-        INSERT INTO alink.f_project (name,uid,create_date,update_date) VALUES(#{name},#{uid},NOW(),NOW())
+        INSERT INTO f_project (name,uid,create_date,update_date) VALUES(#{name},#{uid},NOW(),NOW())
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createOldProject" parameterType="com.tpadsz.after.entity.Project">
-        INSERT INTO alink.f_project (name,uid,create_date,update_date,other) VALUES(#{name},#{uid},NOW(),NOW(),'old')
+        INSERT INTO   f_project (name,uid,create_date,update_date,other) VALUES(#{name},#{uid},NOW(),NOW(),'old')
         <selectKey keyProperty="id" order="AFTER" resultType="int">
             select LAST_INSERT_ID()
         </selectKey>
@@ -89,106 +89,106 @@
 
     <select id="findMeshId" resultType="string" parameterType="int">
         select mesh_id from
-        (SELECT * from alink.create_mesh_id ORDER BY id ASC LIMIT #{limitNum}) as a
+        (SELECT * from create_mesh_id ORDER BY id ASC LIMIT #{limitNum}) as a
         ORDER BY a.id DESC limit 1
     </select>
 
     <delete id="deleteMeshId" parameterType="string">
-        DELETE FROM alink.create_mesh_id WHERE mesh_id = #{mesh_id}
+        DELETE FROM create_mesh_id WHERE mesh_id = #{mesh_id}
     </delete>
 
     <insert id="recordMeshId" parameterType="string">
-        INSERT INTO alink.repeated_mesh_id (mesh_id) VALUES(#{mesh_id})
+        INSERT INTO repeated_mesh_id (mesh_id) VALUES(#{mesh_id})
     </insert>
 
     <select id="findProListByUid" resultMap="standardProjectMap" parameterType="string">
-        SELECT * from alink.f_project where uid = #{uid} and other NOT IN ('old','freezing','freezingOld') or uid=#{uid} and other is null ORDER BY update_date DESC,create_date DESC
+        SELECT * from f_project where uid = #{uid} and other NOT IN ('old','freezing','freezingOld') or uid=#{uid} and other is null ORDER BY update_date DESC,create_date DESC
     </select>
 
     <select id="findOldProByUid" resultMap="standardProjectMap">
-        SELECT * from alink.f_project where uid = #{uid} and other ='old'
+        SELECT * from f_project where uid = #{uid} and other ='old'
     </select>
 
     <update id="rename">
         <if test="renameFlag == 0">
-        update alink.f_project p set p.name = #{name},p.update_date = NOW() where p.id=#{id}
+        update f_project p set p.name = #{name},p.update_date = NOW() where p.id=#{id}
         </if>
         <if test="renameFlag == 1">
-            update alink.f_mesh m set m.mname = #{name},m.update_date = NOW() where m.id=#{id}
+            update f_mesh m set m.mname = #{name},m.update_date = NOW() where m.id=#{id}
         </if>
     </update>
 
     <select id="findProDetailByUid" resultMap="standardMeshMap">
-        SELECT * from alink.f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
+        SELECT * from f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
     </select>
 
 
     <!--删除部分-->
     <select id="findLightByMid" resultType="int" parameterType="int">
-        SELECT COUNT(1) from alink.f_light where mid=#{id}
+        SELECT COUNT(1) from f_light where mid=#{id}
     </select>
 
     <select id="findNewMeshIdByMid" resultType="string" parameterType="int">
-        SELECT mesh_id from alink.f_mesh where id=#{id} and is_repeat=0 and other NOT IN ('old','fromOld') or id=#{id} and is_repeat=0  and other IS NULL
+        SELECT mesh_id from f_mesh where id=#{id} and is_repeat=0 and other NOT IN ('old','fromOld') or id=#{id} and is_repeat=0  and other IS NULL
     </select>
 
     <select id="findProjectById" resultMap="standardProjectMap" parameterType="integer">
-        SELECT * from alink.f_project where id = #{projectId}
+        SELECT * from f_project where id = #{projectId}
     </select>
 
     <select id="findMeshById" resultMap="standardMeshMap" parameterType="integer">
-        SELECT * from alink.f_mesh where id = #{id}
+        SELECT * from f_mesh where id = #{id}
     </select>
 
     <update id="freezing">
         <if test="flag == 0">
-            update alink.f_project p set p.other = 'freezing',p.update_date = NOW() where p.id=#{id}
+            update f_project p set p.other = 'freezing',p.update_date = NOW() where p.id=#{id}
         </if>
         <if test="flag == 1">
-            update alink.f_mesh m set m.other = 'freezing',m.update_date = NOW() where m.id=#{id}
+            update f_mesh m set m.other = 'freezing',m.update_date = NOW() where m.id=#{id}
         </if>
     </update>
 
     <update id="freezingOld">
         <if test="flag == 0">
-            update alink.f_project p set p.other = 'freezingOld',p.update_date = NOW() where p.id=#{id}
+            update f_project p set p.other = 'freezingOld',p.update_date = NOW() where p.id=#{id}
         </if>
         <if test="flag == 1">
-            update alink.f_mesh m set m.other = 'freezingOld',m.update_date = NOW() where m.id=#{id}
+            update f_mesh m set m.other = 'freezingOld',m.update_date = NOW() where m.id=#{id}
         </if>
     </update>
 
     <update id="unfreezing">
         <if test="flag == 0">
-            update alink.f_project p set p.other = NULL ,p.update_date = NOW() where p.id=#{id}
+            update f_project p set p.other = NULL ,p.update_date = NOW() where p.id=#{id}
         </if>
         <if test="flag == 1">
-            update alink.f_mesh m set m.other = NULL ,m.update_date = NOW() where m.id=#{id}
+            update f_mesh m set m.other = NULL ,m.update_date = NOW() where m.id=#{id}
         </if>
     </update>
 
     <update id="unfreezingOld">
         <if test="flag == 0">
-            update alink.f_project p set p.other = 'old' ,p.update_date = NOW() where p.id=#{id}
+            update f_project p set p.other = 'old' ,p.update_date = NOW() where p.id=#{id}
         </if>
         <if test="flag == 1">
-            update alink.f_mesh m set m.other = 'old' ,m.update_date = NOW() where m.id=#{id}
+            update f_mesh m set m.other = 'old' ,m.update_date = NOW() where m.id=#{id}
         </if>
     </update>
 
     <select id="querySidByPid" resultType="integer">
-        SELECT id from alink.f_scene where uid=#{uid} and mid IN (
-        SELECT m.id from alink.f_mesh m where m.project_id=#{id} and m.uid = #{uid}
+        SELECT id from f_scene where uid=#{uid} and mid IN (
+        SELECT m.id from f_mesh m where m.project_id=#{id} and m.uid = #{uid}
         )
     </select>
 
     <delete id="deleteSceneByPid" parameterType="java.util.List">
-        DELETE FROM alink.f_scene
-        WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+        DELETE FROM f_scene
+        WHERE mid IN (SELECT m.id from (SELECT id from f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
     <delete id="deleteSceneSettingBySid">
-        DELETE FROM alink.f_scene_setting
+        DELETE FROM f_scene_setting
         WHERE sid IN
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item}
@@ -196,62 +196,62 @@
     </delete>
 
     <delete id="deletePlaceByPid">
-        DELETE FROM alink.f_place WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+        DELETE FROM f_place WHERE mid IN (SELECT m.id from (SELECT id from f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
     <delete id="deleteGroupByPid">
-        DELETE FROM alink.f_group WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+        DELETE FROM f_group WHERE mid IN (SELECT m.id from (SELECT id from f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
     <delete id="deleteGroupSettingByPid">
-        DELETE FROM alink.f_group_setting WHERE mid IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+        DELETE FROM f_group_setting WHERE mid IN (SELECT m.id from (SELECT id from f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
     <delete id="deleteMeshByMid" parameterType="int">
-        DELETE FROM alink.f_mesh WHERE id=#{id}
+        DELETE FROM f_mesh WHERE id=#{id}
     </delete>
 
     <delete id="deleteSceneSettingByMid">
-        DELETE FROM alink.f_scene_setting WHERE sid IN (SELECT s.id from (SELECT id from alink.f_scene where mid=#{id} and uid = #{uid}) AS s )
+        DELETE FROM f_scene_setting WHERE sid IN (SELECT s.id from (SELECT id from f_scene where mid=#{id} and uid = #{uid}) AS s )
     </delete>
 
     <delete id="deleteSceneByMid">
-        DELETE FROM alink.f_scene WHERE mid=#{id} and uid=#{uid}
+        DELETE FROM f_scene WHERE mid=#{id} and uid=#{uid}
     </delete>
 
     <delete id="deleteGroupSettingByMid" parameterType="int">
-        DELETE FROM alink.f_group_setting WHERE mid=#{id}
+        DELETE FROM f_group_setting WHERE mid=#{id}
     </delete>
 
     <delete id="deleteGroupByMid" parameterType="int">
-        DELETE FROM alink.f_group WHERE mid=#{id}
+        DELETE FROM f_group WHERE mid=#{id}
     </delete>
 
     <delete id="deletePlaceByMid" parameterType="int">
-        DELETE FROM alink.f_place WHERE mid=#{id}
+        DELETE FROM f_place WHERE mid=#{id}
     </delete>
 
     <select id="findLightByPid" resultType="int">
-        SELECT COUNT(1) FROM alink.f_light WHERE mid IN (
-        SELECT m.id from alink.f_mesh m where m.project_id=#{id} and m.uid = #{uid}
+        SELECT COUNT(1) FROM f_light WHERE mid IN (
+        SELECT m.id from f_mesh m where m.project_id=#{id} and m.uid = #{uid}
         )
     </select>
 
     <delete id="deleteMeshByPid">
-        DELETE FROM alink.f_mesh WHERE id IN (SELECT m.id from (SELECT id from alink.f_mesh where project_id=#{id} and uid = #{uid}) AS m )
+        DELETE FROM f_mesh WHERE id IN (SELECT m.id from (SELECT id from f_mesh where project_id=#{id} and uid = #{uid}) AS m )
     </delete>
 
     <delete id="deleteProByPid">
-        DELETE FROM alink.f_project WHERE id=#{id} and uid = #{uid}
+        DELETE FROM f_project WHERE id=#{id} and uid = #{uid}
     </delete>
 
 
     <select id="findNewMeshIdByPid" resultType="string">
-        SELECT mesh_id from alink.f_mesh where project_id=#{id} and is_repeat=0 and uid = #{uid} and other NOT IN ('old','fromOld') or project_id=#{id} and is_repeat=0 and uid = #{uid} and other IS NULL
+        SELECT mesh_id from f_mesh where project_id=#{id} and is_repeat=0 and uid = #{uid} and other NOT IN ('old','fromOld') or project_id=#{id} and is_repeat=0 and uid = #{uid} and other IS NULL
     </select>
 
     <insert id="insertMeshId" parameterType="java.util.List" useGeneratedKeys="false">
-        insert into alink.repeated_mesh_id
+        insert into repeated_mesh_id
         (mesh_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
@@ -262,12 +262,12 @@
     </insert>
 
     <insert id="saveDeleteLog" parameterType="com.tpadsz.after.entity.DeleteLog">
-        INSERT INTO alink.f_delete_log(delete_date,uid,lightFlag,deleteId,deleteFlag) VALUES(#{delete_date},#{uid},#{lightFlag},#{deleteId},#{deleteFlag})
+        INSERT INTO f_delete_log(delete_date,uid,lightFlag,deleteId,deleteFlag) VALUES(#{delete_date},#{uid},#{lightFlag},#{deleteId},#{deleteFlag})
     </insert>
     <!--删除部分-->
 
     <update id="oldMove">
-            update alink.f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}
+            update f_mesh set project_id = #{projectId},other = 'fromOld',update_date = NOW() where mesh_id=#{meshId} and uid=#{uid}
     </update>
 
     <insert id="savePcInfo" parameterType="string">

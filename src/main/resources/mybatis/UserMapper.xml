@@ -27,7 +27,7 @@
 	</update>
 
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into alink.create_mesh_id(mesh_id)
+        insert into create_mesh_id(mesh_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             ( #{item.mesh_id})

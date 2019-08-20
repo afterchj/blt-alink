@@ -21,23 +21,23 @@
     </resultMap>
 
     <insert id="saveLoginOutLog" parameterType="string">
-        INSERT INTO alink.f_login_out_log (uid,create_date) VALUES(#{uid},NOW())
+        INSERT INTO f_login_out_log (uid,create_date) VALUES(#{uid},NOW())
     </insert>
 
     <select id="findUserByAccount" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where account=#{account}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from f_user_account where account=#{account}
     </select>
 
     <insert id="saveLoginLog" parameterType="com.tpadsz.after.entity.LoginLog">
-        INSERT INTO alink.f_user_account_log(login_date,behavior,uid,account,mobile) VALUES(#{login_date},#{behavior},#{uid},#{account},#{mobile})
+        INSERT INTO f_user_account_log(login_date,behavior,uid,account,mobile) VALUES(#{login_date},#{behavior},#{uid},#{account},#{mobile})
     </insert>
 
     <select id="findUserByMobile" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where mobile=#{mobile}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from f_user_account where mobile=#{mobile}
     </select>
 
     <select id="findUserByUname" resultMap="standardTpadUserMap" parameterType="string" >
-        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from alink.f_user_account where uname=#{uname}
+        SELECT id,uname,mobile,account,pwd,salt,utype,uaddress,rid,is_locked,status from f_user_account where uname=#{uname}
     </select>
 
     <select id="findRoleIdByUid" resultType="Integer" parameterType="string">

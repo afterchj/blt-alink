@@ -40,10 +40,10 @@
     </update>
 
     <select id="findByUser" resultType="int" parameterType="string">
-        SELECT COUNT(1) from alink.f_user_account where uname=#{uname}
+        SELECT COUNT(1) from f_user_account where uname=#{uname}
     </select>
 
     <select id="getCount" resultType="int" parameterType="map">
-        SELECT COUNT(1) from alink.f_user_account where mobile=#{mobile}
+        SELECT COUNT(1) from f_user_account where mobile=#{mobile}
     </select>
 </mapper>

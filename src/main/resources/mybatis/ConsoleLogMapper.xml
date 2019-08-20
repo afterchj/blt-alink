@@ -3,7 +3,7 @@
 <mapper namespace="com.tpadsz.after.dao.ConsoleLogDao">
 
     <update id="saveLog" parameterType="map">
-     INSERT INTO alink.f_console_log (
+     INSERT INTO f_console_log (
 		uid,
 		mid,
 		sid,
