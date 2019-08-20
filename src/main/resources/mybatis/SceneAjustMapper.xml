@@ -3,23 +3,23 @@
 <mapper namespace="com.tpadsz.after.dao.SceneAjustDao">
 
     <insert id="saveSceneLog" parameterType="com.tpadsz.after.entity.SceneLog">
-        INSERT INTO alink.f_scene_log (scene_id,mesh_id,uid,create_date,operation,blt_flag)
+        INSERT INTO f_scene_log (scene_id,mesh_id,uid,create_date,operation,blt_flag)
         VALUES(#{sceneId},#{meshId},#{uid},now(),#{operation},#{bltFlag})
     </insert>
     <!--返回主键id-->
     <insert id="saveScene" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO alink.f_scene(scene_id,sname,mid,uid,create_date,update_date)
+        INSERT INTO f_scene(scene_id,sname,mid,uid,create_date,update_date)
         VALUES(#{sceneId},#{sname},#{mid},#{uid},now(),now())
     </insert>
 
     <insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >
-        REPLACE INTO alink.f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
+        REPLACE INTO f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
     </insert>
 
     <delete id="deleteLightSetting">
-        DELETE FROM alink.f_light_setting WHERE sid=#{sid}
+        DELETE FROM f_light_setting WHERE sid=#{sid}
     </delete>
     <delete id="deleteLightSettingByLmac">
-        DELETE FROM alink.f_light_setting WHERE lid=(select id from alink.f_light WHERE lmac=#{lmac})
+        DELETE FROM f_light_setting WHERE lid=(select id from f_light WHERE lmac=#{lmac})
     </delete>
 </mapper>
