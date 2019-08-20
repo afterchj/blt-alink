@@ -25,15 +25,15 @@
     </resultMap>
 
     <select id="getNewestFile" resultMap="standardNewestFileMap" parameterType="string">
-		select app_id,version_code from alink.file_records where app_id= #{appId} ORDER BY create_date DESC LIMIT 1
+		select app_id,version_code from file_records where app_id= #{appId} ORDER BY create_date DESC LIMIT 1
 	</select>
 
     <select id="getFileRecords" resultMap="standardFileRecordMap">
-        select app_id,version_code,version_name,path,md5,size,update_log,force_update from alink.file_records where
+        select app_id,version_code,version_name,path,md5,size,update_log,force_update from file_records where
         app_id= #{appId} and version_code= #{versionCode}
     </select>
 
     <select id="findAccountByUid" resultType="string" parameterType="string">
-        select account from alink.f_user_account where id= #{uid}
+        select account from f_user_account where id= #{uid}
     </select>
 </mapper>
