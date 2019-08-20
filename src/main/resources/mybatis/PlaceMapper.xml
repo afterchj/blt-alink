@@ -3,28 +3,28 @@
 <mapper namespace="com.tpadsz.after.dao.PlaceDao">
 
     <select id="getLastPlace" resultType="integer">
-        select place_id from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and uid=#{uid} order by place_id desc limit 1
+        select place_id from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} order by place_id desc limit 1
     </select>
 
     <insert id="savePlace" useGeneratedKeys="true" keyProperty="pid" parameterType="com.tpadsz.after.entity.PlaceSave">
-        insert into alink.f_place (place_id,pname,uid,mid,create_date,update_date)
-        VALUES(#{placeId},#{pname},#{uid},(select id from alink.f_mesh where mesh_id=#{meshId}),now(),now())
+        insert into f_place (place_id,pname,uid,mid,create_date,update_date)
+        VALUES(#{placeId},#{pname},#{uid},(select id from f_mesh where mesh_id=#{meshId}),now(),now())
     </insert>
 
     <select id="getPname" resultType="integer">
-        select count(*) from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and uid=#{uid} and pname=#{pname}
+        select count(*) from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} and pname=#{pname}
     </select>
 
     <delete id="deletePlaceByPid">
-        DELETE FROM alink.f_place where id=#{pid}
+        DELETE FROM f_place where id=#{pid}
     </delete>
 
     <update id="updatePname">
-        update alink.f_place set pname=#{pname} where id=#{pid}
+        update f_place set pname=#{pname} where id=#{pid}
     </update>
 
     <select id="getPlaceByMeshId" resultType="map">
-        select id as pid,mid from alink.f_place where mid=(select id from alink.f_mesh where mesh_id=#{meshId} and uid=#{uid})
+        select id as pid,mid from f_place where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid})
     </select>
 
     <resultMap id="placeList" type="com.tpadsz.after.entity.PlaceExtend">
@@ -58,14 +58,14 @@
         	l.lmac,
         	l.lname,
         	l.product_id
-        from alink.f_place p left join alink.f_group g on p.id=g.pid
-        left join alink.f_light l on g.id=l.gid
+        from f_place p left join f_group g on p.id=g.pid
+        left join f_light l on g.id=l.gid
         where p.mid=#{mid}
         order by place_id,group_id
     </select>
 
     <select id="getPlaceByPlaceIdAndMeshId" resultType="string">
-        select pname from alink.f_place where mid=(SELECT id FROM alink.f_mesh WHERE mesh_id = #{meshId}) and
+        select pname from f_place where mid=(SELECT id FROM f_mesh WHERE mesh_id = #{meshId}) and
                                             place_id=#{placeId}
     </select>
 </mapper>

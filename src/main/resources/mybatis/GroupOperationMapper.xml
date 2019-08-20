@@ -4,35 +4,35 @@
 
     <!--有区域-->
     <insert id="saveGroup" parameterType="com.tpadsz.after.entity.Group" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO alink.f_group
+        INSERT INTO f_group
         (group_id,gname,mid,create_date,update_date,pid)
         VALUES(#{groupId},#{gname},#{mid},NOW(),NOW(),#{pid})
     </insert>
 
     <insert id="saveGroupLog">
-        INSERT INTO alink.f_group_log
+        INSERT INTO f_group_log
         (uid,mesh_id,operation,blt_flag,create_date,group_id)
         VALUES(#{uid},#{meshId},#{operation},#{bltFlag},NOW(),#{groupId})
     </insert>
 
     <select id="getMeshSerialNo" resultType="integer">
-        SELECT id FROM alink.f_mesh WHERE mesh_id=#{meshId} and uid=#{uid}
+        SELECT id FROM f_mesh WHERE mesh_id=#{meshId} and uid=#{uid}
     </select>
 
     <select id="getGroupIdById" resultType="string">
-        SELECT group_id FROM alink.f_group WHERE id=#{id}
+        SELECT group_id FROM f_group WHERE id=#{id}
     </select>
 
     <update id="updateGroupNameByMid">
-        UPDATE alink.f_group
+        UPDATE f_group
         SET gname=#{gname},update_date=now()
         WHERE mid=#{mid} and group_id=#{groupId}
     </update>
 
     <update id="updateGroupNameByMeshId">
-        UPDATE alink.f_group
+        UPDATE f_group
         SET gname=#{gname},update_date=now()
-        WHERE mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
+        WHERE mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
     </update>
 
     <resultMap id="groupLists" type="com.tpadsz.after.entity.GroupList">
@@ -85,44 +85,44 @@
         	p.tnum
         FROM
     	  (
-        	alink.f_light l
-        	RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM alink.f_group WHERE mid =
+        	f_light l
+        	RIGHT JOIN ( SELECT id, group_id, gname, mid, create_date, update_date FROM f_group WHERE mid =
         	#{mid} ) g ON l.gid = g.id and l.mid=g.mid
         	)
-        	LEFT JOIN alink.f_product p ON l.product_id = p.product_id
+        	LEFT JOIN f_product p ON l.product_id = p.product_id
         ORDER BY
         	group_id
     </select>
 
     <select id="getLightColor" resultType="map">
-        select x,y from alink.f_console_log WHERE lmac=#{lmac} order by log_date desc limit 1
+        select x,y from f_console_log WHERE lmac=#{lmac} order by log_date desc limit 1
     </select>
 
     <select id="getGid"  resultType="integer" parameterType="com.tpadsz.after.entity.Group">
-        select id FROM  alink.f_group WHERE mid=#{mid} and group_id=#{groupId}
+        select id FROM  f_group WHERE mid=#{mid} and group_id=#{groupId}
     </select>
 
     <select id="getLightNum"  resultType="integer" parameterType="com.tpadsz.after.entity.Group">
-        SELECT count(*) FROM  alink.f_light WHERE gid=#{gid}
+        SELECT count(*) FROM  f_light WHERE gid=#{gid}
     </select>
 
     <update id="updateGidInLight" parameterType="com.tpadsz.after.entity.Group">
-        UPDATE alink.f_light
-        SET gid = ( SELECT id FROM alink.f_group WHERE mid=#{mid} AND group_id = 0 limit 1)
+        UPDATE f_light
+        SET gid = ( SELECT id FROM f_group WHERE mid=#{mid} AND group_id = 0 limit 1)
         WHERE
 	      gid = #{gid}
     </update>
 
     <delete id="deleteGroup" parameterType="com.tpadsz.after.entity.Group">
-        DELETE from alink.f_group WHERE id=#{gid}
+        DELETE from f_group WHERE id=#{gid}
     </delete>
 
     <select id="getSceneSeriaNo" resultType="integer">
-        SELECT id FROM alink.f_scene WHERE mid=#{mid} and scene_id=#{sceneId} and uid=#{uid} limit 1
+        SELECT id FROM f_scene WHERE mid=#{mid} and scene_id=#{sceneId} and uid=#{uid} limit 1
     </select>
 
     <select id="getGroupConsoleLogByGid" resultType="com.tpadsz.after.entity.GroupConsoleLog">
-        select x,y,lmac from alink.f_console_log WHERE gid=#{groupId} and uid=#{uid} and mid=#{meshId} order by log_date desc limit 1
+        select x,y,lmac from f_console_log WHERE gid=#{groupId} and uid=#{uid} and mid=#{meshId} order by log_date desc limit 1
     </select>
 
     <resultMap id="groups" type="com.tpadsz.after.entity.GroupList">
@@ -142,57 +142,57 @@
     </resultMap>
 
     <select id="getPid" resultType="integer">
-        select id from alink.f_place WHERE place_id=#{placeId} and mid=(select id from alink.f_mesh where mesh_id=#{meshId})
+        select id from f_place WHERE place_id=#{placeId} and mid=(select id from f_mesh where mesh_id=#{meshId})
     </select>
 
     <insert id="savePlace" parameterType="com.tpadsz.after.entity.AdjustPlace" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO alink.f_place (place_id,pname,uid,mid,create_date,update_date)
+        INSERT INTO f_place (place_id,pname,uid,mid,create_date,update_date)
         VALUES (#{placeId},#{pname},#{uid},#{mid},now(),now())
     </insert>
 
     <select id="getGname" resultType="string">
-        select gname FROM  alink.f_group WHERE mid=#{mid} and gname=#{gname}
+        select gname FROM  f_group WHERE mid=#{mid} and gname=#{gname}
     </select>
 
     <select id="getGnameByPidAndMeshId" resultType="string">
-        select gname FROM  alink.f_group WHERE mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and gname=#{gname}
+        select gname FROM  f_group WHERE mid=(select id from f_mesh where mesh_id=#{meshId}) and gname=#{gname}
     </select>
 
     <select id="getDefaultPlace" resultType="integer">
-        SELECT id FROM alink.f_place WHERE mid=#{mid} and uid=#{uid} limit 1
+        SELECT id FROM f_place WHERE mid=#{mid} and uid=#{uid} limit 1
     </select>
 
     <insert id="saveGroupSetting">
-        INSERT INTO alink.f_group_setting
+        INSERT INTO f_group_setting
         ( mid, sid, x, y, create_date, update_date, gid )
         VALUES
-	      (#{mid},#{sid},#{x},#{y},now(),now(),(select id from alink.f_group where group_id=#{groupId} and mid=#{mid}))
+	      (#{mid},#{sid},#{x},#{y},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}))
     </insert>
 
     <delete id="deleteGroupSetting">
-        DELETE FROM alink.f_group_setting WHERE sid=#{sid}
+        DELETE FROM f_group_setting WHERE sid=#{sid}
     </delete>
 
     <update id="moveGroup">
-        update alink.f_group set pid=#{pid} where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and  group_id=#{groupId}
+        update f_group set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and  group_id=#{groupId}
     </update>
 
     <update id="updateLightPid">
-        update alink.f_light
+        update f_light
         set pid=#{pid}
-        where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and gid=(select id from alink.f_group where mid=(select id from alink.f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
+        where mid=(select id from f_mesh where mesh_id=#{meshId}) and gid=(select id from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
     </update>
 
     <select id="getGidByGroupIdAndMeshId" resultType="integer">
-        select id from alink.f_group where group_id=#{groupId} and mid=(select id from alink.f_mesh where mesh_id=#{meshId})
+        select id from f_group where group_id=#{groupId} and mid=(select id from f_mesh where mesh_id=#{meshId})
     </select>
 
     <delete id="deleteGroupByPid">
-        DELETE from alink.f_group WHERE pid=#{pid}
+        DELETE from f_group WHERE pid=#{pid}
     </delete>
 
     <select id="getLastGroup" resultType="integer">
-        SELECT group_id FROM alink.f_group WHERE mid=#{mid} ORDER BY group_id DESC LIMIT 1
+        SELECT group_id FROM f_group WHERE mid=#{mid} ORDER BY group_id DESC LIMIT 1
     </select>
 
 </mapper>
