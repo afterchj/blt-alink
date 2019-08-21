@@ -719,15 +719,16 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
      */
     @RequestMapping(value = "/moveGroup", method = RequestMethod.POST) //TODO moveGroup
     public void moveGroup(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        try {
+//        try {
             Map<String, Object> placeMap = groupOperationService.moveGroup(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
             model.put("place", placeMap);
-        } catch (GroupDuplicateException e) {
-            model.put("result", ResultDict.DUPLICATE_NAME.getCode());
-            model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
-        }
+//        }
+//        catch (GroupDuplicateException e) {
+//            model.put("result", ResultDict.DUPLICATE_NAME.getCode());
+//            model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
+//        }
 
     }
 

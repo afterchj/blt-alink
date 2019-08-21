@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.*;
-import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import org.apache.commons.collections.map.HashedMap;
@@ -150,7 +149,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     }
 
     @Override
-    public Map<String, Object> moveGroup(JSONObject params) throws GroupDuplicateException {
+    public Map<String, Object> moveGroup(JSONObject params)  {
         Map<String, Object> placeMap = new HashedMap();
         Integer pid = params.getInteger("pid");//目标区域序列号
         Integer placeId = params.getInteger("placeId");//目标区域id
@@ -180,11 +179,11 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             placeDao.savePlace(placeSave);
             pid  = placeSave.getPid();
         }
-        String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
-        if (oldGname != null) {
-            //组名重复
-            throw new GroupDuplicateException();
-        }
+//        String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
+//        if (oldGname != null) {
+//            组名重复
+//            throw new GroupDuplicateException();
+//        }
         //不同区域之间移动
         groupOperationDao.moveGroup(pid, meshId, groupId);
         groupOperationDao.updateLightPid(groupId, pid, meshId);//修改灯信息的pid

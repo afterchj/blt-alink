@@ -2,7 +2,6 @@ package com.tpadsz.after.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
-import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.exception.PlaceNotFoundException;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public interface GroupOperationService {
 
     void deleteGroupSetting(Integer sid);
 
-    Map<String, Object> moveGroup(JSONObject params) throws GroupDuplicateException;
+    Map<String, Object> moveGroup(JSONObject params);
 
     Map<String, Object> saveGroup(JSONObject params);
 

@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.*;
-import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
@@ -448,12 +447,12 @@ public class AlinkAdjustModuleControllerTest {
         String jsonStr = "{\"uid\":\"11\",\"gname\":\"组1\",\"groupId\":1,\"meshId\":\"89034617\",\"operation\":\"0\"," +
                 "\"bltFlag\":\"1\",\"pid\":2}";
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);//2368
-        try {
-            groupOperationService.moveGroup(jsonObject);
-        } catch (GroupDuplicateException e) {
-            e.printStackTrace();
-            System.out.println("GroupDuplicateException");
-        }
+//        try {
+//            groupOperationService.moveGroup(jsonObject);
+//        } catch (GroupDuplicateException e) {
+//            e.printStackTrace();
+//            System.out.println("GroupDuplicateException");
+//        }
     }
 
     @Test
