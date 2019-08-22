@@ -2,6 +2,7 @@ package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
+import com.tpadsz.after.entity.time.ProjectTimer;
 import com.tpadsz.after.service.TimeLineService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -123,6 +124,20 @@ public class TimeLineController extends BaseDecodedController{
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
         model.put("meshIds",meshIds);
+    }
+
+    /**
+     * 获取一个项目下定时信息
+     * @param params projectId:项目id uid:用户id
+     * @param model projectTimer:包含项目-网络-定时层级的集合
+     */
+    @RequestMapping(value = "/getProjectTimers",method = RequestMethod.POST)
+    public void getProjectTimers(@ModelAttribute("decodedParams") JSONObject params,ModelMap model){
+        ProjectTimer projectTimer = timeLineService.getProjectTimers(params);
+
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+        model.put("projectTimer",projectTimer);
     }
 
 }

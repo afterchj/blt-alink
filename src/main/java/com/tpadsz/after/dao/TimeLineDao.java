@@ -3,6 +3,7 @@ package com.tpadsz.after.dao;
 import com.tpadsz.after.entity.TimeBean;
 import com.tpadsz.after.entity.TimeLine;
 import com.tpadsz.after.entity.TimePointParams;
+import com.tpadsz.after.entity.time.ProjectTimer;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +59,8 @@ public interface TimeLineDao {
             ("json") String json);
 
     int getTimeLine(TimeLine timeLine);
+
+    ProjectTimer getProjectTimers(@Param("id") Integer id);
 
 //    void updateTimeJson(@Param("tid") Integer tid, @Param("") String meshId, String uid, String json);
 }

@@ -1,6 +1,7 @@
 package com.tpadsz.after.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.entity.time.ProjectTimer;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface TimeLineService {
     void deleteOne(String uid,String meshId,Integer tid);
 
     void createTimeLine(JSONObject params);
+
+    ProjectTimer getProjectTimers(JSONObject params);
 }

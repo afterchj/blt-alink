@@ -115,4 +115,31 @@
         select count(*) from f_time_line where mid=(SELECT id FROM f_mesh WHERE mesh_id=#{mesh_id} AND uid =
         #{uid})
     </select>
+
+    <resultMap id="projectList" type="com.tpadsz.after.entity.time.ProjectTimer">
+        <id column="id" property="projectId"/>
+        <result column="name" property="projectName"/>
+        <collection property="meshList" ofType="com.tpadsz.after.entity.time.MeshTimer">
+            <result column="mesh_id" property="meshId"/>
+            <result column="mname" property="mname"/>
+            <collection property="timerList" ofType="com.tpadsz.after.entity.time.Timer">
+                <result column="json" property="timer"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getProjectTimers" resultMap="projectList">
+        SELECT
+            p.id as id,
+            p.NAME as name,
+            m.mesh_id as mesh_id ,
+            m.mname as mname,
+            j.tid as tid,
+            j.json as json
+        FROM
+            f_project p
+            left JOIN f_mesh m ON p.id = m.project_id
+            left JOIN f_time_json j ON m.id = j.mid
+        WHERE
+            p.id = #{id}
+    </select>
 </mapper>

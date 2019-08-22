@@ -6,13 +6,19 @@ import com.tpadsz.after.dao.TimeLineDao;
 import com.tpadsz.after.entity.TimeBean;
 import com.tpadsz.after.entity.TimeLine;
 import com.tpadsz.after.entity.TimePointParams;
+import com.tpadsz.after.entity.time.MeshTimer;
+import com.tpadsz.after.entity.time.ProjectTimer;
+import com.tpadsz.after.entity.time.Timer;
 import com.tpadsz.after.service.TimeLineService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.alibaba.fastjson.JSON.parseObject;
 
 /**
  * @program: blt-alink
@@ -55,7 +61,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLineDao.updateTname(tid, meshId, tname, uid);
         TimeBean timeBean = timeLineDao.getTimeJson(tid, meshId, uid);
         String json = timeBean.getJson();
-        JSONObject jsonObject = JSONObject.parseObject(json);
+        JSONObject jsonObject = parseObject(json);
         jsonObject.remove("tname");
         jsonObject.put("tname", tname);
         jsonObject.remove("item_title");
@@ -73,7 +79,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         List<JSONObject> json = new ArrayList<>();
         for (TimeBean timeBean : timeLineLists) {
             String jsonStr = timeBean.getJson();
-            JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+            JSONObject jsonObject = parseObject(jsonStr);
             json.add(jsonObject);
         }
         return json;
@@ -109,6 +115,34 @@ public class TimeLineServiceImpl implements TimeLineService {
         String jsonStr = params.toJSONString();
         timeLineDao.createTimeJson(params.getInteger("tid"), params.getString("meshId"), params.getString("uid"),
                 jsonStr);
+    }
+
+    @Override
+    public ProjectTimer getProjectTimers(JSONObject params) {
+        Integer id = params.getInteger("projectId");
+        ProjectTimer projectTimer = timeLineDao.getProjectTimers(id);
+        List<MeshTimer> meshTimers = projectTimer.getMeshList();
+        JSONObject jsonTimerLine;
+        for (MeshTimer meshTimer:meshTimers){
+            List<Timer> timers = meshTimer.getTimerList();
+            if (timers.size()>0){
+                for (Timer timer:timers){
+                    String timeLine = timer.getTimer();
+                    if (StringUtils.isNotBlank(timeLine)){
+                        jsonTimerLine = parseObject(timeLine);
+                        JSONArray timePoint = jsonTimerLine.getJSONArray("timePointList");
+                        JSONObject dayObj = jsonTimerLine.getJSONObject("dayObj");
+                        jsonTimerLine.put("timePointList",timePoint);
+                        jsonTimerLine.put("dayObj",dayObj);
+                        timer.setTimerLine(jsonTimerLine);
+                        timer.setTimer(null);
+                    }
+                }
+            }
+        }
+
+        return projectTimer;
+//        return timeLineDao.getProjectTimers(id);
     }
 
     /**
@@ -152,7 +186,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLineDao.updateTimeLineState(timePointParams);
         TimeBean timeBean = timeLineDao.getTimeJson(params.getInteger("tid"), meshId, uid);
         String json = timeBean.getJson();
-        JSONObject jsonObject = JSONObject.parseObject(json);
+        JSONObject jsonObject = parseObject(json);
         jsonObject.remove("item_set");
         jsonObject.put("item_set",params.getString("state"));
         json = jsonObject.toJSONString();
