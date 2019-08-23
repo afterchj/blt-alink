@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tpadsz.after.dao.PCFileDao">
 
+    <parameterMap id="fileMapper" type="map">
+        <parameter property="Author_User_ID" mode="IN"/>
+        <parameter property="File_Name" mode="IN"/>
+        <parameter property="File_Path" mode="IN"/>
+        <parameter property="File_Version_Name" mode="IN"/>
+        <parameter property="Author_User_Name" mode="IN"/>
+        <parameter property="Last_Edit_User_Name" mode="IN"/>
+        <parameter property="Mesh_ID" mode="IN"/>
+        <parameter property="Mesh_Name" mode="IN"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+
     <select id="getFile" resultType="map" parameterType="map">
         select * from f_pc_file where 1=1
         <if test="meshId !=null">
@@ -9,7 +21,8 @@
         </if>
         order by update_date desc limit 1
     </select>
-    <insert id="saveFile" parameterType="map">
-	    insert into f_pc_file(file_name,file_version,file_path,create_date,update_date) value (#{file_name},#{file_version},#{file_path},now(),now())
-    </insert>
+
+    <select id="saveFile" parameterMap="fileMapper" resultType="map" statementType="CALLABLE">
+        CALL save_pc_file(?,?,?,?,?,?,?,?,?)
+    </select>
 </mapper>
