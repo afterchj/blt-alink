@@ -1,5 +1,6 @@
 package com.tpadsz.after.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
@@ -76,6 +77,13 @@ public class AdjustServiceImpl implements AdjustService {
         return lightLists;
     }
 
+    private void saveGroupSetting(JSONArray groupList){
+        if (groupList != null){
+            if (groupList.size()>0){
+
+            }
+        }
+    }
 
     //扫描灯
     private List<LightReturn> scanLights(Group group, JSONObject params) throws SystemAlgorithmException,

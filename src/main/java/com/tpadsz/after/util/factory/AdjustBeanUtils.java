@@ -41,7 +41,7 @@ public class AdjustBeanUtils {
         if (pid != null) {
             group.setPid(pid);
         }
-        if (StringUtils.isBlank(gname)){
+        if (StringUtils.isNotBlank(gname)){
             group.setGname(gname);
         }
         group.setMid(mid);
