@@ -3,6 +3,7 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.service.PCFileService;
+import com.tpadsz.after.util.FileReadUtils;
 import com.tpadsz.after.util.PropertiesUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,31 +32,20 @@ public class PCFileController {
 
     @RequestMapping("/upload")
     public String uploadFile(String params, MultipartFile file) {
-        String path = PropertiesUtil.getPath("upload");
         String downloadPath = PropertiesUtil.getPath("otaPath");
-        Map map = new HashMap();
+        String path = PropertiesUtil.getPath("upload");
         String str = file.getOriginalFilename();
-        String fileName = str.substring(0,str.lastIndexOf("."));
         File targetFile = new File(path, str);
-        if (!targetFile.getParentFile().exists()) {
-            targetFile.getParentFile().mkdirs();
-        }
-        try {
-            if (StringUtils.isNotEmpty(fileName)) {
+        if (StringUtils.isNotEmpty(str)) {
+            try {
                 file.transferTo(targetFile);
+            } catch (IOException e) {
+                logger.error(e.getMessage());
             }
-            map.put("file_name", fileName);
-            map.put("file_path", downloadPath + str);
-            map.put("code", "000");
-            map.put("result", "success");
-            fileService.saveFile(map);
-            logger.warn("map=" + JSON.toJSONString(map));
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("code", "500");
-            map.put("result", "fail");
-            return "500";
         }
+        String txt = FileReadUtils.parseTxtFile(targetFile);
+        saveFile(txt, downloadPath + str);
+        logger.warn("str=" + str);
         return "000";
     }
 
@@ -77,5 +68,16 @@ public class PCFileController {
             map.put("result", "fail");
         }
         return map;
+    }
+
+    public void saveFile(String str,String path) {
+        JSONObject jsonObject = JSONObject.parseObject(str);
+        JSONObject mesh=jsonObject.getJSONObject("Project_Mesh");
+        Map map = jsonObject.getJSONObject("Head");
+        map.put("File_Path",path);
+        map.put("Author_User_ID",1);
+        map.put("Mesh_ID",mesh.getString("Mesh_ID"));
+        map.put("Mesh_Name",mesh.getString("Mesh_Name"));
+        fileService.saveFile(map);
     }
 }
