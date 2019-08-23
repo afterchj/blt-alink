@@ -385,13 +385,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             sceneAjustService.saveScene(sceneAjust);
             sid = sceneAjust.getId();
         }
-        JSONArray array = params.getJSONArray("lightList");
+        JSONArray lightArray = params.getJSONArray("lightList");
         JSONArray groupList = params.getJSONArray("groupList");
         String lmac;
         Integer groupId;
         String productId;
         LightList lightList;
-        List<LightSetting> lightSettingList = new ArrayList<>(array.size() + 1);//配置list容量为jsonArray的size()
+        List<LightSetting> lightSettingList = new ArrayList<>(lightArray.size() + 1);//配置list容量为jsonArray的size()
         String x;
         String y;
         String off;
@@ -409,16 +409,16 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 }
             }
         }
-        if (array.isEmpty() || array.size() < 1) {
+        if (lightArray.isEmpty() || lightArray.size() < 1) {
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
             model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             return;
         }
 
-        for (int i = 0; i < array.size(); i++) {
-            lmac = array.getJSONObject(i).getString("lmac");
-            productId = array.getJSONObject(i).getString("productId");
-            groupId = array.getJSONObject(i).getInteger("groupId");
+        for (int i = 0; i < lightArray.size(); i++) {
+            lmac = lightArray.getJSONObject(i).getString("lmac");
+            productId = lightArray.getJSONObject(i).getString("productId");
+            groupId = lightArray.getJSONObject(i).getInteger("groupId");
             productId = productId.split(" ")[0];
             lightMap = lightAjustService.getLid(lmac);
             //服务端未找到该灯
@@ -438,9 +438,9 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     sceneAjustService.deleteLightSettingByLmac(lmac);//删除灯的场景信息
                 }
             }
-            x = array.getJSONObject(i).getString("x");
-            y = array.getJSONObject(i).getString("y");
-            off = array.getJSONObject(i).getString("off");
+            x = lightArray.getJSONObject(i).getString("x");
+            y = lightArray.getJSONObject(i).getString("y");
+            off = lightArray.getJSONObject(i).getString("off");
             lightSettingList.add(adjustBeanUtils.setLightSetting(sid,lightMap,x,y,off));
         }
 

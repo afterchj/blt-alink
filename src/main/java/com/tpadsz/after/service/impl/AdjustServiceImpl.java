@@ -75,6 +75,8 @@ public class AdjustServiceImpl implements AdjustService {
         }
         return lightLists;
     }
+
+
     //扫描灯
     private List<LightReturn> scanLights(Group group, JSONObject params) throws SystemAlgorithmException,
             NotExitException {

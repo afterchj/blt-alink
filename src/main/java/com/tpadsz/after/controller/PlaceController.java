@@ -48,8 +48,8 @@ public class PlaceController extends BaseDecodedController {
             model.put("place",placeMap);
         } catch (NameDuplicateException e) {
 //            e.printStackTrace(); 区域名重复
-            model.put("result", ResultDict.DUPLICATE_NAME.getCode());
-            model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
+            model.put("result", ResultDict.DUPLICATE_PLACE_NAME.getCode());
+            model.put("result_message", ResultDict.DUPLICATE_PLACE_NAME.getValue());
         }
 
     }
@@ -81,8 +81,8 @@ public class PlaceController extends BaseDecodedController {
             model.put("result_message", ResultDict.SUCCESS.getValue());
         } catch (NameDuplicateException e) {
             e.printStackTrace();//区域名重复
-            model.put("result", ResultDict.DUPLICATE_NAME.getCode());
-            model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
+            model.put("result", ResultDict.DUPLICATE_PLACE_NAME.getCode());
+            model.put("result_message", ResultDict.DUPLICATE_PLACE_NAME.getValue());
         }
 
     }
