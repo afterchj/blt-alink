@@ -45,7 +45,8 @@ public class TimeLineServiceImpl implements TimeLineService {
         if (count2 == null) {
             return false;
         }
-
+//        String timePointList = params.getString("timPointList");
+//        System.out.println(timePointList);
         String jsonStr = params.toJSONString();
         timeLineDao.createTimeJson(params.getInteger("tid"), params.getString("meshId"), params.getString("uid"),
                 jsonStr);

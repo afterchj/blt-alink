@@ -1,5 +1,6 @@
 package com.after.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.TimeLineDao;
 import com.tpadsz.after.entity.time.ProjectTimer;
@@ -101,19 +102,38 @@ public class TimeLineControllerTest {
 
     @Test
     public void createTest(){
-        String data = "{\"item_set\":0,\"week\":\"周日、周一\",\"ischoose\":true,\"item_desc\":\"重复,周日,周一,周二,周三,周四,周五," +
-                "周六\",\"timePointList\":[{\"pos_x\":482,\"hour\":3,\"light_status\":0,\"sence_index\":1,\"time\":0," +
-                "\"minute\":30},{\"pos_x\":659,\"hour\":5,\"light_status\":0,\"sence_index\":1,\"time\":0," +
-                "\"minute\":50},{\"pos_x\":482,\"hour\":3,\"light_status\":0,\"detailValueList\":[{\"pos_x\":659," +
-                "\"hour\":3,\"light_status\":0,\"sence_index\":1,\"minute\":0},{\"pos_x\":659,\"hour\":3," +
-                "\"light_status\":0,\"sence_index\":1,\"time\":0,\"minute\":30}],\"sence_index\":23,\"time\":0," +
+        String data = "{\"item_set\":\"0\",\"week\":\"重复,周日,周一,周二,周三,周四,周五,周六\",\"ischoose\":false," +
+                "\"item_desc\":\"重复,周日,周一,周二,周三,周四,周五,周六\",\"timePointList\":\"[{\\\"hour\\\":1," +
+                "\\\"light_status\\\":0,\\\"minute\\\":35,\\\"pos_x\\\":508,\\\"sence_index\\\":1,\\\"time\\\":0}," +
+                "{\\\"hour\\\":3,\\\"light_status\\\":0,\\\"minute\\\":18,\\\"pos_x\\\":847,\\\"sence_index\\\":1," +
+                "\\\"time\\\":0},{\\\"hour\\\":4,\\\"light_status\\\":0,\\\"minute\\\":31,\\\"pos_x\\\":1086," +
+                "\\\"sence_index\\\":1,\\\"time\\\":0}]\",\"dayObj\":\"{\\\"fri\\\":1,\\\"loop\\\":1,\\\"mon\\\":1," +
+                "\\\"sat\\\":1,\\\"sun\\\":1,\\\"thr\\\":1,\\\"tus\\\":1,\\\"wed\\\":1}\",\"tname\":\"Timeline_00\"," +
+                "\"repetition\":\"1\",\"meshId\":\"54206913\",\"tid\":0," +
+                "\"token\":\"7bdac62d92de4acb98041640bf8ded98\",\"uid\":\"7\",\"item_tag\":0," +
+                "\"item_title\":\"Timeline_00\"}";
+        String jsonStr = "{\"item_set\":\"1\",\"week\":\"周日、周一\",\"ischoose\":true,\"item_desc\":\"重复,周日,周一,周二,周三,周四," +
+                "周五\",\"timePointList\":[{\"pos_x\":482,\"hour\":2,\"light_status\":0,\"time\":0,\"sence_index\":21," +
+                "\"minute\":30},{\"pos_x\":659,\"hour\":2,\"light_status\":0,\"time\":0,\"sence_index\":22," +
+                "\"minute\":50},{\"pos_x\":482,\"hour\":2,\"light_status\":0,\"detailValueList\":[{\"pos_x\":659," +
+                "\"hour\":2,\"light_status\":0,\"sence_index\":2,\"minute\":0},{\"pos_x\":659,\"hour\":2," +
+                "\"light_status\":0,\"time\":0,\"sence_index\":22,\"minute\":30}],\"time\":0,\"sence_index\":23," +
                 "\"minute\":30}],\"dayObj\":{\"tus\":1,\"loop\":1,\"sat\":1,\"wed\":1,\"fri\":1,\"mon\":1,\"sun\":1," +
-                "\"thr\":1},\"tname\":\"ceshi\",\"repetition\":\"0\",\"meshId\":\"84137526\",\"tid\":400," +
-                "\"uid\":\"7\",\"item_tag\":0,\"item_title\":\"ceshi\"}";
+                "\"thr\":1},\"tname\":\"ceshi\",\"repetition\":\"0\",\"meshId\":\"84137526\",\"tid\":2,\"uid\":\"7\"," +
+                "\"item_tag\":0,\"item_title\":\"ceshi\"}";
         JSONObject jsonObject = JSONObject.parseObject(data);
-        String s = jsonObject.toJSONString();
-        System.out.println(s);
-        timeLineService.create(jsonObject);
+//        String timePointList = jsonObject.getString("timePointList");
+        JSONArray jsonTimePointList = jsonObject.getJSONArray("timePointList");
+        jsonObject.put("timePointList",jsonTimePointList);
+        System.out.println(jsonObject.toJSONString());
+//        jsonObject.remove("timePointList");
+//        jsonObject.put("timePointList",jsonTimePointList);
+//        JSONObject json = JSONObject.parseObject(jsonStr);
+//        System.out.println(jsonObject.getString("timePointList").getClass());
+//        System.out.println(json.getString("timePointList"));
+//        String s = jsonObject.toJSONString();
+//        System.out.println(s);
+//        timeLineService.create(jsonObject);
 
     }
 

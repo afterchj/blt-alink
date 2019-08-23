@@ -137,7 +137,7 @@ public class TimeLineController extends BaseDecodedController{
 
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-        model.put("projectTimer",projectTimer);
+        model.put("data",projectTimer);
     }
 
 }
