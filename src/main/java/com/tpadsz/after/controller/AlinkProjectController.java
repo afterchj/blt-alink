@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.RepetitionException;
-import com.tpadsz.after.service.GroupOperationService;
-import com.tpadsz.after.service.LightAjustService;
-import com.tpadsz.after.service.ProjectService;
-import com.tpadsz.after.service.SceneAjustService;
+import com.tpadsz.after.service.*;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,6 +38,9 @@ public class AlinkProjectController extends BaseDecodedController {
 
     @Resource
     private LightAjustService lightAjustService;
+
+    @Resource
+    private PlaceService placeService;
 
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -384,8 +384,8 @@ public class AlinkProjectController extends BaseDecodedController {
             throws Exception {
         for (int i = 0; i < meshList.size(); i++) {
             AdjustPlace place = new AdjustPlace();
-            place.setPlaceId(1);
-            place.setPname("区域1");
+            place.setPlaceId(0);
+            place.setPname("扫描区");
             place.setUid(uid);
             place.setMid(meshList.get(i).getId());
             projectService.createPlace(place);
@@ -417,8 +417,11 @@ public class AlinkProjectController extends BaseDecodedController {
                         group.setGname(groupInfoList.get(i).getGname());
                         group.setMid(meshList.get(j).getId());
                         group.setGroupId(groupInfoList.get(i).getGroupId());
-                        Integer pid = groupOperationService.getDefaultPlace(null, uid, group.getMid());
-                        group.setPid(pid);
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("meshId",meshList.get(j).getMesh_id());
+                        jsonObject.put("uid",uid);
+                        List<Map<String, Object>> list = placeService.getPlaceByMeshId(jsonObject);
+                        group.setPid((Integer) list.get(0).get("pid"));
                         groupOperationService.saveGroup(group);
                         groupInfoList.get(i).setGid(group.getId());
                         break;
