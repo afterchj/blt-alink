@@ -3,6 +3,7 @@ package com.tpadsz.after.service;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.exception.SystemAlgorithmException;
 
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,11 @@ public interface LightAjustService {
 
     void updateLightName(String lmac, String lname, Integer pid);
 
-    String saveLight(List<LightList> lightLists) throws Exception;
+    String saveLight(List<LightList> lightLists) throws SystemAlgorithmException;
 
     Integer deleteLight(String lmac);
 
-    void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws Exception;
+    void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws SystemAlgorithmException;
 
 //    void saveLightColor(String uid,String meshId,String lmac, String x, String y);
 

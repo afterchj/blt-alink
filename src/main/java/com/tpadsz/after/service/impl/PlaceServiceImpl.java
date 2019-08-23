@@ -102,4 +102,9 @@ public class PlaceServiceImpl implements PlaceService {
         int mid = (int) placeNum.get(0).get("mid");
         return placeDao.getPlacesAndGroups(mid);
     }
+
+    @Override
+    public Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId) {
+        return placeDao.getPlaceByGroupIdAndMeshId(dGroupId,meshId);
+    }
 }
