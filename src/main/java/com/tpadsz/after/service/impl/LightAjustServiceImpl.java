@@ -7,6 +7,7 @@ import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import org.apache.ibatis.session.ExecutorType;
@@ -58,7 +59,7 @@ public class LightAjustServiceImpl implements LightAjustService {
      * @throws Exception
      */
     @Override
-    public String saveLight(List<LightList> lightLists) throws Exception {
+    public String saveLight(List<LightList> lightLists) throws SystemAlgorithmException {
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Integer nowMid;
@@ -99,7 +100,8 @@ public class LightAjustServiceImpl implements LightAjustService {
         } catch (Exception e) {
             //回滚
             sqlSession.rollback();
-            throw e;
+//            throw e;
+            throw new SystemAlgorithmException("数据提交错误");
         } finally {
             sqlSession.close();
         }
@@ -113,7 +115,7 @@ public class LightAjustServiceImpl implements LightAjustService {
     }
 
     @Override
-    public void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws Exception{
+    public void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws SystemAlgorithmException {
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Map<String,Integer> lightMap;
@@ -154,7 +156,7 @@ public class LightAjustServiceImpl implements LightAjustService {
         } catch (Exception e) {
             //回滚
             sqlSession.rollback();
-            throw e;
+            throw new SystemAlgorithmException("数据提交异常");
         } finally {
             sqlSession.close();
         }

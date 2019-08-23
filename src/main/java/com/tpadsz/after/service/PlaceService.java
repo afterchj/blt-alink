@@ -23,4 +23,6 @@ public interface PlaceService {
     List<Map<String, Object>> getPlaceByMeshId(JSONObject param);
 
     List<PlaceExtend> getPlacesAndGroups(List<Map<String, Object>> placeNum);
+
+    Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId);
 }

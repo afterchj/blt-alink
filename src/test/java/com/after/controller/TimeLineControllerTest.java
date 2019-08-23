@@ -3,6 +3,7 @@ package com.after.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.TimeLineDao;
+import com.tpadsz.after.entity.LightReturn;
 import com.tpadsz.after.entity.time.ProjectTimer;
 import com.tpadsz.after.service.TimeLineService;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -185,5 +186,11 @@ public class TimeLineControllerTest {
 //        System.out.println(list);
 
 
+    }
+
+    @Test
+    public void listSizeTest(){
+        List<LightReturn> lightReturns = new ArrayList<>();
+        System.out.println(lightReturns.size());
     }
 }
