@@ -1,5 +1,6 @@
 package com.tpadsz.after.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.PlaceDao;
@@ -155,9 +156,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         Integer placeId = params.getInteger("placeId");//目标区域id
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
-        Integer groupId = params.getInteger("groupId");
-        String gname = params.getString("gname");//组名
         String pname;
+        Integer groupId;
         pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
         if (pname == null){
             //区域未创建 创建区域
@@ -179,14 +179,15 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             placeDao.savePlace(placeSave);
             pid  = placeSave.getPid();
         }
-//        String oldGname = groupOperationDao.getGnameByPidAndMeshId(pid, meshId, gname);
-//        if (oldGname != null) {
-//            组名重复
-//            throw new GroupDuplicateException();
-//        }
-        //不同区域之间移动
-        groupOperationDao.moveGroup(pid, meshId, groupId);
-        groupOperationDao.updateLightPid(groupId, pid, meshId);//修改灯信息的pid
+        JSONArray groupList = params.getJSONArray("groupList");
+        if (groupList.size()>0){
+            for (int i=0;i<groupList.size();i++){
+                groupId = groupList.getJSONObject(i).getInteger("groupId");
+                //不同区域之间移动
+                groupOperationDao.moveGroup(pid, meshId, groupId);
+                groupOperationDao.updateLightPid(groupId, pid, meshId);//修改灯信息的pid
+            }
+        }
         placeMap.put("pid",pid);
         placeMap.put("placeId",placeId);
         placeMap.put("pname",pname);

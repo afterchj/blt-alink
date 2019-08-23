@@ -451,7 +451,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             sceneAjustService.saveSceneLog(sceneLog);//保存场景日志
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
-        } catch (Exception e) {
+        } catch (SystemAlgorithmException e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
             logger.error("method:saveScene; service:saveLightSetting(); db rollback;sid:{},mid:{}", sid, mid);

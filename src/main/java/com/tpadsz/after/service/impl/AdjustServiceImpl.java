@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.SceneAjustDao;
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.LightList;
-import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
@@ -15,6 +13,7 @@ import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.AdjustService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.util.factory.AdjustBeanUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -77,11 +77,86 @@ public class AdjustServiceImpl implements AdjustService {
         return lightLists;
     }
 
-    private void saveGroupSetting(JSONArray groupList){
-        if (groupList != null){
-            if (groupList.size()>0){
+    public void saveLightSetting(JSONObject params) throws NotExitException {
+        String meshId = params.getString("meshId");
+        String uid = params.getString("uid");
+        Integer sceneId = params.getInteger("sceneId");
+        String sname = params.getString("sname");
+        Integer pid = params.getInteger("pid");
+        Integer mid = groupOperationDao.getMeshSerialNo(meshId, uid);
+        Integer sid = groupOperationDao.getSceneSeriaNo(mid, sceneId, uid);
+        //sid 为空判断
+        if (sid == null) {
+            //创建场景
+            SceneAjust sceneAjust = adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname);
+            sceneAjustDao.saveScene(sceneAjust);
+            sid = sceneAjust.getId();
+        }
+        JSONArray lightArray = params.getJSONArray("lightList");
+        JSONArray groupList = params.getJSONArray("groupList");
+        saveGroupSetting(groupList,sid,mid);
+        setLightSettings(lightArray,mid,pid,sid);
+    }
 
+    private void saveGroupSetting(JSONArray groupList, Integer sid,Integer mid){
+        String x;
+        String y;
+        Integer groupId;
+        if (groupList != null && groupList.size()>0 ){
+//            if (groupList.size()>0){
+                //删除group_setting信息
+                groupOperationDao.deleteGroupSetting(sid);
+                //v2.1.0新版本添加groupList集合
+                for (int i = 0; i < groupList.size(); i++) {
+                    groupId = groupList.getJSONObject(i).getInteger("groupId");
+                    x = groupList.getJSONObject(i).getString("x");
+                    y = groupList.getJSONObject(i).getString("y");
+                    groupOperationDao.saveGroupSetting(adjustBeanUtils.setGroupSetting(x,y,sid,mid,groupId));
+                }
+//            }
+        }
+    }
+
+    public void setLightSettings(JSONArray lightArray,Integer mid,Integer pid,Integer sid) throws NotExitException {
+        String x;
+        String y;
+        String off;
+        String lmac;
+        Integer groupId;
+        String productId;
+        Map<String, Integer> lightMap;
+        LightList lightList;
+        if (lightArray.isEmpty() || lightArray.size() < 1) {
+            throw new NotExitException("不存在设备");
+        }
+        List<LightSetting> lightSettingList = new ArrayList<>(lightArray.size() + 1);//配置list容量为jsonArray的size()
+        for (int i = 0; i < lightArray.size(); i++) {
+            lmac = lightArray.getJSONObject(i).getString("lmac");
+            productId = lightArray.getJSONObject(i).getString("productId");
+            groupId = lightArray.getJSONObject(i).getInteger("groupId");
+            productId = productId.split(" ")[0];
+            lightMap = lightAjustDao.getLid(lmac);
+            //服务端未找到该灯
+            if (lightMap == null || lightMap.size() == 0) {
+                //Map<String, Integer> lightMap默认不会分配内存空间需要实例化
+                //否则lightMap.put会报空指针
+                lightMap = new HashedMap();
+                lightList = adjustBeanUtils.setLightList(mid,lmac,groupId,productId,pid);
+                //创建灯
+                lightAjustDao.saveTempLight(lightList);
+                lightMap.put("id", lightList.getId());
+            } else {
+                //服务端有灯
+                //mid不一致
+                if (lightMap.get("mid").intValue() != mid.intValue()) {
+                    lightAjustDao.updateLight(lmac, groupId, mid, pid);//更新灯信息
+                    sceneAjustDao.deleteLightSettingByLmac(lmac);//删除灯的场景信息
+                }
             }
+            x = lightArray.getJSONObject(i).getString("x");
+            y = lightArray.getJSONObject(i).getString("y");
+            off = lightArray.getJSONObject(i).getString("off");
+            lightSettingList.add(adjustBeanUtils.setLightSetting(sid,lightMap,x,y,off));
         }
     }
 

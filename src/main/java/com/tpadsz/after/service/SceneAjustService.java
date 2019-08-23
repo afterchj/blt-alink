@@ -1,6 +1,7 @@
 package com.tpadsz.after.service;
 
 import com.tpadsz.after.entity.*;
+import com.tpadsz.after.exception.SystemAlgorithmException;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface SceneAjustService {
 
     void saveScene(SceneAjust sceneAjust);
 
-    void saveLightSetting(List<LightSetting> lightSettingList) throws Exception;
+    void saveLightSetting(List<LightSetting> lightSettingList) throws  SystemAlgorithmException;
 
 //    void saveSceneSetting(SceneSetting sceneSetting);
 
