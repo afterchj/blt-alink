@@ -176,8 +176,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String bltFlag = params.getString("bltFlag");//"1":连接蓝牙；"0":未连蓝牙；
         Integer groupId = params.getInteger("groupId");//组id(客户端生成)
         String meshId = params.getString("meshId");//网络id
-        //未连蓝牙
-        if (bltFlag.equals("0")) {
+        if (bltFlag.equals("0")) {//未连蓝牙
             saveLog(uid, meshId, operation, bltFlag, model, groupId, null);
         } else if ("1".equals(bltFlag)) {//连接蓝牙
             Group group = adjustBeanUtils.setGroup(params);
@@ -188,8 +187,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 model.put("result_message", ResultDict.SUCCESS.getValue());
             } catch (NameDuplicateException e) {//组名重复
                 logger.error("method:groupOperation group name duplicate:{},meshId:{}", groupId, meshId);
-                model.put("result", ResultDict.DUPLICATE_NAME.getCode());
-                model.put("result_message", ResultDict.DUPLICATE_NAME.getValue());
+                model.put("result", ResultDict.GROUP_NAME_DUPLICATE.getCode());
+                model.put("result_message", ResultDict.GROUP_NAME_DUPLICATE.getValue());
             } catch (GroupDuplicateException e) {//存在组
                 logger.error("method:groupOperation group duplicate:{},meshId:{}", groupId, meshId);
                 model.put("result", ResultDict.DUPLICATE_GID.getCode());
@@ -210,45 +209,18 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     @RequestMapping(value = "/groupsLists", method = RequestMethod.POST)
     public void groupsLists(@ModelAttribute("decodedParams") JSONObject
                                     params, ModelMap model) {
-        String meshId = params.getString("meshId");
-        String uid = params.getString("uid");
-        if (StringUtils.isBlank(meshId)) {
-            model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-            return;
-        }
-        Integer mid = groupOperationService.getMeshSerialNo(meshId, uid);
-
-        if (mid == null) {
+        try {
+            Map<String, Object> map = adjustService.getGroupList(params);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+            model.put("data", map.get("data"));
+        } catch (NotExitException e) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-//            System.out.println("method:groupsLists" + "mid is null");
-            return;
+            logger.error("method groupsLists; meshid is null; meshId is {}, uid is {}", params.getString("meshId"),
+                    params.getString("uid"));
         }
-        List<Map<String, Object>> placeNum = placeService.getPlaceByMeshId(params);
-        Integer version = params.getInteger("version");
-        List<PlaceExtend> places;
-        List<GroupList> groupLists;
-        if (version != null && 2 == version) {
-            //v2.1.0版本
-//            if (placeNum.size()>1){
-            //区域数大于1
-            places = placeService.getPlacesAndGroups(placeNum);
-            model.put("data", places);
-//            }else {
-//                区域数小于等于1
-//                groupLists = groupOperationService.getGroupAll(mid);
-//                model.put("data", groupLists);
-//            }
-        } else if (version == null) {
-            //v2.1.0版本
-            groupLists = groupOperationService.getGroupAll(mid);
-            model.put("data", groupLists);
-        }
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
     }
-
 
     /**
      * 重命名灯
@@ -283,7 +255,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             if (lightMap == null || lightMap.size() == 0) {
                 //服务端未找到该灯
                 operation = "5";
-                LightList lightList = adjustBeanUtils.setLightList(mid,lmac,groupId,productId,pid);
+                LightList lightList = adjustBeanUtils.setLightList(mid, lmac, groupId, productId, pid);
                 //创建灯
                 lightAjustService.saveTempLight(lightList);
             } else {
@@ -306,7 +278,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 
     /**
      * 保存默认场景
-     *
      */
     @RequestMapping(value = "/saveDefaultScene", method = RequestMethod.POST)
     public void saveDefaultScene(@ModelAttribute("decodedParams") JSONObject params,
@@ -343,10 +314,10 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }
             Integer sid = groupOperationService.getSceneSerialNo(mid, sceneId, uid);
             if (sid == null) {
-                sceneAjust = adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname);
+                sceneAjust = adjustBeanUtils.setSceneAjust(sceneId, uid, mid, sname);
                 //创建场景
                 sceneAjustService.saveScene(sceneAjust);
-                SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid,"1",meshId,sceneId);
+                SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid, "1", meshId, sceneId);
                 sceneAjustService.saveSceneLog(sceneLog);//保存场景日志
             }
         }
@@ -370,7 +341,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         //未连蓝牙
         if ("0".equals(bltFlag)) {
             //记录日志
-            sceneAjustService.saveSceneLog(adjustBeanUtils.setSceneLog(uid,bltFlag,meshId,sceneId));
+            sceneAjustService.saveSceneLog(adjustBeanUtils.setSceneLog(uid, bltFlag, meshId, sceneId));
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
             return;
@@ -381,7 +352,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         //sid 为空判断
         if (sid == null) {
             //创建场景
-            SceneAjust sceneAjust = adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname);
+            SceneAjust sceneAjust = adjustBeanUtils.setSceneAjust(sceneId, uid, mid, sname);
             sceneAjustService.saveScene(sceneAjust);
             sid = sceneAjust.getId();
         }
@@ -405,7 +376,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     groupId = groupList.getJSONObject(i).getInteger("groupId");
                     x = groupList.getJSONObject(i).getString("x");
                     y = groupList.getJSONObject(i).getString("y");
-                    groupOperationService.saveGroupSetting(adjustBeanUtils.setGroupSetting(x,y,sid,mid,groupId));
+                    groupOperationService.saveGroupSetting(adjustBeanUtils.setGroupSetting(x, y, sid, mid, groupId));
                 }
             }
         }
@@ -426,7 +397,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 //Map<String, Integer> lightMap默认不会分配内存空间需要实例化
                 //否则lightMap.put会报空指针
                 lightMap = new HashedMap();
-                lightList = adjustBeanUtils.setLightList(mid,lmac,groupId,productId,pid);
+                lightList = adjustBeanUtils.setLightList(mid, lmac, groupId, productId, pid);
                 //创建灯
                 lightAjustService.saveTempLight(lightList);
                 lightMap.put("id", lightList.getId());
@@ -441,13 +412,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             x = lightArray.getJSONObject(i).getString("x");
             y = lightArray.getJSONObject(i).getString("y");
             off = lightArray.getJSONObject(i).getString("off");
-            lightSettingList.add(adjustBeanUtils.setLightSetting(sid,lightMap,x,y,off));
+            lightSettingList.add(adjustBeanUtils.setLightSetting(sid, lightMap, x, y, off));
         }
 
         //批量插入到light_setting
         try {
             sceneAjustService.saveLightSetting(lightSettingList);
-            SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid,bltFlag,meshId,sceneId);
+            SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid, bltFlag, meshId, sceneId);
             sceneAjustService.saveSceneLog(sceneLog);//保存场景日志
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -456,6 +427,40 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
             logger.error("method:saveScene; service:saveLightSetting(); db rollback;sid:{},mid:{}", sid, mid);
         }
+    }
+
+    @RequestMapping(value = "/saveScene2", method = RequestMethod.POST)//TODO saveScene
+    public void saveScene2(@ModelAttribute("decodedParams") JSONObject params,
+                           ModelMap model) {
+        String meshId = params.getString("meshId");
+        Integer sceneId = params.getInteger("sceneId");
+        String bltFlag = params.getString("bltFlag");
+        String uid = params.getString("uid");
+        //未连蓝牙
+        if ("0".equals(bltFlag)) {
+            //记录日志
+            sceneAjustService.saveSceneLog(adjustBeanUtils.setSceneLog(uid, bltFlag, meshId, sceneId));
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+            model.put("result", ResultDict.SUCCESS.getCode());
+            return;
+        }
+        try {
+            adjustService.saveLightSetting(params);
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("result_message", ResultDict.SUCCESS.getValue());
+        } catch (NotExitException e) {
+            model.put("result", ResultDict.PARAMS_BLANK.getCode());
+            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
+            logger.error("method:saveScene; service:saveLightSetting(); PARAMS BLANK;sceneId:{},meshId:{}", sceneId,
+                    meshId);
+        } catch (SystemAlgorithmException e) {
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
+            logger.error("method:saveScene; service:saveLightSetting(); db rollback;sceneId:{},meshId:{}", sceneId,
+                    meshId);
+        }
+
+
     }
 
     /**
@@ -573,13 +578,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         //未连蓝牙
         if ("0".equals(bltFlag)) {
             saveLog(null, meshId, operation, bltFlag, model, null, null);
-        }else if ("1".equals(bltFlag)){//连接蓝牙
+        } else if ("1".equals(bltFlag)) {//连接蓝牙
             Group group = adjustBeanUtils.setGroup(params);
             try {
-                List<LightReturn> lightReturns = adjustService.lightOperation(group,params);
+                List<LightReturn> lightReturns = adjustService.lightOperation(group, params);
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
-                if (lightReturns.size()>0){
+                if (lightReturns.size() > 0) {
                     model.put("lightLists", lightReturns);
                 }
             } catch (SystemAlgorithmException e) {
@@ -594,12 +599,14 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }
         }
     }
+
     /**
      * "0":扫描灯
      * "2":移动灯
+     *
      * @return 返回灯集合
      */
-    private List<LightList> getLightList(ModelMap model,Group group, JSONObject params) {
+    private List<LightList> getLightList(ModelMap model, Group group, JSONObject params) {
         String operation = params.getString("operation");
         String lmac;
         String lname;
@@ -673,10 +680,10 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
      */
     @RequestMapping(value = "/moveGroup", method = RequestMethod.POST) //TODO moveGroup
     public void moveGroup(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-            Map<String, Object> placeMap = groupOperationService.moveGroup(params);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("result_message", ResultDict.SUCCESS.getValue());
-            model.put("place", placeMap);
+        Map<String, Object> placeMap = groupOperationService.moveGroup(params);
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+        model.put("place", placeMap);
     }
 
     /**

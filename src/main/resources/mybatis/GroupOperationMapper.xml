@@ -75,14 +75,14 @@
         	l.lname,
         	l.gid,
         	l.type_id,
-        	l.product_id,
-        	p.product_name,
-        	p.irr_eff,
-        	p.power,
-        	p.voltage,
-        	p.current,
-        	p.tname,
-        	p.tnum
+        	l.product_id
+#         	p.product_name,
+#         	p.irr_eff,
+#         	p.power,
+#         	p.voltage,
+#         	p.current,
+#         	p.tname,
+#         	p.tnum
         FROM
     	  (
         	f_light l

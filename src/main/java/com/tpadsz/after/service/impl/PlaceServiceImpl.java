@@ -63,7 +63,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void delete(JSONObject params){
-        String uid = params.getString("uid");
+//        String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         Integer pid = params.getInteger("pid");//区域序列号
         Integer count = lightAjustDao.getLightByPid(pid);
