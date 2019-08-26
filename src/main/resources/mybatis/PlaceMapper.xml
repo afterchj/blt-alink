@@ -72,4 +72,8 @@
     <select id="getPlaceByGroupIdAndMeshId" resultType="integer">
         select pid from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
     </select>
+
+    <select id="getRecoverPlace" resultType="integer">
+        SELECT id FROM f_place WHERE mid=#{mid} AND place_id=-1
+    </select>
 </mapper>

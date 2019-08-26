@@ -33,4 +33,6 @@ public interface PlaceDao {
     String getPlaceByPlaceIdAndMeshId(@Param("placeId") Integer placeId, @Param("meshId") String meshId);
 
     Integer getPlaceByGroupIdAndMeshId(@Param("groupId") Integer dGroupId, @Param("meshId") String meshId);
+
+    Integer getRecoverPlace(@Param("mid") Integer mid);
 }

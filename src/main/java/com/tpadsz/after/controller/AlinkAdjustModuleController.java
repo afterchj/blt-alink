@@ -186,11 +186,11 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
             } catch (NameDuplicateException e) {//组名重复
-                logger.error("method:groupOperation group name duplicate:{},meshId:{}", groupId, meshId);
+                logger.error("method:groupOperation group name duplicate;groupId:{},meshId:{}", groupId, meshId);
                 model.put("result", ResultDict.GROUP_NAME_DUPLICATE.getCode());
                 model.put("result_message", ResultDict.GROUP_NAME_DUPLICATE.getValue());
             } catch (GroupDuplicateException e) {//存在组
-                logger.error("method:groupOperation group duplicate:{},meshId:{}", groupId, meshId);
+                logger.error("method:groupOperation group duplicate;groupId:{},meshId:{}", groupId, meshId);
                 model.put("result", ResultDict.DUPLICATE_GID.getCode());
                 model.put("result_message", ResultDict.DUPLICATE_GID.getValue());
             } catch (NotExitException e) {//不存在组

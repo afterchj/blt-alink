@@ -464,8 +464,9 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void moveLightsToDiffGroupsTest(){
-        String jsonStr = "{\"uid\":\"11\",\"token\":\"aaa\",\"meshId\":\"89034617\"," +
-                "\"lightList\":[{\"lmac\":\"aa-aa-aa-aaa\",\"groupId\":1}]}";
+        String jsonStr = "{\"uid\":\"4\",\"token\":\"75a3ab5db3fa431990288d9f516cfc60\",\"meshId\":\"45029867\"," +
+                "\"lightList\":\"[{\\\"groupId\\\":7,\\\"lmac\\\":\\\"f0:ac:d7:6d:44:61\\\"," +
+                "\\\"productId\\\":\\\"8200 1.2\\\"}]\"}";
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         lightAjustService.moveLightsToDiffGroups(jsonObject);
 

@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
+import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
+import com.tpadsz.after.service.PlaceService;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -41,6 +43,12 @@ public class LightAjustServiceImpl implements LightAjustService {
 
     @Resource
     private GroupOperationService groupOperationService;
+
+    @Resource
+    private PlaceDao placeDao;
+
+    @Resource
+    private PlaceService placeService;
 
     @Override
     public void saveLightAjustLog(String meshId, String bltFlag, String operation, String lmacs) {
@@ -192,13 +200,14 @@ public class LightAjustServiceImpl implements LightAjustService {
         String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         JSONArray lights =  params.getJSONArray("lightList");
+        Integer version = params.getInteger("version");
         Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
         Integer pid = groupOperationDao.getDefaultPlace(uid,mid);
         LightList lightList;
         String lmac;
         Integer groupId;
         String productId;
-        Group group;
+        Group group = new Group();
         for (int i=0;i<lights.size();i++){
             lightList = new LightList();
             lmac = lights.getJSONObject(i).getString("lmac");
@@ -206,9 +215,20 @@ public class LightAjustServiceImpl implements LightAjustService {
             productId = lights.getJSONObject(i).getString("productId");
             productId = productId.split(" ")[0];
             Integer gid = groupOperationDao.getGidByGroupIdAndMeshId(groupId,meshId);
-            if (gid == null){
-                //不存在该组 创建组
-                group = groupOperationService.createGroup(mid,pid,groupId);
+            if (gid == null){//创建组
+                //2.1.2 版本
+                if (version == null){
+                    //组放到扫描区中
+                    group = groupOperationService.createGroup(mid,pid,groupId);
+                }else if (version == 2){
+                    //组放到恢复区中
+                    pid = placeDao.getRecoverPlace(mid);//获取恢复区
+                    if (pid == null){//创建恢复区
+                        String pname = "恢复区";
+                        pid = placeService.SavePlace(uid,meshId,pname);
+                    }
+                    group = groupOperationService.createGroup(mid,pid,groupId);
+                }
                 gid = group.getId();
             }
             lightList.setGid(gid);
