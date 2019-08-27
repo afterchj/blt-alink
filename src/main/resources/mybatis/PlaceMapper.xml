@@ -3,16 +3,17 @@
 <mapper namespace="com.tpadsz.after.dao.PlaceDao">
 
     <select id="getLastPlace" resultType="integer">
-        select place_id from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} order by place_id desc limit 1
+        select place_id from f_place where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and uid=#{uid} order
+        by place_id desc limit 1
     </select>
 
     <insert id="savePlace" useGeneratedKeys="true" keyProperty="pid" parameterType="com.tpadsz.after.entity.PlaceSave">
         insert into f_place (place_id,pname,uid,mid,create_date,update_date)
-        VALUES(#{placeId},#{pname},#{uid},(select id from f_mesh where mesh_id=#{meshId}),now(),now())
+        VALUES(#{placeId},#{pname},#{uid},(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}),now(),now())
     </insert>
 
     <select id="getPname" resultType="integer">
-        select count(*) from f_place where mid=(select id from f_mesh where mesh_id=#{meshId}) and uid=#{uid} and pname=#{pname}
+        select count(*) from f_place where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and uid=#{uid} and pname=#{pname}
     </select>
 
     <delete id="deletePlaceByPid">
