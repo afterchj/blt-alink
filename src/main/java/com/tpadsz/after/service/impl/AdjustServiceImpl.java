@@ -3,6 +3,7 @@ package com.tpadsz.after.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
+import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.SceneAjustDao;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.GroupDuplicateException;
@@ -58,6 +59,9 @@ public class AdjustServiceImpl implements AdjustService {
     @Resource
     private GroupOperationService groupOperationService;
 
+    @Resource
+    private LightAjustDao lightAjustDao;
+
     /**
      * 组操作
      * @param group 组信息
@@ -105,7 +109,7 @@ public class AdjustServiceImpl implements AdjustService {
      * @throws SystemAlgorithmException 数据库回滚异常
      */
     @Override
-    public void saveLightSetting(JSONObject params) throws NotExitException, SystemAlgorithmException {
+    public void saveScene(JSONObject params) throws NotExitException, SystemAlgorithmException {
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         Integer sceneId = params.getInteger("sceneId");
@@ -127,7 +131,35 @@ public class AdjustServiceImpl implements AdjustService {
         List<LightSetting> lightSettings = adjustComponentUtils.setLightSettings(lightArray, mid, pid, sid);
         sceneAjustService.saveLightSetting(lightSettings);
         SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid,bltFlag,meshId,sceneId);
-        sceneAjustService.saveSceneLog(sceneLog);//保存场景日志
+        sceneAjustDao.saveSceneLog(sceneLog);//保存场景日志
+    }
+
+    /**
+     * 保存默认场景
+     * @param params meshId:网络id;sceneId:场景id;sname:场景名
+     * @throws NotExitException 数据为空
+     */
+    @Override
+    public void saveDefaultScene(JSONObject params) throws NotExitException {
+        String meshId = params.getString("meshId");
+        String uid = params.getString("uid");
+        Integer mid = groupOperationDao.getMeshSerialNo(meshId, uid);
+        JSONArray sceneArray = params.getJSONArray("sceneArray");
+        if (sceneArray.isEmpty() || sceneArray.size() < 1) {
+            throw new NotExitException("数据为空");
+        }
+        SceneAjust sceneAjust;
+        for (int i = 0; i < sceneArray.size(); i++) {
+            Integer sceneId = sceneArray.getJSONObject(i).getInteger("sceneId");
+            String sname = sceneArray.getJSONObject(i).getString("sname");
+            Integer sid = groupOperationDao.getSceneSeriaNo(mid, sceneId, uid);
+            if (sid == null) {
+                sceneAjust = adjustBeanUtils.setSceneAjust(sceneId, uid, mid, sname);
+                sceneAjustDao.saveScene(sceneAjust);//创建场景
+                SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid, "1", meshId, sceneId);
+                sceneAjustDao.saveSceneLog(sceneLog);//保存场景日志
+            }
+        }
     }
 
     /**
@@ -159,5 +191,43 @@ public class AdjustServiceImpl implements AdjustService {
             map.put("data",groupLists);
         }
         return map;
+    }
+
+    /**
+     * 重命名灯
+     * @param params bltFlag:蓝牙连接标志;productId:产品id;pid:区域序列号
+     */
+    @Override
+    public void renameLight(JSONObject params){
+        String bltFlag = params.getString("bltFlag");
+        String lmac = params.getString("lmac");
+        String lname = params.getString("lname");
+        String meshId = params.getString("meshId");
+        Integer groupId = params.getInteger("groupId");
+        String productId = params.getString("productId");
+        productId = productId.split(" ")[0];
+        String uid = params.getString("uid");
+        Integer pid = params.getInteger("pid");
+        String operation = "5";
+        Integer mid = groupOperationService.getMeshSerialNo(meshId, uid);
+        Map<String, Integer> lightMap = lightAjustDao.getLid(lmac);
+        if (lightMap == null || lightMap.size() == 0) {
+            //服务端未找到该灯
+            LightList lightList = adjustBeanUtils.setLightList(mid, lmac, groupId, productId, pid);
+            //创建灯
+            lightAjustDao.saveTempLight(lightList);
+        }else {
+            //数据库中的mid和当前扫描入网的mid不是同一网络//Integer默认比较[-128,128]
+            if (lightMap.get("mid").intValue() != mid.intValue()) {
+                lightAjustDao.deleteLightSettingByLmac(lmac);//删除灯的场景
+                //更新 lname,gid,mid,update_date,pid
+                lightAjustDao.updateLight(lmac, groupId, mid, pid);
+            } else {
+                //只更新灯名和pid
+                lightAjustDao.updateLightName(lmac, lname, pid);
+            }
+        }
+        //记录日志
+        lightAjustDao.saveLightAjustLog(meshId, bltFlag, operation, lmac);
     }
 }

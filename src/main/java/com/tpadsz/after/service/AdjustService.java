@@ -24,7 +24,11 @@ public interface AdjustService {
 
     List<LightReturn> lightOperation(Group group, JSONObject params) throws SystemAlgorithmException, NotExitException;
 
-    void saveLightSetting(JSONObject params) throws NotExitException, SystemAlgorithmException;
+    void saveScene(JSONObject params) throws NotExitException, SystemAlgorithmException;
 
     Map<String,Object> getGroupList(JSONObject params) throws NotExitException;
+
+    void renameLight(JSONObject params);
+
+    void saveDefaultScene(JSONObject params) throws NotExitException;
 }
