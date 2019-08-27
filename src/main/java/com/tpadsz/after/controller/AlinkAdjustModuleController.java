@@ -79,15 +79,15 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 model.put("result", ResultDict.SUCCESS.getCode());
                 model.put("result_message", ResultDict.SUCCESS.getValue());
             } catch (NameDuplicateException e) {//组名重复
-                logger.error("method:groupOperation group name duplicate;groupId:{},meshId:{}", groupId, meshId);
+                logger.error("method:groupOperation; group name duplicate;groupId:{},meshId:{}", groupId, meshId);
                 model.put("result", ResultDict.GROUP_NAME_DUPLICATE.getCode());
                 model.put("result_message", ResultDict.GROUP_NAME_DUPLICATE.getValue());
             } catch (GroupDuplicateException e) {//存在组
-                logger.error("method:groupOperation group duplicate;groupId:{},meshId:{}", groupId, meshId);
+                logger.error("method:groupOperation; group duplicate;groupId:{},meshId:{}", groupId, meshId);
                 model.put("result", ResultDict.DUPLICATE_GID.getCode());
                 model.put("result_message", ResultDict.DUPLICATE_GID.getValue());
             } catch (NotExitException e) {//不存在组
-                logger.error("method:groupOperation cannot find the group:{},meshId:{}", groupId, meshId);
+                logger.error("method:groupOperation; cannot find the group:{},meshId:{}", groupId, meshId);
                 model.put("result", ResultDict.NO_GROUP.getCode());
                 model.put("result_message", ResultDict.NO_GROUP.getValue());
             }
@@ -109,7 +109,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         } catch (NotExitException e) {
             model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
             model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-            logger.error("method groupsLists; meshid is null; meshId is {}, uid is {}", params.getString("meshId"),
+            logger.error("method groupsLists; meshid is null; meshId: {}, uid: {}", params.getString("meshId"),
                     params.getString("uid"));
         }
     }
@@ -417,7 +417,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 logger.error("method:lightAjust; service:saveLight(); db rollback; meshId:{},groupId:{}",
                         meshId, params.getInteger("dGroupId"));
             } catch (NotExitException e) {
-                System.out.println(e.getMessage());
                 model.put("result", ResultDict.PARAMS_BLANK.getCode());
                 model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
             }
