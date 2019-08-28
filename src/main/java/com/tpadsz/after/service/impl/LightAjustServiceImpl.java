@@ -231,7 +231,7 @@ public class LightAjustServiceImpl implements LightAjustService {
                     group = groupOperationService.createGroup(mid,pid,groupId);
                 }
                 gid = group.getId();
-            }else {
+            }else {//存在组 设置pid为对应组对应的区域
                 pid = groupMap.get("pid");
             }
             lightList.setGid(gid);
