@@ -14,6 +14,7 @@ import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.LightAjustService;
+import com.tpadsz.after.service.PlaceService;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,9 @@ public class AdjustComponentUtils {
 
     @Resource
     private SceneAjustDao sceneAjustDao;
+
+    @Resource
+    private PlaceService placeService;
 
 
     public void createGroup(Group group) throws NameDuplicateException, GroupDuplicateException {
@@ -98,10 +102,14 @@ public class AdjustComponentUtils {
 
     public List<LightList> getLightList(Group group, JSONObject params) throws NotExitException {
         String operation = params.getString("operation");
+        Integer pid;
+        String meshId = params.getString("meshId");
         if ("0".equals(operation)) {//扫描灯
             //v2.0 2.1版本默认groupId为0
             if (group.getGroupId() == null) {
                 group.setGroupId(0);
+                pid = placeService.getPlaceByGroupIdAndMeshId(0,meshId);
+                group.setPid(pid);
             }
         } else if ("2".equals(operation)) {//移动灯
             if (group.getGroupId() == null) {//未找到组

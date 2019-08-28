@@ -195,4 +195,8 @@
         SELECT group_id FROM f_group WHERE mid=#{mid} ORDER BY group_id DESC LIMIT 1
     </select>
 
+    <select id="getGidAndPid" resultType="map">
+        SELECT id,pid FROM f_group WHERE group_id=#{groupId} and mid=(SELECT id from f_mesh WHERE  mesh_id=#{meshId})
+    </select>
+
 </mapper>
