@@ -31,7 +31,7 @@ public class PCFileController {
     private org.apache.log4j.Logger logger = Logger.getLogger(this.getClass());
 
     @RequestMapping("/upload")
-    public String uploadFile(String params, MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         String downloadPath = PropertiesUtil.getPath("otaPath");
         String path = PropertiesUtil.getPath("upload");
         String str = file.getOriginalFilename();
@@ -45,7 +45,6 @@ public class PCFileController {
         }
         String txt = FileReadUtils.parseTxtFile(targetFile);
         saveFile(txt, downloadPath + str);
-        logger.warn("str=" + str);
         return "000";
     }
 
@@ -70,14 +69,21 @@ public class PCFileController {
         return map;
     }
 
-    public void saveFile(String str,String path) {
-        JSONObject jsonObject = JSONObject.parseObject(str);
-        JSONObject mesh=jsonObject.getJSONObject("Project_Mesh");
-        Map map = jsonObject.getJSONObject("Head");
-        map.put("File_Path",path);
-        map.put("Author_User_ID",1);
-        map.put("Mesh_ID",mesh.getString("Mesh_ID"));
-        map.put("Mesh_Name",mesh.getString("Mesh_Name"));
-        fileService.saveFile(map);
+    public void saveFile(String str, String path) {
+        Map map=new HashMap();
+        map.put("File_Path", path);
+        JSONObject jsonObject;
+        try {
+            jsonObject = JSONObject.parseObject(str);
+            JSONObject mesh = jsonObject.getJSONObject("Project_Mesh");
+            map = jsonObject.getJSONObject("Head");
+            map.put("Author_User_ID", 1);
+            map.put("Mesh_ID", mesh.getString("Mesh_ID"));
+            map.put("Mesh_Name", mesh.getString("Mesh_Name"));
+            fileService.saveFile(map);
+        } catch (Exception e) {
+            fileService.saveFile(map);
+            logger.error(e.getCause());
+        }
     }
 }

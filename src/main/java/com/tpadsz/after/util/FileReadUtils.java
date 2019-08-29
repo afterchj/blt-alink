@@ -1,14 +1,11 @@
 package com.tpadsz.after.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * @author hongjian.chen
@@ -38,7 +35,7 @@ public class FileReadUtils {
 //        return txtValue.toString();
 //    }
 
-    public static String parseTxtFile(File file){
+    public static String parseTxtFile(File file) {
         StringBuilder txtValue = new StringBuilder();
         InputStreamReader read = null;
         try {
@@ -49,20 +46,20 @@ public class FileReadUtils {
                 txtValue.append(lineTxt);
             }
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             try {
                 read.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         }
         return txtValue.toString();
     }
 
-    public static String pareUrlTxt(String uri) throws IOException {
+    public static String pareUrlTxt(String uri) {
         StringBuilder txtValue = new StringBuilder();
         BufferedReader br = null;
         try {
@@ -77,22 +74,26 @@ public class FileReadUtils {
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
-            br.close();
+            try {
+                br.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
         }
         return txtValue.toString();
     }
 
-    public static void main(String[] args) throws IOException {
-        String text = parseTxtFile(new File("C:/file/37853561.txt"));
-        JSONObject jsonObject=JSONObject.parseObject(text);
-
-        JSONObject mesh=jsonObject.getJSONObject("Project_Mesh");
-        Map head=jsonObject.getJSONObject("Head");
-        head.put("Mesh_ID",mesh.getString("Mesh_ID"));
-        head.put("Mesh_Name",mesh.getString("Mesh_Name"));
-//        String urlTxtInfo = pareUrlTxt("http://uichange.com/file/ota/37853561.txt");
-        logger.warn("text:" + JSON.toJSONString(head));
-    }
+//    public static void main(String[] args) throws IOException {
+//        String text = parseTxtFile(new File("C:/file/37853561.txt"));
+//        JSONObject jsonObject=JSONObject.parseObject(text);
+//
+//        JSONObject mesh=jsonObject.getJSONObject("Project_Mesh");
+//        Map head=jsonObject.getJSONObject("Head");
+//        head.put("Mesh_ID",mesh.getString("Mesh_ID"));
+//        head.put("Mesh_Name",mesh.getString("Mesh_Name"));
+////        String urlTxtInfo = pareUrlTxt("http://uichange.com/file/ota/37853561.txt");
+//        logger.warn("text:" + JSON.toJSONString(head));
+//    }
 }
