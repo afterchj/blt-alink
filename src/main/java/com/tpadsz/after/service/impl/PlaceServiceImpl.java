@@ -10,6 +10,7 @@ import com.tpadsz.after.entity.PlaceSave;
 import com.tpadsz.after.entity.SavePlaceFactory;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.service.PlaceService;
+import com.tpadsz.after.util.factory.PlaceBeanUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Resource
     private GroupOperationDao groupOperationDao;
+
+    @Resource
+    private PlaceBeanUtils placeBeanUtils;
 
     @Override
     public Map<String,Object> create(JSONObject params) throws NameDuplicateException {
@@ -63,7 +67,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void delete(JSONObject params){
-        String uid = params.getString("uid");
+//        String uid = params.getString("uid");
         String meshId = params.getString("meshId");
         Integer pid = params.getInteger("pid");//区域序列号
         Integer count = lightAjustDao.getLightByPid(pid);
@@ -107,4 +111,45 @@ public class PlaceServiceImpl implements PlaceService {
     public Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId) {
         return placeDao.getPlaceByGroupIdAndMeshId(dGroupId,meshId);
     }
+
+    /**
+     * 服务端根据pid自动创建区域
+     * @param uid
+     * @param meshId
+     * @param pname
+     * @return
+     */
+    @Override
+    public Integer SavePlace(String uid,String meshId,String pname){
+        pname = createPname(uid,meshId,pname);//赋予不重复的区域名
+        //创建恢复区
+        PlaceSave placeSave = placeBeanUtils.setPlaceSave(uid,meshId,pname,-1);
+        placeDao.savePlace(placeSave);
+        return placeSave.getPid();
+    }
+
+    /**
+     * 为创建区域赋予一个名称不重复的区域名
+     * @param uid
+     * @param meshId
+     * @param pname
+     * @return
+     */
+    public String createPname(String uid,String meshId,String pname){
+        int pnameNum = placeDao.getPname(uid,meshId,pname);
+        int num = 1;
+        StringBuffer sb = new StringBuffer();
+        StringBuffer preSb = new StringBuffer();
+        preSb.append("恢复区");
+        sb.append("恢复区");
+        while (pnameNum>0){//存在名称叫"恢复区"
+            pname = sb.append(num).toString();
+            sb = preSb;
+            pnameNum = placeDao.getPname(uid,meshId,pname);
+            num++;
+        }
+        return pname;
+    }
+
+
 }

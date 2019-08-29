@@ -1,7 +1,10 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.SceneAjustDao;
-import com.tpadsz.after.entity.*;
+import com.tpadsz.after.entity.LightSetting;
+import com.tpadsz.after.entity.SceneAjust;
+import com.tpadsz.after.entity.SceneLog;
+import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.SceneAjustService;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -38,7 +41,7 @@ public class SceneAjustServiceImpl implements SceneAjustService {
     }
 
     @Override
-    public void saveLightSetting(List<LightSetting> lightSettingList)throws Exception {
+    public void saveLightSetting(List<LightSetting> lightSettingList) throws SystemAlgorithmException {
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH,false);
         SceneAjustDao sceneAjustDao1 = sqlSession.getMapper(SceneAjustDao.class);
         try {
@@ -55,7 +58,7 @@ public class SceneAjustServiceImpl implements SceneAjustService {
             }
         }catch (Exception e){
             sqlSession.rollback();
-            throw e;
+            throw new SystemAlgorithmException("数据提交错误");
         }finally {
             sqlSession.close();
         }

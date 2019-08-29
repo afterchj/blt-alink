@@ -9,6 +9,7 @@ import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -22,4 +23,12 @@ public interface AdjustService {
             NotExitException;
 
     List<LightReturn> lightOperation(Group group, JSONObject params) throws SystemAlgorithmException, NotExitException;
+
+    void saveScene(JSONObject params) throws NotExitException, SystemAlgorithmException;
+
+    Map<String,Object> getGroupList(JSONObject params) throws NotExitException;
+
+    void renameLight(JSONObject params);
+
+    void saveDefaultScene(JSONObject params) throws NotExitException;
 }

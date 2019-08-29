@@ -65,4 +65,6 @@ public interface GroupOperationDao {
     void deleteGroupByPid(@Param("pid") Integer pid);
 
     Integer getLastGroup(@Param("mid") Integer mid);
+
+    Map<String,Integer> getGidAndPid(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
 }

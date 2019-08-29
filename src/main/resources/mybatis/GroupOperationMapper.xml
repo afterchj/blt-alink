@@ -75,14 +75,14 @@
         	l.lname,
         	l.gid,
         	l.type_id,
-        	l.product_id,
-        	p.product_name,
-        	p.irr_eff,
-        	p.power,
-        	p.voltage,
-        	p.current,
-        	p.tname,
-        	p.tnum
+        	l.product_id
+#         	p.product_name,
+#         	p.irr_eff,
+#         	p.power,
+#         	p.voltage,
+#         	p.current,
+#         	p.tname,
+#         	p.tnum
         FROM
     	  (
         	f_light l
@@ -159,7 +159,7 @@
     </select>
 
     <select id="getDefaultPlace" resultType="integer">
-        SELECT id FROM f_place WHERE mid=#{mid} and uid=#{uid} limit 1
+        SELECT id FROM f_place WHERE mid=#{mid} and uid=#{uid} and place_id=1
     </select>
 
     <insert id="saveGroupSetting">
@@ -193,6 +193,10 @@
 
     <select id="getLastGroup" resultType="integer">
         SELECT group_id FROM f_group WHERE mid=#{mid} ORDER BY group_id DESC LIMIT 1
+    </select>
+
+    <select id="getGidAndPid" resultType="map">
+        SELECT id,pid FROM f_group WHERE group_id=#{groupId} and mid=(SELECT id from f_mesh WHERE  mesh_id=#{meshId})
     </select>
 
 </mapper>
