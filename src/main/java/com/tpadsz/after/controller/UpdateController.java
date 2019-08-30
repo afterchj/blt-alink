@@ -49,12 +49,14 @@ public class UpdateController extends BaseDecodedController {
         UpdateInfo updateInfo = new UpdateInfo();
         String appId = params.getString("appId");
         String versionCode = params.getString("versionCode");
-        NewestFile newestFile = updateService.getNewestFile(appId);
+        String pkg = params.getString("pkg");
+        NewestFile newestFile = updateService.getNewestFile(appId,pkg);
         if (Integer.parseInt(versionCode) < newestFile.getVersionCode()) {
-            FileRecord fileRecord = updateService.getFileRecords(appId, newestFile.getVersionCode());
+            FileRecord fileRecord = updateService.getFileRecords(appId, newestFile.getVersionCode(),newestFile.getPkg());
             updateInfo.setUpdate(true);
             updateInfo.setApkUrl(fileRecord.getPath());
             updateInfo.setVersionCode(fileRecord.getVersionCode());
+            updateInfo.setPkg(fileRecord.getPkg());
             updateInfo.setVersion(fileRecord.getVersionName());
             updateInfo.setSize(fileRecord.getSize());
             updateInfo.setMd5(fileRecord.getMd5());
