@@ -1,11 +1,9 @@
 package com.tpadsz.after.controller;
 
-
-
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,14 +15,6 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/home")
 public class HomeController {
-
-
-    private Logger log = Logger.getLogger(HomeController.class);
-
-    @RequestMapping(value = "/toChat")
-    public String toChat() {
-        return "websocket";
-    }
 
     @RequestMapping(value = "/login")
     public String login() {
