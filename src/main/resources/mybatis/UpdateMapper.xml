@@ -30,7 +30,7 @@
 	</select>
 
     <select id="getFileRecords" resultMap="standardFileRecordMap">
-        select app_id,version_code,version_name,path,md5,size,update_log,force_update from file_records where
+        select app_id,version_code,pkg,version_name,path,md5,size,update_log,force_update from file_records where
         app_id= #{appId} and version_code= #{versionCode} and pkg= #{pkg}
     </select>
 
