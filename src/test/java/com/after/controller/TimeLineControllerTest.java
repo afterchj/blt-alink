@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.TimeLineDao;
 import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.entity.SceneLog;
 import com.tpadsz.after.entity.time.ProjectTimer;
 import com.tpadsz.after.service.TimeLineService;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -102,7 +103,7 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void createTest(){
+    public void createTest() {
         String data = "{\"item_set\":\"0\",\"week\":\"重复,周日,周一,周二,周三,周四,周五,周六\",\"ischoose\":false," +
                 "\"item_desc\":\"重复,周日,周一,周二,周三,周四,周五,周六\",\"timePointList\":\"[{\\\"hour\\\":1," +
                 "\\\"light_status\\\":0,\\\"minute\\\":35,\\\"pos_x\\\":508,\\\"sence_index\\\":1,\\\"time\\\":0}," +
@@ -125,7 +126,7 @@ public class TimeLineControllerTest {
         JSONObject jsonObject = JSONObject.parseObject(data);
 //        String timePointList = jsonObject.getString("timePointList");
         JSONArray jsonTimePointList = jsonObject.getJSONArray("timePointList");
-        jsonObject.put("timePointList",jsonTimePointList);
+        jsonObject.put("timePointList", jsonTimePointList);
         System.out.println(jsonObject.toJSONString());
 //        jsonObject.remove("timePointList");
 //        jsonObject.put("timePointList",jsonTimePointList);
@@ -139,7 +140,7 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void test(){
+    public void test() {
         String data = "{\"uid\":\"7\",\"tname\":\"test1\",\"tid\":300,\"week\":\"周日、周一\",\"state\":\"0\"," +
                 "\"repetition\":\"0\",\"meshId\":\"84137526\",\"dayObj\":{\"fri\":1,\"loop\":1,\"mon\":1,\"sat\":1," +
                 "\"sun\":1,\"thr\":1,\"tus\":1,\"wed\":1},\"ischoose\":true,\"item_desc\":\"重复,周日,周一,周二,周三,周四,周五," +
@@ -156,7 +157,7 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void getProjectTimersTest(){
+    public void getProjectTimersTest() {
         String jsonStr = "{\"projectId\":450}";
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         ProjectTimer projectTimers = timeLineService.getProjectTimers(jsonObject);
@@ -164,7 +165,7 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void gsonTest(){
+    public void gsonTest() {
         String jsonStr = "{\"item_set\":\"0\",\"week\":\"重复,周日,周一,周二,周三,周四,周五,周六\",\"ischoose\":false," +
                 "\"item_desc\":\"重复,周日,周一,周二,周三,周四,周五,周六\",\"timePointList\":\"[{\\\"hour\\\":1," +
                 "\\\"light_status\\\":0,\\\"minute\\\":35,\\\"pos_x\\\":508,\\\"sence_index\\\":1,\\\"time\\\":0}," +
@@ -189,8 +190,57 @@ public class TimeLineControllerTest {
     }
 
     @Test
-    public void listSizeTest(){
+    public void listSizeTest() {
         List<LightReturn> lightReturns = new ArrayList<>();
         System.out.println(lightReturns.size());
     }
+
+    enum GroupOpeEnum {
+        create("0") {
+            //            public void doOperation(Group group) throws NameDuplicateException, GroupDuplicateException {
+//                adjustComponentUtils.createGroup(group);
+//            }
+            public void getName() {
+//                timeLineService.getProjectTimers(parms);
+                System.out.println(111);
+            }
+        };
+
+        abstract void getName();
+
+        private String key;
+
+        GroupOpeEnum(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public static GroupOpeEnum getValueByKey(String key) {
+            for (GroupOpeEnum s : GroupOpeEnum.values()) {
+                if (s.getKey().equals(key)) {
+                    return s;
+                }
+            }
+            return null;
+        }
+
+    }
+
+    @Test
+    public void enumTest() {
+        String operation = "0";
+        GroupOpeEnum.getValueByKey(operation).getName();
+//        GroupOpeEnum.create.getName();
+
+    }
+
+    @Test
+    public void builderTest(){
+        SceneLog sceneLog = new SceneLog.Builder().sceneId(10).operation("0").meshId("11223344").build();
+        System.out.println(sceneLog.getMeshId());
+    }
+
 }

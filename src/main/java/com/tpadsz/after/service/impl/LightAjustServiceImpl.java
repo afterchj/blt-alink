@@ -221,7 +221,7 @@ public class LightAjustServiceImpl implements LightAjustService {
                 if (version == null){
                     //组放到扫描区中
                     group = groupOperationService.createGroup(mid,pid,groupId);
-                }else if (version == 2){
+                }else if (version == 2){//2.2.0版本
                     //组放到恢复区中
                     pid = placeDao.getRecoverPlace(mid);//获取恢复区
                     if (pid == null){//创建恢复区

@@ -62,6 +62,8 @@ public class AdjustServiceImpl implements AdjustService {
     @Resource
     private LightAjustDao lightAjustDao;
 
+
+
     /**
      * 组操作
      * @param group 组信息

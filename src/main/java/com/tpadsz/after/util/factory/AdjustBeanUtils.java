@@ -63,13 +63,19 @@ public class AdjustBeanUtils {
     }
 
     public SceneLog setSceneLog(String uid, String bltFlag, String meshId, Integer sceneId){
-        SceneLog sceneLog = new SceneLog();
-        sceneLog.setUid(uid);
-        sceneLog.setBltFlag(bltFlag);
-        sceneLog.setMeshId(meshId);
-        sceneLog.setOperation("0");
-        sceneLog.setSceneId(sceneId);
-        return sceneLog;
+//        SceneLog sceneLog = new SceneLog();
+//        sceneLog.setUid(uid);
+//        sceneLog.setBltFlag(bltFlag);
+//        sceneLog.setMeshId(meshId);
+//        sceneLog.setOperation("0");
+//        sceneLog.setSceneId(sceneId);
+        return new SceneLog.Builder()
+                .uid(uid)
+                .bltFlag(bltFlag)
+                .meshId(meshId)
+                .operation("0")
+                .sceneId(sceneId)
+                .build();
     }
 
     public SceneAjust setSceneAjust(Integer sceneId, String uid, Integer mid, String sname){
