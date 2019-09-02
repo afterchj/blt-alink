@@ -22,8 +22,8 @@
     <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
-                <!--<value>classpath:setup.test.properties</value>-->
-                <value>classpath:setup.development.properties</value>
+                <value>classpath:setup.test.properties</value>
+                <!--<value>classpath:setup.development.properties</value>-->
                 <!--<value>classpath:setup.production.properties</value>-->
             </list>
         </property>
