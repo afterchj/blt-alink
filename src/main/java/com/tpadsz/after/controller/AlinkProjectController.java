@@ -476,11 +476,13 @@ public class AlinkProjectController extends BaseDecodedController {
         try {
             String meshId = String.valueOf(map.get("meshId"));
             String info = projectService.getInfoByMeshId(meshId);
-            if (info.startsWith("\"")) {
-                info = info.substring(1);
-            }
-            if (info.endsWith("\"")) {
-                info = info.substring(0,info.length() - 1);
+            if(info!=null) {
+                if (info.startsWith("\"")) {
+                    info = info.substring(1);
+                }
+                if (info.endsWith("\"")) {
+                    info = info.substring(0, info.length() - 1);
+                }
             }
             model.put("data", info);
             model.put("result", ResultDict.SUCCESS.getCode());
