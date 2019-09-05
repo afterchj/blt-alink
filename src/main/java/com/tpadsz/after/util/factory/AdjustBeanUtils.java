@@ -50,7 +50,7 @@ public class AdjustBeanUtils {
         }
         if (dGroupId != null){
             group.setGroupId(dGroupId);//存在dGroup是对灯操作
-            pid = placeService.getPlaceByGroupIdAndMeshId(dGroupId,meshId);
+            pid = placeService.getPlaceByGroupIdAndMeshId(dGroupId,meshId,uid);
             group.setPid(pid);//移动灯后目标组的pid
         }
         group.setUid(uid);

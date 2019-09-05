@@ -14,7 +14,7 @@ public class Timer {
     private JSONObject TimerLine;
 
 
-        public JSONObject getTimerLine() {
+    public JSONObject getTimerLine() {
         return TimerLine;
     }
 

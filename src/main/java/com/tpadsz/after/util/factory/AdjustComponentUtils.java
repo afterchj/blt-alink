@@ -108,7 +108,7 @@ public class AdjustComponentUtils {
             //v2.0 2.1版本默认groupId为0
             if (group.getGroupId() == null) {
                 group.setGroupId(0);
-                pid = placeService.getPlaceByGroupIdAndMeshId(0,meshId);
+                pid = placeService.getPlaceByGroupIdAndMeshId(0,meshId,params.getString("uid"));
                 group.setPid(pid);
             }
         } else if ("2".equals(operation)) {//移动灯

@@ -24,7 +24,7 @@ public interface PlaceService {
 
     List<PlaceExtend> getPlacesAndGroups(List<Map<String, Object>> placeNum);
 
-    Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId);
+    Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId,String uid);
 
     Integer SavePlace(String uid,String meshId,String pname);
 }

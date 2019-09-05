@@ -184,7 +184,8 @@
     </update>
 
     <select id="getGidByGroupIdAndMeshId" resultType="integer">
-        select id from f_group where group_id=#{groupId} and mid=(select id from f_mesh where mesh_id=#{meshId})
+        select id from f_group where group_id=#{groupId} and mid=(select id from f_mesh where mesh_id=#{meshId} and
+                                                                                              uid=#{uid})
     </select>
 
     <delete id="deleteGroupByPid">
@@ -196,7 +197,8 @@
     </select>
 
     <select id="getGidAndPid" resultType="map">
-        SELECT id,pid FROM f_group WHERE group_id=#{groupId} and mid=(SELECT id from f_mesh WHERE  mesh_id=#{meshId})
+        SELECT id,pid FROM f_group WHERE group_id=#{groupId} and mid=(SELECT id from f_mesh WHERE  mesh_id=#{meshId}
+       and uid=#{uid})
     </select>
 
 </mapper>

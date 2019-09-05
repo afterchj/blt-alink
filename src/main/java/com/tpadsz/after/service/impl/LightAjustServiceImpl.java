@@ -214,8 +214,8 @@ public class LightAjustServiceImpl implements LightAjustService {
             groupId = lights.getJSONObject(i).getInteger("groupId");
             productId = lights.getJSONObject(i).getString("productId");
             productId = productId.split(" ")[0];
-            Integer gid = groupOperationDao.getGidByGroupIdAndMeshId(groupId,meshId);
-            Map<String,Integer> groupMap= groupOperationDao.getGidAndPid(groupId,meshId);
+            Integer gid = groupOperationDao.getGidByGroupIdAndMeshId(groupId,meshId,uid);
+            Map<String,Integer> groupMap= groupOperationDao.getGidAndPid(groupId,meshId,uid);
             if (gid == null){//创建组
                 //2.1.2 版本
                 if (version == null){

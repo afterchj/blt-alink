@@ -71,7 +71,8 @@
     </select>
 
     <select id="getPlaceByGroupIdAndMeshId" resultType="integer">
-        select pid from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId}
+        select pid from f_group where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and
+                                      group_id=#{groupId}
     </select>
 
     <select id="getRecoverPlace" resultType="integer">

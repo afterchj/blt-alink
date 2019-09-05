@@ -108,8 +108,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId) {
-        return placeDao.getPlaceByGroupIdAndMeshId(dGroupId,meshId);
+    public Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId,String uid) {
+        return placeDao.getPlaceByGroupIdAndMeshId(dGroupId,meshId, uid);
     }
 
     /**

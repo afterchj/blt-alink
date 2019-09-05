@@ -60,11 +60,13 @@ public interface GroupOperationDao {
     
     void updateLightPid(@Param("groupId") Integer groupId, @Param("pid") Integer pid,@Param("meshId") String meshId);
 
-    Integer getGidByGroupIdAndMeshId(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
+    Integer getGidByGroupIdAndMeshId(@Param("groupId") Integer groupId, @Param("meshId") String meshId,@Param("uid")
+            String uid);
 
     void deleteGroupByPid(@Param("pid") Integer pid);
 
     Integer getLastGroup(@Param("mid") Integer mid);
 
-    Map<String,Integer> getGidAndPid(@Param("groupId") Integer groupId, @Param("meshId") String meshId);
+    Map<String,Integer> getGidAndPid(@Param("groupId") Integer groupId, @Param("meshId") String meshId,@Param("uid")
+            String uid);
 }
