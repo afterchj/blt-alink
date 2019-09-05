@@ -10,11 +10,20 @@ public class UpdateInfo {
     private boolean update;
     private String apkUrl;
     private Integer versionCode;
+    private String pkg;
     private String version;
     private Integer size;
     private String md5;
     private String updateLog;
     private boolean force;
+
+    public String getPkg() {
+        return pkg;
+    }
+
+    public void setPkg(String pkg) {
+        this.pkg = pkg;
+    }
 
     public String getResultCode() {
         return resultCode;
@@ -104,6 +113,7 @@ public class UpdateInfo {
                 ", \"update\":" + update  +
                 ", \"apkUrl\":\"" + apkUrl + '\"' +
                 ", \"versionCode\":" + versionCode +
+                ", \"pkg\":" + pkg +
                 ", \"version\":\"" + version + '\"' +
                 ", \"size\":" + size +
                 ", \"md5\":\"" + md5 + '\"' +

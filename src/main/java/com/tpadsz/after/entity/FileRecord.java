@@ -7,6 +7,7 @@ import java.util.Date;
 public class FileRecord implements Serializable {
     String appId;
     Integer versionCode;
+    String pkg;
     String versionName;
     String path;
     String md5;
@@ -32,6 +33,14 @@ public class FileRecord implements Serializable {
 
     public void setVersionCode(Integer versionCode) {
         this.versionCode = versionCode;
+    }
+
+    public String getPkg() {
+        return pkg;
+    }
+
+    public void setPkg(String pkg) {
+        this.pkg = pkg;
     }
 
     public String getVersionName() {

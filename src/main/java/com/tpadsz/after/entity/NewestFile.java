@@ -7,6 +7,7 @@ public class NewestFile {
 
     private String appId;
     private Integer versionCode;
+    private String pkg;
 
     public String getAppId() {
         return appId;
@@ -24,4 +25,11 @@ public class NewestFile {
         this.versionCode = versionCode;
     }
 
+    public String getPkg() {
+        return pkg;
+    }
+
+    public void setPkg(String pkg) {
+        this.pkg = pkg;
+    }
 }

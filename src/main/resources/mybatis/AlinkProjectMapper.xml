@@ -279,7 +279,7 @@
     </select>
 
     <select id="getInfoByMeshId" resultType="string">
-        SELECT info from f_pc_info WHERE mesh_id=#{meshId} ORDER BY create_date desc limit 1
+        SELECT info from f_pc_info WHERE mesh_id=#{meshId} and info is not null ORDER BY create_date desc limit 1
     </select>
 
 </mapper>

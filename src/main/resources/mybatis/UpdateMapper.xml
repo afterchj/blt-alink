@@ -12,6 +12,7 @@
     <resultMap type="FileRecord" id="standardFileRecordMap">
         <id property="appId" column="app_id" javaType="String" jdbcType="VARCHAR"/>
         <result property="versionCode" column="version_code" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="pkg" column="pkg" javaType="String" jdbcType="VARCHAR"/>
         <result property="versionName" column="version_name" javaType="String" jdbcType="VARCHAR"/>
         <result property="path" column="path" javaType="String" jdbcType="VARCHAR"/>
         <result property="md5" column="md5" javaType="String" jdbcType="VARCHAR"/>
@@ -25,12 +26,12 @@
     </resultMap>
 
     <select id="getNewestFile" resultMap="standardNewestFileMap" parameterType="string">
-		select app_id,version_code from file_records where app_id= #{appId} ORDER BY create_date DESC LIMIT 1
+		select app_id,version_code,pkg from file_records where app_id= #{appId} and pkg = IFNULL(#{pkg},'default') ORDER BY create_date DESC LIMIT 1
 	</select>
 
     <select id="getFileRecords" resultMap="standardFileRecordMap">
-        select app_id,version_code,version_name,path,md5,size,update_log,force_update from file_records where
-        app_id= #{appId} and version_code= #{versionCode}
+        select app_id,version_code,pkg,version_name,path,md5,size,update_log,force_update from file_records where
+        app_id= #{appId} and version_code= #{versionCode} and pkg= #{pkg}
     </select>
 
     <select id="findAccountByUid" resultType="string" parameterType="string">

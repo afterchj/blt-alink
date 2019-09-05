@@ -14,13 +14,13 @@ public class UpdateServiceImpl implements UpdateService {
     UpdateDao updateDao;
 
     @Override
-    public NewestFile getNewestFile(String appId) {
-        return updateDao.getNewestFile(appId);
+    public NewestFile getNewestFile(String appId,String pkg) {
+        return updateDao.getNewestFile(appId,pkg);
     }
 
     @Override
-    public FileRecord getFileRecords(String appId, int versionCode) {
-        return updateDao.getFileRecords(appId,versionCode);
+    public FileRecord getFileRecords(String appId, int versionCode,String pkg) {
+        return updateDao.getFileRecords(appId,versionCode,pkg);
     }
 
     @Override
