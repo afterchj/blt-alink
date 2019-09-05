@@ -11,6 +11,7 @@
         <parameter property="Last_Edit_User_Name" mode="IN"/>
         <parameter property="Mesh_ID" mode="IN"/>
         <parameter property="Mesh_Name" mode="IN"/>
+        <parameter property="info" mode="IN"/>
         <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
     </parameterMap>
 
@@ -23,6 +24,6 @@
     </select>
 
     <select id="saveFile" parameterMap="fileMapper" resultType="map" statementType="CALLABLE">
-        CALL save_pc_file(?,?,?,?,?,?,?,?,?)
+        CALL save_pc_file(?,?,?,?,?,?,?,?,?,?)
     </select>
 </mapper>

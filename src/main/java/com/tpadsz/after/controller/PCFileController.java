@@ -70,18 +70,20 @@ public class PCFileController {
     }
 
     public void saveFile(String str, String path) {
-        Map map=new HashMap();
-        map.put("File_Path", path);
+        Map map = new HashMap();
         JSONObject jsonObject;
         try {
             jsonObject = JSONObject.parseObject(str);
             JSONObject mesh = jsonObject.getJSONObject("Project_Mesh");
             map = jsonObject.getJSONObject("Head");
+            map.put("File_Path", path);
             map.put("Author_User_ID", 1);
             map.put("Mesh_ID", mesh.getString("Mesh_ID"));
             map.put("Mesh_Name", mesh.getString("Mesh_Name"));
+            map.put("info", str);
             fileService.saveFile(map);
         } catch (Exception e) {
+            map.put("File_Path", path);
             fileService.saveFile(map);
             logger.error(e.getCause());
         }
