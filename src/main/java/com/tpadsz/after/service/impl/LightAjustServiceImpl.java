@@ -251,8 +251,10 @@ public class LightAjustServiceImpl implements LightAjustService {
                     //删除light_setting中的场景记录
                     lightAjustDao.deleteLightSettingByLmac(lmac);
                     lightAjustDao.updateLightGidAndMid(lightList);
+                }else {
+                    lightAjustDao.updateLightGidAndLmac(lightList);
                 }
-                lightAjustDao.updateLightGidAndLmac(lightList);
+
             }
 
 
