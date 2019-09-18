@@ -94,7 +94,7 @@ public class AlinkProjectController extends BaseDecodedController {
                 }
                 model.put("result", ResultDict.SUCCESS.getCode());
             } else {
-                Mesh mesh = projectService.findRepeatIdByUid(preId, uid);
+                Mesh mesh = projectService.findRepeatIdByUid(preId, uid,flag);
                 if (mesh != null) {
                     Project project = projectService.findProjectById(mesh.getProject_id());
                     if ("freezing".equals(mesh.getOther())) {
@@ -124,10 +124,9 @@ public class AlinkProjectController extends BaseDecodedController {
 
     @RequestMapping(value = "/proDetail", method = RequestMethod.POST)
     public String proDetail(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
-        String uid = params.getString("uid");
         String projectId = params.getString("projectId");
         try {
-            List<Mesh> list = projectService.findProDetailByUid(uid, Integer.parseInt(projectId));
+            List<Mesh> list = projectService.findProDetailByUid(Integer.parseInt(projectId));
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("meshList", list);
         } catch (Exception e) {
