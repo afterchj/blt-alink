@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
+import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.dao.SceneAjustDao;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
@@ -51,6 +52,9 @@ public class AdjustComponentUtils {
     @Resource
     private PlaceService placeService;
 
+    @Resource
+    private PlaceDao placeDao;
+
 
     public void createGroup(Group group) throws NameDuplicateException, GroupDuplicateException {
         String dbGname = groupOperationDao.getGname(group);
@@ -58,6 +62,8 @@ public class AdjustComponentUtils {
             throw new NameDuplicateException("组名重复");
         }
         if (group.getGid() == null) {
+//            Integer pid = placeDao.getPlaceByGroupIdAndMeshId(group.getGroupId(),group.getMeshId(),group.getUid());
+//            group.setPid(pid);
             groupOperationDao.saveGroup(group);
         } else {
             throw new GroupDuplicateException("存在组");
