@@ -34,7 +34,7 @@
 
     <select id="getByUidAndMeshId" resultType="com.tpadsz.after.entity.TimeBean">
           select tid,mid,json from f_time_json where mid= ( SELECT id FROM f_mesh WHERE
-                  mesh_id=#{meshId} AND uid = #{uid} )
+                  mesh_id=#{meshId} )
     </select>
 
     <delete id="delete">
