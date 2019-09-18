@@ -26,7 +26,12 @@
     </resultMap>
 
     <select id="findRepeatIdByUid" resultMap="standardMeshMap" parameterType="string">
-        SELECT * from ( SELECT * from f_mesh m WHERE m.uid = #{uid} and LENGTH(m.mesh_id)=8) as a where a.mesh_id LIKE CONCAT(#{mesh_id},'%')
+        <if test="flag == null">
+            SELECT * from ( SELECT * from f_mesh m WHERE m.uid = #{uid} and LENGTH(m.mesh_id)=8) as a where a.mesh_id LIKE CONCAT(#{mesh_id},'%')
+        </if>
+        <if test="flag != null">
+        SELECT * from ( SELECT * from f_mesh m WHERE m.uid IN (SELECT uid FROM f_user_customer WHERE fid=(SELECT fid FROM f_user_customer WHERE uid=#{uid})) and LENGTH(m.mesh_id)=8) as a where a.mesh_id LIKE CONCAT(#{mesh_id},'%')
+        </if>
     </select>
 
     <select id="findFullyRepeatIdByUid" resultType="int" parameterType="string">
@@ -102,7 +107,12 @@
     </insert>
 
     <select id="findProListByUid" resultMap="standardProjectMap" parameterType="string">
+        <if test="flag == null">
         SELECT * from f_project where uid = #{uid} and other NOT IN ('old','freezing','freezingOld') or uid=#{uid} and other is null ORDER BY update_date DESC,create_date DESC
+        </if>
+        <if test="flag != null">
+        SELECT * from f_project where uid IN (SELECT uid FROM f_user_customer WHERE fid=(SELECT fid FROM f_user_customer WHERE uid=#{uid})) and other NOT IN ('old','freezing','freezingOld') or uid IN (SELECT uid FROM f_user_customer WHERE fid=(SELECT fid FROM f_user_customer WHERE uid=#{uid})) and other is null ORDER BY update_date DESC,create_date DESC
+        </if>
     </select>
 
     <select id="findOldProByUid" resultMap="standardProjectMap">
@@ -119,7 +129,7 @@
     </update>
 
     <select id="findProDetailByUid" resultMap="standardMeshMap">
-        SELECT * from f_mesh where project_id = #{projectId} and uid = #{uid} ORDER BY update_date DESC, create_date DESC
+        SELECT * from f_mesh where project_id = #{projectId} ORDER BY update_date DESC, create_date DESC
     </select>
 
 

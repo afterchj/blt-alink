@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ProjectDao {
 
-    Mesh findRepeatIdByUid(@Param("mesh_id")String meshId, @Param("uid")String uid);
+    Mesh findRepeatIdByUid(@Param("mesh_id")String meshId, @Param("uid")String uid,@Param("flag")String flag);
 
     int findFullyRepeatIdByUid(@Param("mesh_id")String meshId);
 
@@ -22,7 +22,7 @@ public interface ProjectDao {
 
     void recordMeshId(@Param("mesh_id")String meshId);
 
-    List<Project> findProListByUid(@Param("uid")String uid);
+    List<Project> findProListByUid(@Param("uid")String uid,@Param("flag")String flag);
 
     Project findOldProByUid(@Param("uid")String uid);
 
@@ -32,7 +32,7 @@ public interface ProjectDao {
 
     void rename(@Param("id")int id, @Param("name")String name,@Param("renameFlag")int renameFlag);
 
-    List<Mesh> findProDetailByUid(@Param("uid")String uid, @Param("projectId")int projectId);
+    List<Mesh> findProDetailByUid(@Param("projectId")int projectId);
 
     //删除部分
     int findLightByMid(@Param("id")int id);

@@ -10,11 +10,11 @@ import java.util.List;
  */
 public interface ProjectService {
 
-    Mesh findRepeatIdByUid(String preId,String uid);
+    Mesh findRepeatIdByUid(String preId,String uid,String flag);
 
     int findFullyRepeatIdByUid(String meshId);
 
-    List<Project> findProListByUid(String uid);
+    List<Project> findProListByUid(String uid,String flag);
 
     Project findOldProByUid(String uid);
 
@@ -30,7 +30,7 @@ public interface ProjectService {
 
     void recordMeshId(String meshId);
 
-    List<Mesh> findProDetailByUid(String uid, int projectId);
+    List<Mesh> findProDetailByUid(int projectId);
 
     //删除部分
     int findLightByMid(int id);

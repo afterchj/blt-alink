@@ -19,8 +19,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
-    public Mesh findRepeatIdByUid(String preId, String uid) {
-        return projectDao.findRepeatIdByUid(preId, uid);
+    public Mesh findRepeatIdByUid(String preId, String uid,String flag) {
+        return projectDao.findRepeatIdByUid(preId, uid,flag);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findProListByUid(String uid) {
-        return projectDao.findProListByUid(uid);
+    public List<Project> findProListByUid(String uid,String flag) {
+        return projectDao.findProListByUid(uid,flag);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public int createMesh(Mesh mesh) throws RepetitionException {
         int result;
-        Mesh mesh2 = projectDao.findRepeatIdByUid(mesh.getMesh_id().substring(0, 4), mesh.getUid());
+        Mesh mesh2 = projectDao.findRepeatIdByUid(mesh.getMesh_id().substring(0, 4), mesh.getUid(),null);
         if (mesh2 == null) {
             String mname = projectDao.findRepeatNameByUid(mesh.getUid(), mesh.getMname(),mesh.getProject_id());
             if (mname == null) {
@@ -90,8 +90,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Mesh> findProDetailByUid(String uid, int projectId) {
-        return projectDao.findProDetailByUid(uid, projectId);
+    public List<Mesh> findProDetailByUid(int projectId) {
+        return projectDao.findProDetailByUid(projectId);
     }
 
     @Override

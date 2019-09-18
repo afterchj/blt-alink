@@ -98,6 +98,10 @@ public class AlinkLoginController extends BaseDecodedController {
                     model.put("result", ResultDict.ACCOUNT_DISABLED.getCode());
                     model.put("result_message", ResultDict.ACCOUNT_DISABLED.getValue());
                 } else {
+                    Integer role_id = alinkLoginService.findRoleIdByUid(appUser.getId());
+                    if(role_id==14){
+                        appUser.setUtype("salesman");
+                    }
                     String token = alinkLoginService.generateToken(appUser.getId());
                     model.put("token", token);
                     appUser.setPwd(null);
