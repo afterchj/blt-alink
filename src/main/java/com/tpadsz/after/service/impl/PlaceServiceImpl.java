@@ -102,8 +102,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceExtend> getPlacesAndGroups(List<Map<String, Object>> placeNum) {
-        int mid = (int) placeNum.get(0).get("mid");
+    public List<PlaceExtend> getPlacesAndGroups(Integer mid) {
         return placeDao.getPlacesAndGroups(mid);
     }
 

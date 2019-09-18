@@ -7,7 +7,6 @@ import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.PlaceService;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.text.StrBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,12 +52,8 @@ public class PlaceControllerTest {
 
     @Test
     public void getPlacesAndGroupsTest(){
-        List<Map<String, Object>> placeNum = new ArrayList<>();
-        Map<String,Object> placeMap = new HashedMap();
-        placeMap.put("pid",2501);
-        placeMap.put("mid",20066);
-        placeNum.add(placeMap);
-        List<PlaceExtend> places = placeService.getPlacesAndGroups(placeNum);
+        Integer mid=20066;
+        List<PlaceExtend> places = placeService.getPlacesAndGroups(mid);
         System.out.println(places.toString());
 
     }
