@@ -49,10 +49,11 @@ public class AlinkProjectController extends BaseDecodedController {
     public String findProList(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         String uid = params.getString("uid");
         String preId = params.getString("preId");
+        String flag = params.getString("flag");
         List<ProjectVo> listVo = new ArrayList<>();
         try {
             if ("".equals(preId)) {
-                List<Project> list = projectService.findProListByUid(uid);
+                List<Project> list = projectService.findProListByUid(uid,flag);
                 if (list.size() != 0) {
                     for (Project project : list) {
                         ProjectVo projectVo = new ProjectVo();

@@ -14,7 +14,7 @@ public interface ProjectService {
 
     int findFullyRepeatIdByUid(String meshId);
 
-    List<Project> findProListByUid(String uid);
+    List<Project> findProListByUid(String uid,String flag);
 
     Project findOldProByUid(String uid);
 

@@ -22,7 +22,7 @@ public interface ProjectDao {
 
     void recordMeshId(@Param("mesh_id")String meshId);
 
-    List<Project> findProListByUid(@Param("uid")String uid);
+    List<Project> findProListByUid(@Param("uid")String uid,@Param("flag")String flag);
 
     Project findOldProByUid(@Param("uid")String uid);
 

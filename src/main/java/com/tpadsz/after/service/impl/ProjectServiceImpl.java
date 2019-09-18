@@ -29,8 +29,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findProListByUid(String uid) {
-        return projectDao.findProListByUid(uid);
+    public List<Project> findProListByUid(String uid,String flag) {
+        return projectDao.findProListByUid(uid,flag);
     }
 
     @Override
