@@ -14,6 +14,19 @@
         <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
     </parameterMap>
 
+    <sql id="common_choose">
+        <if test="uid!=null and uid!=''">
+            <choose>
+                <when test="role == 'salesman'">
+                    AND s.uid IN (SELECT c.uid FROM f_user_customer c WHERE fid=(SELECT fid FROM f_user_customer WHERE
+                    uid=#{uid}))
+                </when>
+                <otherwise>
+                    AND s.uid =#{uid}
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
     <select id="saveOperation" parameterMap="consoleMapper" statementType="CALLABLE">
 		CALL save_operation (?,?,?,?,?,?,?,?,?)
 	</select>
@@ -33,7 +46,14 @@
 		AND uid = #{uid}
 		)
 	</update>
-
+    <select id="selectById" resultType="string" parameterType="java.lang.String">
+        SELECT
+        r.role_type
+        FROM f_role r
+        INNER JOIN f_user_role ur ON ur.role_id = r.id
+        INNER JOIN f_user_account u ON u.id = ur.user_id
+        WHERE u.id = #{uid}
+    </select>
     <select id="getTotal" parameterType="map" resultType="int">
 		SELECT COUNT(0) total
 		FROM f_light l
@@ -77,13 +97,17 @@
         FROM
         f_mesh m
         INNER JOIN f_scene s ON m.id = s.mid
-        WHERE s.uid = #{uid}
-        AND m.mesh_id = #{meshId}
+        WHERE 1=1
+        <include refid="common_choose"></include>
         <if test="sceneId!=null">
             AND s.scene_id=#{sceneId}
         </if>
+        <if test="meshId!=null">
+            AND m.mesh_id = #{meshId}
+        </if>
         GROUP BY m.mesh_id,s.scene_id,s.sname
     </select>
+
     <select id="getCount" resultType="Integer" parameterType="map">
 		SELECT COUNT(0) tcount FROM f_time_point WHERE sid = (
 			SELECT s.id

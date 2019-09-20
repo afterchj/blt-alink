@@ -17,7 +17,7 @@ public interface BltConsoleDao {
     List getLightsInfo(Map map);
 
     List getAll(Map map);
-
+    String selectById(String uid);
     Integer getPid(Map map);
 
     Integer getCount(Map map);
