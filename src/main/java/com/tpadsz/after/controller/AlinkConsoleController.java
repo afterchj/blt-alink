@@ -37,6 +37,8 @@ public class AlinkConsoleController extends BaseDecodedController {
 
     @RequestMapping("/show")
     public void bltInfo(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
+        String role = bltConsoleService.selectById(param.getString("uid"));
+        param.put("role", role);
         List scenes = bltConsoleService.getScenes(param);
         int total = bltConsoleService.getTotal(param);
         Integer pid = bltConsoleService.getPid(param);

@@ -2,6 +2,7 @@ package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.config.WebSocket;
 import com.tpadsz.after.service.PCFileService;
 import com.tpadsz.after.util.FileReadUtils;
 import com.tpadsz.after.util.PropertiesUtil;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author hongjian.chen
@@ -45,6 +47,9 @@ public class PCFileController {
         }
         String txt = FileReadUtils.parseTxtFile(targetFile);
         saveFile(txt, downloadPath + str);
+        Map map = new ConcurrentHashMap<>();
+        map.put("newVersionCode","123");
+        WebSocket.sendMessage(map);
         return "000";
     }
 

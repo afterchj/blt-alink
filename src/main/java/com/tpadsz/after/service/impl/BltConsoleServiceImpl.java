@@ -45,6 +45,11 @@ public class BltConsoleServiceImpl implements BltConsoleService {
     }
 
     @Override
+    public String selectById(String uid) {
+        return bltConsoleDao.selectById(uid);
+    }
+
+    @Override
     public int getTotal(Map map) {
         return bltConsoleDao.getTotal(map);
     }

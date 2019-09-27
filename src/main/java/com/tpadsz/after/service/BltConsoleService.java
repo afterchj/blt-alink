@@ -20,11 +20,13 @@ public interface BltConsoleService {
 
     List getAll(Map map);
 
+    String selectById(String uid);
+
     int getTotal(Map map);
 
     Integer getPid(Map map);
 
-    Integer getCount(Map map)throws NotExitException;
+    Integer getCount(Map map) throws NotExitException;
 
     void saveApplyScene(Map map);
 
