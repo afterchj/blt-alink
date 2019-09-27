@@ -87,4 +87,17 @@ public class PlaceController extends BaseDecodedController {
 
     }
 
+    /**
+     * 获取服务端最新PC版本
+     * @param params meshId
+     * @param model 返回最新版本号
+     */
+    @RequestMapping(value = "/getNewestFileVersionCode", method = RequestMethod.POST)
+    public void getNewestFileVersionCode(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        Integer versionCode = placeService.getVersionCode(params);
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+        model.put("versionCode",versionCode);
+    }
+
 }

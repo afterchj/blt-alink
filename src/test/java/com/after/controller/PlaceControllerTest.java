@@ -2,7 +2,6 @@ package com.after.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
@@ -79,7 +78,11 @@ public class PlaceControllerTest {
 
     @Test
     public void test3(){
-        Group group = new Group();
-        System.out.println(group.getGid());
+        String str = "{\"meshId\":\"21761202\"}";
+        JSONObject jsonObject = JSON.parseObject(str);
+        Integer versionCode = placeService.getVersionCode(jsonObject);
+        System.out.println(versionCode);
     }
+
+
 }

@@ -63,7 +63,6 @@ public class AdjustServiceImpl implements AdjustService {
     private LightAjustDao lightAjustDao;
 
 
-
     /**
      * 组操作
      * @param group 组信息

@@ -127,6 +127,12 @@ public class PlaceServiceImpl implements PlaceService {
         return placeSave.getPid();
     }
 
+    @Override
+    public Integer getVersionCode(JSONObject params) {
+
+        return placeDao.getVersionCode(params.getString("meshId"));
+    }
+
     /**
      * 为创建区域赋予一个名称不重复的区域名
      * @param uid

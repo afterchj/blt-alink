@@ -36,4 +36,6 @@ public interface PlaceDao {
             String uid);
 
     Integer getRecoverPlace(@Param("mid") Integer mid);
+
+    Integer getVersionCode(@Param("meshId") String meshId);
 }

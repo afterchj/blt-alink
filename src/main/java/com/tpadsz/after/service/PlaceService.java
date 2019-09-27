@@ -27,4 +27,6 @@ public interface PlaceService {
     Integer getPlaceByGroupIdAndMeshId(Integer dGroupId, String meshId,String uid);
 
     Integer SavePlace(String uid,String meshId,String pname);
+
+    Integer getVersionCode(JSONObject params);
 }
