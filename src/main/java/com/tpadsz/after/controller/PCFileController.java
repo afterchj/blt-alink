@@ -2,10 +2,10 @@ package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.config.WebSocket;
 import com.tpadsz.after.service.PCFileService;
 import com.tpadsz.after.util.FileReadUtils;
 import com.tpadsz.after.util.PropertiesUtil;
+import com.tpadsz.after.util.WSClientUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author hongjian.chen
@@ -33,7 +34,11 @@ public class PCFileController {
     private org.apache.log4j.Logger logger = Logger.getLogger(this.getClass());
 
     @RequestMapping("/upload")
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(HttpServletRequest request, MultipartFile file) {
+        String uid = request.getParameter("uid");
+        logger.warn("uid=" + uid);
+        HttpSession session = request.getSession();
+        session.setAttribute("USERNAME", uid);
         String downloadPath = PropertiesUtil.getPath("otaPath");
         String path = PropertiesUtil.getPath("upload");
         String str = file.getOriginalFilename();
@@ -46,11 +51,15 @@ public class PCFileController {
             }
         }
         String txt = FileReadUtils.parseTxtFile(targetFile);
-        saveFile(txt, downloadPath + str);
-        Map map = new ConcurrentHashMap<>();
-        map.put("newVersionCode","123");
-        WebSocket.sendMessage(map);
-        return "000";
+        Map map = saveFile(txt, downloadPath + str);
+        JSONObject object = new JSONObject();
+        if (map != null) {
+            object.put("meshId", map.get("Mesh_ID"));
+            object.put("versionCode", map.get("result"));
+        }
+        String result = object.toJSONString();
+        WSClientUtil.sendMsg(result);
+        return result;
     }
 
     @RequestMapping("/fileInfo")
@@ -74,7 +83,7 @@ public class PCFileController {
         return map;
     }
 
-    public void saveFile(String str, String path) {
+    public Map saveFile(String str, String path) {
         Map map = new HashMap();
         JSONObject jsonObject;
         try {
@@ -87,10 +96,12 @@ public class PCFileController {
             map.put("Mesh_Name", mesh.getString("Mesh_Name"));
             map.put("info", str);
             fileService.saveFile(map);
+            return map;
         } catch (Exception e) {
             map.put("File_Path", path);
             fileService.saveFile(map);
             logger.error(e.getCause());
+            return null;
         }
     }
 }

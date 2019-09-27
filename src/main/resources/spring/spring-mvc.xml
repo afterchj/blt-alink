@@ -26,6 +26,7 @@
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
             <mvc:exclude-mapping path="/pc/**"/>
+            <mvc:exclude-mapping path="/websocket/**"/>
             <mvc:exclude-mapping path="/getFirms**"/>
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
@@ -41,6 +42,7 @@
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/msg/**"/>
             <mvc:exclude-mapping path="/pc/**"/>
+            <mvc:exclude-mapping path="/websocket/**"/>
             <mvc:exclude-mapping path="/lightConsole/**"/>
             <mvc:exclude-mapping path="/account/pwd/login*"/>
             <mvc:exclude-mapping path="/account/code/login*"/>
