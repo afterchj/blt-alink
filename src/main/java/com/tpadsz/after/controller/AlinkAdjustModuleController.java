@@ -151,7 +151,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
             model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
         }
-
     }
 
     /**

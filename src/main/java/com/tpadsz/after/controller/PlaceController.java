@@ -87,4 +87,12 @@ public class PlaceController extends BaseDecodedController {
 
     }
 
+    @RequestMapping(value = "/getNewestFileVersionCode", method = RequestMethod.POST)
+    public void getNewestFileVersionCode(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
+        Integer versionCode = placeService.getVersionCode(params);
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("result_message", ResultDict.SUCCESS.getValue());
+        model.put("versionCode",versionCode);
+    }
+
 }
