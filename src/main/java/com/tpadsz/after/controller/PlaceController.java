@@ -7,11 +7,10 @@ import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.PlaceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -89,15 +88,20 @@ public class PlaceController extends BaseDecodedController {
 
     /**
      * 获取服务端最新PC版本
-     * @param params meshId
-     * @param model 返回最新版本号
+//     * @param meshId meshId
      */
     @RequestMapping(value = "/getNewestFileVersionCode", method = RequestMethod.POST)
-    public void getNewestFileVersionCode(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-        Integer versionCode = placeService.getVersionCode(params);
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("result_message", ResultDict.SUCCESS.getValue());
-        model.put("versionCode",versionCode);
+    @ResponseBody
+    public Map<String, Object> getNewestFileVersionCode( @RequestBody String params){
+        Map<String, Object> map = new HashMap<>();
+        JSONObject jsonObject = JSONObject.parseObject(params);
+        String meshId = jsonObject.getString("meshId");
+        Integer versionCode = placeService.getVersionCode(meshId);
+        map.put("result", ResultDict.SUCCESS.getCode());
+        map.put("result_message", ResultDict.SUCCESS.getValue());
+        map.put("versionCode",versionCode);
+        return map;
+
     }
 
 }
