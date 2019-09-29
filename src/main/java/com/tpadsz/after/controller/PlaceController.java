@@ -92,10 +92,10 @@ public class PlaceController extends BaseDecodedController {
      */
     @RequestMapping(value = "/getNewestFileVersionCode", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> getNewestFileVersionCode( @RequestBody String params){
+    public Map<String, Object> getNewestFileVersionCode( @RequestBody JSONObject params){
         Map<String, Object> map = new HashMap<>();
-        JSONObject jsonObject = JSONObject.parseObject(params);
-        String meshId = jsonObject.getString("meshId");
+//        JSONObject jsonObject = JSONObject.parseObject(params);
+        String meshId = params.getString("meshId");
         Integer versionCode = placeService.getVersionCode(meshId);
         map.put("result", ResultDict.SUCCESS.getCode());
         map.put("result_message", ResultDict.SUCCESS.getValue());
