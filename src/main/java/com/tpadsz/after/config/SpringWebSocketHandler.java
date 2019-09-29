@@ -39,7 +39,7 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
             user = o.toString();
         }
         users.put(user, session);
-        logger.info("current user:" + user + "online num:" + users.size());
+        logger.info("current user:" + user + ",online num:" + users.size());
         try {
             session.sendMessage(new TextMessage(user + "：I'm " + user));
         } catch (IOException e) {
@@ -52,13 +52,11 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
 //        super.afterConnectionClosed(session, closeStatus);
-        logger.info("websocket connection closed......");
         Object username = session.getAttributes().get("USERNAME");
         users.remove(username);
         //这块会实现自己业务，比如，当用户登录后，会把离线消息推送给用户
 //        TextMessage returnMessage = new TextMessage(username.toString() + "退出聊天室！");
 //        session.sendMessage(returnMessage);
-        logger.info("剩余在线用户" + users.size());
     }
 
     /**
@@ -129,11 +127,9 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      * @param message
      */
     public void sendMessageToAll(String user, TextMessage message) {
-        logger.error("给所有在线用户发送消息！" + users.size());
         try {
             for (Map.Entry<Object, WebSocketSession> entry : users.entrySet()) {
                 if (entry.getValue().isOpen()) {
-                    logger.info("user:" + entry.getKey());
                     entry.getValue().sendMessage(message);
 //                    if (!entry.getKey().equals(user)) {
 //                        entry.getValue().sendMessage(message);

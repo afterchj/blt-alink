@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,11 +32,7 @@ public class PCFileController {
     private org.apache.log4j.Logger logger = Logger.getLogger(this.getClass());
 
     @RequestMapping("/upload")
-    public String uploadFile(HttpServletRequest request, MultipartFile file) {
-        String uid = request.getParameter("uid");
-        logger.warn("uid=" + uid);
-        HttpSession session = request.getSession();
-        session.setAttribute("USERNAME", uid);
+    public String uploadFile(MultipartFile file) {
         String downloadPath = PropertiesUtil.getPath("otaPath");
         String path = PropertiesUtil.getPath("upload");
         String str = file.getOriginalFilename();
@@ -53,12 +47,15 @@ public class PCFileController {
         String txt = FileReadUtils.parseTxtFile(targetFile);
         Map map = saveFile(txt, downloadPath + str);
         JSONObject object = new JSONObject();
+        object.put("code", "000");
         if (map != null) {
             object.put("meshId", map.get("Mesh_ID"));
             object.put("versionCode", map.get("result"));
+        } else {
+            object.put("code", "200");
         }
         String result = object.toJSONString();
-        WSClientUtil.sendMsg(result);
+        new Thread(() -> WSClientUtil.sendMsg(result)).start();
         return result;
     }
 
