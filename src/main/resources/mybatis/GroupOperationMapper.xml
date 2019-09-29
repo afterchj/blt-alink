@@ -60,7 +60,7 @@
             <result property="current" column="current"/>
             <result property="tname" column="tname"/>
             <result property="tnum" column="tnum"/>
-            <result property="groupId" column="group_id"/>
+            <result property="groupId" column="lGroupId"/>
             <!--</association>-->
         </collection>
     </resultMap>
@@ -69,6 +69,10 @@
         SELECT
     	    g.id,
         	g.group_id,
+            CASE
+            WHEN l.lmac IS NULL THEN NULL
+            ELSE g.group_id
+            END lGroupId,
         	g.gname,
 #         	g.mid,
         	l.id as lid,

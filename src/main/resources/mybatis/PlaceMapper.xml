@@ -44,7 +44,7 @@
                 <result property="lmac" column="lmac"/>
                 <result property="lname" column="lname"/>
                 <result property="productId" column="product_id"/>
-                <result property="groupId" column="group_id"/>
+                <result property="groupId" column="lGroupId"/>
             </collection>
         </collection>
     </resultMap>
@@ -54,6 +54,10 @@
         select
             p.id,p.place_id,p.pname,
         	g.group_id,
+            CASE
+              WHEN l.lmac IS NULL THEN NULL
+              ELSE g.group_id
+            END lGroupId,
         	g.gname,
         	l.id as lid,
         	l.lmac,
