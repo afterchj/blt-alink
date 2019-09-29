@@ -39,7 +39,7 @@ public class FileReadUtils {
         StringBuilder txtValue = new StringBuilder();
         InputStreamReader read = null;
         try {
-            read = new InputStreamReader(new FileInputStream(file), "gbk");// 考虑到编码格式
+            read = new InputStreamReader(new FileInputStream(file));// 考虑到编码格式
             BufferedReader bufferedReader = new BufferedReader(read);
             String lineTxt;
             while ((lineTxt = bufferedReader.readLine()) != null) {
