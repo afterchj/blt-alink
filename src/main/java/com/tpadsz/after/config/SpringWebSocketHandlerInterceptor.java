@@ -40,7 +40,6 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
                     userName = "default-system" + new Random().nextInt(10);
                 }
                 attributes.put("USERNAME", userName);
-                logger.info("user:" + userName);
             }
         }
         return super.beforeHandshake(request, response, wsHandler, attributes);
