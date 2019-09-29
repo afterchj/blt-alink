@@ -28,5 +28,5 @@ public interface PlaceService {
 
     Integer SavePlace(String uid,String meshId,String pname);
 
-    Integer getVersionCode(JSONObject params);
+    Integer getVersionCode(String params);
 }

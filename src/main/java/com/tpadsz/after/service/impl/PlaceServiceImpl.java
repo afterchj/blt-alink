@@ -128,9 +128,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Integer getVersionCode(JSONObject params) {
-
-        return placeDao.getVersionCode(params.getString("meshId"));
+    public Integer getVersionCode(String meshId) {
+        return placeDao.getVersionCode(meshId);
     }
 
     /**

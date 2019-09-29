@@ -78,9 +78,8 @@ public class PlaceControllerTest {
 
     @Test
     public void test3(){
-        String str = "{\"meshId\":\"21761202\"}";
-        JSONObject jsonObject = JSON.parseObject(str);
-        Integer versionCode = placeService.getVersionCode(jsonObject);
+        String str = "21761202";
+        Integer versionCode = placeService.getVersionCode(str);
         System.out.println(versionCode);
     }
 
