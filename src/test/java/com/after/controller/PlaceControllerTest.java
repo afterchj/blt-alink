@@ -83,5 +83,14 @@ public class PlaceControllerTest {
         System.out.println(versionCode);
     }
 
+    @Test
+    public void moveGroupTest(){
+        String jsonStr = "{\"uid\":\"10\",\"token\":\"c535ba1517894958a6a97bc352283107\",\"gname\":\"组8\"," +
+                "\"groupList\":\"[{\\\"click_flag\\\":0,\\\"groupId\\\":8}]\",\"meshId\":\"11223344\",\"pid\":2711," +
+                "\"placeId\":2}";
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+
+
+    }
 
 }

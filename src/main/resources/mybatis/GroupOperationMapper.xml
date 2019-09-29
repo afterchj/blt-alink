@@ -174,13 +174,14 @@
     </delete>
 
     <update id="moveGroup">
-        update f_group set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId}) and  group_id=#{groupId}
+        update f_group set pid=#{pid} where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and
+                                            group_id=#{groupId}
     </update>
 
     <update id="updateLightPid">
         update f_light
         set pid=#{pid}
-        where mid=(select id from f_mesh where mesh_id=#{meshId}) and gid=(select id from f_group where mid=(select id from f_mesh where mesh_id=#{meshId}) and group_id=#{groupId})
+        where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and gid=(select id from f_group where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and group_id=#{groupId})
     </update>
 
     <select id="getGidByGroupIdAndMeshId" resultType="integer">

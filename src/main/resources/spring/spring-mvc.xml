@@ -31,7 +31,7 @@
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
             <mvc:exclude-mapping path="/project/download**"/>
-            <mvc:exclude-mapping path="/place/**"/>
+            <mvc:exclude-mapping path="/place/getNewestFileVersionCode**"/>
             <bean class="com.tpadsz.after.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
 
@@ -56,7 +56,7 @@
             <mvc:exclude-mapping path="/project/uploadFromPc**"/>
             <mvc:exclude-mapping path="/project/meshList**"/>
             <mvc:exclude-mapping path="/project/download**"/>
-            <mvc:exclude-mapping path="/place/**"/>
+            <!--<mvc:exclude-mapping path="/place/getNewestFileVersionCode**"/>-->
             <bean class="com.tpadsz.after.interceptor.UserTokenValidationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

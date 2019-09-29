@@ -54,11 +54,13 @@ public interface GroupOperationDao {
 
     void deleteGroupSetting(@Param("sid") Integer sid);//删除场景中组的xy值
 
-    void moveGroup(@Param("pid") Integer pid, @Param("meshId") String meshId, @Param("groupId") Integer groupId);
+    void moveGroup(@Param("pid") Integer pid, @Param("meshId") String meshId, @Param("groupId") Integer groupId,
+                   @Param("uid") String uid );
 
     String getGnameByPidAndMeshId(@Param("pid") Integer pid, @Param("meshId") String meshId,@Param("gname") String gname);
     
-    void updateLightPid(@Param("groupId") Integer groupId, @Param("pid") Integer pid,@Param("meshId") String meshId);
+    void updateLightPid(@Param("groupId") Integer groupId, @Param("pid") Integer pid,@Param("meshId") String meshId,
+                        @Param("uid") String uid);
 
     Integer getGidByGroupIdAndMeshId(@Param("groupId") Integer groupId, @Param("meshId") String meshId,@Param("uid")
             String uid);

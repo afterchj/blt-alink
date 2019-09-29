@@ -158,7 +158,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         String uid = params.getString("uid");
         String pname;
         Integer groupId;
-        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
+        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId,uid);
+//        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
         if (pname == null){
             //区域未创建 创建区域
             StringBuffer sb = new StringBuffer();
@@ -184,8 +185,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             for (int i=0;i<groupList.size();i++){
                 groupId = groupList.getJSONObject(i).getInteger("groupId");
                 //不同区域之间移动
-                groupOperationDao.moveGroup(pid, meshId, groupId);
-                groupOperationDao.updateLightPid(groupId, pid, meshId);//修改灯信息的pid
+                groupOperationDao.moveGroup(pid, meshId, groupId,uid);
+                groupOperationDao.updateLightPid(groupId, pid, meshId,uid);//修改灯信息的pid
             }
         }
         placeMap.put("pid",pid);
