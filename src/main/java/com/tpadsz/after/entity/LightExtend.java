@@ -1,7 +1,5 @@
 package com.tpadsz.after.entity;
 
-import static org.apache.ibatis.ognl.DynamicSubscript.mid;
-
 /**
  * @program: blt-alink
  * @description:
@@ -15,6 +13,15 @@ public class LightExtend {
     private String lname;
     private String x;
     private String y;
+    private String groupId;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     public Integer getLid() {
         return lid;
@@ -73,7 +80,6 @@ public class LightExtend {
                 ", lname='" + lname + '\'' +
                 ", x='" + x + '\'' +
                 ", y='" + y + '\'' +
-                ", mid=" + mid +
                 '}';
     }
 }

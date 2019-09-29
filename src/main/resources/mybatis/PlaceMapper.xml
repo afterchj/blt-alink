@@ -44,6 +44,7 @@
                 <result property="lmac" column="lmac"/>
                 <result property="lname" column="lname"/>
                 <result property="productId" column="product_id"/>
+                <result property="groupId" column="group_id"/>
             </collection>
         </collection>
     </resultMap>
@@ -52,7 +53,6 @@
     <select id="getPlacesAndGroups" resultMap="placeList">
         select
             p.id,p.place_id,p.pname,
-#     	    g.id,
         	g.group_id,
         	g.gname,
         	l.id as lid,

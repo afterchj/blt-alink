@@ -60,6 +60,7 @@
             <result property="current" column="current"/>
             <result property="tname" column="tname"/>
             <result property="tnum" column="tnum"/>
+            <result property="groupId" column="group_id"/>
             <!--</association>-->
         </collection>
     </resultMap>
