@@ -1,5 +1,6 @@
 package com.tpadsz.after.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.UrlConstants;
 import org.apache.log4j.Logger;
 import org.java_websocket.WebSocket;
@@ -69,11 +70,11 @@ public class WSClientUtil {
             }
         }
         client.send(content);
-        closeCliet();
+        closeClient();
     }
 
     //主动关闭连接才调用，不然不需要调用这个方法
-    public static void closeCliet() {
+    public static void closeClient() {
         if (client != null) {
             client.close();
             client = null;
@@ -81,11 +82,11 @@ public class WSClientUtil {
     }
 
 
-//    public static void main(String[] args) {
-//        JSONObject object = new JSONObject();
-//        object.put("from", "admin");
-//        object.put("to", "test");
-//        object.put("message", "hello test,ok that is fine.");
-//        sendMsg(object.toString());
-//    }
+    public static void main(String[] args) {
+        JSONObject object = new JSONObject();
+        object.put("from", "admin");
+        object.put("to", "test");
+        object.put("message", "hello test,ok that is fine.");
+        sendMsg(object.toJSONString());
+    }
 }
