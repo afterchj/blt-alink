@@ -75,7 +75,7 @@
     </select>
 
     <select id="getPlace" resultType="map">
-        select pname,place_id as placeId from f_place where mid=(SELECT id FROM f_mesh WHERE mesh_id = #{meshId} and
+        select pname,id as pid from f_place where mid=(SELECT id FROM f_mesh WHERE mesh_id = #{meshId} and
         uid=#{uid}) and place_id=#{placeId}
     </select>
 
