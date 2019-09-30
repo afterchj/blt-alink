@@ -152,8 +152,8 @@ public class GroupOperationServiceImpl implements GroupOperationService {
     @Override
     public Map<String, Object> moveGroup(JSONObject params)  {
 //        Map<String, Object> placeMap = new HashedMap();
-//        Integer pid = params.getInteger("pid");//目标区域序列号
-        Integer pid ;//目标区域序列号
+        Integer pid = params.getInteger("pid");//目标区域序列号
+//        Integer pid ;//目标区域序列号
         Integer placeId = params.getInteger("placeId");//目标区域id
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
@@ -161,6 +161,9 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         Integer groupId;
 //        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId,uid);
         Map<String, Object> placeMap = placeDao.getPlace(placeId, meshId,uid);
+        if (pid!=null){
+            placeMap.put("pid",pid);
+        }
 //        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
         if (placeMap == null){
             //区域未创建 创建区域
