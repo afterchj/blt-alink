@@ -37,21 +37,19 @@ public class FileReadUtils {
 
     public static String parseTxtFile(File file) {
         StringBuilder txtValue = new StringBuilder();
-        InputStreamReader read = null;
+        Reader reader = null;
         try {
-            read = new InputStreamReader(new FileInputStream(file), "gbk");// 考虑到编码格式
-            BufferedReader bufferedReader = new BufferedReader(read);
+            reader = new InputStreamReader(new FileInputStream(file), getCharset(file));// 考虑到编码格式
+            BufferedReader bufferedReader = new BufferedReader(reader);
             String lineTxt;
             while ((lineTxt = bufferedReader.readLine()) != null) {
                 txtValue.append(lineTxt);
             }
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         } finally {
             try {
-                read.close();
+                reader.close();
             } catch (IOException e) {
                 logger.error(e.getMessage());
             }
@@ -67,7 +65,7 @@ public class FileReadUtils {
             HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
             urlCon.setConnectTimeout(5000);
             urlCon.setReadTimeout(5000);
-            br = new BufferedReader(new InputStreamReader(urlCon.getInputStream(), "gbk"));
+            br = new BufferedReader(new InputStreamReader(urlCon.getInputStream(), "utf-8"));
             String lineTxt;
             while ((lineTxt = br.readLine()) != null) {
                 txtValue.append(lineTxt);
@@ -85,8 +83,29 @@ public class FileReadUtils {
         return txtValue.toString();
     }
 
+    private static String getCharset(File file) throws IOException {
+        InputStream in = new FileInputStream(file);
+        byte[] b = new byte[3];
+        in.read(b);
+        in.close();
+        String code;
+        if (b[0] == -17 && b[1] == -69 && b[2] == -65)
+            code = "UTF-8";
+        else
+            code = "GBK";
+        return code;
+    }
+
 //    public static void main(String[] args) throws IOException {
-//        String text = parseTxtFile(new File("C:/file/37853561.txt"));
+
+//        String text = pareUrlTxt("http://iotsztp.com/file/ota/37853561.txt");
+//        String text1 = parseTxtFile(new File("c:/file/37853561.txt"));
+//        String text2 = parseTxtFile(new File("c:/file/test.txt"));
+//        System.out.println("result=" + text1);
+//        System.out.println(getCharset(new File("c:/file/test.txt")));
+//        System.out.println("result=" + text2);
+//        System.out.println(getCharset(new File("c:/file/37853561.txt")));
+
 //        JSONObject jsonObject=JSONObject.parseObject(text);
 //
 //        JSONObject mesh=jsonObject.getJSONObject("Project_Mesh");

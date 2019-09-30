@@ -40,18 +40,12 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
         }
         users.put(user, session);
         logger.info("current user:" + user + ",online num:" + users.size());
-        try {
-            session.sendMessage(new TextMessage(user + "：I'm " + user));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 
     /**
      * 关闭连接时触发
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
-//        super.afterConnectionClosed(session, closeStatus);
         Object username = session.getAttributes().get("USERNAME");
         users.remove(username);
         //这块会实现自己业务，比如，当用户登录后，会把离线消息推送给用户
@@ -64,15 +58,13 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
-        logger.info("收到消息：" + message.getPayload());
+        logger.info("from client:" + message.getPayload());
         Object o = session.getAttributes().get("USERNAME");
         String user = UUID.randomUUID().toString().replace("_", "");
         if (null != o) {
             user = o.toString();
         }
-
         sendMessageToAll(user, message);
-
 //        sendMessageToAll(session.getAttributes().get("USERNAME").toString(), message);
     }
 

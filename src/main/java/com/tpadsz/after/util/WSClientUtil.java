@@ -34,7 +34,7 @@ public class WSClientUtil {
 
                 @Override
                 public void onMessage(String arg0) {
-                    logger.warn("收到消息：" + arg0);
+                    logger.warn("from server：" + arg0);
                 }
 
                 @Override
@@ -56,6 +56,7 @@ public class WSClientUtil {
                     }
                 }
             };
+            client.connect();
         } catch (URISyntaxException e) {
             logger.error(e.getMessage());
         }
@@ -63,7 +64,6 @@ public class WSClientUtil {
 
     public static void sendMsg(String content) {
         initClient();
-        client.connect();
         while (!client.getReadyState().equals(WebSocket.READYSTATE.OPEN)) {
             try {
                 Thread.sleep(10);
