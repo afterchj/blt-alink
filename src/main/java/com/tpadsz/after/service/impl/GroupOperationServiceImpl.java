@@ -159,10 +159,10 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         String uid = params.getString("uid");
         String pname;
         Integer groupId;
-        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId,uid);
+//        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId,uid);
         Map<String, Object> placeMap = placeDao.getPlace(placeId, meshId,uid);
 //        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
-        if (placeMap.isEmpty()){
+        if (placeMap == null){
             //区域未创建 创建区域
             StringBuffer sb = new StringBuffer();
             StringBuffer preSb = new StringBuffer();
@@ -182,6 +182,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             placeDao.savePlace(placeSave);
             pid  = placeSave.getPid();
             placeMap.put("pid",pid);
+            placeMap.put("pname",pname);
         }
         JSONArray groupList = params.getJSONArray("groupList");
         if (groupList.size()>0){
@@ -194,7 +195,7 @@ public class GroupOperationServiceImpl implements GroupOperationService {
         }
 //        placeMap.put("pid",pid);
         placeMap.put("placeId",placeId);
-        placeMap.put("pname",pname);
+//        placeMap.put("pname",pname);
         return placeMap;
     }
 

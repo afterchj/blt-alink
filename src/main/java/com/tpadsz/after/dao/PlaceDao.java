@@ -40,5 +40,5 @@ public interface PlaceDao {
 
     Integer getVersionCode(@Param("meshId") String meshId);
 
-    Map<String,Object> getPlace(Integer placeId, String meshId, String uid);
+    Map<String,Object> getPlace(@Param("placeId")Integer placeId, @Param("meshId")String meshId, @Param("uid")String uid);
 }

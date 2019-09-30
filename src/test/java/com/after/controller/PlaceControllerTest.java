@@ -90,7 +90,7 @@ public class PlaceControllerTest {
     @Test
     public void moveGroupTest(){
         Map<String, Object> placeMap = placeDao.getPlace(1, "11223344","100");
-        System.out.println(placeMap.isEmpty());
+//        System.out.println(placeMap.isEmpty());
         System.out.println(placeMap==null);
 
     }
