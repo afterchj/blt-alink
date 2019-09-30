@@ -74,6 +74,11 @@
                                         place_id=#{placeId}
     </select>
 
+    <select id="getPlace" resultType="map">
+        select pname,place_id as placeId from f_place where mid=(SELECT id FROM f_mesh WHERE mesh_id = #{meshId} and
+        uid=#{uid}) and place_id=#{placeId}
+    </select>
+
     <select id="getPlaceByGroupIdAndMeshId" resultType="integer">
         select pid from f_group where mid=(select id from f_mesh where mesh_id=#{meshId} and uid=#{uid}) and
                                       group_id=#{groupId}

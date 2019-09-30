@@ -2,6 +2,7 @@ package com.after.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.PlaceExtend;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
@@ -29,6 +30,9 @@ public class PlaceControllerTest {
 
     @Resource
     private PlaceService placeService;
+
+    @Resource
+    private PlaceDao placeDao;
 
     @Test
     public void createTest(){
@@ -85,11 +89,9 @@ public class PlaceControllerTest {
 
     @Test
     public void moveGroupTest(){
-        String jsonStr = "{\"uid\":\"10\",\"token\":\"c535ba1517894958a6a97bc352283107\",\"gname\":\"组8\"," +
-                "\"groupList\":\"[{\\\"click_flag\\\":0,\\\"groupId\\\":8}]\",\"meshId\":\"11223344\",\"pid\":2711," +
-                "\"placeId\":2}";
-        JSONObject jsonObject = JSON.parseObject(jsonStr);
-
+        Map<String, Object> placeMap = placeDao.getPlace(1, "11223344","100");
+        System.out.println(placeMap.isEmpty());
+        System.out.println(placeMap==null);
 
     }
 

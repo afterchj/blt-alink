@@ -2,8 +2,8 @@ package com.after.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
+import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.PlaceNotFoundException;
 import com.tpadsz.after.service.GroupOperationService;
@@ -103,11 +103,10 @@ public class AlinkAdjustModuleControllerTest {
     @Test
     public void getMapperTest() {
         SqlSession session = getSession();
-        List<GroupList> groupLists = session.getMapper(GroupOperationDao
-                .class).getGroupAll(3);
-        for (GroupList groupList : groupLists) {
-            System.out.println(groupList.toString());
-        }
+        Map<String, Object> placeMap = session.getMapper(PlaceDao
+                .class).getPlace(1, "11223344","100");;
+        System.out.println(placeMap.isEmpty());
+        System.out.println(placeMap==null);
     }
 
     @Test

@@ -151,16 +151,18 @@ public class GroupOperationServiceImpl implements GroupOperationService {
 
     @Override
     public Map<String, Object> moveGroup(JSONObject params)  {
-        Map<String, Object> placeMap = new HashedMap();
-        Integer pid = params.getInteger("pid");//目标区域序列号
+//        Map<String, Object> placeMap = new HashedMap();
+//        Integer pid = params.getInteger("pid");//目标区域序列号
+        Integer pid ;//目标区域序列号
         Integer placeId = params.getInteger("placeId");//目标区域id
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
         String pname;
         Integer groupId;
         pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId,uid);
+        Map<String, Object> placeMap = placeDao.getPlace(placeId, meshId,uid);
 //        pname = placeDao.getPlaceByPlaceIdAndMeshId(placeId, meshId);
-        if (pname == null){
+        if (placeMap.isEmpty()){
             //区域未创建 创建区域
             StringBuffer sb = new StringBuffer();
             StringBuffer preSb = new StringBuffer();
@@ -179,17 +181,18 @@ public class GroupOperationServiceImpl implements GroupOperationService {
             PlaceSave placeSave = SavePlaceFactory.savePlace(uid,meshId,pname,placeId);
             placeDao.savePlace(placeSave);
             pid  = placeSave.getPid();
+            placeMap.put("pid",pid);
         }
         JSONArray groupList = params.getJSONArray("groupList");
         if (groupList.size()>0){
             for (int i=0;i<groupList.size();i++){
                 groupId = groupList.getJSONObject(i).getInteger("groupId");
                 //不同区域之间移动
-                groupOperationDao.moveGroup(pid, meshId, groupId,uid);
-                groupOperationDao.updateLightPid(groupId, pid, meshId,uid);//修改灯信息的pid
+                groupOperationDao.moveGroup((Integer) placeMap.get("pid"), meshId, groupId,uid);
+                groupOperationDao.updateLightPid(groupId, (Integer) placeMap.get("pid"), meshId,uid);//修改灯信息的pid
             }
         }
-        placeMap.put("pid",pid);
+//        placeMap.put("pid",pid);
         placeMap.put("placeId",placeId);
         placeMap.put("pname",pname);
         return placeMap;

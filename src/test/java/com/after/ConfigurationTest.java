@@ -1,6 +1,8 @@
 package com.after;
 
 import com.tpadsz.after.config.SpringConfig;
+import com.tpadsz.after.entity.PlaceExtend;
+import com.tpadsz.after.service.PlaceService;
 import net.rubyeye.xmemcached.XMemcachedClient;
 import net.rubyeye.xmemcached.exception.MemcachedException;
 import org.junit.Test;
@@ -11,6 +13,9 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -27,6 +32,9 @@ public class ConfigurationTest {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
+    private PlaceService placeService;
 
     @Test
     public void testXmemcached() throws InterruptedException, MemcachedException, TimeoutException {
@@ -72,5 +80,10 @@ public class ConfigurationTest {
         System.out.println(redisTemplate.hasKey(key) + "\t" + operations.get(key));
         System.out.println("-----------------分隔线-----------------");
         Thread.sleep(3000);
+    }
+
+    @Test
+    public void moveGroupTest(){
+        List<PlaceExtend> placesAndGroups = placeService.getPlacesAndGroups(199);
     }
 }
