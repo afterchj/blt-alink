@@ -1,6 +1,5 @@
 package com.tpadsz.after.util;
 
-import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.UrlConstants;
 import org.apache.log4j.Logger;
 import org.java_websocket.WebSocket;
@@ -29,7 +28,6 @@ public class WSClientUtil {
             client = new WebSocketClient(new URI(UrlConstants.TEST_URL.getUrl()), new Draft_17()) {
                 @Override
                 public void onOpen(ServerHandshake arg0) {
-                   logger.warn("链接已打开");
                 }
 
                 @Override
@@ -44,13 +42,12 @@ public class WSClientUtil {
 
                 @Override
                 public void onClose(int arg0, String arg1, boolean arg2) {
-                   logger.warn("链接已关闭");
                 }
 
                 @Override
                 public void onMessage(ByteBuffer bytes) {
                     try {
-                       logger.warn(new String(bytes.array(), "utf-8"));
+                        logger.warn(new String(bytes.array(), "utf-8"));
                     } catch (UnsupportedEncodingException e) {
                         logger.error(e.getCause());
                     }
@@ -72,10 +69,11 @@ public class WSClientUtil {
             }
         }
         client.send(content);
+        closeCliet();
     }
 
     //主动关闭连接才调用，不然不需要调用这个方法
-    public static void closeCilet() {
+    public static void closeCliet() {
         if (client != null) {
             client.close();
             client = null;
@@ -83,11 +81,11 @@ public class WSClientUtil {
     }
 
 
-    public static void main(String[] args) {
-        JSONObject object = new JSONObject();
-        object.put("from", "admin");
-        object.put("to", "test");
-        object.put("message", "hello test,ok that is fine.");
-        sendMsg(object.toString());
-    }
+//    public static void main(String[] args) {
+//        JSONObject object = new JSONObject();
+//        object.put("from", "admin");
+//        object.put("to", "test");
+//        object.put("message", "hello test,ok that is fine.");
+//        sendMsg(object.toString());
+//    }
 }
