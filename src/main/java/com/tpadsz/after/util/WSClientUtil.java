@@ -87,6 +87,6 @@ public class WSClientUtil {
         object.put("from", "admin");
         object.put("to", "test");
         object.put("message", "hello test,ok that is fine.");
-        sendMsg(object.toJSONString());
+        new Thread(() -> WSClientUtil.sendMsg(object.toJSONString())).start();
     }
 }
