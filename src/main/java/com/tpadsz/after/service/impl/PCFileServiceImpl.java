@@ -1,10 +1,12 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.PCFileDao;
+import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.service.PCFileService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,6 +18,21 @@ import java.util.Map;
 public class PCFileServiceImpl implements PCFileService {
     @Resource
     private PCFileDao pcFileDao;
+
+    @Override
+    public AppUser getUser(String account) {
+        return pcFileDao.getUser(account);
+    }
+
+    @Override
+    public List getMesh(Map map) {
+        return pcFileDao.getMesh(map);
+    }
+
+    @Override
+    public Map getProject() {
+        return pcFileDao.getProject();
+    }
 
     @Override
     public Map getFile(Map map) {

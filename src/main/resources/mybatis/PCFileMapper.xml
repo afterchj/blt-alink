@@ -15,12 +15,31 @@
         <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
     </parameterMap>
 
+
+    <select id="getUser" resultType="AppUser" parameterType="string">
+        SELECT id,uname,mobile,account,pwd,salt,is_locked,status from f_user_account where account=#{account}
+    </select>
+
     <select id="getFile" resultType="map" parameterType="map">
         select * from f_pc_file where 1=1
         <if test="meshId !=null">
             and file_name=#{fileName}
         </if>
         order by update_date desc limit 1
+    </select>
+
+    <select id="getMesh" resultType="string" parameterType="map">
+        SELECT m.mesh_id FROM f_pc_file f
+        INNER JOIN f_pc_info m ON f.id = m.fid
+        WHERE 1=1
+        <if test="projectName !=null">
+            and project_name=#{projectName}
+        </if>
+        GROUP BY m.mesh_id
+    </select>
+
+    <select id="getProject" resultType="map" parameterType="map">
+        SELECT f.project_name,f.create_date,f.update_date FROM f_pc_file f GROUP BY f.project_name LIMIT 1
     </select>
 
     <select id="saveFile" parameterMap="fileMapper" resultType="map" statementType="CALLABLE">
