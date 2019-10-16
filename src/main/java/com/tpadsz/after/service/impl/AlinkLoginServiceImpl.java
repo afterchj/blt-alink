@@ -51,12 +51,16 @@ public class AlinkLoginServiceImpl implements AlinkLoginService {
             throw new AccountNotCorrectException();
         }
         Integer role_id = alinkLoginDao.findRoleIdByUid(appUser.getId());
-        if(role_id!=4&&role_id!=14){
+        if(role_id!=3&&role_id!=4&&role_id!=14){
             throw new AdminNotAllowedException();
+        }
+        if(role_id==3){
+            appUser.setUtype("manager");
         }
         if(role_id==14){
             appUser.setUtype("salesman");
         }
+
         boolean isCorrect = checkPassword(password, appUser.getPwd(), appUser.getSalt());
         if (!isCorrect) {
             throw new PasswordNotCorrectException();
