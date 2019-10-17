@@ -172,9 +172,9 @@ public class AdjustServiceImpl implements AdjustService {
     public Map<String,Object> getGroupList(JSONObject params) throws NotExitException {
         String meshId = params.getString("meshId");
         String uid = params.getString("uid");
-        Integer count = groupOperationDao.getSalesman(uid);//业务员
+        Integer count = groupOperationDao.getSalesman(uid);//业务员 or 乙方管理员
         if (count>0 && !"11223344".equals(meshId)){
-            uid = groupOperationDao.getUidByMeshId(meshId);//是业务员且不是11223344网络
+            uid = groupOperationDao.getUidByMeshId(meshId);//是业务员或乙方管理员且不是11223344网络
         }
         Integer mid = groupOperationDao.getMeshSerialNo(meshId, uid);
         if (mid == null){
