@@ -72,7 +72,7 @@ public interface GroupOperationDao {
     Map<String,Integer> getGidAndPid(@Param("groupId") Integer groupId, @Param("meshId") String meshId,@Param("uid")
             String uid);
 
-    Integer getSalesman(@Param("uid") String uid);
+    Integer getSalesmanOrManager(@Param("uid") String uid);
 
     String getUidByMeshId(@Param("meshId") String meshId);
 }
