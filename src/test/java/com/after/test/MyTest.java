@@ -7,6 +7,7 @@ import com.tpadsz.after.dao.AccountDao;
 import com.tpadsz.after.dao.PCFileDao;
 import com.tpadsz.after.service.ValidationService;
 import com.tpadsz.after.util.HttpUtils;
+import com.tpadsz.after.util.MapUtil;
 import com.tpadsz.after.util.RandomNumberGenerator;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -40,10 +41,10 @@ public class MyTest {
     @Test
     public void test() {
         SqlSessionTemplate sqlSessionTemplate = getSqlSessionTemplate();
-        Map map=new HashMap();
-        map.put("uid",10);
-        map.put("sceneId",0);
-        map.put("meshId","77661234");
+//        Map map=new HashMap();
+//        map.put("uid",10);
+//        map.put("sceneId",0);
+//        map.put("meshId","77661234");
 //        System.out.println("template=" + sqlSessionTemplate);
 //        List<Map> list=new ArrayList<>();
 //        for (int i = 0; i < 5000; i++) {
@@ -51,8 +52,11 @@ public class MyTest {
 //            map.put("mesh_id", RandomNumberGenerator.generateNumber2());
 //            list.add(map);
 //        }
-        sqlSessionTemplate.insert("com.tpadsz.after.dao.BltConsoleDao.restScene",map);
-
+//        sqlSessionTemplate.insert("com.tpadsz.after.dao.BltConsoleDao.restScene",map);
+        Map<String, String> map = sqlSessionTemplate.selectOne("com.tpadsz.after.dao.PCFileDao.getUser","odelic");
+        System.out.println("map remove before="+JSON.toJSONString(map));
+        map= MapUtil.removeEntries(map,new String[]{"pwd","salt"});
+        System.out.println("map remove after="+JSON.toJSONString(map));
 //        System.out.println("xMemcachedClient=" + ctx.getBean("xMemcachedClient"));
     }
 

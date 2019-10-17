@@ -1,14 +1,11 @@
 package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.PCFileService;
-import com.tpadsz.after.util.Encryption;
-import com.tpadsz.after.util.FileReadUtils;
-import com.tpadsz.after.util.PropertiesUtil;
-import com.tpadsz.after.util.WSClientUtil;
+import com.tpadsz.after.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,25 +37,64 @@ public class PCFileController {
     @RequestMapping("/login")
     public Map login(@RequestBody JSONObject params) {
         logger.warn("params =" + params);
+        Map map = new HashMap();
         Map data = new HashMap();
-        AppUser appUser = fileService.getUser(params.getString("account"));
-        String confirm = Encryption.encrypt(Encryption.getMD5Str(params.getString("password")), appUser.getSalt());
-        boolean flag = appUser.getPwd().equals(confirm);
+        Map<String, String> appUser = fileService.getUser(params.getString("User_Name"));
+        map.put("uid", appUser.get("User_ID"));
+        String confirm = Encryption.encrypt(Encryption.getMD5Str(params.getString("User_Pwd")), appUser.get("salt"));
+        boolean flag = appUser.get("pwd").equals(confirm);
         if (!flag) {
             data.put("code", ResultDict.PASSWORD_NOT_CORRECT.getCode());
             data.put("msg", ResultDict.PASSWORD_NOT_CORRECT.getValue());
             return data;
         }
-        Map p = fileService.getProject();
+        appUser = MapUtil.removeEntries(appUser, new String[]{"pwd", "salt"});
+        data.put("User_Info", appUser);
+        List<Map> maps = fileService.getProject(map);
         List pList = new ArrayList();
-        List mesh = fileService.getMesh(p);
-        Map project = new HashMap();
-        project.put("name", p.get("project_name"));
-        project.put("create_date", p.get("create_date"));
-        project.put("update_date", p.get("update_date"));
-        project.put("mesh", mesh);
-        pList.add(project);
-        data.put("myProject", pList);
+        for (Map p : maps) {
+            Map project = new HashMap();
+            List mesh = fileService.getMesh(p);
+            project.put("Project_Mesh", mesh);
+            project.putAll(p);
+            pList.add(project);
+        }
+        data.put("User_Project", pList);
+        return data;
+    }
+
+    @RequestMapping("/backup")
+    public Map submit(@RequestBody JSONObject params) {
+        logger.warn("params =" + params);
+        Map data = new HashMap();
+        try {
+            String uid = params.getString("User_ID");
+            Map project = new HashMap();
+            project.put("uid", uid);
+            JSONArray jsonArray = params.getJSONArray("User_Project");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                List list = new ArrayList();
+                JSONObject object = (JSONObject) jsonArray.get(i);
+                String pid = object.getString("Project_ID");
+                String name = object.getString("Project_Name");
+                project.put("name", name);
+                List mesh = object.getJSONArray("Project_Mesh");
+                for (int j = 0; j < mesh.size(); j++) {
+                    Map map = new HashMap();
+                    map.put("pid", pid);
+                    map.put("meshId", mesh.get(j));
+                    list.add(map);
+                }
+                fileService.saveUpdateProject(project);
+                fileService.saveMesh(list);
+            }
+        } catch (Exception e) {
+            data.put("code", ResultDict.PASSWORD_NOT_CORRECT.getCode());
+            data.put("msg", ResultDict.PASSWORD_NOT_CORRECT.getValue());
+            return data;
+        }
+        data.put("code", ResultDict.SUCCESS.getCode());
+        data.put("msg", ResultDict.SUCCESS.getValue());
         return data;
     }
 

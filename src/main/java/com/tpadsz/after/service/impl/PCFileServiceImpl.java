@@ -20,7 +20,7 @@ public class PCFileServiceImpl implements PCFileService {
     private PCFileDao pcFileDao;
 
     @Override
-    public AppUser getUser(String account) {
+    public Map getUser(String account) {
         return pcFileDao.getUser(account);
     }
 
@@ -30,13 +30,28 @@ public class PCFileServiceImpl implements PCFileService {
     }
 
     @Override
-    public Map getProject() {
-        return pcFileDao.getProject();
+    public List<Map> getProject(Map map) {
+        return pcFileDao.getProject(map);
     }
 
     @Override
     public Map getFile(Map map) {
         return pcFileDao.getFile(map);
+    }
+
+    @Override
+    public void saveMesh(Map map) {
+        pcFileDao.saveFile(map);
+    }
+
+    @Override
+    public void saveMesh(List map) {
+        pcFileDao.saveMesh(map);
+    }
+
+    @Override
+    public void saveUpdateProject(Map map) {
+        pcFileDao.saveUpdateProject(map);
     }
 
     @Override
