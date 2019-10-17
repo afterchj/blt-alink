@@ -207,7 +207,7 @@
        and uid=#{uid})
     </select>
 
-    <select id="getSalesman" resultType="integer">
+    <select id="getSalesmanOrManager" resultType="integer">
         select count(*)  from f_user_role u,f_role r where u.user_id=#{uid} and u.role_id=r.id and (r.role_type='salesman' or r.role_type='manager')
     </select>
 
