@@ -1,6 +1,6 @@
 package com.tpadsz.after.service;
 
-import com.tpadsz.after.exception.NotExitException;
+import com.tpadsz.after.entity.AppUser;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +10,13 @@ import java.util.Map;
  */
 public interface PCFileService {
 
+    AppUser getUser(String account);
+
+    List getMesh(Map map);
+
+    Map getProject();
+
     Map getFile(Map map);
+
     void saveFile(Map map);
 }
