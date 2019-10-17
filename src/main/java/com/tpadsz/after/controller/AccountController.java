@@ -120,7 +120,7 @@ public class AccountController extends BaseDecodedController {
                         throw new MobileNotExistedException();
                     }
                     Integer role_id = alinkLoginService.findRoleIdByUid(appUser.getId());
-                    if (role_id != 4 && role_id!=14) {
+                    if (role_id!=3 && role_id != 4 && role_id!=14) {
                         throw new AdminNotAllowedException();
                     }
                     if (appUser.getStatus() == 0) {

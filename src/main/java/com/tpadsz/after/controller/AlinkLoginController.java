@@ -99,6 +99,9 @@ public class AlinkLoginController extends BaseDecodedController {
                     model.put("result_message", ResultDict.ACCOUNT_DISABLED.getValue());
                 } else {
                     Integer role_id = alinkLoginService.findRoleIdByUid(appUser.getId());
+                    if(role_id==3){
+                        appUser.setUtype("manager");
+                    }
                     if(role_id==14){
                         appUser.setUtype("salesman");
                     }
