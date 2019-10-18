@@ -36,10 +36,14 @@ public class PCFileController {
 
     @RequestMapping("/login")
     public Map login(@RequestBody JSONObject params) {
-        logger.warn("params =" + params);
         Map map = new HashMap();
         Map data = new HashMap();
         Map<String, String> appUser = fileService.getUser(params.getString("User_Name"));
+        if (appUser == null) {
+            data.put("code", ResultDict.ACCOUNT_NOT_CORRECT.getCode());
+            data.put("msg", ResultDict.ACCOUNT_NOT_CORRECT.getValue());
+            return data;
+        }
         map.put("uid", appUser.get("User_ID"));
         String confirm = Encryption.encrypt(Encryption.getMD5Str(params.getString("User_Pwd")), appUser.get("salt"));
         boolean flag = appUser.get("pwd").equals(confirm);
@@ -65,7 +69,6 @@ public class PCFileController {
 
     @RequestMapping("/backup")
     public Map submit(@RequestBody JSONObject params) {
-        logger.warn("params =" + params);
         Map data = new HashMap();
         try {
             String uid = params.getString("User_ID");
@@ -79,6 +82,7 @@ public class PCFileController {
                 String name = object.getString("Project_Name");
                 project.put("name", name);
                 List mesh = object.getJSONArray("Project_Mesh");
+                if (mesh == null || mesh.size() == 0) continue;
                 for (int j = 0; j < mesh.size(); j++) {
                     Map map = new HashMap();
                     map.put("pid", pid);
@@ -89,8 +93,9 @@ public class PCFileController {
                 fileService.saveMesh(list);
             }
         } catch (Exception e) {
-            data.put("code", ResultDict.PASSWORD_NOT_CORRECT.getCode());
-            data.put("msg", ResultDict.PASSWORD_NOT_CORRECT.getValue());
+            logger.error(e.getMessage());
+            data.put("code", ResultDict.SYSTEM_ERROR.getCode());
+            data.put("msg", ResultDict.SYSTEM_ERROR.getValue());
             return data;
         }
         data.put("code", ResultDict.SUCCESS.getCode());
