@@ -13,6 +13,8 @@ public interface PCFileDao {
 
     void saveFile(Map map);
 
+    void saveProject(Map map);
+
     void saveMesh(List map);
 
     Map getUser(String account);
@@ -23,5 +25,4 @@ public interface PCFileDao {
 
     void saveMesh(Map map);
 
-    void saveUpdateProject(Map map);
 }

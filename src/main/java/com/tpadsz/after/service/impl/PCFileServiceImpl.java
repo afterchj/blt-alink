@@ -1,7 +1,6 @@
 package com.tpadsz.after.service.impl;
 
 import com.tpadsz.after.dao.PCFileDao;
-import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.service.PCFileService;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +50,7 @@ public class PCFileServiceImpl implements PCFileService {
 
     @Override
     public void saveUpdateProject(Map map) {
-        pcFileDao.saveUpdateProject(map);
+        pcFileDao.saveProject(map);
     }
 
     @Override

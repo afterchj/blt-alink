@@ -15,8 +15,21 @@
         <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
     </parameterMap>
 
+    <parameterMap id="projectMapper" type="map">
+        <parameter property="uid" mode="IN"/>
+        <parameter property="pid" mode="IN"/>
+        <parameter property="name" mode="IN"/>
+        <parameter property="createTime" mode="IN"/>
+        <parameter property="updateTime" mode="IN"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+
     <select id="saveFile" parameterMap="fileMapper" resultType="map" statementType="CALLABLE">
         CALL save_pc_file(?,?,?,?,?,?,?,?,?,?)
+    </select>
+
+    <select id="saveProject" parameterMap="projectMapper" resultType="map" statementType="CALLABLE">
+        CALL save_pc_project(?,?,?,?,?,?)
     </select>
 
     <select id="getUser" resultType="map" parameterType="string">
@@ -42,11 +55,11 @@
 
     <select id="getProject" resultType="map" parameterType="map">
         SELECT
-            id Project_ID,
-            uid User_ID,
-            DATE_FORMAT(create_date,'%Y-%m-%d %H:%i:%s') Project_Time,
-            DATE_FORMAT(update_date,'%Y-%m-%d %H:%i:%s') Update_Time,
-            project_name Project_Name
+        id Project_ID,
+        uid User_ID,
+        DATE_FORMAT(create_date,'%Y-%m-%d %H:%i:%s') Project_Time,
+        DATE_FORMAT(update_date,'%Y-%m-%d %H:%i:%s') Update_Time,
+        project_name Project_Name
         FROM f_pc_project
         WHERE 1=1
         <if test="uid !=null">
@@ -64,14 +77,14 @@
         </foreach>
     </insert>
 
-    <insert id="saveUpdateProject" parameterType="map">
+    <insert id="saveUpdateProject" parameterType="map" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         <!-- 查看是否存在,如果存在及更新，否则插入 -->
         <selectKey keyProperty="count" order="BEFORE" resultType="int">
-            select count(*) as count from f_pc_project where uid = #{uid}
+            select count(*) as id from f_pc_project where id = #{pid}
         </selectKey>
         <choose>
-            <when test="count>0">
-                update f_pc_project set project_name=#{name} where uid = #{uid}
+            <when test="id>0">
+                update f_pc_project set project_name=#{name} where id = #{pid}
             </when>
             <otherwise>
                 insert into f_pc_project(uid,project_name,create_date,update_date) value (#{uid},#{name},now(),now())

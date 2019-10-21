@@ -79,18 +79,25 @@ public class PCFileController {
                 List list = new ArrayList();
                 JSONObject object = (JSONObject) jsonArray.get(i);
                 String pid = object.getString("Project_ID");
-                String name = object.getString("Project_Name");
-                project.put("name", name);
-                List mesh = object.getJSONArray("Project_Mesh");
-                if (mesh == null || mesh.size() == 0) continue;
-                for (int j = 0; j < mesh.size(); j++) {
-                    Map map = new HashMap();
-                    map.put("pid", pid);
-                    map.put("meshId", mesh.get(j));
-                    list.add(map);
-                }
+                project.put("pid", pid);
+                project.put("name", object.getString("Project_Name"));
+                project.put("createTime", object.getString("Project_Time"));
+                project.put("updateTime", object.getString("Update_Time"));
                 fileService.saveUpdateProject(project);
-                fileService.saveMesh(list);
+                if (StringUtils.isEmpty(pid)) {
+                    pid = String.valueOf(project.get("result"));
+                }
+                List mesh = object.getJSONArray("Project_Mesh");
+                logger.warn("id=" + project.get("id") + ",pid=" + pid + ",mesh=" + mesh);
+                if (mesh != null && mesh.size() > 0) {
+                    for (int j = 0; j < mesh.size(); j++) {
+                        Map map = new HashMap();
+                        map.put("pid", pid);
+                        map.put("meshId", mesh.get(j));
+                        list.add(map);
+                    }
+                    fileService.saveMesh(list);
+                }
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
