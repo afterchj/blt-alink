@@ -77,6 +77,13 @@
         </foreach>
     </insert>
 
+    <delete id="deleteProject" parameterType="map">
+        DELETE FROM f_pc_project WHERE uid=#{uid} AND id NOT IN
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
     <insert id="saveUpdateProject" parameterType="map" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         <!-- 查看是否存在,如果存在及更新，否则插入 -->
         <selectKey keyProperty="count" order="BEFORE" resultType="int">

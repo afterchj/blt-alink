@@ -18,7 +18,10 @@ public interface PCFileService {
     Map getFile(Map map);
 
     void saveMesh(Map map);
+
     void saveMesh(List map);
+
+    void deleteProject(Map map);
 
     void saveUpdateProject(Map map);
 

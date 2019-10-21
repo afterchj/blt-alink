@@ -49,6 +49,11 @@ public class PCFileServiceImpl implements PCFileService {
     }
 
     @Override
+    public void deleteProject(Map map) {
+        pcFileDao.deleteProject(map);
+    }
+
+    @Override
     public void saveUpdateProject(Map map) {
         pcFileDao.saveProject(map);
     }

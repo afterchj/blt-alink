@@ -70,6 +70,8 @@ public class PCFileController {
     @RequestMapping("/backup")
     public Map submit(@RequestBody JSONObject params) {
         Map data = new HashMap();
+
+        List ids = new ArrayList();
         try {
             String uid = params.getString("User_ID");
             Map project = new HashMap();
@@ -86,9 +88,10 @@ public class PCFileController {
                 fileService.saveUpdateProject(project);
                 if (StringUtils.isEmpty(pid)) {
                     pid = String.valueOf(project.get("result"));
+                } else {
+                    ids.add(pid);
                 }
                 List mesh = object.getJSONArray("Project_Mesh");
-                logger.warn("id=" + project.get("id") + ",pid=" + pid + ",mesh=" + mesh);
                 if (mesh != null && mesh.size() > 0) {
                     for (int j = 0; j < mesh.size(); j++) {
                         Map map = new HashMap();
@@ -98,6 +101,14 @@ public class PCFileController {
                     }
                     fileService.saveMesh(list);
                 }
+                logger.warn("id=" + project.get("id") + ",ids=" + ids + ",mesh=" + mesh);
+            }
+
+            if (ids != null && ids.size() > 0) {
+                Map param = new HashMap();
+                param.put("uid", uid);
+                param.put("list", ids);
+                fileService.deleteProject(param);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());

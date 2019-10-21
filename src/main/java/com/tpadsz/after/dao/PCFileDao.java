@@ -11,6 +11,8 @@ public interface PCFileDao {
 
     Map getFile(Map map);
 
+    void deleteProject(Map map);
+
     void saveFile(Map map);
 
     void saveProject(Map map);
