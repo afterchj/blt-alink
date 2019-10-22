@@ -15,9 +15,25 @@
         <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
     </parameterMap>
 
+    <parameterMap id="projectMapper" type="map">
+        <parameter property="uid" mode="IN"/>
+        <parameter property="Project_ID" mode="IN"/>
+        <parameter property="Project_Name" mode="IN"/>
+        <parameter property="Project_Time" mode="IN"/>
+        <parameter property="Update_Time" mode="IN"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
 
-    <select id="getUser" resultType="AppUser" parameterType="string">
-        SELECT id,uname,mobile,account,pwd,salt,is_locked,status from f_user_account where account=#{account}
+    <select id="saveFile" parameterMap="fileMapper" resultType="map" statementType="CALLABLE">
+        CALL save_pc_file(?,?,?,?,?,?,?,?,?,?)
+    </select>
+
+    <select id="saveProject" parameterMap="projectMapper" resultType="map" statementType="CALLABLE">
+        CALL save_pc_project(?,?,?,?,?,?)
+    </select>
+
+    <select id="getUser" resultType="map" parameterType="string">
+        SELECT id User_ID,uname User_Name,IFNULL(mobile,'') User_Phone,IFNULL(email,'') User_Email,pwd,salt from f_user_account where account=#{account}
     </select>
 
     <select id="getFile" resultType="map" parameterType="map">
@@ -29,20 +45,57 @@
     </select>
 
     <select id="getMesh" resultType="string" parameterType="map">
-        SELECT m.mesh_id FROM f_pc_file f
-        INNER JOIN f_pc_info m ON f.id = m.fid
+        SELECT mesh_id FROM f_pc_mesh
         WHERE 1=1
-        <if test="projectName !=null">
-            and project_name=#{projectName}
+        <if test="Project_ID !=null">
+            and pid=#{Project_ID}
         </if>
-        GROUP BY m.mesh_id
+        GROUP BY mesh_id
     </select>
 
     <select id="getProject" resultType="map" parameterType="map">
-        SELECT f.project_name,f.create_date,f.update_date FROM f_pc_file f GROUP BY f.project_name LIMIT 1
+        SELECT
+        id Project_ID,
+        uid User_ID,
+        DATE_FORMAT(create_date,'%Y-%m-%d %H:%i:%s') Project_Time,
+        DATE_FORMAT(update_date,'%Y-%m-%d %H:%i:%s') Update_Time,
+        project_name Project_Name
+        FROM f_pc_project
+        WHERE 1=1
+        <if test="uid !=null">
+            and uid=#{uid}
+        </if>
+        GROUP BY id
     </select>
 
-    <select id="saveFile" parameterMap="fileMapper" resultType="map" statementType="CALLABLE">
-        CALL save_pc_file(?,?,?,?,?,?,?,?,?,?)
-    </select>
+    <insert id="saveMesh" parameterType="list">
+        REPLACE INTO f_pc_mesh(pid,mesh_id,create_date,update_date) VALUES
+        <foreach collection="list" item="p" index="index" separator=",">
+            (
+            #{p.pid},#{p.meshId},now(),now()
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteProject" parameterType="map">
+        DELETE FROM f_pc_project WHERE uid=#{uid} AND id NOT IN
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="saveUpdateProject" parameterType="map" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        <!-- 查看是否存在,如果存在及更新，否则插入 -->
+        <selectKey keyProperty="count" order="BEFORE" resultType="int">
+            select count(*) as id from f_pc_project where id = #{pid}
+        </selectKey>
+        <choose>
+            <when test="id>0">
+                update f_pc_project set project_name=#{name} where id = #{pid}
+            </when>
+            <otherwise>
+                insert into f_pc_project(uid,project_name,create_date,update_date) value (#{uid},#{name},now(),now())
+            </otherwise>
+        </choose>
+    </insert>
 </mapper>

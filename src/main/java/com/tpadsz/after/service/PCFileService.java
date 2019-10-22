@@ -1,6 +1,5 @@
 package com.tpadsz.after.service;
 
-import com.tpadsz.after.entity.AppUser;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +9,21 @@ import java.util.Map;
  */
 public interface PCFileService {
 
-    AppUser getUser(String account);
+    Map getUser(String account);
 
     List getMesh(Map map);
 
-    Map getProject();
+    List<Map> getProject(Map map);
 
     Map getFile(Map map);
+
+    void saveMesh(Map map);
+
+    void saveMesh(List map);
+
+    void deleteProject(Map map);
+
+    void saveUpdateProject(Map map);
 
     void saveFile(Map map);
 }

@@ -1,14 +1,11 @@
 package com.tpadsz.after.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.tpadsz.after.entity.AppUser;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.service.PCFileService;
-import com.tpadsz.after.util.Encryption;
-import com.tpadsz.after.util.FileReadUtils;
-import com.tpadsz.after.util.PropertiesUtil;
-import com.tpadsz.after.util.WSClientUtil;
+import com.tpadsz.after.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,26 +36,80 @@ public class PCFileController {
 
     @RequestMapping("/login")
     public Map login(@RequestBody JSONObject params) {
-        logger.warn("params =" + params);
+        Map map = new HashMap();
         Map data = new HashMap();
-        AppUser appUser = fileService.getUser(params.getString("account"));
-        String confirm = Encryption.encrypt(Encryption.getMD5Str(params.getString("password")), appUser.getSalt());
-        boolean flag = appUser.getPwd().equals(confirm);
+        Map<String, String> appUser = fileService.getUser(params.getString("User_Name"));
+        if (appUser == null) {
+            data.put("code", ResultDict.ACCOUNT_NOT_CORRECT.getCode());
+            data.put("msg", ResultDict.ACCOUNT_NOT_CORRECT.getValue());
+            return data;
+        }
+        map.put("uid", appUser.get("User_ID"));
+        String confirm = Encryption.encrypt(Encryption.getMD5Str(params.getString("User_Pwd")), appUser.get("salt"));
+        boolean flag = appUser.get("pwd").equals(confirm);
         if (!flag) {
             data.put("code", ResultDict.PASSWORD_NOT_CORRECT.getCode());
             data.put("msg", ResultDict.PASSWORD_NOT_CORRECT.getValue());
             return data;
         }
-        Map p = fileService.getProject();
+        appUser = MapUtil.removeEntries(appUser, new String[]{"pwd", "salt"});
+        data.put("User_Info", appUser);
+        List<Map> maps = fileService.getProject(map);
         List pList = new ArrayList();
-        List mesh = fileService.getMesh(p);
-        Map project = new HashMap();
-        project.put("name", p.get("project_name"));
-        project.put("create_date", p.get("create_date"));
-        project.put("update_date", p.get("update_date"));
-        project.put("mesh", mesh);
-        pList.add(project);
-        data.put("myProject", pList);
+        for (Map p : maps) {
+            Map project = new HashMap();
+            List mesh = fileService.getMesh(p);
+            project.put("Project_Mesh", mesh);
+            project.putAll(p);
+            pList.add(project);
+        }
+        data.put("User_Project", pList);
+        return data;
+    }
+
+    @RequestMapping("/backup")
+    public Map submit(@RequestBody JSONObject params) {
+        Map data = new HashMap();
+        List ids = new ArrayList();
+        try {
+            String uid = params.getString("User_ID");
+            JSONArray jsonArray = params.getJSONArray("User_Project");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                List list = new ArrayList();
+                JSONObject project = (JSONObject) jsonArray.get(i);
+                String pid = project.getString("Project_ID");
+                project.put("uid", uid);
+                fileService.saveUpdateProject(project);
+                if (StringUtils.isEmpty(pid)) {
+                    pid = String.valueOf(project.get("result"));
+                }
+                ids.add(pid);
+                List mesh = project.getJSONArray("Project_Mesh");
+                if (mesh != null && mesh.size() > 0) {
+                    for (int j = 0; j < mesh.size(); j++) {
+                        Map map = new HashMap();
+                        map.put("pid", pid);
+                        map.put("meshId", mesh.get(j));
+                        list.add(map);
+                    }
+                    fileService.saveMesh(list);
+                }
+            }
+            logger.warn("jsonArray=" + jsonArray + ",ids=" + ids);
+            if (ids != null && ids.size() > 0) {
+                Map param = new HashMap();
+                param.put("uid", uid);
+                param.put("list", ids);
+                fileService.deleteProject(param);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            data.put("code", ResultDict.SYSTEM_ERROR.getCode());
+            data.put("msg", ResultDict.SYSTEM_ERROR.getValue());
+            return data;
+        }
+        data.put("code", ResultDict.SUCCESS.getCode());
+        data.put("msg", ResultDict.SUCCESS.getValue());
         return data;
     }
 

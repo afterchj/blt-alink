@@ -10,6 +10,7 @@ public class AppUser {
     private String id;
     private String uname;
     private String mobile;
+    private String email;
     private String imei;
     private String account;
     private String pwd;
@@ -45,6 +46,14 @@ public class AppUser {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAccount() {

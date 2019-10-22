@@ -2,7 +2,7 @@ package com.tpadsz.after.entity.dd;
 
 public enum ResultDict {
 
-    SUCCESS("000", "成功"), SYSTEM_ERROR("200", "系统错误"), ACCOUNT_NOT_CORRECT("101", "账号密码不正确！"),
+    SUCCESS("000", "成功"), SYSTEM_ERROR("200", "系统错误"), ACCOUNT_NOT_CORRECT("101", "账号或密码不正确！"),
     PASSWORD_NOT_CORRECT("102", "账号密码不正确！"), MOBILE_NOT_EXISTED("103", "该手机号未绑定！"),
     ACCOUNT_IS_DISABLED("104", "token校验失败，该账号已被禁用！"), ACCOUNT_DISABLED("105", "该账号已被禁用！"),
     ADMIN_NOT_ALLOWED("106", "管理员账号不能进入客户端！"), LIGHT_EXISTED("120", "有灯存在，冻结"),
