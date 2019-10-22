@@ -12,8 +12,13 @@
         VALUES(#{sceneId},#{sname},#{mid},#{uid},now(),now())
     </insert>
 
+    <!--<insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >-->
+        <!--REPLACE INTO f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})-->
+    <!--</insert>-->
+
     <insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >
-        REPLACE INTO f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})
+        REPLACE INTO f_light_setting(lid,sid,x,y,off,horizontal_angle,vertical_angle,focus)
+        VALUES (#{lid},#{sid},#{x},#{y},#{off},#{horizontalAngle},#{verticalAngle},#{focus})
     </insert>
 
     <delete id="deleteLightSetting">

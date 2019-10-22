@@ -167,11 +167,18 @@
         SELECT id FROM f_place WHERE mid=#{mid} and uid=#{uid} and place_id=1
     </select>
 
+    <!--<insert id="saveGroupSetting">-->
+        <!--INSERT INTO f_group_setting-->
+        <!--( mid, sid, x, y, create_date, update_date, gid )-->
+        <!--VALUES-->
+	      <!--(#{mid},#{sid},#{x},#{y},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}))-->
+    <!--</insert>-->
+
     <insert id="saveGroupSetting">
         INSERT INTO f_group_setting
-        ( mid, sid, x, y, create_date, update_date, gid )
+        ( mid, sid, x, y, create_date, update_date, gid, horizontal_angle, vertical_angle, focus)
         VALUES
-	      (#{mid},#{sid},#{x},#{y},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}))
+        (#{mid},#{sid},#{x},#{y},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}),#{horizontalAngle},#{verticalAngle},#{focus})
     </insert>
 
     <delete id="deleteGroupSetting">

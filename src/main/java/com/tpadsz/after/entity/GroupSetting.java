@@ -1,5 +1,7 @@
 package com.tpadsz.after.entity;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @program: blt-alink
  * @description: group_setting table
@@ -15,6 +17,9 @@ public class GroupSetting {
     private String x;
     private String y;
     private Integer groupId;
+    private String horizontalAngle;//水平角度 --轨道灯
+    private String verticalAngle;//垂直角度 --轨道灯
+    private String focus;//焦距 --轨道灯
 
     public Integer getGroupId() {
         return groupId;
@@ -53,7 +58,7 @@ public class GroupSetting {
     }
 
     public void setSid(Integer sid) {
-        this.sid = sid;
+            this.sid = sid;
     }
 
     public String getX() {
@@ -61,7 +66,48 @@ public class GroupSetting {
     }
 
     public void setX(String x) {
-        this.x = x;
+        if (StringUtils.isNotBlank(x)){
+            this.x = x;
+        }
+    }
+
+    public String getHorizontalAngle() {
+        return horizontalAngle;
+    }
+
+    public void setHorizontalAngle(String horizontalAngle) {
+        if (StringUtils.isNotBlank(horizontalAngle)){
+            this.horizontalAngle = horizontalAngle;
+        }
+//        else {
+//            this.horizontalAngle = null;
+//        }
+    }
+
+    public String getVerticalAngle() {
+        return verticalAngle;
+    }
+
+    public void setVerticalAngle(String verticalAngle) {
+        if (StringUtils.isNotBlank(verticalAngle)){
+            this.verticalAngle = verticalAngle;
+        }
+//        else {
+//            this.verticalAngle = null;
+//        }
+    }
+
+    public String getFocus() {
+        return focus;
+    }
+
+    public void setFocus(String focus) {
+        if (StringUtils.isNotBlank(focus)){
+            this.focus = focus;
+        }
+//        else {
+//            this.focus = null;
+//        }
     }
 
     public String getY() {
@@ -69,6 +115,8 @@ public class GroupSetting {
     }
 
     public void setY(String y) {
-        this.y = y;
+        if (StringUtils.isNotBlank(y)){
+            this.y = y;
+        }
     }
 }
