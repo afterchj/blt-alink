@@ -70,28 +70,21 @@ public class PCFileController {
     @RequestMapping("/backup")
     public Map submit(@RequestBody JSONObject params) {
         Map data = new HashMap();
-
         List ids = new ArrayList();
         try {
             String uid = params.getString("User_ID");
-            Map project = new HashMap();
-            project.put("uid", uid);
             JSONArray jsonArray = params.getJSONArray("User_Project");
             for (int i = 0; i < jsonArray.size(); i++) {
                 List list = new ArrayList();
-                JSONObject object = (JSONObject) jsonArray.get(i);
-                String pid = object.getString("Project_ID");
-                project.put("pid", pid);
-                project.put("name", object.getString("Project_Name"));
-                project.put("createTime", object.getString("Project_Time"));
-                project.put("updateTime", object.getString("Update_Time"));
+                JSONObject project = (JSONObject) jsonArray.get(i);
+                String pid = project.getString("Project_ID");
+                project.put("uid", uid);
                 fileService.saveUpdateProject(project);
                 if (StringUtils.isEmpty(pid)) {
                     pid = String.valueOf(project.get("result"));
-                } else {
-                    ids.add(pid);
                 }
-                List mesh = object.getJSONArray("Project_Mesh");
+                ids.add(pid);
+                List mesh = project.getJSONArray("Project_Mesh");
                 if (mesh != null && mesh.size() > 0) {
                     for (int j = 0; j < mesh.size(); j++) {
                         Map map = new HashMap();
@@ -101,9 +94,8 @@ public class PCFileController {
                     }
                     fileService.saveMesh(list);
                 }
-                logger.warn("id=" + project.get("id") + ",ids=" + ids + ",mesh=" + mesh);
             }
-
+            logger.warn("jsonArray=" + jsonArray + ",ids=" + ids);
             if (ids != null && ids.size() > 0) {
                 Map param = new HashMap();
                 param.put("uid", uid);

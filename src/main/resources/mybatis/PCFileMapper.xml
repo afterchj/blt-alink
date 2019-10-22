@@ -17,10 +17,10 @@
 
     <parameterMap id="projectMapper" type="map">
         <parameter property="uid" mode="IN"/>
-        <parameter property="pid" mode="IN"/>
-        <parameter property="name" mode="IN"/>
-        <parameter property="createTime" mode="IN"/>
-        <parameter property="updateTime" mode="IN"/>
+        <parameter property="Project_ID" mode="IN"/>
+        <parameter property="Project_Name" mode="IN"/>
+        <parameter property="Project_Time" mode="IN"/>
+        <parameter property="Update_Time" mode="IN"/>
         <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
     </parameterMap>
 
