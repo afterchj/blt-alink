@@ -9,6 +9,7 @@ import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.*;
+import com.tpadsz.after.util.UrlUtils;
 import com.tpadsz.after.util.factory.AdjustBeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }
             model.put("result", result);
             model.put("result_message", resultMessage);
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
         }
     }
 
@@ -115,7 +116,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         model.put("result", result);
         model.put("result_message", resultMessage);
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -138,7 +139,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             adjustService.renameLight(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
         }
     }
 
@@ -158,7 +159,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         model.put("result", result);
         model.put("result_message", resultMessage);
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -179,24 +180,24 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             sceneAjustService.saveSceneLog(adjustBeanUtils.setSceneLog(uid, bltFlag, meshId, sceneId));
             model.put("result_message", ResultDict.SUCCESS.getValue());
             model.put("result", ResultDict.SUCCESS.getCode());
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
             return;
         }
         try {
             adjustService.saveScene(params);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
         } catch (NotExitException e) {
             model.put("result", ResultDict.PARAMS_BLANK.getCode());
             model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
             logger.error("method:saveScene; service:saveLightSetting(); PARAMS BLANK;sceneId:{},meshId:{}", sceneId,
                     meshId);
         } catch (SystemAlgorithmException e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
             model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
             logger.error("method:saveScene; service:saveLightSetting(); db rollback;sceneId:{},meshId:{}", sceneId,
                     meshId);
         }
@@ -209,7 +210,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     public void communicationTest(@ModelAttribute("decodedParams") JSONObject params, ModelMap model, HttpServletRequest request) {
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -248,7 +249,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             }
             model.put("result", result);
             model.put("result_message", resultMessage);
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
         }
     }
 
@@ -261,13 +262,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
-            model.putAll(getModelUrl(request));
+            model.putAll(UrlUtils.getModelUrl(request));
             return;
         }
         lightAjustService.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -279,7 +280,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
         model.put("place", placeMap);
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -290,7 +291,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         lightAjustService.moveLightsToDiffGroups(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -309,7 +310,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         model.put("result", result);
         model.put("result_message", resultMessage);
-        model.putAll(getModelUrl(request));
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     private String getUrl(HttpServletRequest request){

@@ -101,7 +101,6 @@ public class PlaceController extends BaseDecodedController {
         map.put("result_message", ResultDict.SUCCESS.getValue());
         map.put("versionCode",versionCode);
         return map;
-
     }
 
 }
