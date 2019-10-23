@@ -68,11 +68,13 @@
         <!--VALUES((select id from f_light where lmac=#{lmac}),#{x},#{y},now(),now())-->
     <!--</insert>-->
 
+    <!--扩展轨道灯-->
     <insert id="insertLightXY">
         insert into f_light_adjust(lid,x,y,create_date,update_date,horizontal_angle,vertical_angle,focus)
         VALUES((select id from f_light where lmac=#{lmac}),#{x},#{y},now(),now(),#{horizontalAngle},#{verticalAngle},#{focus})
     </insert>
 
+    <!--扩展轨道灯-->
     <update id="updateLightXY">
         UPDATE f_light_adjust
         set x=#{x},y=#{y},update_date=now(),horizontal_angle=#{horizontalAngle},vertical_angle=#{verticalAngle},focus=#{focus}
