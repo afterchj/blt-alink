@@ -312,26 +312,4 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         model.put("result_message", resultMessage);
         model.putAll(UrlUtils.getModelUrl(request));
     }
-
-    private String getUrl(HttpServletRequest request){
-        String url;
-        String head = "http://";
-        String hostName = request.getServerName();
-        int port = request.getServerPort();
-        String contextPath  = request.getContextPath();
-        String servletPath = request.getServletPath();
-        if ("localhost".equals(hostName) || "127.0.0.1".equals(hostName)){
-            url = new StringBuffer().append(head).append(hostName).append(":").append(port).append(contextPath).append(servletPath).toString();
-        }else {
-            url = new StringBuffer().append(head).append(hostName).append(contextPath).append(servletPath).toString();
-        }
-        return url;
-    }
-
-    private ModelMap getModelUrl(HttpServletRequest request){
-        ModelMap modelMap = new ModelMap();
-        String url = getUrl(request);
-        modelMap.put("url",url);
-        return modelMap;
-    }
 }
