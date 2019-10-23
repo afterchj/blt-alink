@@ -44,9 +44,6 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     private SceneAjustService sceneAjustService;
 
     @Resource
-    private PlaceService placeService;
-
-    @Resource
     private AdjustService adjustService;
 
     private final AdjustBeanUtils adjustBeanUtils;
@@ -70,6 +67,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String bltFlag = params.getString("bltFlag");//"1":连接蓝牙；"0":未连蓝牙；
         Integer groupId = params.getInteger("groupId");//组id(客户端生成)
         String meshId = params.getString("meshId");//网络id
+        String result = ResultDict.SUCCESS.getCode();
+        String resultMessage = ResultDict.SUCCESS.getValue();
         if (bltFlag.equals("0")) {//未连蓝牙
             saveLog(uid, meshId, operation, bltFlag, model, groupId, null,request);
         } else if ("1".equals(bltFlag)) {//连接蓝牙
@@ -77,25 +76,22 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             try {
                 adjustService.groupOperation(group, operation);
                 groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
-                model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("result_message", ResultDict.SUCCESS.getValue());
-                model.putAll(getModelUrl(request));
             } catch (NameDuplicateException e) {//组名重复
                 logger.error("method:groupOperation; group name duplicate;groupId:{},meshId:{}", groupId, meshId);
-                model.put("result", ResultDict.GROUP_NAME_DUPLICATE.getCode());
-                model.put("result_message", ResultDict.GROUP_NAME_DUPLICATE.getValue());
-                model.putAll(getModelUrl(request));
+                result = ResultDict.GROUP_NAME_DUPLICATE.getCode();
+                resultMessage = ResultDict.GROUP_NAME_DUPLICATE.getValue();
             } catch (GroupDuplicateException e) {//存在组
                 logger.error("method:groupOperation; group duplicate;groupId:{},meshId:{}", groupId, meshId);
-                model.put("result", ResultDict.DUPLICATE_GID.getCode());
-                model.put("result_message", ResultDict.DUPLICATE_GID.getValue());
-                model.putAll(getModelUrl(request));
+                result = ResultDict.DUPLICATE_GID.getCode();
+                resultMessage = ResultDict.DUPLICATE_GID.getValue();
             } catch (NotExitException e) {//不存在组
                 logger.error("method:groupOperation; cannot find the group:{},meshId:{}", groupId, meshId);
-                model.put("result", ResultDict.NO_GROUP.getCode());
-                model.put("result_message", ResultDict.NO_GROUP.getValue());
-                model.putAll(getModelUrl(request));
+                result = ResultDict.NO_GROUP.getCode();
+                resultMessage = ResultDict.NO_GROUP.getValue();
             }
+            model.put("result", result);
+            model.put("result_message", resultMessage);
+            model.putAll(getModelUrl(request));
         }
     }
 
@@ -106,19 +102,20 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     @RequestMapping(value = "/groupsLists", method = RequestMethod.POST)
     public void groupsLists(@ModelAttribute("decodedParams") JSONObject
                                     params, ModelMap model, HttpServletRequest request) {
+        String result = ResultDict.SUCCESS.getCode();
+        String resultMessage = ResultDict.SUCCESS.getValue();
         try {
             Map<String, Object> map = adjustService.getGroupList(params);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("result_message", ResultDict.SUCCESS.getValue());
             model.put("data", map.get("data"));
-            model.putAll(getModelUrl(request));
         } catch (NotExitException e) {
-            model.put("result", ResultDict.MESHID_NOT_NULL.getCode());
-            model.put("result_message", ResultDict.MESHID_NOT_NULL.getValue());
-            model.putAll(getModelUrl(request));
+            result = ResultDict.MESHID_NOT_NULL.getCode();
+            resultMessage = ResultDict.MESHID_NOT_NULL.getValue();
             logger.error("method groupsLists; meshid is null; meshId: {}, uid: {}", params.getString("meshId"),
                     params.getString("uid"));
         }
+        model.put("result", result);
+        model.put("result_message", resultMessage);
+        model.putAll(getModelUrl(request));
     }
 
     /**
@@ -151,16 +148,17 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
     @RequestMapping(value = "/saveDefaultScene", method = RequestMethod.POST)
     public void saveDefaultScene(@ModelAttribute("decodedParams") JSONObject params,
                                  ModelMap model, HttpServletRequest request) {
+        String result = ResultDict.SUCCESS.getCode();
+        String resultMessage = ResultDict.SUCCESS.getValue();
         try {
             adjustService.saveDefaultScene(params);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("result_message", ResultDict.SUCCESS.getValue());
-            model.putAll(getModelUrl(request));
         } catch (NotExitException e) {
-            model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-            model.putAll(getModelUrl(request));
+            result = ResultDict.PARAMS_BLANK.getCode();
+            resultMessage = ResultDict.PARAMS_BLANK.getValue();
         }
+        model.put("result", result);
+        model.put("result_message", resultMessage);
+        model.putAll(getModelUrl(request));
     }
 
     /**
@@ -225,6 +223,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         String operation = params.getString("operation");
         String bltFlag = params.getString("bltFlag");
         String meshId = params.getString("meshId");
+        String result = ResultDict.SUCCESS.getCode();
+        String resultMessage = ResultDict.SUCCESS.getValue();
         //未连蓝牙
         if ("0".equals(bltFlag)) {
             saveLog(null, meshId, operation, bltFlag, model, null, null,request);
@@ -232,23 +232,23 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             Group group = adjustBeanUtils.setGroup(params);
             try {
                 List<LightReturn> lightReturns = adjustService.lightOperation(group, params);
-                model.put("result", ResultDict.SUCCESS.getCode());
-                model.put("result_message", ResultDict.SUCCESS.getValue());
                 if (lightReturns.size() > 0) {
                     model.put("lightLists", lightReturns);
                 }
-                model.putAll(getModelUrl(request));
             } catch (SystemAlgorithmException e) {
-                model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-                model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
-                model.putAll(getModelUrl(request));
-                logger.error("method:lightAjust; service:saveLight(); db rollback; meshId:{},groupId:{}",
+                result = ResultDict.SYSTEM_ERROR.getCode();
+                resultMessage = ResultDict.SYSTEM_ERROR.getValue();
+                logger.error("method:lightAjust; db rollback; meshId:{},groupId:{}",
                         meshId, params.getInteger("dGroupId"));
             } catch (NotExitException e) {
-                model.put("result", ResultDict.PARAMS_BLANK.getCode());
-                model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-                model.putAll(getModelUrl(request));
+                result = ResultDict.PARAMS_BLANK.getCode();
+                resultMessage = ResultDict.PARAMS_BLANK.getValue();
+                logger.error("method:lightAjust;AdjustComponentUtils.getLightList; 目标组id不能为空; meshId:{},groupId:{}",
+                        meshId, params.getInteger("dGroupId"));
             }
+            model.put("result", result);
+            model.put("result_message", resultMessage);
+            model.putAll(getModelUrl(request));
         }
     }
 

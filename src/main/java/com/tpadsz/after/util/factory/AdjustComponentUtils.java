@@ -125,7 +125,7 @@ public class AdjustComponentUtils {
         return adjustBeanUtils.setLightList(params, group);
     }
 
-    public void deleteLight(JSONObject params) throws NotExitException, SystemAlgorithmException {
+    public void deleteLight(JSONObject params) throws SystemAlgorithmException {
         String lmac = params.getString("lmac");
         lightAjustDao.deleteLight(lmac);
         //删除light_setting中的记录

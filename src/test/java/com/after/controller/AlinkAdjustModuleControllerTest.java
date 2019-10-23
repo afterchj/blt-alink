@@ -486,4 +486,14 @@ public class AlinkAdjustModuleControllerTest {
         Map<String, Object> map = groupOperationService.saveGroup(jsonObject);
         System.out.println(map.get("gname")+", "+map.get("groupId"));
     }
+
+    @Test
+    public void test8(){
+        List<Integer> list = new ArrayList<>();
+        for (int i=0;i<12;i++){
+            list.add(i);
+            System.out.println(list.toString());
+            System.out.println(list.size());
+        }
+    }
 }
