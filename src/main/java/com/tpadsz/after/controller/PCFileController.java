@@ -95,7 +95,6 @@ public class PCFileController {
                     fileService.saveMesh(list);
                 }
             }
-            logger.warn("jsonArray=" + jsonArray + ",ids=" + ids);
             if (ids != null && ids.size() > 0) {
                 Map param = new HashMap();
                 param.put("uid", uid);
