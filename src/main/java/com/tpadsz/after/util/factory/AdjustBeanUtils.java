@@ -41,16 +41,16 @@ public class AdjustBeanUtils {
         if (pid != null) {
             group.setPid(pid);
         }
-        if (StringUtils.isNotBlank(gname)){
+        if (StringUtils.isNotBlank(gname)) {
             group.setGname(gname);
         }
         group.setMid(mid);
-        if (groupId != null){
+        if (groupId != null) {
             group.setGroupId(groupId);
         }
-        if (dGroupId != null){
+        if (dGroupId != null) {
             group.setGroupId(dGroupId);//存在dGroup是对灯操作
-            pid = placeService.getPlaceByGroupIdAndMeshId(dGroupId,meshId,uid);
+            pid = placeService.getPlaceByGroupIdAndMeshId(dGroupId, meshId, uid);
             group.setPid(pid);//移动灯后目标组的pid
         }
         group.setUid(uid);
@@ -62,7 +62,7 @@ public class AdjustBeanUtils {
         return group;
     }
 
-    public SceneLog setSceneLog(String uid, String bltFlag, String meshId, Integer sceneId){
+    public SceneLog setSceneLog(String uid, String bltFlag, String meshId, Integer sceneId) {
 //        SceneLog sceneLog = new SceneLog();
 //        sceneLog.setUid(uid);
 //        sceneLog.setBltFlag(bltFlag);
@@ -78,7 +78,7 @@ public class AdjustBeanUtils {
                 .build();
     }
 
-    public SceneAjust setSceneAjust(Integer sceneId, String uid, Integer mid, String sname){
+    public SceneAjust setSceneAjust(Integer sceneId, String uid, Integer mid, String sname) {
         SceneAjust sceneAjust = new SceneAjust();
         sceneAjust.setSceneId(sceneId);
         sceneAjust.setUid(uid);
@@ -87,7 +87,7 @@ public class AdjustBeanUtils {
         return sceneAjust;
     }
 
-    public GroupSetting setGroupSetting(String x, String y, Integer sid, Integer mid, Integer groupId){
+    public GroupSetting setGroupSetting(String x, String y, Integer sid, Integer mid, Integer groupId) {
         GroupSetting groupSetting = new GroupSetting();
         groupSetting.setX(x);
         groupSetting.setY(y);
@@ -97,7 +97,20 @@ public class AdjustBeanUtils {
         return groupSetting;
     }
 
-    public LightList setLightList(Integer mid, String lmac, Integer groupId, String productId, Integer pid){
+    public GroupSetting setGroupSetting(JSONObject group, Integer sid, Integer mid) {
+        GroupSetting groupSetting = new GroupSetting();
+        groupSetting.setX(group.getString("x"));
+        groupSetting.setY(group.getString("y"));
+        groupSetting.setHorizontalAngle(group.getString("horizontalAngle"));
+        groupSetting.setVerticalAngle(group.getString("verticalAngle"));
+        groupSetting.setFocus(group.getString("focus"));
+        groupSetting.setSid(sid);
+        groupSetting.setMid(mid);
+        groupSetting.setGroupId(group.getInteger("groupId"));
+        return groupSetting;
+    }
+
+    public LightList setLightList(Integer mid, String lmac, Integer groupId, String productId, Integer pid) {
         LightList lightList = new LightList();
         lightList.setMid(mid);
         lightList.setLmac(lmac);
@@ -108,13 +121,37 @@ public class AdjustBeanUtils {
         return lightList;
     }
 
-    public LightSetting setLightSetting(Integer sid, Map<String, Integer> lightMap, String x, String y, String off){
+    public LightList setLightList(JSONObject light) {
+        LightList lightList = new LightList();
+        lightList.setLmac(light.getString("lmac"));
+        lightList.setX(light.getString("x"));
+        lightList.setY(light.getString("x"));
+        lightList.setHorizontalAngle(light.getString("horizontalAngle"));
+        lightList.setVerticalAngle(light.getString("verticalAngle"));
+        lightList.setFocus(light.getString("focus"));
+        return lightList;
+    }
+
+    public LightSetting setLightSetting(Integer sid, Map<String, Integer> lightMap, String x, String y, String off) {
         LightSetting lightSetting = new LightSetting();
         lightSetting.setSid(sid);
         lightSetting.setLid(lightMap.get("id"));
         lightSetting.setX(x);
         lightSetting.setY(y);
         lightSetting.setOff(off);
+        return lightSetting;
+    }
+
+    public LightSetting setLightSetting(Integer sid, Map<String, Integer> lightMap, JSONObject light) {
+        LightSetting lightSetting = new LightSetting();
+        lightSetting.setSid(sid);
+        lightSetting.setLid(lightMap.get("id"));
+        lightSetting.setX(light.getString("x"));
+        lightSetting.setY(light.getString("y"));
+        lightSetting.setOff(light.getString("off"));
+        lightSetting.setHorizontalAngle(light.getString("horizontalAngle"));
+        lightSetting.setVerticalAngle(light.getString("verticalAngle"));
+        lightSetting.setFocus(light.getString("focus"));
         return lightSetting;
     }
 

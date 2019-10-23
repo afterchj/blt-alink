@@ -1,5 +1,7 @@
 package com.tpadsz.after.entity;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @program: blt-alink
  * @description:
@@ -9,22 +11,26 @@ package com.tpadsz.after.entity;
 public class LightList {
     private Integer id;
     private Integer lid;
+    private Integer pid;
     private String productId;
     private String lmac;
     private String lname;
     private Integer gid;
-//    private Integer typeId;
+    //    private Integer typeId;
     private String x;
     private String y;
-//    private String tname;
+    //    private String tname;
 //    private String tnum;
     private Integer groupId;
     private Integer mid;
-//    private String productName;
+    //    private String productName;
 //    private String irrEff;
 //    private String power;
 //    private String voltage;
 //    private String current;
+    private String horizontalAngle;//水平角度 --轨道灯
+    private String verticalAngle;//垂直角度 --轨道灯
+    private String focus;//焦距 --轨道灯
 
     public Integer getPid() {
         return pid;
@@ -34,8 +40,6 @@ public class LightList {
         this.pid = pid;
     }
 
-    private Integer pid;
-
     public Integer getId() {
         return id;
     }
@@ -43,6 +47,7 @@ public class LightList {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public Integer getLid() {
         return lid;
     }
@@ -128,7 +133,9 @@ public class LightList {
     }
 
     public void setX(String x) {
-        this.x = x;
+        if (StringUtils.isNotBlank(x)){
+            this.x = x;
+        }
     }
 
     public String getY() {
@@ -136,7 +143,39 @@ public class LightList {
     }
 
     public void setY(String y) {
-        this.y = y;
+        if (StringUtils.isNotBlank(y)){
+            this.y = y;
+        }
+    }
+
+    public String getHorizontalAngle() {
+        return horizontalAngle;
+    }
+
+    public void setHorizontalAngle(String horizontalAngle) {
+        if (StringUtils.isNotBlank(horizontalAngle)){
+            this.horizontalAngle = horizontalAngle;
+        }
+    }
+
+    public String getVerticalAngle() {
+        return verticalAngle;
+    }
+
+    public void setVerticalAngle(String verticalAngle) {
+        if (StringUtils.isNotBlank(verticalAngle)){
+            this.verticalAngle = verticalAngle;
+        }
+    }
+
+    public String getFocus() {
+        return focus;
+    }
+
+    public void setFocus(String focus) {
+        if (StringUtils.isNotBlank(focus)){
+            this.focus = focus;
+        }
     }
 
     public void setGid(Integer gid) {
@@ -179,26 +218,4 @@ public class LightList {
         this.lname = lname;
     }
 
-    @Override
-    public String toString() {
-        return "LightList{" +
-                "lid=" + lid +
-                ", productId='" + productId + '\'' +
-                ", lmac='" + lmac + '\'' +
-                ", lname='" + lname + '\'' +
-                ", gid=" + gid +
-//                ", typeId=" + typeId +
-                ", x='" + x + '\'' +
-                ", y='" + y + '\'' +
-//                ", tname='" + tname + '\'' +
-//                ", tnum='" + tnum + '\'' +
-                ", groupId=" + groupId +
-                ", mid=" + mid +
-//                ", productName='" + productName + '\'' +
-//                ", irrEff='" + irrEff + '\'' +
-//                ", power='" + power + '\'' +
-//                ", voltage='" + voltage + '\'' +
-//                ", current='" + current + '\'' +
-                '}';
-    }
 }

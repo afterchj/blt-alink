@@ -473,10 +473,10 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void updateLightXYTest(){
-        String jsonStr = "{\"uid\":\"11\",\"token\":\"aaa\",\"meshId\":\"89034617\"," +
-                "\"lightList\":[{\"lmac\":\"aa-aa-aa-aa\",\"x\":\"100\",\"y\":\"100\"}]}";
-        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-        lightAjustService.updateLightXY(jsonObject);
+//        String jsonStr = "{\"uid\":\"11\",\"token\":\"aaa\",\"meshId\":\"89034617\"," +
+//                "\"lightList\":[{\"lmac\":\"aa-aa-aa-aa\",\"x\":\"100\",\"y\":\"100\"}]}";
+//        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+//        lightAjustService.updateLightXY(jsonObject);
     }
 
     @Test
@@ -485,5 +485,15 @@ public class AlinkAdjustModuleControllerTest {
         JSONObject jsonObject = getJson(jsonStr);
         Map<String, Object> map = groupOperationService.saveGroup(jsonObject);
         System.out.println(map.get("gname")+", "+map.get("groupId"));
+    }
+
+    @Test
+    public void test8(){
+        List<Integer> list = new ArrayList<>();
+        for (int i=0;i<12;i++){
+            list.add(i);
+            System.out.println(list.toString());
+            System.out.println(list.size());
+        }
     }
 }

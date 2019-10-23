@@ -3,6 +3,7 @@ package com.tpadsz.after.service;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 
 import java.util.List;
@@ -41,5 +42,5 @@ public interface LightAjustService {
 
     void moveLightsToDiffGroups(JSONObject params);
 
-    void updateLightXY(JSONObject params);
+    void updateLightXY(JSONObject params) throws NotExitException;
 }

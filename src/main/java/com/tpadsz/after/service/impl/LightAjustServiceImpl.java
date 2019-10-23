@@ -8,10 +8,12 @@ import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.entity.Group;
 import com.tpadsz.after.entity.LightList;
 import com.tpadsz.after.entity.LightReturn;
+import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.exception.SystemAlgorithmException;
 import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.LightAjustService;
 import com.tpadsz.after.service.PlaceService;
+import com.tpadsz.after.util.factory.AdjustBeanUtils;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -49,6 +51,9 @@ public class LightAjustServiceImpl implements LightAjustService {
 
     @Resource
     private PlaceService placeService;
+
+    @Resource
+    private AdjustBeanUtils adjustBeanUtils;
 
     @Override
     public void saveLightAjustLog(String meshId, String bltFlag, String operation, String lmacs) {
@@ -262,21 +267,28 @@ public class LightAjustServiceImpl implements LightAjustService {
     }
 
     @Override
-    public void updateLightXY(JSONObject params) {
+    public void updateLightXY(JSONObject params) throws NotExitException {
 //        String uid = params.getString("uid");
 //        String meshId = params.getString("meshId");
         JSONArray lights =  params.getJSONArray("lightList");
 //        Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
         LightList lightList;
+        JSONObject light;
         for (int i=0;i<lights.size();i++){
-            lightList = new LightList();
+//            lightList = new LightList();
+            light = lights.getJSONObject(i);
+            lightList = adjustBeanUtils.setLightList(light);
             String lmac = lights.getJSONObject(i).getString("lmac");
-            String x = lights.getJSONObject(i).getString("x");
-            String y = lights.getJSONObject(i).getString("y");
-//            lightList.setMid(mid);
-            lightList.setLmac(lmac);
-            lightList.setX(x);
-            lightList.setY(y);
+//            String x = lights.getJSONObject(i).getString("x");
+//            String y = lights.getJSONObject(i).getString("y");
+////            lightList.setMid(mid);
+//            lightList.setLmac(lmac);
+//            lightList.setX(x);
+//            lightList.setY(y);
+            Map<String, Integer> lightMap = lightAjustDao.getLid(lmac);
+            if (lightMap == null || lightMap.size() == 0){
+                throw new NotExitException("未发现灯");
+            }
             Integer count = lightAjustDao.getLightAdjust(lmac);
             if (count>0){
                 lightAjustDao.updateLightXY(lightList);
