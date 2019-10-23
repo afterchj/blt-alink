@@ -121,6 +121,17 @@ public class AdjustBeanUtils {
         return lightList;
     }
 
+    public LightList setLightList(JSONObject light) {
+        LightList lightList = new LightList();
+        lightList.setLmac(light.getString("lmac"));
+        lightList.setX(light.getString("x"));
+        lightList.setY(light.getString("x"));
+        lightList.setHorizontalAngle(light.getString("horizontalAngle"));
+        lightList.setVerticalAngle(light.getString("verticalAngle"));
+        lightList.setFocus(light.getString("focus"));
+        return lightList;
+    }
+
     public LightSetting setLightSetting(Integer sid, Map<String, Integer> lightMap, String x, String y, String off) {
         LightSetting lightSetting = new LightSetting();
         lightSetting.setSid(sid);

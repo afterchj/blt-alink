@@ -79,9 +79,6 @@ public class GroupSetting {
         if (StringUtils.isNotBlank(horizontalAngle)){
             this.horizontalAngle = horizontalAngle;
         }
-//        else {
-//            this.horizontalAngle = null;
-//        }
     }
 
     public String getVerticalAngle() {
@@ -92,9 +89,6 @@ public class GroupSetting {
         if (StringUtils.isNotBlank(verticalAngle)){
             this.verticalAngle = verticalAngle;
         }
-//        else {
-//            this.verticalAngle = null;
-//        }
     }
 
     public String getFocus() {
@@ -105,9 +99,6 @@ public class GroupSetting {
         if (StringUtils.isNotBlank(focus)){
             this.focus = focus;
         }
-//        else {
-//            this.focus = null;
-//        }
     }
 
     public String getY() {

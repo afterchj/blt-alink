@@ -162,9 +162,9 @@ public class AdjustComponentUtils {
 
     public List<LightSetting> setLightSettings(JSONArray lightArray, Integer mid, Integer pid, Integer sid) throws
             NotExitException {
-        String x;
-        String y;
-        String off;
+//        String x;
+//        String y;
+//        String off;
         String lmac;
         Integer groupId;
         String productId;
