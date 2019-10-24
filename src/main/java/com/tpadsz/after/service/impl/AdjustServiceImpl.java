@@ -157,7 +157,8 @@ public class AdjustServiceImpl implements AdjustService {
             if (sid == null) {
                 sceneAjust = adjustBeanUtils.setSceneAjust(sceneId, uid, mid, sname);
                 sceneAjustDao.saveScene(sceneAjust);//创建场景
-                SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid, "1", meshId, sceneId);
+                SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid, "0", meshId, sceneId);
+                sceneLog.setOperation("1");//保存默认场景设置1
                 sceneAjustDao.saveSceneLog(sceneLog);//保存场景日志
             }
         }
@@ -184,7 +185,7 @@ public class AdjustServiceImpl implements AdjustService {
         Integer version = params.getInteger("version");
         List<PlaceExtend> places;
         List<GroupList> groupLists;
-        Map<String,Object> map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         if (version != null && 2 == version) {
             //v2.1.0版本
             places = placeService.getPlacesAndGroups(mid);

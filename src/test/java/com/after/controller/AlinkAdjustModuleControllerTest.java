@@ -18,9 +18,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: blt-alink
@@ -489,11 +487,9 @@ public class AlinkAdjustModuleControllerTest {
 
     @Test
     public void test8(){
-        List<Integer> list = new ArrayList<>();
-        for (int i=0;i<12;i++){
-            list.add(i);
-            System.out.println(list.toString());
-            System.out.println(list.size());
-        }
+        Map<Integer,Integer> map = new TreeMap<>();
+        map.put(1,2);
+        map.put(0,1);
+        System.out.println(map.toString());
     }
 }
