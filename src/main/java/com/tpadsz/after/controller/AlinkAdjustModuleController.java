@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
+import static com.tpadsz.after.entity.dd.ResultDict.PARAMS_BLANK;
+import static com.tpadsz.after.entity.dd.ResultDict.SYSTEM_ERROR;
+
 /**
  * @program: blt-alink
  * @description: 场景和组调节模块
@@ -154,8 +157,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         try {
             adjustService.saveDefaultScene(params);
         } catch (NotExitException e) {
-            result = ResultDict.PARAMS_BLANK.getCode();
-            resultMessage = ResultDict.PARAMS_BLANK.getValue();
+            result = PARAMS_BLANK.getCode();
+            resultMessage = PARAMS_BLANK.getValue();
         }
         model.put("result", result);
         model.put("result_message", resultMessage);
@@ -174,6 +177,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         Integer sceneId = params.getInteger("sceneId");
         String bltFlag = params.getString("bltFlag");
         String uid = params.getString("uid");
+        String result = ResultDict.SUCCESS.getCode();
+        String resultMessage = ResultDict.SUCCESS.getValue();
         //未连蓝牙
         if ("0".equals(bltFlag)) {
             //记录日志
@@ -185,22 +190,20 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
         }
         try {
             adjustService.saveScene(params);
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("result_message", ResultDict.SUCCESS.getValue());
-            model.putAll(UrlUtils.getModelUrl(request));
         } catch (NotExitException e) {
-            model.put("result", ResultDict.PARAMS_BLANK.getCode());
-            model.put("result_message", ResultDict.PARAMS_BLANK.getValue());
-            model.putAll(UrlUtils.getModelUrl(request));
+            result = PARAMS_BLANK.getCode();
+            resultMessage = PARAMS_BLANK.getValue();
             logger.error("method:saveScene; service:saveLightSetting(); PARAMS BLANK;sceneId:{},meshId:{}", sceneId,
                     meshId);
         } catch (SystemAlgorithmException e) {
-            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-            model.put("result_message", ResultDict.SYSTEM_ERROR.getValue());
-            model.putAll(UrlUtils.getModelUrl(request));
+            result = SYSTEM_ERROR.getCode();
+            resultMessage = SYSTEM_ERROR.getValue();
             logger.error("method:saveScene; service:saveLightSetting(); db rollback;sceneId:{},meshId:{}", sceneId,
                     meshId);
         }
+        model.put("result", result);
+        model.put("result_message", resultMessage);
+        model.putAll(UrlUtils.getModelUrl(request));
     }
 
     /**
@@ -237,13 +240,13 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                     model.put("lightLists", lightReturns);
                 }
             } catch (SystemAlgorithmException e) {
-                result = ResultDict.SYSTEM_ERROR.getCode();
-                resultMessage = ResultDict.SYSTEM_ERROR.getValue();
+                result = SYSTEM_ERROR.getCode();
+                resultMessage = SYSTEM_ERROR.getValue();
                 logger.error("method:lightAjust; db rollback; meshId:{},groupId:{}",
                         meshId, params.getInteger("dGroupId"));
             } catch (NotExitException e) {
-                result = ResultDict.PARAMS_BLANK.getCode();
-                resultMessage = ResultDict.PARAMS_BLANK.getValue();
+                result = PARAMS_BLANK.getCode();
+                resultMessage = PARAMS_BLANK.getValue();
                 logger.error("method:lightAjust;AdjustComponentUtils.getLightList; 目标组id不能为空; meshId:{},groupId:{}",
                         meshId, params.getInteger("dGroupId"));
             }
