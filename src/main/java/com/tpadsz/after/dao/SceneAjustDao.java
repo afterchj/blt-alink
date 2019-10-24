@@ -25,4 +25,8 @@ public interface SceneAjustDao {
     void deleteLightSetting(@Param("sid") Integer sid);//删除旧场景
 
     void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除单灯lightsetting记录
+
+    int getLightSetting(LightSetting lightSetting);
+
+    void updateLightSetting(LightSetting lightSetting);
 }

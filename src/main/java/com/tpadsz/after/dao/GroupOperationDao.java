@@ -75,4 +75,8 @@ public interface GroupOperationDao {
     Integer getSalesmanOrManager(@Param("uid") String uid);
 
     String getUidByMeshId(@Param("meshId") String meshId);
+
+    int getgroupSetting(GroupSetting groupSetting);
+
+    void updateGroupSetting(GroupSetting groupSetting);
 }

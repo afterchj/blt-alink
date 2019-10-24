@@ -16,10 +16,35 @@
         <!--REPLACE INTO f_light_setting(lid,sid,x,y,off) VALUES (#{lid},#{sid},#{x},#{y},#{off})-->
     <!--</insert>-->
 
+    <!--插入空值时，需要指定JdbcType-->
     <insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >
-        REPLACE INTO f_light_setting(lid,sid,x,y,off,horizontal_angle,vertical_angle,focus)
-        VALUES (#{lid},#{sid},#{x},#{y},#{off},#{horizontalAngle},#{verticalAngle},#{focus})
+        INSERT INTO f_light_setting(lid,sid,x,y,off,horizontal_angle,vertical_angle,focus)
+        VALUES
+        (#{lid},#{sid},#{x,jdbcType=VARCHAR},#{y,jdbcType=VARCHAR},#{off,jdbcType=VARCHAR},#{horizontalAngle,jdbcType=VARCHAR},#{verticalAngle,jdbcType=VARCHAR},#{focus,jdbcType=VARCHAR})
     </insert>
+
+    <update id="updateLightSetting" parameterType="com.tpadsz.after.entity.LightSetting">
+        update f_light_setting
+        <set>
+            <if test="x!=null">
+                x=#{x},
+            </if>
+            <if test="y!=null">
+                y=#{y},
+            </if>
+            update_date=now(),
+            <if test="horizontalAngle!=null">
+                horizontal_angle=#{horizontalAngle},
+            </if>
+            <if test="verticalAngle!=null">
+                vertical_angle=#{verticalAngle},
+            </if>
+            <if test="focus!=null">
+                focus=#{focus}
+            </if>
+        </set>
+        WHERE lid=#{lid} and sid=#{sid}
+    </update>
 
     <delete id="deleteLightSetting">
         DELETE FROM f_light_setting WHERE sid=#{sid}
@@ -27,4 +52,8 @@
     <delete id="deleteLightSettingByLmac">
         DELETE FROM f_light_setting WHERE lid=(select id from f_light WHERE lmac=#{lmac})
     </delete>
+
+    <select id="getLightSetting" resultType="int" parameterType="com.tpadsz.after.entity.LightSetting">
+        select count(*) from f_light_setting where lid=#{lid} and sid=#{sid}
+    </select>
 </mapper>

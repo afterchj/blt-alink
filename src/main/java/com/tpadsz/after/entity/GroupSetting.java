@@ -1,7 +1,5 @@
 package com.tpadsz.after.entity;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * @program: blt-alink
  * @description: group_setting table
@@ -66,9 +64,9 @@ public class GroupSetting {
     }
 
     public void setX(String x) {
-        if (StringUtils.isNotBlank(x)){
+//        if (StringUtils.isNotBlank(x)){
             this.x = x;
-        }
+//        }
     }
 
     public String getHorizontalAngle() {
@@ -76,9 +74,9 @@ public class GroupSetting {
     }
 
     public void setHorizontalAngle(String horizontalAngle) {
-        if (StringUtils.isNotBlank(horizontalAngle)){
+//        if (StringUtils.isNotBlank(horizontalAngle)){
             this.horizontalAngle = horizontalAngle;
-        }
+//        }
     }
 
     public String getVerticalAngle() {
@@ -86,9 +84,9 @@ public class GroupSetting {
     }
 
     public void setVerticalAngle(String verticalAngle) {
-        if (StringUtils.isNotBlank(verticalAngle)){
+//        if (StringUtils.isNotBlank(verticalAngle)){
             this.verticalAngle = verticalAngle;
-        }
+//        }
     }
 
     public String getFocus() {
@@ -96,9 +94,9 @@ public class GroupSetting {
     }
 
     public void setFocus(String focus) {
-        if (StringUtils.isNotBlank(focus)){
+//        if (StringUtils.isNotBlank(focus)){
             this.focus = focus;
-        }
+//        }
     }
 
     public String getY() {
@@ -106,8 +104,8 @@ public class GroupSetting {
     }
 
     public void setY(String y) {
-        if (StringUtils.isNotBlank(y)){
+//        if (StringUtils.isNotBlank(y)){
             this.y = y;
-        }
+//        }
     }
 }
