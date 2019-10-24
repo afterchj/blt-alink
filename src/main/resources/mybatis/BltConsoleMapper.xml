@@ -141,7 +141,6 @@
 			g.id,
 			g.group_id,
 			g.gname,
-			g.group_id,
 			gs.x,
 			gs.y,
 			gs.focus,
@@ -176,6 +175,7 @@
 		GROUP BY l.id
 		ORDER BY l.id
 	</select>
+
     <delete id="deleteScene" parameterType="map">
 		DELETE FROM f_scene
 		WHERE scene_id = #{sceneId}
@@ -194,10 +194,10 @@
 			SELECT
 				l.id,
 				ls.x,
-				ls.y,,
+				ls.y,
 				ls.focus,
 				ls.vertical_angle,
-				ls.horizontal_angle
+				ls.horizontal_angle,
 				NOW(),
 				NOW()
 			FROM
@@ -216,6 +216,7 @@
 				AND mesh_id = #{meshId}
 			)GROUP BY l.id;
 	</update>
+
     <update id="restScene" parameterType="map">
 		UPDATE f_light_setting l,(SELECT x,y FROM f_scene_setting WHERE sid=#{sceneId}) r SET l.x=r.x,l.y = r.y,l.update_date=NOW() WHERE l.id IN (
 			SELECT	rec.id
