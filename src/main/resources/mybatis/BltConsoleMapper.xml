@@ -143,7 +143,10 @@
 			g.gname,
 			g.group_id,
 			gs.x,
-			gs.y
+			gs.y,
+			gs.focus,
+			gs.vertical_angle,
+			gs.horizontal_angle
 		FROM f_group_setting gs
 		INNER JOIN f_mesh m ON m.id=gs.mid
 		INNER JOIN f_scene s ON s.id=gs.sid
@@ -159,7 +162,10 @@
 		SELECT
 			l.lmac,
 			ls.x,
-			ls.y
+			ls.y,
+			ls.focus,
+			ls.vertical_angle,
+			ls.horizontal_angle
 		FROM f_light_setting ls
 		INNER JOIN f_light l ON l.id=ls.lid
 		INNER JOIN f_mesh m ON m.id=l.mid
@@ -171,27 +177,27 @@
 		ORDER BY l.id
 	</select>
     <delete id="deleteScene" parameterType="map">
-		DELETE
-		FROM
-		f_scene
-		WHERE
-		scene_id = #{sceneId}
+		DELETE FROM f_scene
+		WHERE scene_id = #{sceneId}
 		AND mid = (
-		SELECT
-		id
-		FROM
-		f_mesh
-		WHERE mesh_id = #{meshId}
-		AND uid = #{uid}
+			SELECT
+			id
+			FROM
+			f_mesh
+			WHERE mesh_id = #{meshId}
+			AND uid = #{uid}
 		)
 	</delete>
 
     <update id="saveApplyScene" parameterType="map">
-		REPLACE INTO f_light_adjust(lid,x,y,create_date,update_date)
+		REPLACE INTO f_light_adjust(lid,x,y,focus,vertical_angle,horizontal_angle,create_date,update_date)
 			SELECT
 				l.id,
 				ls.x,
-				ls.y,
+				ls.y,,
+				ls.focus,
+				ls.vertical_angle,
+				ls.horizontal_angle
 				NOW(),
 				NOW()
 			FROM

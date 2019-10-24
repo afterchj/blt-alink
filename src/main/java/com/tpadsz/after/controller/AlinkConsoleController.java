@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.NotExitException;
 import com.tpadsz.after.service.BltConsoleService;
-import com.tpadsz.after.service.PlaceService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +29,6 @@ public class AlinkConsoleController extends BaseDecodedController {
 
     @Autowired
     private BltConsoleService bltConsoleService;
-
-    @Resource
-    private PlaceService placeService;
 
     @RequestMapping("/show")
     public void bltInfo(@ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
@@ -84,8 +79,7 @@ public class AlinkConsoleController extends BaseDecodedController {
     }
 
     @RequestMapping("/rename")
-    public void consoleRenameScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap
-            model) {
+    public void consoleRenameScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
         try {
             bltConsoleService.saveSceneName(param);
@@ -98,8 +92,7 @@ public class AlinkConsoleController extends BaseDecodedController {
     }
 
     @RequestMapping("/clean")
-    public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap
-            model) {
+    public void consoleCleanScene(HttpSession session, @ModelAttribute("decodedParams") JSONObject param, ModelMap model) {
         session.setAttribute("param", param);
         String flag = param.getString("bltFlag");
         int sceneId = param.getInteger("sceneId");
