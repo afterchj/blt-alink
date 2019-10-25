@@ -2,7 +2,6 @@ package com.tpadsz.after.util.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.SceneAjust;
 import com.tpadsz.after.entity.SceneLog;
 
 import javax.annotation.Resource;
@@ -28,8 +27,8 @@ public class AdjustBeanFactory implements AdjustBeanInterfaceFactory {
         return adjustBeanUtils.setSceneLog(uid,bltFlag,meshId,sceneId);
     }
 
-    @Override
-    public SceneAjust createSceneAdjust(Integer sceneId, String uid, Integer mid, String sname) {
-        return adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname);
-    }
+//    @Override
+//    public SceneAjust createSceneAdjust(Integer sceneId, String uid, Integer mid, String sname) {
+//        return adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname);
+//    }
 }

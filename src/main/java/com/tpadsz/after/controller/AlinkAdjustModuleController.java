@@ -166,7 +166,7 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
 
     /**
      * 保存更新场景
-     * v2.2.3 轨道灯
+     * v2.2.3 轨道灯场景类型 type=1
      * TODO saveScene
      */
     @RequestMapping(value = "/saveScene", method = RequestMethod.POST)//TODO saveScene

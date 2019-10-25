@@ -8,8 +8,8 @@
     </insert>
     <!--返回主键id-->
     <insert id="saveScene" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO f_scene(scene_id,sname,mid,uid,create_date,update_date)
-        VALUES(#{sceneId},#{sname},#{mid},#{uid},now(),now())
+        INSERT INTO f_scene(scene_id,sname,mid,uid,create_date,update_date,type)
+        VALUES(#{sceneId},#{sname},#{mid},#{uid},now(),now(),#{type})
     </insert>
 
     <!--<insert id="saveLightSetting" parameterType="com.tpadsz.after.entity.LightSetting" >-->

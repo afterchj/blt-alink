@@ -78,12 +78,16 @@ public class AdjustBeanUtils {
                 .build();
     }
 
-    public SceneAjust setSceneAjust(Integer sceneId, String uid, Integer mid, String sname) {
+    public SceneAjust setSceneAjust(Integer sceneId, String uid, Integer mid, String sname,Integer type) {
         SceneAjust sceneAjust = new SceneAjust();
         sceneAjust.setSceneId(sceneId);
         sceneAjust.setUid(uid);
         sceneAjust.setMid(mid);
         sceneAjust.setSname(sname);
+        if (type == null){
+            type = 0;
+        }
+        sceneAjust.setType(type);
         return sceneAjust;
     }
 
