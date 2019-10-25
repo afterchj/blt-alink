@@ -61,6 +61,4 @@ public interface TimeLineDao {
     int getTimeLine(TimeLine timeLine);
 
     ProjectTimer getProjectTimers(@Param("id") Integer id);
-
-//    void updateTimeJson(@Param("tid") Integer tid, @Param("") String meshId, String uid, String json);
 }

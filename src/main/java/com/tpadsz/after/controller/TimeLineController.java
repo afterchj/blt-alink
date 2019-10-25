@@ -50,7 +50,6 @@ public class TimeLineController extends BaseDecodedController{
      */
     @RequestMapping(value = "/rename",method = RequestMethod.POST)
     public void rename(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-
         timeLineService.rename(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -71,7 +70,6 @@ public class TimeLineController extends BaseDecodedController{
         timeLineService.create(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
-
     }
 
     /**
@@ -81,7 +79,6 @@ public class TimeLineController extends BaseDecodedController{
      */
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public void delete(@ModelAttribute("decodedParams") JSONObject params, ModelMap model){
-
         timeLineService.delete(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -119,7 +116,6 @@ public class TimeLineController extends BaseDecodedController{
      */
     @RequestMapping(value = "/createMeshId", method = RequestMethod.POST)
     public void createMeshIdToPC(@ModelAttribute("decodedParams") JSONObject params,ModelMap model){
-
         String meshIds = timeLineService.createMeshToPC(params);
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
@@ -134,7 +130,6 @@ public class TimeLineController extends BaseDecodedController{
     @RequestMapping(value = "/getProjectTimers",method = RequestMethod.POST)
     public void getProjectTimers(@ModelAttribute("decodedParams") JSONObject params,ModelMap model){
         ProjectTimer projectTimer = timeLineService.getProjectTimers(params);
-
         model.put("result", ResultDict.SUCCESS.getCode());
         model.put("result_message", ResultDict.SUCCESS.getValue());
         model.put("data",projectTimer);

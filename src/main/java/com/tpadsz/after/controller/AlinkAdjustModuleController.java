@@ -25,8 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import static com.tpadsz.after.entity.dd.ResultDict.PARAMS_BLANK;
-import static com.tpadsz.after.entity.dd.ResultDict.SYSTEM_ERROR;
+import static com.tpadsz.after.entity.dd.ResultDict.*;
 
 /**
  * @program: blt-alink
@@ -82,8 +81,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
                 groupOperationService.saveGroupLog(uid, meshId, operation, bltFlag, groupId);
             } catch (NameDuplicateException e) {//组名重复
                 logger.error("method:groupOperation; group name duplicate;groupId:{},meshId:{}", groupId, meshId);
-                result = ResultDict.GROUP_NAME_DUPLICATE.getCode();
-                resultMessage = ResultDict.GROUP_NAME_DUPLICATE.getValue();
+                result = GROUP_NAME_DUPLICATE.getCode();
+                resultMessage = GROUP_NAME_DUPLICATE.getValue();
             } catch (GroupDuplicateException e) {//存在组
                 logger.error("method:groupOperation; group duplicate;groupId:{},meshId:{}", groupId, meshId);
                 result = ResultDict.DUPLICATE_GID.getCode();
@@ -112,8 +111,8 @@ public class AlinkAdjustModuleController extends BaseDecodedController {
             Map<String, Object> map = adjustService.getGroupList(params);
             model.put("data", map.get("data"));
         } catch (NotExitException e) {
-            result = ResultDict.MESHID_NOT_NULL.getCode();
-            resultMessage = ResultDict.MESHID_NOT_NULL.getValue();
+            result = MESHID_NOT_NULL.getCode();
+            resultMessage = MESHID_NOT_NULL.getValue();
             logger.error("method groupsLists; meshid is null; meshId: {}, uid: {}", params.getString("meshId"),
                     params.getString("uid"));
         }

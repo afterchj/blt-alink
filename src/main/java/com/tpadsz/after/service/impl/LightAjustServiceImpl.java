@@ -60,11 +60,6 @@ public class LightAjustServiceImpl implements LightAjustService {
         lightAjustDao.saveLightAjustLog(meshId, bltFlag, operation, lmacs);
     }
 
-    @Override
-    public void updateLightName(String lmac, String lname, Integer pid) {
-        lightAjustDao.updateLightName(lmac, lname,pid);
-    }
-
     /**
      * 批量插入ExecutorType.BATCH
      * 在Insert操作时，在事务没有提交之前，是没有办法获取到自增的id
@@ -77,7 +72,6 @@ public class LightAjustServiceImpl implements LightAjustService {
         LightAjustDao lightAjustDao1 = sqlSession.getMapper(LightAjustDao.class);
         Integer nowMid;
         Map<String,Integer> lightMap;
-//        StringBuffer sb = new StringBuffer();
         StringJoiner sj = new StringJoiner(",");//分隔符分割的字符串拼接
         String lmacs;
         try {
@@ -97,7 +91,6 @@ public class LightAjustServiceImpl implements LightAjustService {
                         lightAjustDao1.updateLightGidAndMid(lightLists.get(i-1));
                     }
                 }
-//                sb.append(lightLists.get(i-1).getLmac()).append(",");
                 sj.add(lightLists.get(i-1).getLmac());
                 if (i % 500 == 0 || i == lightLists.size()) {
                     //手动每500个一提交，提交后无法回滚
@@ -107,13 +100,10 @@ public class LightAjustServiceImpl implements LightAjustService {
                 }
             }
             lmacs = sj.toString();
-//            lmacs = sb.toString();
-//            lmacs = lmacs.substring(0,lmacs.length()-",".length());
             return lmacs;
         } catch (Exception e) {
             //回滚
             sqlSession.rollback();
-//            throw e;
             throw new SystemAlgorithmException("数据提交错误");
         } finally {
             sqlSession.close();
@@ -165,7 +155,6 @@ public class LightAjustServiceImpl implements LightAjustService {
                     sqlSession.clearCache();
                 }
             }
-
         } catch (Exception e) {
             //回滚
             sqlSession.rollback();
@@ -259,32 +248,19 @@ public class LightAjustServiceImpl implements LightAjustService {
                 }else {
                     lightAjustDao.updateLightGidAndLmac(lightList);
                 }
-
             }
-
-
         }
     }
 
     @Override
     public void updateLightXY(JSONObject params) throws NotExitException {
-//        String uid = params.getString("uid");
-//        String meshId = params.getString("meshId");
         JSONArray lights =  params.getJSONArray("lightList");
-//        Integer mid = groupOperationDao.getMeshSerialNo(meshId,uid);
         LightList lightList;
         JSONObject light;
         for (int i=0;i<lights.size();i++){
-//            lightList = new LightList();
             light = lights.getJSONObject(i);
             lightList = adjustBeanUtils.setLightList(light);
             String lmac = lights.getJSONObject(i).getString("lmac");
-//            String x = lights.getJSONObject(i).getString("x");
-//            String y = lights.getJSONObject(i).getString("y");
-////            lightList.setMid(mid);
-//            lightList.setLmac(lmac);
-//            lightList.setX(x);
-//            lightList.setY(y);
             Map<String, Integer> lightMap = lightAjustDao.getLid(lmac);
             if (lightMap == null || lightMap.size() == 0){
                 throw new NotExitException("未发现灯");
@@ -297,5 +273,4 @@ public class LightAjustServiceImpl implements LightAjustService {
             }
         }
     }
-
 }
