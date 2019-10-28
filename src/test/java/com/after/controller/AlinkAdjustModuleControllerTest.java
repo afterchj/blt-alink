@@ -18,7 +18,9 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: blt-alink
@@ -486,10 +488,8 @@ public class AlinkAdjustModuleControllerTest {
     }
 
     @Test
-    public void test8(){
-        Map<Integer,Integer> map = new TreeMap<>();
-        map.put(1,2);
-        map.put(0,1);
-        System.out.println(map.toString());
+    public void test8() throws NoSuchMethodException {
+        System.out.println("className "+this.getClass().getSimpleName());
+        System.out.println("methodName: "+Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }
