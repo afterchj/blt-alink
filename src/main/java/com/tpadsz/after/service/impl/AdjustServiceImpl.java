@@ -117,12 +117,13 @@ public class AdjustServiceImpl implements AdjustService {
         String sname = params.getString("sname");
         Integer pid = params.getInteger("pid");
         String bltFlag = params.getString("bltFlag");
+        Integer type = params.getInteger("type");
         Integer mid = groupOperationDao.getMeshSerialNo(meshId, uid);
         Integer sid = groupOperationDao.getSceneSeriaNo(mid, sceneId, uid);
         //sid 为空判断
         if (sid == null) {
             //创建场景
-            SceneAjust sceneAjust = adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname);
+            SceneAjust sceneAjust = adjustBeanUtils.setSceneAjust(sceneId,uid,mid,sname,type);
             sceneAjustDao.saveScene(sceneAjust);
             sid = sceneAjust.getId();
         }
@@ -155,7 +156,7 @@ public class AdjustServiceImpl implements AdjustService {
             String sname = sceneArray.getJSONObject(i).getString("sname");
             Integer sid = groupOperationDao.getSceneSeriaNo(mid, sceneId, uid);
             if (sid == null) {
-                sceneAjust = adjustBeanUtils.setSceneAjust(sceneId, uid, mid, sname);
+                sceneAjust = adjustBeanUtils.setSceneAjust(sceneId, uid, mid, sname,0);
                 sceneAjustDao.saveScene(sceneAjust);//创建场景
                 SceneLog sceneLog = adjustBeanUtils.setSceneLog(uid, "0", meshId, sceneId);
                 sceneLog.setOperation("1");//保存默认场景设置1

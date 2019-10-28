@@ -2,7 +2,6 @@ package com.tpadsz.after.util.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.SceneAjust;
 import com.tpadsz.after.entity.SceneLog;
 
 /**
@@ -17,7 +16,7 @@ public interface AdjustBeanInterfaceFactory {
 
     SceneLog createSceneLog(String uid, String bltFlag, String meshId, Integer sceneId);
 
-    SceneAjust createSceneAdjust(Integer sceneId, String uid, Integer mid, String sname);
+//    SceneAjust createSceneAdjust(Integer sceneId, String uid, Integer mid, String sname);
 
 
 }

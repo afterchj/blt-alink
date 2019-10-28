@@ -3,7 +3,6 @@ package com.tpadsz.after.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.tpadsz.after.entity.dd.ResultDict;
 import com.tpadsz.after.exception.NameDuplicateException;
-import com.tpadsz.after.service.GroupOperationService;
 import com.tpadsz.after.service.PlaceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,9 +25,6 @@ public class PlaceController extends BaseDecodedController {
     @Resource
     private PlaceService placeService;
 
-    @Resource
-    private GroupOperationService groupOperationService;
-
     /**
      * 创建区域
      *
@@ -40,8 +36,6 @@ public class PlaceController extends BaseDecodedController {
         try {
             Map<String, Object> placeMap = placeService.create(params);
             params.put("pid",placeMap.get("pid"));
-//            Map<String,Object> groupMap = groupOperationService.saveGroup(params);
-//            placeMap.put("group",groupMap);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("result_message", ResultDict.SUCCESS.getValue());
             model.put("place",placeMap);
@@ -50,7 +44,6 @@ public class PlaceController extends BaseDecodedController {
             model.put("result", ResultDict.DUPLICATE_PLACE_NAME.getCode());
             model.put("result_message", ResultDict.DUPLICATE_PLACE_NAME.getValue());
         }
-
     }
 
     /**
@@ -83,7 +76,6 @@ public class PlaceController extends BaseDecodedController {
             model.put("result", ResultDict.DUPLICATE_PLACE_NAME.getCode());
             model.put("result_message", ResultDict.DUPLICATE_PLACE_NAME.getValue());
         }
-
     }
 
     /**
@@ -94,7 +86,6 @@ public class PlaceController extends BaseDecodedController {
     @ResponseBody
     public Map<String, Object> getNewestFileVersionCode( @RequestBody JSONObject params){
         Map<String, Object> map = new HashMap<>();
-//        JSONObject jsonObject = JSONObject.parseObject(params);
         String meshId = params.getString("meshId");
         Integer versionCode = placeService.getVersionCode(meshId);
         map.put("result", ResultDict.SUCCESS.getCode());
@@ -102,5 +93,4 @@ public class PlaceController extends BaseDecodedController {
         map.put("versionCode",versionCode);
         return map;
     }
-
 }

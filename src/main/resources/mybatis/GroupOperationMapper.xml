@@ -174,12 +174,40 @@
 	      <!--(#{mid},#{sid},#{x},#{y},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}))-->
     <!--</insert>-->
 
+    <!--插入空值时，需要指定JdbcType-->
     <insert id="saveGroupSetting">
         INSERT INTO f_group_setting
         ( mid, sid, x, y, create_date, update_date, gid, horizontal_angle, vertical_angle, focus)
         VALUES
-        (#{mid},#{sid},#{x},#{y},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}),#{horizontalAngle},#{verticalAngle},#{focus})
+        (#{mid},#{sid},#{x,jdbcType=VARCHAR},#{y,jdbcType=VARCHAR},now(),now(),(select id from f_group where group_id=#{groupId} and mid=#{mid}),#{horizontalAngle,jdbcType=VARCHAR},#{verticalAngle,jdbcType=VARCHAR},#{focus,jdbcType=VARCHAR})
     </insert>
+
+    <update id="updateGroupSetting" parameterType="com.tpadsz.after.entity.GroupSetting">
+        update f_group_setting
+        <set>
+            <if test="x!=null">
+                x=#{x},
+            </if>
+            <if test="y!=null">
+                y=#{y},
+            </if>
+            update_date=now(),
+            <if test="horizontalAngle!=null">
+                horizontal_angle=#{horizontalAngle},
+            </if>
+            <if test="verticalAngle!=null">
+                vertical_angle=#{verticalAngle},
+            </if>
+            <if test="focus!=null">
+                focus=#{focus}
+            </if>
+        </set>
+        WHERE mid=#{mid} and sid=#{sid} and gid=(select id from f_group where group_id=#{groupId} and mid=#{mid})
+    </update>
+
+    <select id="getgroupSetting" resultType="int" parameterType="com.tpadsz.after.entity.GroupSetting">
+        SELECT count(*) from f_group_setting where mid=#{mid} and sid=#{sid} and gid=(select id from f_group where group_id=#{groupId} and mid=#{mid})
+    </select>
 
     <delete id="deleteGroupSetting">
         DELETE FROM f_group_setting WHERE sid=#{sid}

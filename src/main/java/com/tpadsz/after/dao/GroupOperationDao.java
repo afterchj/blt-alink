@@ -57,8 +57,6 @@ public interface GroupOperationDao {
     void moveGroup(@Param("pid") Integer pid, @Param("meshId") String meshId, @Param("groupId") Integer groupId,
                    @Param("uid") String uid );
 
-    String getGnameByPidAndMeshId(@Param("pid") Integer pid, @Param("meshId") String meshId,@Param("gname") String gname);
-    
     void updateLightPid(@Param("groupId") Integer groupId, @Param("pid") Integer pid,@Param("meshId") String meshId,
                         @Param("uid") String uid);
 
@@ -75,4 +73,8 @@ public interface GroupOperationDao {
     Integer getSalesmanOrManager(@Param("uid") String uid);
 
     String getUidByMeshId(@Param("meshId") String meshId);
+
+    int getgroupSetting(GroupSetting groupSetting);
+
+    void updateGroupSetting(GroupSetting groupSetting);
 }

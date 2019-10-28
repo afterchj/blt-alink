@@ -69,15 +69,35 @@
     <!--</insert>-->
 
     <!--扩展轨道灯-->
+    <!--插入空值时，需要指定JdbcType-->
     <insert id="insertLightXY">
-        insert into f_light_adjust(lid,x,y,create_date,update_date,horizontal_angle,vertical_angle,focus)
-        VALUES((select id from f_light where lmac=#{lmac}),#{x},#{y},now(),now(),#{horizontalAngle},#{verticalAngle},#{focus})
+        insert into f_light_adjust
+        (lid,x,y,create_date,update_date,horizontal_angle,vertical_angle,focus)
+        VALUES
+        ((select id from f_light where lmac=#{lmac}),#{x,jdbcType=VARCHAR},#{y,jdbcType=VARCHAR},now(),now(),#{horizontalAngle,jdbcType=VARCHAR},#{verticalAngle,jdbcType=VARCHAR},#{focus,jdbcType=VARCHAR})
     </insert>
 
     <!--扩展轨道灯-->
     <update id="updateLightXY">
         UPDATE f_light_adjust
-        set x=#{x},y=#{y},update_date=now(),horizontal_angle=#{horizontalAngle},vertical_angle=#{verticalAngle},focus=#{focus}
+        <set>
+            <if test="x!=null">
+                x=#{x},
+            </if>
+            <if test="y!=null">
+                y=#{y},
+            </if>
+            update_date=now(),
+            <if test="horizontalAngle!=null">
+                horizontal_angle=#{horizontalAngle},
+            </if>
+            <if test="verticalAngle!=null">
+                vertical_angle=#{verticalAngle},
+            </if>
+            <if test="focus!=null">
+                focus=#{focus}
+            </if>
+        </set>
         where lid=(select id from f_light where lmac=#{lmac})
     </update>
 

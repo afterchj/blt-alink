@@ -6,10 +6,7 @@ import com.tpadsz.after.dao.GroupOperationDao;
 import com.tpadsz.after.dao.LightAjustDao;
 import com.tpadsz.after.dao.PlaceDao;
 import com.tpadsz.after.dao.SceneAjustDao;
-import com.tpadsz.after.entity.Group;
-import com.tpadsz.after.entity.LightList;
-import com.tpadsz.after.entity.LightReturn;
-import com.tpadsz.after.entity.LightSetting;
+import com.tpadsz.after.entity.*;
 import com.tpadsz.after.exception.GroupDuplicateException;
 import com.tpadsz.after.exception.NameDuplicateException;
 import com.tpadsz.after.exception.NotExitException;
@@ -141,30 +138,24 @@ public class AdjustComponentUtils {
     }
 
     public void saveGroupSetting(JSONArray groupList, Integer sid, Integer mid) {
-//        String x;
-//        String y;
-//        Integer groupId;
         if (groupList != null && groupList.size() > 0) {
             JSONObject group;
-            //删除group_setting信息
-            groupOperationDao.deleteGroupSetting(sid);
             //v2.1.0新版本添加groupList集合
             for (int i = 0; i < groupList.size(); i++) {
                 group = groupList.getJSONObject(i);
-                groupOperationDao.saveGroupSetting(adjustBeanUtils.setGroupSetting(group,sid,mid));
-//                groupId = groupList.getJSONObject(i).getInteger("groupId");
-//                y = groupList.getJSONObject(i).getString("y");
-//                x = groupList.getJSONObject(i).getString("x");
-//                groupOperationDao.saveGroupSetting(adjustBeanUtils.setGroupSetting(x, y, sid, mid, groupId));
+                GroupSetting groupSetting = adjustBeanUtils.setGroupSetting(group,sid,mid);
+                int count = groupOperationDao.getgroupSetting(groupSetting);
+                if (count > 0){
+                    groupOperationDao.updateGroupSetting(groupSetting);
+                }else {
+                    groupOperationDao.saveGroupSetting(groupSetting);
+                }
             }
         }
     }
 
     public List<LightSetting> setLightSettings(JSONArray lightArray, Integer mid, Integer pid, Integer sid) throws
             NotExitException {
-//        String x;
-//        String y;
-//        String off;
         String lmac;
         Integer groupId;
         String productId;
@@ -199,10 +190,6 @@ public class AdjustComponentUtils {
                     sceneAjustDao.deleteLightSettingByLmac(lmac);//删除灯的场景信息
                 }
             }
-//            x = lightArray.getJSONObject(i).getString("x");
-//            y = lightArray.getJSONObject(i).getString("y");
-//            off = lightArray.getJSONObject(i).getString("off");
-//            lightSettingList.add(adjustBeanUtils.setLightSetting(sid, lightMap, x, y, off));
             lightSettingList.add(adjustBeanUtils.setLightSetting(sid, lightMap, light));
         }
         return lightSettingList;

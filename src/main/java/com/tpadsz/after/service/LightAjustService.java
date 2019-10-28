@@ -18,17 +18,11 @@ import java.util.Map;
 public interface LightAjustService {
     void saveLightAjustLog(String meshId, String bltFlag,String operation, String lmacs);
 
-    void updateLightName(String lmac, String lname, Integer pid);
-
     String saveLight(List<LightList> lightLists) throws SystemAlgorithmException;
 
     Integer deleteLight(String lmac);
 
     void updateLightGid(List<LightList> lightLists, String meshId, String bltFlag, String operation) throws SystemAlgorithmException;
-
-//    void saveLightColor(String uid,String meshId,String lmac, String x, String y);
-
-//    String getLightOff(String lmac);
 
     Map<String,Integer> getLid(String lmac);
 

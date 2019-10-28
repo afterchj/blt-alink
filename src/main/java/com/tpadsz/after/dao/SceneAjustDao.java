@@ -18,11 +18,11 @@ public interface SceneAjustDao {
 
     void saveLightSetting(LightSetting lightSetting);//单灯场景设置
 
-//    void saveSceneSetting(SceneSetting sceneSetting);//场景设置
-
-//    void saveGroupSetting(GroupSetting groupSetting);//保存单组场景
-
     void deleteLightSetting(@Param("sid") Integer sid);//删除旧场景
 
     void deleteLightSettingByLmac(@Param("lmac") String lmac);//删除单灯lightsetting记录
+
+    int getLightSetting(LightSetting lightSetting);
+
+    void updateLightSetting(LightSetting lightSetting);
 }

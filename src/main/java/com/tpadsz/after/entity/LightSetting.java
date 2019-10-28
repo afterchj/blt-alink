@@ -1,7 +1,5 @@
 package com.tpadsz.after.entity;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * @program: blt-alink
  * @description: light_setting
@@ -57,9 +55,9 @@ public class LightSetting {
     }
 
     public void setX(String x) {
-        if (StringUtils.isNotBlank(x)){
+//        if (StringUtils.isNotBlank(x)){
             this.x = x;
-        }
+//        }
     }
 
     public String getY() {
@@ -67,9 +65,9 @@ public class LightSetting {
     }
 
     public void setY(String y) {
-        if (StringUtils.isNotBlank(y)){
+//        if (StringUtils.isNotBlank(y)){
             this.y = y;
-        }
+//        }
     }
 
     public String getHorizontalAngle() {
@@ -77,9 +75,9 @@ public class LightSetting {
     }
 
     public void setHorizontalAngle(String horizontalAngle) {
-        if (StringUtils.isNotBlank(horizontalAngle)){
+//        if (StringUtils.isNotBlank(horizontalAngle)){
             this.horizontalAngle = horizontalAngle;
-        }
+//        }
     }
 
     public String getVerticalAngle() {
@@ -87,9 +85,9 @@ public class LightSetting {
     }
 
     public void setVerticalAngle(String verticalAngle) {
-        if (StringUtils.isNotBlank(verticalAngle)){
+//        if (StringUtils.isNotBlank(verticalAngle)){
             this.verticalAngle = verticalAngle;
-        }
+//        }
     }
 
     public String getFocus() {
@@ -97,8 +95,8 @@ public class LightSetting {
     }
 
     public void setFocus(String focus) {
-        if (StringUtils.isNotBlank(focus)){
+//        if (StringUtils.isNotBlank(focus)){
             this.focus = focus;
-        }
+//        }
     }
 }

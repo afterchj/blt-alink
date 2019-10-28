@@ -13,6 +13,15 @@ public class SceneAjust {
     private String sname;
     private Integer mid;
     private String uid;
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;
