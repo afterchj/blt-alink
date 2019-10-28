@@ -26,7 +26,7 @@
     </resultMap>
 
     <select id="getNewestFile" resultMap="standardNewestFileMap" parameterType="string">
-		select app_id,version_code,pkg from file_records where app_id= #{appId} and pkg = IFNULL(#{pkg},'default') ORDER BY create_date DESC LIMIT 1
+		select app_id,version_code,pkg from file_records where app_id= #{appId} and pkg = IFNULL(#{pkg},'com.example.alinkforweb') ORDER BY create_date DESC LIMIT 1
 	</select>
 
     <select id="getFileRecords" resultMap="standardFileRecordMap">

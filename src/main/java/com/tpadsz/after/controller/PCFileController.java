@@ -45,7 +45,7 @@ public class PCFileController {
             return data;
         }
         map.put("uid", appUser.get("User_ID"));
-        String confirm = Encryption.encrypt(Encryption.getMD5Str(params.getString("User_Pwd")), appUser.get("salt"));
+        String confirm = Encryption.encrypt(params.getString("User_Pwd"), appUser.get("salt"));
         boolean flag = appUser.get("pwd").equals(confirm);
         if (!flag) {
             data.put("code", ResultDict.PASSWORD_NOT_CORRECT.getCode());

@@ -130,8 +130,8 @@ public class Encryption {
 
 	public static void main(String[] args) {
 		String str="123456";
-		Encryption.HashPassword password = Encryption.encrypt(Encryption.getMD5Str(str));
-		String confirm = Encryption.encrypt(Encryption.getMD5Str(str), password.getSalt());
-		System.out.println(JSON.toJSONString(password)+"\t"+password.getPassword().equals(confirm));
+		Encryption.HashPassword password = Encryption.encrypt(Encryption.getMD5Str("123456"));
+		String confirm = Encryption.encrypt("e10adc3949ba59abbe56e057f20f883e","0d4d0aab8c26de4b");
+		System.out.println(JSON.toJSONString(password)+"\t"+"bfaedaf30de520017e8970b4c608bd4130f4a3f7".equals(confirm));
 	}
 }
